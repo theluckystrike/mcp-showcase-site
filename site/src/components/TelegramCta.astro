@@ -1,0 +1,25 @@
+---
+// "Join Zovo Chat on Telegram" (BRIEF section 10, brand.links.telegram).
+// variant="button" = the button alone. variant="band" = button with one line of context.
+import { brand } from '../config/brand';
+interface Props { variant?: 'button' | 'band'; text?: string }
+const { variant = 'band', text = 'Questions, setup help and new servers. The maintainer reads every message.' } = Astro.props;
+---
+{variant === 'button' ? (
+  <a href={brand.links.telegram} rel="noopener" target="_blank" class="btn tg-btn">
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 3.2 2.9 10.4c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.3-2.3 4.8 3.6c.9.5 1.5.2 1.7-.8l3.2-15c.3-1.3-.5-1.9-1.5-1.4ZM9 13.2l9.4-5.9c.5-.3.9-.1.5.2l-8 7.3-.3 3.3L9 13.2Z"/></svg>
+    Join Zovo Chat on Telegram
+  </a>
+) : (
+  <div class="tg-band flex flex-col gap-4 border-y border-line py-6 sm:flex-row sm:items-center sm:justify-between">
+    <p class="max-w-xl">{text}</p>
+    <a href={brand.links.telegram} rel="noopener" target="_blank" class="btn tg-btn shrink-0">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 3.2 2.9 10.4c-1.3.5-1.3 1.2-.2 1.6l4.8 1.5 1.8 5.6c.2.6.1.9.8.9.5 0 .7-.2 1-.5l2.3-2.3 4.8 3.6c.9.5 1.5.2 1.7-.8l3.2-15c.3-1.3-.5-1.9-1.5-1.4ZM9 13.2l9.4-5.9c.5-.3.9-.1.5.2l-8 7.3-.3 3.3L9 13.2Z"/></svg>
+      Join Zovo Chat on Telegram
+    </a>
+  </div>
+)}
+<style>
+  .tg-btn { color: var(--accent); border-color: var(--accent); }
+  .tg-btn:hover { background: var(--accent-subtle); }
+</style>

@@ -1,57 +1,185 @@
 ---
-// Static "chat -> tool calls -> result" demo. The first paint shows the WHOLE turn: prompt, tool calls, the finished file.
-// Motion (global.css .demo) only pops the check marks and lands the stamp. Nothing starts hidden. Zero JS.
-// Uses the first content case of the featured server when it exists; else a fallback built on real invoice tool names.
+// Home signature moment (d-home, wave 5): a chat prompt turns into a numbered invoice, and a PAID stamp lands when
+// invoice_mark_paid finishes. The first frame is the finished state: every line, tick and the stamp are visible at rest.
+// Motion is CSS only, plays once, and is off under prefers-reduced-motion. Zero JS. Tokens only, no literal colors.
+// Numbers: data/content/a.json, invoice case 1 "Bill a client in one message" (12 h x 90 + 300 setup, 23% VAT, 14 days).
+// Turn 2 uses invoice_mark_paid (invoice case 3, servers/invoice/src/index.ts:769, sets status "paid"). Labeled Example.
 import { getServer } from '../data/servers';
-import { getCategory } from '../data/categories';
-import InvoicePreview from './InvoicePreview.astro';
-interface Props { serverId?: string }
-const { serverId = 'invoice' } = Astro.props;
-const s = getServer(serverId);
-const cat = getCategory(s?.category ?? 'invoicing');
+
+const s = getServer('invoice');
 const c = s?.cases[0];
 const prompt = c?.prompt ?? 'Invoice Acme for 12 hours of API work at 90 EUR plus a 300 EUR setup fee, 23% VAT, due in 14 days, and give me the PDF.';
-const steps = (c?.steps.length ? c.steps : [
+const steps = (c?.steps?.length ? c.steps : [
   { tool: 'invoice_create', does: 'Creates INV-2026-0001 with two lines' },
   { tool: 'invoice_pdf', does: 'Renders the A4 PDF' },
-]).slice(0, 3);
-const result = c?.result ?? 'EUR 1,380.00 subtotal, EUR 317.40 VAT, EUR 1,697.40 total, as a PDF ready to email.';
-const showInvoice = serverId === 'invoice';
+]).slice(0, 2);
+
+// Line items from the prompt. Math is computed here so the sheet and the case result can't drift apart.
+const lines = [
+  { d: 'API work', q: '12 h', u: 90, n: 12 },
+  { d: 'Setup fee', q: '1', u: 300, n: 1 },
+];
+const fmt = (v: number) => v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const subtotal = lines.reduce((t, l) => t + l.u * l.n, 0);
+const vat = Math.round(subtotal * 23) / 100;
+const total = subtotal + vat;
+if (c?.result && !c.result.includes(fmt(total))) console.warn(`[HeroDemo] invoice case total ${fmt(total)} not in case result`);
+const issued = '30 Oct 2026';
+const due = '13 Nov 2026';
 ---
-<div class="demo cat relative" style={`--hue:${cat.hue}`}>
-  <div class="card overflow-hidden">
-    <div class="flex items-center gap-2 border-b border-line px-4 py-2.5" style="background: var(--surface)">
-      <span class="h-2.5 w-2.5 rounded-full bg-[#e5dfd4]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#e5dfd4]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#e5dfd4]"></span>
-      <span class="ml-2 text-[.78rem] text-faint">Claude, with {s?.name ?? 'Invoice'} connected</span>
-      <span class="ml-auto chip !py-0 !text-[.7rem]">Example</span>
-    </div>
-    <div class="flex flex-col gap-3 p-4 sm:p-5">
-      <p class="sr-only">Example chat turn. You type:</p>
-      <div data-step class="ml-auto max-w-[90%] rounded-2xl rounded-br-md px-4 py-3 text-[.92rem] leading-relaxed" style="background: var(--surface-2); border: 1px solid var(--border)">{prompt}</div>
-      <p class="sr-only">The assistant calls these tools:</p>
-      <ol class="flex flex-col gap-1.5">
-        {steps.map((st, i) => (
-          <li data-step style={`--d:${0.25 + i * 0.35}`} class="shimmer flex items-center gap-2.5 rounded-lg border border-line px-3 py-2 text-[.82rem]" >
-            <span class="tick grid h-5 w-5 shrink-0 place-items-center rounded-full" style={`--d:${0.25 + i * 0.35}; background: var(--accent); color: var(--accent-text)`}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
-            </span>
-            <code class="font-mono text-[.79rem]">{st.tool}</code>
-            <span class="muted hidden truncate sm:inline">{st.does}</span>
-          </li>
-        ))}
-      </ol>
-      <p class="sr-only">Result:</p>
-      {showInvoice ? (
-        <div data-step class="mt-1 rounded-xl p-3 sm:p-4" style="background: var(--bg-2)">
-          <InvoicePreview compact caption={false} />
-          <p class="mt-3 flex items-center gap-2 text-[.82rem] text-muted"><span class="dot" style="--cat: var(--accent)"></span>{result}</p>
+<div class="desk" aria-label={`Example. You ask for an invoice in chat. The tools return INV-2026-0001 for Acme, total EUR ${fmt(total)}, later stamped paid.`} role="group">
+  <!-- Chat: the real prompt and the real tool names, in order -->
+  <div class="chat">
+    <p class="chat-label"><span>Claude, with {s?.name ?? 'Invoice'} connected</span><span class="ex">Example</span></p>
+    <p class="you">{prompt}</p>
+    <ol class="calls">
+      {steps.map((st, i) => (
+        <li style={`--d:${0.35 + i * 0.4}s`}><span class="tick" aria-hidden="true"></span><code>{st.tool}</code><span class="does">{st.does}</span></li>
+      ))}
+    </ol>
+    <p class="you you-2">Acme paid today. Mark it paid.</p>
+    <ol class="calls">
+      <li style="--d:1.45s"><span class="tick" aria-hidden="true"></span><code>invoice_mark_paid</code><span class="does">Status: paid</span></li>
+    </ol>
+  </div>
+
+  <!-- The document the tools produce -->
+  <div class="doc-wrap">
+    <div class="carbon" aria-hidden="true"><span>Copy</span></div>
+    <article class="doc">
+      <header class="doc-head">
+        <div>
+          <p class="doc-type">Invoice</p>
+          <p class="doc-no">INV-2026-0001</p>
         </div>
-      ) : (
-        <div data-step class="mt-1 rounded-xl border border-line p-4" style="background: var(--surface)">
-          <p class="text-[.72rem] font-semibold cat-text">Result</p>
-          <p class="mt-1 text-[.92rem] leading-snug">{result}</p>
-        </div>
-      )}
-    </div>
+        <dl class="doc-meta">
+          <dt>Bill to</dt><dd>Acme</dd>
+          <dt>Issued</dt><dd>{issued}</dd>
+          <dt>Due</dt><dd>{due}</dd>
+        </dl>
+      </header>
+      <table class="doc-lines">
+        <thead><tr><th scope="col">Item</th><th scope="col">Qty</th><th scope="col">Price</th><th scope="col">EUR</th></tr></thead>
+        <tbody>
+          {lines.map((l) => (<tr><td>{l.d}</td><td>{l.q}</td><td>{fmt(l.u)}</td><td>{fmt(l.u * l.n)}</td></tr>))}
+        </tbody>
+      </table>
+      <dl class="doc-sum">
+        <dt>Subtotal</dt><dd>{fmt(subtotal)}</dd>
+        <dt>VAT 23%</dt><dd>{fmt(vat)}</dd>
+        <dt class="tot">Total EUR</dt><dd class="tot">{fmt(total)}</dd>
+      </dl>
+      <p class="doc-foot">invoice_pdf, A4. Free tier adds a "Generated with mcp-invoice" line.</p>
+      <div class="stamp-big" aria-label="Stamped paid">
+        <span class="s-word">Paid</span>
+        <span class="s-small">{issued} &middot; invoice_mark_paid</span>
+      </div>
+    </article>
   </div>
 </div>
+
+<style>
+  .desk {
+    position: relative; display: grid; gap: 1rem; align-items: start;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (min-width: 900px) { .desk { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 0; } }
+
+  /* Chat column: a narrow transcript, not a window chrome */
+  .chat { display: grid; gap: .45rem; font-size: .84rem; line-height: 1.45; position: relative; z-index: 2; }
+  @media (min-width: 900px) { .chat { margin-top: 2.2rem; margin-right: -1.5rem; } }
+  .chat-label { display: flex; justify-content: space-between; gap: .5rem; font-size: .72rem; color: var(--muted); font-weight: 560; }
+  .ex { border: 1px solid var(--border-strong); border-radius: 99px; padding: 0 .45rem; font-size: .66rem; line-height: 1.45; }
+  .you {
+    margin: 0; padding: .6rem .75rem; border-radius: .7rem .7rem .2rem .7rem;
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+  }
+  .you-2 { justify-self: end; max-width: 85%; }
+  .calls { display: flex; flex-wrap: wrap; gap: .3rem .5rem; margin: 0; padding: 0 .15rem; list-style: none; }
+  @media (min-width: 900px) { .calls { flex-direction: column; } }
+  .calls li { display: flex; align-items: center; gap: .4rem; min-width: 0; }
+  .calls code { font-family: var(--font-mono); font-size: .74rem; color: var(--text); }
+  .calls .does { display: none; color: var(--muted); font-size: .74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (min-width: 900px) { .calls .does { display: inline; } .calls li { flex-wrap: wrap; } .calls .does { flex-basis: 100%; padding-left: 1.3rem; margin-top: -.15rem; } }
+  .tick {
+    flex: none; width: .9rem; height: .9rem; border-radius: 99px; background: var(--accent);
+    -webkit-mask: none; position: relative;
+  }
+  .tick::after {
+    content: ''; position: absolute; left: .29rem; top: .16rem; width: .25rem; height: .44rem;
+    border: solid var(--accent-text); border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+
+  /* Document: a sheet torn from a pad, with a carbon copy offset behind it */
+  .doc-wrap { position: relative; padding: .5rem .25rem .75rem 0; filter: drop-shadow(0 14px 22px color-mix(in oklab, var(--text) 16%, transparent)) drop-shadow(0 1px 1px color-mix(in oklab, var(--text) 10%, transparent)); }
+  .carbon {
+    position: absolute; inset: 1.1rem -.2rem -.1rem 1.2rem; border-radius: 2px;
+    background: var(--surface-2); border: 1px solid var(--border); transform: rotate(1.6deg);
+  }
+  .carbon span {
+    position: absolute; right: .8rem; bottom: .5rem; font-size: .62rem; font-weight: 700; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .doc {
+    position: relative; padding: 1.1rem 1.1rem .9rem; border-radius: 2px;
+    background: var(--paper, var(--surface-solid)); color: var(--text);
+    border: 1px solid var(--border);
+    font-size: .8rem; line-height: 1.4;
+    /* Perforated top edge, cut with a mask: real holes, no color literal */
+    -webkit-mask: radial-gradient(circle at 50% 0, transparent .22rem, #000 .24rem) top / .8rem .5rem repeat-x, linear-gradient(#000 0 0) 0 .5rem / 100% calc(100% - .5rem) no-repeat;
+            mask: radial-gradient(circle at 50% 0, transparent .22rem, #000 .24rem) top / .8rem .5rem repeat-x, linear-gradient(#000 0 0) 0 .5rem / 100% calc(100% - .5rem) no-repeat;
+    /* Ledger rules behind the lines */
+    background-image: repeating-linear-gradient(180deg, transparent 0 1.55rem, var(--rule) 1.55rem calc(1.55rem + 1px));
+  }
+  @media (min-width: 640px) { .doc { padding: 1.5rem 1.6rem 1.1rem; font-size: .86rem; } }
+  .doc-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+  .doc-type { margin: 0; font-weight: 750; font-size: 1.05rem; letter-spacing: -.01em; }
+  @media (min-width: 640px) { .doc-type { font-size: 1.35rem; } }
+  .doc-no { margin: .1rem 0 0; font-family: var(--font-mono); font-size: .76rem; color: var(--muted); }
+  .doc-meta { display: grid; grid-template-columns: auto auto; gap: .05rem .7rem; margin: 0; font-size: .74rem; text-align: right; }
+  .doc-meta dt { color: var(--muted); }
+  .doc-meta dd { margin: 0; font-weight: 600; }
+  .doc-lines { width: 100%; border-collapse: collapse; margin-top: .9rem; }
+  .doc-lines th { font-size: .64rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; text-align: right; padding: .3rem 0; border-bottom: 1px solid var(--border-strong); }
+  .doc-lines td { text-align: right; padding: .38rem 0; border-bottom: 1px solid var(--border); }
+  .doc-lines th:first-child, .doc-lines td:first-child { text-align: left; }
+  .doc-sum { display: grid; grid-template-columns: 1fr auto; gap: .1rem 1.2rem; margin: .6rem 0 0 auto; max-width: 13rem; text-align: right; }
+  .doc-sum dt { color: var(--muted); }
+  .doc-sum dd { margin: 0; }
+  .doc-sum .tot { font-weight: 750; font-size: 1rem; color: var(--text); border-top: 2px solid var(--text); padding-top: .25rem; margin-top: .2rem; }
+  @media (min-width: 640px) { .doc-sum .tot { font-size: 1.15rem; } }
+  .doc-foot { margin: .8rem 0 0; font-size: .66rem; color: var(--muted); font-family: var(--font-mono); }
+
+  /* The stamp: rubber-ink impression with uneven ink (SVG noise mask), the date and the tool that closed the work */
+  .stamp-big {
+    position: absolute; left: 7%; bottom: 3.1rem; display: grid; justify-items: center; gap: .05rem;
+    padding: .3rem .8rem .35rem; border: 3px solid var(--stamp); border-radius: .4rem;
+    outline: 1.5px solid var(--stamp); outline-offset: 2px;
+    color: var(--stamp); transform: rotate(-11deg); transform-origin: 50% 50%;
+    mix-blend-mode: multiply; opacity: .92; pointer-events: none;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 1.75'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 1.75'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  :global(html[data-mode='dark']) .stamp-big { mix-blend-mode: normal; }
+  .s-word { font-weight: 850; font-size: 2.1rem; line-height: 1; letter-spacing: .16em; text-transform: uppercase; margin-right: -.16em; }
+  @media (min-width: 640px) { .s-word { font-size: 2.9rem; } .stamp-big { left: 9%; bottom: 3.4rem; } }
+  .s-small { font-family: var(--font-mono); font-size: .56rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
+
+  /* Motion. Rest state = final state. Plays once. */
+  @media (prefers-reduced-motion: no-preference) {
+    .calls li .tick { animation: d-tick .45s cubic-bezier(.3, 1.6, .5, 1) backwards; animation-delay: var(--d); }
+    .calls li code { animation: d-ink .5s ease-out backwards; animation-delay: var(--d); }
+    .doc { animation: d-feed .7s cubic-bezier(.2, .8, .2, 1) .55s backwards; }
+    .stamp-big { animation: d-stamp .42s cubic-bezier(.5, 0, .7, 1.4) 1.75s backwards; }
+    .doc-wrap { animation: d-thud .25s ease-out 2.15s 1; }
+  }
+  @keyframes d-tick { from { transform: scale(.3); background: var(--border-strong); } }
+  @keyframes d-ink { from { color: var(--muted); } }
+  @keyframes d-feed { from { transform: translateY(14px); } }
+  @keyframes d-stamp {
+    0% { transform: rotate(-4deg) scale(2.1); opacity: .3; }
+    80% { transform: rotate(-11deg) scale(.97); opacity: .95; }
+    100% { transform: rotate(-11deg) scale(1); opacity: .92; }
+  }
+  @keyframes d-thud { 40% { transform: translateY(2px); } }
+</style>

@@ -1,0 +1,65 @@
+---
+// Rubber stamp (d-identity). Marks a DOCUMENT STATE only: PAID, SENT, READY, RECEIVED, OVERDUE.
+// Never stamp a claim about a server (no CERTIFIED, TESTED, APPROVED). BRIEF section 10.
+// Use sparingly: at most one stamp per viewport, on a document, a result or a price. Not as decoration.
+interface Props {
+  state: 'PAID' | 'SENT' | 'READY' | 'RECEIVED' | 'OVERDUE';
+  /** Optional small second line, for example a document number "INV-0042". Keep it under 14 characters. */
+  sub?: string;
+  /** Height in px. Width follows the text. */
+  size?: number;
+  /** Degrees. Default -6. Keep between -12 and 8. */
+  rotate?: number;
+  /** Play the land animation once (respects reduced motion). */
+  land?: boolean;
+  class?: string;
+}
+const { state, sub, size = 56, rotate = -6, land = false, class: cls = '' } = Astro.props;
+const INK: Record<Props['state'], string> = {
+  PAID: 'var(--ink-red)', OVERDUE: 'var(--ink-red)', SENT: 'var(--ink-blue)', RECEIVED: 'var(--ink-violet)', READY: 'var(--ink-black)',
+};
+const ink = INK[state];
+const id = 'ink' + Math.random().toString(36).slice(2, 8);
+const H = sub ? 74 : 56;
+const textW = state.length * 19;
+const W = textW + 36;
+const width = Math.round((size * W) / H);
+---
+<svg
+  class:list={['stamp-svg', land && 'stamp-land', cls]}
+  width={width} height={size} viewBox={`0 0 ${W} ${H}`}
+  style={`transform: rotate(${rotate}deg); color: ${ink}`}
+  role="img" aria-label={sub ? `${state}, ${sub}` : state}
+>
+  <defs>
+    <filter id={id} x="-5%" y="-10%" width="110%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed={state.length * 7} result="grain" />
+      <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.4 1.9" result="holes" />
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3" result="wobble" />
+      <feDisplacementMap in="SourceGraphic" in2="wobble" scale="2.2" result="rough" />
+      <feComposite in="rough" in2="holes" operator="in" />
+    </filter>
+  </defs>
+  <g filter={`url(#${id})`} fill="none" stroke="currentColor">
+    <rect x="3" y="3" width={W - 6} height={H - 6} rx="5" stroke-width="3.2" />
+    <rect x="8.5" y="8.5" width={W - 17} height={H - 17} rx="2.5" stroke-width="1.4" />
+    {state === 'OVERDUE' && <path d={`M14 ${H - 14} L${W - 14} 14`} stroke-width="1.2" opacity=".35" />}
+    <text
+      x={W / 2} y={sub ? 39 : 38} text-anchor="middle" fill="currentColor" stroke="none"
+      font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="850" font-size="27" letter-spacing="2.5"
+      style="font-stretch: 72%" textLength={textW} lengthAdjust="spacingAndGlyphs"
+    >{state}</text>
+    {sub && (
+      <text x={W / 2} y="58" text-anchor="middle" fill="currentColor" stroke="none"
+        font-family="'IBM Plex Mono', ui-monospace, monospace" font-weight="600" font-size="11" letter-spacing="1.5">{sub}</text>
+    )}
+  </g>
+</svg>
+<style>
+  .stamp-svg { display: inline-block; vertical-align: middle; flex: none; opacity: .9; mix-blend-mode: multiply; overflow: visible; }
+  :global(html[data-mode='dark']) .stamp-svg { mix-blend-mode: normal; }
+  @media (prefers-reduced-motion: no-preference) {
+    .stamp-land { animation: svg-stamp-land .42s cubic-bezier(.2,1.3,.4,1) 1 both; animation-delay: .6s; transform-box: fill-box; transform-origin: center; }
+  }
+  @keyframes svg-stamp-land { 0% { scale: 1.5; opacity: 0; } 70% { scale: .97; opacity: .95; } 100% { scale: 1; opacity: .9; } }
+</style>

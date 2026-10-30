@@ -1,0 +1,82 @@
+---
+// Home free vs paid (d-home): a receipt, not three pricing cards. Limits come from data/content free_vs_pro, which cites
+// the server source lines (for example servers/invoice/src/index.ts:23). Prices: brand.pricing + catalog bundle price.
+// Holds buy CTA 2 of 2 on the home page (src=site.home.pricing).
+import { brand } from '../config/brand';
+import { getServer, stats, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
+
+const st = stats();
+const ROWS = [
+  { id: 'invoice', free: '3 invoices a month', pro: 'Unlimited, your logo, no branding line' },
+  { id: 'quotes', free: '5 open quotes', pro: 'Unlimited, plus an A4 PDF' },
+  { id: 'spreadsheet', free: 'Reads 5,000 rows, 5 MB', pro: 'Files up to 50 MB' },
+  { id: 'pdf', free: 'Merges 5 files, splits 30 pages', pro: 'Any count, any length' },
+  { id: 'bank-statement', free: '2 accounts, 12 months', pro: 'Unlimited, full history' },
+  { id: 'time-tracker', free: 'Reports on the last 7 days', pro: 'Full history' },
+];
+const rows = ROWS.map((r) => {
+  const s = getServer(r.id);
+  const src = s?.freeVsPro?.source?.split(/[ ;(]/)[0] ?? '';
+  return { ...r, name: s?.name ?? r.id, src };
+});
+---
+<div class="pr">
+  <div class="pr-copy">
+    <h2 class="h2">Free until it earns its keep</h2>
+    <p class="lead mt-4">Every server has a free tier. No key, no account, no card. When a limit gets in your way, pay once and it's gone for good.</p>
+    <p class="muted mt-4 text-[.95rem]">Eight servers, Payroll and Receipts among them, have no paid tier at all. On a local install the key checks offline. There is no licence server to call.</p>
+  </div>
+
+  <div class="receipt" role="group" aria-label="Free and Pro limits, and prices">
+    <p class="r-head"><span>Free</span><span>Pro</span></p>
+    <ul class="r-rows">
+      {rows.map((r) => (
+        <li>
+          <p class="r-name">{r.name}</p>
+          <p class="r-free">{r.free}</p>
+          <p class="r-pro">{r.pro}</p>
+        </li>
+      ))}
+    </ul>
+    <dl class="r-total">
+      <dt>Pro on one server</dt><dd>${brand.pricing.serverUsd} once</dd>
+      <dt>Pro on all {st.paid} paid servers</dt><dd class="big">${bundlePrice()} once</dd>
+      <dt>Monthly fee</dt><dd>none</dd>
+    </dl>
+    <div class="r-cta">
+      <a href={buyUrl(bundleUrl(), 'home', 'pricing')} rel="nofollow" class="btn btn-primary">Get all {st.paid} for ${bundlePrice()}</a>
+      <a href="/pricing/" class="link text-[.92rem]">Every limit, server by server</a>
+    </div>
+    <p class="r-src">Limits read from each server's source code, for example {rows[0].src}. Refund within 14 days.</p>
+  </div>
+</div>
+
+<style>
+  .pr { display: grid; gap: 2.5rem; align-items: start; }
+  @media (min-width: 960px) { .pr { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 4rem; } }
+  .receipt {
+    position: relative; padding: 1.4rem 1.25rem 1.5rem; background: var(--paper, var(--surface-solid));
+    border: 1px solid var(--border); border-radius: 2px; font-variant-numeric: tabular-nums;
+    /* Torn receipt bottom edge */
+    -webkit-mask: linear-gradient(#000 0 0) top / 100% calc(100% - .45rem) no-repeat, conic-gradient(from -45deg at 50% 100%, transparent 90deg, #000 0) bottom / .9rem .45rem repeat-x;
+            mask: linear-gradient(#000 0 0) top / 100% calc(100% - .45rem) no-repeat, conic-gradient(from -45deg at 50% 100%, transparent 90deg, #000 0) bottom / .9rem .45rem repeat-x;
+    padding-bottom: 2rem;
+  }
+  @media (min-width: 640px) { .receipt { padding: 1.8rem 2rem 2.4rem; } }
+  .r-head, .r-rows li { display: grid; grid-template-columns: 1fr 1fr; gap: .2rem 1.25rem; }
+  @media (min-width: 640px) { .r-head, .r-rows li { grid-template-columns: 8.5rem 1fr 1fr; } .r-head::before { content: ''; } }
+  .r-head { margin: 0; padding-bottom: .5rem; border-bottom: 2px solid var(--text); font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .r-rows { list-style: none; margin: 0; padding: 0; }
+  .r-rows li { padding: .65rem 0; border-bottom: 1px dashed var(--border-strong); font-size: .9rem; }
+  .r-rows p { margin: 0; }
+  .r-name { font-weight: 650; grid-column: 1 / -1; }
+  @media (min-width: 640px) { .r-name { grid-column: auto; } }
+  .r-free { color: var(--text); }
+  .r-pro { color: var(--muted); }
+  .r-total { display: grid; grid-template-columns: 1fr auto; gap: .35rem 1rem; margin: 1rem 0 0; font-size: .95rem; }
+  .r-total dt { color: var(--muted); }
+  .r-total dd { margin: 0; text-align: right; font-weight: 650; }
+  .r-total .big { font-size: 1.35rem; font-weight: 750; }
+  .r-cta { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-top: 1.4rem; }
+  .r-src { margin: 1rem 0 0; font-family: var(--font-mono); font-size: .68rem; color: var(--muted); }
+</style>

@@ -1,0 +1,42 @@
+---
+// "Support the project": tips and a GitHub star. Links come from brand.links only (BRIEF section 10).
+// compact = one row for the footer. Default = a full band for /pricing/, /services/, /about/.
+import { brand } from '../config/brand';
+interface Props { compact?: boolean; page?: string }
+const { compact = false } = Astro.props;
+const links = [
+  { href: brand.links.buyMeACoffee, label: 'Buy Me a Coffee', note: 'A one-off tip' },
+  { href: brand.links.paypal, label: 'PayPal.me', note: 'Any amount' },
+  { href: brand.links.github, label: 'Star on GitHub', note: 'Free, and it helps people find the repo' },
+];
+---
+{compact ? (
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[.92rem]">
+    <span class="font-semibold">Support the project</span>
+    {links.map((l) => <a href={l.href} rel="noopener nofollow" target="_blank" class="text-accent underline decoration-1 underline-offset-4 hover:no-underline">{l.label}</a>)}
+  </div>
+) : (
+  <section class="wrap py-10" aria-labelledby="support-band-h">
+    <div class="support-band grid gap-6 border border-line-strong bg-surface-solid p-6 sm:p-8 md:grid-cols-[1fr_auto] md:items-center">
+      <div>
+        <h2 id="support-band-h" class="font-display text-2xl font-bold tracking-tight sm:text-3xl">Support the project</h2>
+        <p class="muted mt-2 max-w-xl">The free tier stays free. If it saved you an afternoon, a tip or a star keeps the servers tested and the hosted URLs running.</p>
+      </div>
+      <ul class="grid gap-2 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
+        {links.map((l) => (
+          <li>
+            <a href={l.href} rel="noopener nofollow" target="_blank" class="support-link flex h-full flex-col gap-0.5 border border-line-strong px-4 py-3 hover:border-accent">
+              <span class="font-semibold">{l.label}</span>
+              <span class="text-[.82rem] text-faint">{l.note}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+<style>
+  .support-band { border-radius: 4px; background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px); }
+  .support-link { border-radius: 3px; background: var(--surface); transition: border-color .15s ease, transform .15s ease; }
+  .support-link:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow-lift); }
+</style>

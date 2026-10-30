@@ -6,28 +6,33 @@ import { getServers, stats, bundleUrl, bundlePrice, buyUrl } from '../../data/se
 import { upsell } from '../../data/content';
 import UpsellBand from '../../components/UpsellBand.astro';
 import { seo } from '../../data/pages';
+import { buyerRank, outputType } from './_outputs';
 
 const st = stats();
-const items = getServers().map((s) => ({
+const items = [...getServers()].sort((a, b) => buyerRank(a) - buyerRank(b) || a.name.localeCompare(b.name)).map((s) => ({
   id: s.id,
   name: s.name,
   category: s.category,
   tagline: s.tagline,
   hosted: s.hosted,
+  output: outputType(s),
+  price: s.satellite ? 'Free calculator' : !s.paid ? 'Free' : s.bundleOnly ? `Bundle $${bundlePrice()}` : `Free tier, Pro $${s.priceUsd}`,
+  free: !s.paid,
+  satellite: s.satellite,
   chips: (s.outcomeChips.length ? s.outcomeChips : []).slice(0, 3),
-  search: [s.name, s.id, s.tagline, s.category, ...s.keywords, ...s.outcomeChips, ...s.topTools.map((t) => t.name)].join(' ').toLowerCase(),
+  search: [s.name, s.id, s.tagline, s.category, outputType(s), ...s.keywords, ...s.outcomeChips, ...s.topTools.map((t) => t.name)].join(' ').toLowerCase(),
 }));
 const end = upsell('servers', 'list_end', { copy: `Need more than one? All ${stats().paid} paid servers cost $${bundlePrice()} once.`, cta_url: buyUrl(bundleUrl(), 'servers', 'list_end') });
-const meta = seo('/servers/', { title: `All ${st.servers} MCP servers`, description: `Search ${st.servers} MCP servers. ${st.hosted} run hosted with one URL.` });
+const meta = seo('/servers/', { title: `${st.servers} MCP servers and ${st.satellites} free calculators`, description: `Search ${st.servers} MCP servers and ${st.satellites} free calculators by the file they hand back. ${st.hosted} run at a hosted URL.` });
+const countLine = `${st.servers} servers and ${st.satellites} free calculators`;
 const cats = CATEGORIES.map((c) => ({ id: c.id, short: c.short, hue: c.hue }));
 ---
 <Layout title={meta.title} description={meta.description} crumbs={[{ name: 'Servers', path: '/servers/' }]}>
-  <section class="relative isolate overflow-hidden">
-    <div class="glow-bg opacity-60"></div>
-    <div class="wrap pb-10 pt-14 sm:pt-20">
-      <span class="eyebrow">Directory</span>
-      <h1 class="display mt-5 max-w-4xl">Every server. <span class="mark">One search.</span></h1>
-      <p class="lead mt-5 max-w-2xl">{st.servers} servers, {st.hosted} available as a hosted URL, plus {st.satellites} free calculators. Filter by the job you need done.</p>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-12 sm:pt-16">
+      <h1 class="display max-w-4xl">Pick the paperwork. <span class="mark">Get the file.</span></h1>
+      <p class="lead mt-5 max-w-2xl">{countLine}. Each card says what you get back. The ones people buy most come first.</p>
     </div>
   </section>
   <section class="wrap pb-10">

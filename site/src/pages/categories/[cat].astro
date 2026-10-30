@@ -15,7 +15,7 @@ export function getStaticPaths() {
 const { cat } = Astro.props as { cat: Category };
 const servers = getServersByCategory(cat.id);
 const foot = upsell('category', 'footer', { copy: `Every paid server in this category and the rest, for $${bundlePrice()} once.`, cta_url: buyUrl(bundleUrl(), 'category', 'footer') });
-const meta = seo(`/categories/${cat.id}/`, { title: `${cat.name} tools for Claude and ChatGPT`, description: `${cat.blurb} ${servers.length} servers for Claude, ChatGPT and Cursor.` });
+const meta = seo(`/categories/${cat.id}/`, { title: `${cat.name} tools for Claude`, description: `${cat.blurb} ${servers.length} servers for Claude, Cursor and other MCP clients.` });
 const cases = servers.flatMap((s) => s.cases.slice(0, 1).map((c) => ({ server: s, case: c }))).slice(0, 3);
 ---
 <Layout title={meta.title} description={meta.description} crumbs={[{ name: 'Servers', path: '/servers/' }, { name: cat.short, path: `/categories/${cat.id}/` }]}
