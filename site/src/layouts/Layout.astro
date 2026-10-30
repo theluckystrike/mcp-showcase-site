@@ -6,6 +6,8 @@ import { brand } from '../config/brand';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { buildGraph, citationFor, CONTENT_REVIEWED } from '../data/schema';
+import { getServer } from '../data/servers';
+import { pageMeta } from '../data/pages';
 // Preload the body font (same hashed file the @font-face rule uses; fontsource exports ./files/*.woff2).
 import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 
@@ -27,7 +29,11 @@ const suffix = ` | ${brand.name}`;
 const baseTitle = title.endsWith(suffix) && title.length > 60 ? title.slice(0, -suffix.length) : title;
 const fullTitle = baseTitle.includes(brand.name) || (baseTitle + suffix).length > 60 ? baseTitle : baseTitle + suffix;
 // QA (t-qa): meta description 120-160 chars. Pad short ones with true, generic sentences. Cut long ones at a sentence end.
-const FILLERS = [' Works in Claude and Cursor.', ' Open source, with a free tier.', ` ${brand.tagline}`];
+// t-seo: a page-specific fact first (tool count of the page's server, from catalog), so padded metas stay unique.
+const pageServerId = /^\/servers\/([^/]+)\/$/.exec(Astro.url.pathname)?.[1] ?? pageMeta(Astro.url.pathname)?.servers[0];
+const pageServer = pageServerId ? getServer(pageServerId) : undefined;
+const toolCount = pageServer ? pageServer.tools.filter((t) => !t.name.startsWith('license_')).length : 0;
+const FILLERS = [...(toolCount > 1 ? [` ${pageServer!.name} has ${toolCount} tools.`] : []), ' Works in Claude and Cursor.', ' Open source, with a free tier.', ` ${brand.tagline}`];
 function fitDescription(d: string): string {
   let out = String(d ?? '').replace(/\s+/g, ' ').trim();
   if (out && !/[.!?]$/.test(out)) out += '.';
@@ -86,8 +92,9 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
     <link rel="sitemap" href="/sitemap.xml" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
     <link rel="alternate" type="text/plain" href="/llms-full.txt" title="llms-full.txt" />
-    <meta name="color-scheme" content="dark light" />
-    <meta name="theme-color" content="#07070b" />
+    <!-- t-design tokens: warm light is the default (--bg #f7f4ee); dark is opt-in (localStorage 'mode', --bg #151412). -->
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f7f4ee" />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={brand.name} />
     <meta property="og:title" content={fullTitle} />
@@ -104,7 +111,7 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={metaDescription} />
     <script is:inline>
-      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') { document.documentElement.dataset.theme = t; if (t === 'light') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fbfbfd'); } } catch (e) {}
+      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; if (localStorage.getItem('mode') === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#151412'); } catch (e) {}
     </script>
     <script type="application/ld+json" set:html={graphJson} />
   </head>

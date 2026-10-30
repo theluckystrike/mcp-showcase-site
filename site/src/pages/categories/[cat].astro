@@ -23,7 +23,7 @@ const cases = servers.flatMap((s) => s.cases.slice(0, 1).map((c) => ({ server: s
     { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: servers.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(`/servers/${s.id}/`, Astro.site).href, name: s.name })) }]}>
   <div class="cat" style={`--hue:${cat.hue}`}>
     <section class="relative isolate overflow-hidden">
-      <div class="pointer-events-none absolute inset-x-0 -top-40 -z-10 h-[30rem] opacity-50 blur-3xl" style="background: radial-gradient(36rem 18rem at 30% 40%, color-mix(in oklab, var(--cat) 45%, transparent), transparent 70%)"></div>
+      <div class="glow-bg"></div>
       <div class="wrap pb-10 pt-14 sm:pt-20">
         <span class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={cat.icon} /></svg></span>
         <h1 class="display mt-6 max-w-4xl !text-[clamp(2.3rem,6vw,4.4rem)]">{cat.name}</h1>

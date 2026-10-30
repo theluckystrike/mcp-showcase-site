@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import HeroDemo from '../components/HeroDemo.astro';
-import InvoicePreview from '../components/InvoicePreview.astro';
+import OutputPreview from '../components/OutputPreview.astro';
 import ServerCard from '../components/ServerCard.astro';
 import CaseTurn from '../components/CaseTurn.astro';
 import SectionHead from '../components/SectionHead.astro';
@@ -18,6 +18,7 @@ import { CLIENTS } from '../data/content';
 const st = stats();
 const servers = getServers();
 const featuredIds = ['invoice', 'time-tracker', 'pdf', 'expense-tracker', 'quotes', 'bank-statement'];
+const pdfServer = getServer('pdf');
 const featured = featuredIds.map((id) => getServer(id)).filter((s) => s !== undefined);
 
 // Case examples: content cases first; fallback to README "Try it" prompts (prompt only, no invented results).
@@ -103,15 +104,14 @@ const marquee = [...servers, ...servers];
       <div class="reveal">
         <span class="eyebrow">What you get</span>
         <h2 class="h2 mt-4">A file you can send, not a table to copy.</h2>
-        <p class="lead mt-4">Claude on its own writes invoice text. With the Invoice server it keeps your clients, numbers each invoice in order and renders an A4 PDF with the VAT worked out.</p>
-        <ul class="mt-6 grid gap-2.5 text-[.98rem]">
-          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span>Numbering that carries on from the last invoice</li>
-          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span>VAT, discounts and currency per line</li>
-          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span>Paid and overdue tracking you can ask about later</li>
+        <p class="lead mt-4">Claude on its own writes text. With a server connected it keeps your data between chats and hands back the finished file.</p>
+        <ul class="mt-6 grid gap-3 text-[.98rem]">
+          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span><span>Numbered invoices as an A4 PDF, VAT worked out. <a href="/servers/invoice/" class="link">Invoice</a></span></li>
+          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span><span>Several PDFs merged into one, in the order you say. <a href="/servers/pdf/" class="link">PDF</a></span></li>
+          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span><span>A month of hours as a CSV for your accountant. <a href="/servers/time-tracker/" class="link">Time Tracker</a></span></li>
         </ul>
-        <p class="mt-6"><a href="/servers/invoice/" class="link">See the Invoice server</a></p>
       </div>
-      <div class="reveal rounded-2xl p-4 sm:p-8" style="background: var(--bg-2)"><InvoicePreview /></div>
+      {pdfServer && <div class="reveal rounded-2xl p-4 sm:p-8" style="background: var(--bg-2)"><OutputPreview server={pdfServer} /></div>}
     </div>
   </section>
 

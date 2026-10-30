@@ -281,15 +281,10 @@ html[data-mode='dark'] {
 @keyframes stamp-land { 0% { transform: rotate(-8deg) scale(1.6); opacity: .25; } 100% { transform: rotate(-8deg) scale(1); opacity: .9; } }
 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 
-/* Sticky CTA: hidden at the top of the page (no overlap with the hero), slides in after the first screen.
-   Scroll-driven where supported; elsewhere it is simply always visible. */
-@supports (animation-timeline: scroll()) {
-  .sticky-cta { animation: sticky-in linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
-  @keyframes sticky-in {
-    0%, 60% { opacity: 0; transform: translateY(120%); visibility: hidden; }
-    100% { opacity: 1; transform: none; visibility: visible; }
-  }
-}
+/* Sticky CTA: hidden at the top of the page (no overlap with the hero), slides in after half a screen of scroll.
+   html.js is set by the header script; without JS the bar is always visible. */
+.js .sticky-cta { opacity: 0; visibility: hidden; transform: translateY(120%); transition: opacity .25s ease, transform .25s ease, visibility .25s; }
+.js.scrolled .sticky-cta { opacity: 1; visibility: visible; transform: none; }
 
 /* Entrance reveal for sections (pure CSS, scroll-driven where supported) */
 @supports (animation-timeline: view()) {

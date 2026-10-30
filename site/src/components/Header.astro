@@ -13,6 +13,9 @@ const nav = [
 <script is:inline>
   // Light is the default. Dark only when the visitor picked it (t-design). Runs before the page paints below the header.
   try { if (localStorage.getItem('mode') === 'dark') document.documentElement.dataset.mode = 'dark'; } catch (e) {}
+  (function () { var h = document.documentElement; h.classList.add('js');
+    var f = function () { h.classList.toggle('scrolled', window.scrollY > window.innerHeight * 0.5); };
+    f(); window.addEventListener('scroll', f, { passive: true }); })();
   (function () { var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', document.documentElement.dataset.mode === 'dark' ? '#151412' : '#f7f4ee'); })();
 </script>
 <header class="sticky top-0 z-40 border-b border-line backdrop-blur-xl" style="background: color-mix(in oklab, var(--bg) 86%, transparent)">
