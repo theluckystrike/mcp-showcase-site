@@ -52,7 +52,7 @@ export default function ServerExplorer({ items, categories, initialCategory = 'a
   }, [items, q, cat, hostedOnly]);
 
   const pill = (active: boolean) =>
-    `chip cursor-pointer !px-3 !py-1.5 !text-[.84rem] transition-colors ${active ? '!text-fg !border-line-strong bg-surface-2' : 'hover:!text-fg'}`;
+    `chip shrink-0 cursor-pointer !px-3 !py-1.5 !text-[.84rem] transition-colors ${active ? '!text-fg !border-line-strong bg-surface-2' : 'hover:!text-fg'}`;
 
   return (
     <div>
@@ -66,7 +66,8 @@ export default function ServerExplorer({ items, categories, initialCategory = 'a
             type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="invoice, PDF, mileage, VAT ...  (press / to search)"
+            placeholder="Search invoice, PDF, VAT"
+            aria-keyshortcuts="/"
             className="h-12 w-full rounded-xl border border-line bg-surface pl-11 pr-4 text-[1rem] outline-none transition-colors placeholder:text-faint focus:border-line-strong"
           />
         </label>
@@ -85,7 +86,7 @@ export default function ServerExplorer({ items, categories, initialCategory = 'a
         </label>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+      <div className="-mx-5 mt-4 flex gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0" role="group" aria-label="Filter by category">
         <button type="button" className={pill(cat === 'all')} aria-pressed={cat === 'all'} onClick={() => setCat('all')}>All</button>
         {categories.map((c) => (
           <button key={c.id} type="button" className={`${pill(cat === c.id)} cat`} style={{ ['--hue' as string]: c.hue }} aria-pressed={cat === c.id} onClick={() => setCat(c.id)}>

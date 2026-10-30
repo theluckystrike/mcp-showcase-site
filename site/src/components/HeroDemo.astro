@@ -93,9 +93,9 @@ const due = '13 Nov 2026';
   .chat { display: grid; gap: .45rem; font-size: .84rem; line-height: 1.45; position: relative; z-index: 2; }
   @media (min-width: 900px) { .chat { margin-top: 1.6rem; } }
   .chat-label { display: flex; justify-content: space-between; gap: .5rem; font-size: .72rem; color: var(--muted); font-weight: 560; }
-  .ex { border: 1px solid var(--border-strong); border-radius: 99px; padding: 0 .45rem; font-size: .66rem; line-height: 1.45; }
+  .ex { border: 1px solid var(--border-strong); border-radius: 2px; padding: 0 .45rem; font-size: .66rem; line-height: 1.45; }
   .you {
-    margin: 0; padding: .6rem .75rem; border-radius: .7rem .7rem .2rem .7rem;
+    margin: 0; padding: .6rem .75rem; border-radius: 3px;
     background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
   }
   .you-2 { justify-self: end; max-width: 85%; }
@@ -106,7 +106,7 @@ const due = '13 Nov 2026';
   .calls .does { display: none; color: var(--muted); font-size: .74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   @media (min-width: 900px) { .calls .does { display: inline; } .calls li { flex-wrap: wrap; } .calls .does { flex-basis: 100%; padding-left: 1.3rem; margin-top: -.15rem; } }
   .tick {
-    flex: none; width: .9rem; height: .9rem; border-radius: 99px; background: var(--accent);
+    flex: none; width: .9rem; height: .9rem; border-radius: 2px; background: var(--accent);
     -webkit-mask: none; position: relative;
   }
   .tick::after {
