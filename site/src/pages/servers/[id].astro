@@ -134,8 +134,8 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
                 )}
                 {c.result && (
                   <div class="chat-bot">
-                    <p>{c.result}</p>
-                    {c.minutes_saved && <p class="mt-1.5 text-[.78rem] text-faint" title={c.minutes_basis}>Saves about {c.minutes_saved} min (our estimate)</p>}
+                    <div><p>{c.result}</p>
+                    {c.minutes_saved && <p class="mt-1.5 text-[.78rem] text-faint" title={c.minutes_basis}>Saves about {c.minutes_saved} min (our estimate)</p>}</div>
                   </div>
                 )}
               </li>
@@ -241,16 +241,22 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
   .chat-case + .chat-case { padding-top: 2.2rem; border-top: 1px dashed var(--border-strong); }
   .chat-who { font-size: .78rem; color: var(--faint); font-weight: 600; display: flex; flex-wrap: wrap; gap: .25rem .75rem; align-items: baseline; }
   .chat-title { color: var(--text); font-size: 1rem; font-weight: 650; letter-spacing: -0.01em; flex-basis: 100%; }
+  /* Typed memo (same form as the home hero): mono margin label, a rule on top, no bubbles. */
   .chat-user {
-    margin-left: auto; max-width: 88%; padding: .8rem 1rem; border-radius: 1rem 1rem .3rem 1rem;
-    background: var(--surface-solid); border: 1px solid var(--border); font-size: .97rem; line-height: 1.5;
+    display: grid; grid-template-columns: 3.4rem minmax(0, 1fr); gap: .5rem; padding-top: .6rem;
+    border-top: 1px solid var(--border-strong); font-size: .97rem; line-height: 1.5;
   }
-  .chat-tools { list-style: none; margin: 0; padding: 0 0 0 .9rem; border-left: 2px solid var(--cat, var(--accent)); display: grid; gap: .35rem; font-size: .86rem; }
+  .chat-user::before, .chat-bot::before {
+    font-family: var(--font-mono); font-size: .64rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: .3rem;
+  }
+  .chat-user::before { content: 'You'; }
+  .chat-tools { list-style: none; margin: 0; padding: 0 0 0 .9rem; margin-left: 3.9rem; border-left: 2px solid var(--border-strong); display: grid; gap: .35rem; font-size: .86rem; }
   .chat-tools code { font-size: .8rem; font-weight: 600; color: var(--text); }
   .chat-bot {
-    max-width: 92%; padding: .85rem 1rem; border-radius: 1rem 1rem 1rem .3rem;
-    background: var(--accent-subtle); color: var(--text); font-size: .97rem; line-height: 1.5; font-weight: 520;
+    display: grid; grid-template-columns: 3.4rem minmax(0, 1fr); gap: .5rem; padding-top: .6rem;
+    border-top: 2px solid var(--text); color: var(--text); font-size: .97rem; line-height: 1.5; font-weight: 520;
   }
+  .chat-bot::before { content: 'Result'; }
 
   .fvp { border-top: 2px solid var(--text); border-bottom: 2px solid var(--text); }
   .fvp-head, .fvp-row { display: grid; grid-template-columns: 1fr; }

@@ -33,7 +33,7 @@ const jsonLd = [
 ---
 <Layout title={p.title} description={p.meta_description} jsonLd={jsonLd} ogType="article" crumbs={[{ name: 'Connect', path: '/connect/' }, { name: p.h1, path: p.path }]}>
   <section class="relative isolate overflow-hidden">
-    <div class="glow-bg opacity-60"></div>
+    <div class="grid-lines"></div>
     <div class="wrap pb-10 pt-14 sm:pt-20">
       <nav class="muted flex gap-2 text-[.88rem]" aria-label="Breadcrumb"><a href="/connect/" class="hover:text-fg">Connect</a><span class="text-faint">/</span><span class="text-fg">{name}</span></nav>
       <h1 class="display mt-6 max-w-4xl !text-[clamp(2.2rem,5.5vw,4rem)]">{p.h1}</h1>
@@ -69,7 +69,7 @@ const jsonLd = [
       <div>
         <h2 class="text-2xl font-semibold">{q.client}</h2>
         <span class="chip mt-3">{q.method === 'hosted' ? 'Hosted URL, no install' : 'Runs on your computer'}</span>
-        <ol class="mt-5 grid list-decimal gap-2.5 pl-5 text-[1rem]">{q.steps.map((t) => <li>{t}</li>)}</ol>
+        <ol class="index-list index-plain mt-5">{q.steps.map((t) => <li class="index-row !py-3"><span class="index-text !text-fg">{t}</span></li>)}</ol>
         {q.note && <p class="mt-4 text-[.82rem] text-faint">Test status: {q.note}</p>}
       </div>
       <div class="self-start">

@@ -349,6 +349,7 @@ html[data-mode='dark'] {
     .index-row::before { grid-row: auto; }
     .index-go { display: inline; }
     .index-plain .index-row { grid-template-columns: 3rem minmax(0, 1fr); }
+    .index-plain .index-row::before { grid-row: span 2; }
   }
 }
 

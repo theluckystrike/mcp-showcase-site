@@ -2682,7 +2682,7 @@
     {
      "title": "Put a new packaging supplier on file",
      "persona": "Agnieszka Wrobel, runs a candle shop in Gdansk, Poland",
-     "prompt": "Add Pak-Bud Sp. z o.o. as a Packaging supplier. Contact Tomasz Lis, tomasz@pakbud.pl, terms 14 days net, lead time 10 days. Note: minimum order 500 PLN.",
+     "prompt": "Add Pak-Bud Sp. z o.o. as a Packaging supplier. Contact Tomasz Lis, tomasz@pakbud.pl, terms 14 days net, lead time 10 days. Minimum order is 500 PLN.",
      "steps": [
       {
        "tool": "supplier_add",

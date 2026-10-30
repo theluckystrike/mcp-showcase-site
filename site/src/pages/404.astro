@@ -1,14 +1,30 @@
 ---
+// 404 (w6-polish): a routing slip, not a centered stock block. Left aligned, ruled index of the 4 places people look for.
 import Layout from '../layouts/Layout.astro';
+import { stats } from '../data/servers';
+const st = stats();
+const routes = [
+  ['/servers/', `All ${st.servers} servers`, 'Search by job: invoice, PDF, VAT, timesheet.'],
+  ['/use-cases/', 'Use cases', 'Real prompts with the tools they call, in order.'],
+  ['/connect/', 'Connect free', 'Paste one URL into Claude or Cursor. No key.'],
+  ['/pricing/', 'Pricing', 'Free tier, $19 once per server, or all paid servers in one bundle.'],
+];
 ---
 <Layout title="Page not found" noindex>
   <section class="relative isolate overflow-hidden">
-    <div class="glow-bg opacity-60"></div>
-    <div class="wrap py-28 text-center">
-      <p class="font-mono text-sm text-accent-2">404</p>
-      <h1 class="display mt-4">Nothing here.</h1>
-      <p class="lead mx-auto mt-5 max-w-lg">The page moved or never existed. Try the server directory.</p>
-      <div class="mt-8 flex justify-center gap-3"><a href="/servers/" class="btn btn-primary">All servers</a><a href="/" class="btn">Home</a></div>
+    <div class="grid-lines"></div>
+    <div class="wrap grid gap-10 pb-20 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
+      <div>
+        <p class="serial !text-stamp">Error 404</p>
+        <h1 class="display mt-4">Nothing filed here.</h1>
+        <p class="lead mt-5 max-w-lg">The page moved or never existed. Pick a drawer below, or go back to the start.</p>
+        <div class="mt-8 flex flex-wrap gap-3"><a href="/servers/" class="btn btn-primary">All servers</a><a href="/" class="btn">Home</a></div>
+      </div>
+      <ol class="index-list index-plain self-start lg:mt-6">
+        {routes.map(([href, title, text]) => (
+          <li><a href={href} class="index-row"><span class="index-title">{title}</span><span class="index-text">{text}</span></a></li>
+        ))}
+      </ol>
     </div>
   </section>
 </Layout>
