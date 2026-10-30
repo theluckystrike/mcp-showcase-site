@@ -23,7 +23,7 @@
   --manila-ink: #5a4414;
   /* Lines */
   --border: #cfd4cb;
-  --border-strong: #8e958c;
+  --border-strong: #7c837a;   /* 3.4:1 on --bg, UI line minimum 3:1 (w7-finish) */
   --rule: rgb(43 60 158 / 0.11);   /* ledger rule, carbon blue */
   --margin-rule: rgb(180 35 24 / 0.35); /* ledger margin, red */
   /* Ink */
@@ -63,9 +63,9 @@ html[data-mode='dark'] {
   --manila-2: #3a3428;
   --manila-ink: #e6cf92;
   --border: #2a3242;
-  --border-strong: #4d5873;
-  --rule: rgb(165 180 255 / 0.07);
-  --margin-rule: rgb(255 122 107 / 0.28);
+  --border-strong: #636e8b;   /* 3.6:1 on --bg (w7-finish) */
+  --rule: rgb(165 180 255 / 0.12);   /* same visibility as light (1.2:1) */
+  --margin-rule: rgb(255 122 107 / 0.34);
   --text: #e8ebe5;
   --muted: #b0b7c4;
   --faint: #949cad;
@@ -164,7 +164,9 @@ html[data-mode='dark'] {
   .serial { font-family: var(--font-mono); font-size: .74rem; letter-spacing: .06em; color: var(--faint); font-variant-numeric: tabular-nums; }
 
   .display { font-family: var(--font-display); font-size: clamp(2.4rem, 6.2vw, 4.5rem); font-weight: 800; font-stretch: 112%; letter-spacing: -0.03em; line-height: 1; }
-  .h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 760; letter-spacing: -0.02em; }
+  /* .h2 is under 32px below ~940px wide: no negative tracking there (w7-finish). */
+  .h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 760; letter-spacing: 0; }
+  @media (min-width: 960px) { .h2 { letter-spacing: -0.02em; } }
   .lead { font-size: clamp(1.06rem, 1.6vw, 1.2rem); color: var(--muted); line-height: 1.55; max-width: 38em; }
   .muted { color: var(--muted); }
 
@@ -219,11 +221,12 @@ html[data-mode='dark'] {
     border-color: color-mix(in oklab, var(--cat, var(--accent)) 30%, var(--border));
     background: color-mix(in oklab, var(--cat, var(--accent)) 6%, var(--surface-solid));
   }
-  .dot { width: .5rem; height: .5rem; border-radius: 99px; background: var(--cat, var(--accent)); flex: none; }
+  /* Ink-only (d-gate round 4): the dot is a graphite punch mark, not a category hue. Category names carry the meaning. */
+  .dot { width: .45rem; height: .45rem; border-radius: 99px; background: currentColor; opacity: .8; flex: none; }
 
   /* Category color from a hue: style="--hue: 285". Ink hues, never neon. */
   .cat { --cat: oklch(var(--cat-l) var(--cat-c) var(--hue, 160)); }
-  .cat-text { color: var(--cat); }
+  .cat-text { color: var(--muted); }
   .cat-icon {
     display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 3px; color: var(--cat);
     background: color-mix(in oklab, var(--cat) 8%, var(--surface-solid)); border: 1px solid color-mix(in oklab, var(--cat) 30%, var(--border));
@@ -305,6 +308,14 @@ html[data-mode='dark'] {
     content: ''; position: absolute; top: 0; right: 0; width: 1.4rem; height: 1.4rem;
     background: linear-gradient(225deg, var(--bg) 50%, #dfe2da 50%);
   }
+  /* A sheet is paper in both modes, so it keeps the light inks. Without this, dark inks print pale on white (1.2-2.7:1). */
+  html[data-mode='dark'] .sheet {
+    --text: #1a1d22; --muted: #454b55; --faint: #59606b; --accent: #2b3c9e; --accent-hover: #1f2d80;
+    --stamp: #b42318; --ink-red: #b42318; --ink-blue: #2b3c9e; --ink-violet: #5a3a8e; --ink-black: #1a1d22;
+    --ok: #1f6a46; --warn: #8a5300; --border: #cfd4cb; --border-strong: #7c837a; --surface: #f7f8f4; --surface-solid: #fcfcfa;
+    --rule: rgb(43 60 158 / 0.11); --cat-l: 0.46; --cat-c: 0.12;
+  }
+  html[data-mode='dark'] .sheet .stamp, html[data-mode='dark'] .sheet .stamp-svg { mix-blend-mode: multiply; }
   html[data-mode='dark'] .sheet-fold::after { background: linear-gradient(225deg, var(--surface-solid) 50%, #dfe2da 50%); }
 
   /* Rubber stamp (CSS version, for inline use). The SVG version is components/Stamp.astro.

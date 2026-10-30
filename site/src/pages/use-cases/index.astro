@@ -7,7 +7,8 @@ import { upsell } from '../../data/content';
 import UpsellBand from '../../components/UpsellBand.astro';
 import JobCard from '../../components/JobCard.astro';
 import { pagesOfType, seo } from '../../data/pages';
-import { buyerRank } from '../servers/_outputs';
+import { buyerRank, outputType } from '../servers/_outputs';
+import InvoicePreview from '../../components/InvoicePreview.astro';
 import { getServer } from '../../data/servers';
 // Buyer order (same rank as /servers/): invoice, quotes, spreadsheet, pdf first. Stable for ties.
 const rankOf = (p: { servers: string[] }) => { const s = p.servers.map((id) => getServer(id)).find((x) => x); return s ? buyerRank(s) : 999; };
@@ -20,28 +21,46 @@ const cases = allCases();
 // One sample slip for the hero: the first invoice case (top buyer job).
 const lead = cases.find((x) => x.server.id === 'invoice');
 const groups = CATEGORIES.map((c) => ({ cat: c, items: cases.filter((x) => x.server.category === c.id) })).filter((g) => g.items.length);
+// First viewport (w7-finish): a ruled file index of the top 5 jobs, Invoice first. Each row prints the result the job hands back.
+const filed = jobs.slice(0, 5).map((j) => {
+  const s = j.servers.map((id) => getServer(id)).find((x) => x);
+  return { j, out: s ? outputType(s) : '', result: s?.cases[0]?.result ?? j.meta_description };
+});
 // Fallback when no content cases exist yet: README prompts per server.
 const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.length).map((s) => ({ s, p: s.tryPrompts[0] }));
 ---
 <Layout title={meta.title} description={meta.description} crumbs={[{ name: 'Use cases', path: '/use-cases/' }]}>
   <section class="relative isolate overflow-hidden">
     <div class="grid-lines"></div>
-    <div class="wrap grid gap-10 pb-10 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] lg:gap-14">
+    <div class="wrap grid gap-10 pb-12 pt-12 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-14">
       <div>
-      <span class="eyebrow">Use cases</span>
-      <h1 class="display mt-5 max-w-4xl">{meta.h1 || 'What you can do in chat'}</h1>
-      <p class="lead mt-5 max-w-2xl">One sentence in. Real tool calls. A finished file out. {jobs.length} jobs below, then {cases.length} example scenarios across {groups.length} categories. Each one uses the real tools of a server.</p>
-      {groups.length > 1 && (
-        <nav class="cat-jump mt-8" aria-label="Jump to category">
-          {groups.map((g) => <a href={`#${g.cat.id}`}>{g.cat.short}</a>)}
-        </nav>
-      )}
+        <span class="eyebrow">Job file</span>
+        <h1 class="display mt-5 !text-[clamp(2.3rem,5.2vw,3.9rem)]">{meta.h1 || 'Every job here ends in a file.'}</h1>
+        <p class="lead mt-5 max-w-xl">You type one sentence. The server calls its real tools and hands back the file. {jobs.length} jobs, {cases.length} example scenarios.</p>
+        <ol class="index-list index-plain uc-file mt-8" aria-label="Top jobs">
+          {filed.map(({ j, out, result }) => (
+            <li><a href={j.path} class="index-row">
+              <span class="index-title">{j.h1}</span>
+              <span class="index-text"><span class="uc-out">{out}</span>{result}</span>
+            </a></li>
+          ))}
+        </ol>
+        <a href="#jobs" class="link mt-4 inline-block text-[.95rem]">All {jobs.length} jobs</a>
       </div>
-      {lead && <aside class="hidden self-start lg:block lg:pt-10" aria-label="Example job"><CaseTurn server={lead.server} case={lead.case} showServer compact /></aside>}
+      {lead && (
+        <aside class="self-start lg:pt-2" aria-label="Example job, Invoice">
+          <div class="uc-memo">
+            <span class="uc-label">You</span>
+            <p>{lead.case.prompt}</p>
+          </div>
+          <div class="mt-4"><InvoicePreview /></div>
+          <a href={filed[0]?.j.path ?? "/servers/invoice/"} class="link mt-3 inline-block text-[.95rem]">See the invoice job, step by step</a>
+        </aside>
+      )}
     </div>
   </section>
-  <section class="wrap py-10">
-    <h2 class="text-2xl font-semibold sm:text-3xl">Pick your job</h2>
+  <section id="jobs" class="wrap py-10">
+    <h2 class="text-2xl font-semibold sm:text-3xl">All {jobs.length} jobs</h2>
     <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{jobs.map((j) => <JobCard page={j} />)}</div>
   </section>
   {answers.length > 0 && (
@@ -50,7 +69,14 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
       <ol class="index-list mt-6">{answers.map((a) => <li><a href={a.path} class="index-row"><span class="index-title">{a.h1}</span><span></span><span class="index-go" aria-hidden="true">Read</span></a></li>)}</ol>
     </section>
   )}
-  <section class="wrap pt-10"><h2 class="text-2xl font-semibold sm:text-3xl">All examples by category</h2></section>
+  <section class="wrap pt-10">
+    <h2 class="text-2xl font-semibold sm:text-3xl">All examples by category</h2>
+    {groups.length > 1 && (
+      <nav class="cat-jump mt-6" aria-label="Jump to category">
+        {groups.map((g) => <a href={`#${g.cat.id}`}>{g.cat.short}</a>)}
+      </nav>
+    )}
+  </section>
   {groups.map((g) => (
     <section id={g.cat.id} class="wrap py-10">
       <h2 class="text-2xl font-semibold sm:text-3xl"><a href={`/categories/${g.cat.id}/`} class="hover:underline">{g.cat.name}</a></h2>
@@ -82,4 +108,15 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
   }
   .cat-jump a:last-child { border-right: 0; }
   .cat-jump a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+  /* First-viewport file index: output type in mono caps before the result text. */
+  .uc-file .index-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .uc-out {
+    font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--text); margin-right: .55rem; padding-right: .55rem; border-right: 1px solid var(--border-strong);
+  }
+  .uc-file .index-row { padding-block: .8rem; }
+  /* The prompt above the sheet, typed like a memo line. */
+  .uc-memo { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: .5rem; border-top: 2px solid var(--text); padding-top: .7rem; font-size: .93rem; line-height: 1.5; }
+  .uc-memo p { margin: 0; }
+  .uc-label { padding-top: .2rem; font-family: var(--font-mono); font-size: .66rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 </style>

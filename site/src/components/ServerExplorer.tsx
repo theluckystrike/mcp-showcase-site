@@ -22,7 +22,7 @@ const CSS = `
 .srv-row:hover .srv-row-name { color: var(--accent); }
 .srv-row-out { justify-self: start; font-family: var(--font-mono); font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
   color: var(--text); padding: .15rem .45rem; border: 1px solid var(--border-strong); border-radius: .25rem; background: var(--surface-solid); }
-.srv-row-name { font-size: 1.15rem; font-weight: 660; letter-spacing: -0.02em; margin-top: .35rem; transition: color .15s ease; }
+.srv-row-name { font-size: 1.15rem; font-weight: 660; letter-spacing: 0; margin-top: .35rem; transition: color .15s ease; }
 .srv-row-tag { color: var(--muted); font-size: .93rem; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .srv-row-meta { display: flex; flex-wrap: wrap; gap: .2rem .9rem; font-size: .78rem; font-weight: 560; color: var(--faint); margin-top: .25rem; }
 `;

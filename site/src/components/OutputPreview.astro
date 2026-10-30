@@ -15,7 +15,7 @@ const kind = fileCase ? (fileCase.result!.match(/\b(PDF|DOCX|Word|Excel|XLSX|CSV
   <figure class="m-0">
     <div class="sheet sheet-fold p-5 sm:p-6" aria-label={`Example output: ${fileCase.result}`}>
       <div class="flex items-center justify-between gap-3 pr-5">
-        <p class="text-[1rem] font-bold tracking-tight">{fileCase.title}</p>
+        <p class="text-[1rem] font-bold">{fileCase.title}</p>
         <span class="rounded px-1.5 py-0.5 text-[.62rem] font-bold tracking-[.08em] text-white" style="background:#1f6b4f">{kind}</span>
       </div>
       <p class="sheet-muted mt-0.5 text-[.75rem]">{s.name}{fileCase.persona && ` · ${fileCase.persona}`}</p>

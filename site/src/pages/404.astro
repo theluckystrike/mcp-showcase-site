@@ -1,5 +1,6 @@
 ---
 // 404 (w6-polish): a routing slip, not a centered stock block. Left aligned, ruled index of the 4 places people look for.
+// w7-finish: the slip is now a paper sheet with a punched top edge and a slip head, so the page uses the document system.
 import Layout from '../layouts/Layout.astro';
 import { stats } from '../data/servers';
 const st = stats();
@@ -13,18 +14,33 @@ const routes = [
 <Layout title="Page not found" noindex>
   <section class="relative isolate overflow-hidden">
     <div class="grid-lines"></div>
-    <div class="wrap grid gap-10 pb-20 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
+    <div class="wrap grid gap-10 pb-16 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
       <div>
         <p class="serial !text-stamp">Error 404</p>
         <h1 class="display mt-4">Nothing filed here.</h1>
         <p class="lead mt-5 max-w-lg">The page moved or never existed. Pick a drawer below, or go back to the start.</p>
         <div class="mt-8 flex flex-wrap gap-3"><a href="/servers/" class="btn btn-primary">All servers</a><a href="/" class="btn">Home</a></div>
       </div>
-      <ol class="index-list index-plain self-start lg:mt-6">
-        {routes.map(([href, title, text]) => (
-          <li><a href={href} class="index-row"><span class="index-title">{title}</span><span class="index-text">{text}</span></a></li>
-        ))}
-      </ol>
+      <div class="sheet perf-top slip self-start lg:mt-4">
+        <div class="slip-head">
+          <span class="slip-kind">Routing slip</span>
+          <span class="slip-no">Undelivered</span>
+        </div>
+        <ol class="index-list index-plain slip-list">
+          {routes.map(([href, title, text]) => (
+            <li><a href={href} class="index-row"><span class="index-title">{title}</span><span class="index-text">{text}</span></a></li>
+          ))}
+        </ol>
+      </div>
     </div>
   </section>
 </Layout>
+
+<style>
+  .slip { padding: 1.5rem 1.3rem .6rem; }
+  .slip-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: .8rem; }
+  .slip-kind { font-family: var(--font-display); font-stretch: 100%; font-weight: 750; font-size: 1.05rem; }
+  .slip-no { font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--stamp); }
+  .slip-list > li:last-child { border-bottom: 0; }
+  .slip-list a.index-row:hover { background: var(--surface); }
+</style>

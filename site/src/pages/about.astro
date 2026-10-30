@@ -1,26 +1,63 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { brand } from '../config/brand';
-import { stats } from '../data/servers';
+import { stats, bundlePrice } from '../data/servers';
 import SupportBand from '../components/SupportBand.astro';
 import TelegramCta from '../components/TelegramCta.astro';
 const st = stats();
+// Record card (w7-finish): the facts of the project on one ruled card, like a register entry. Every number comes from data.
+const record: [string, string][] = [
+  ['Servers', String(st.servers)],
+  ['Tools, each in a SPEC.md', String(st.tools)],
+  ['Hosted URLs', String(st.hosted)],
+  ['Free tier', 'No key'],
+  ['Pro, per server', `$${brand.pricing.serverUsd} once`],
+  ['All paid servers', `$${bundlePrice()} once`],
+];
 ---
 <Layout title="About" description={`${brand.name}: ${brand.tagline} Open-source MCP servers for back-office work.`}>
   <section class="relative isolate overflow-hidden">
     <div class="grid-lines"></div>
-    <div class="wrap max-w-3xl pb-16 pt-14 sm:pt-20">
-      <span class="eyebrow">About</span>
-      <h1 class="display mt-5 !text-[clamp(2.3rem,6vw,4.2rem)]">{brand.tagline}</h1>
-      <div class="prose-site lead mt-8">
-        <p>Most back-office work is small, repeated and boring: an invoice, a quote, a mileage log, a check that a supplier bill matches the order. You already ask an AI for help with words. {brand.name} lets it do the work and hand you the file.</p>
-        <p>We build {st.servers} focused MCP servers. Each one does one job, and every tool is listed in its SPEC.md. {st.hosted} of them run as a hosted URL. All of them run on your own machine.</p>
-        <p>The free tier needs no key. Pro is a one-time payment. The source is on <a href={brand.links.github} rel="noopener">GitHub</a>.</p>
+    <div class="wrap grid gap-12 pb-16 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,23rem)] lg:gap-16">
+      <div class="max-w-[42rem]">
+        <span class="eyebrow">About</span>
+        <h1 class="display mt-5 !text-[clamp(2.3rem,6vw,4.2rem)]">{brand.tagline}</h1>
+        <div class="prose-site lead mt-8">
+          <p>Most back-office work is small, repeated and boring. An invoice, a quote, a mileage log, a check that a supplier bill matches the order. You already ask an AI for help with words. {brand.name} lets it do the work and hand you the file.</p>
+          <p>We build {st.servers} focused MCP servers. Each one does one job, and every tool is listed in its SPEC.md. {st.hosted} of them run as a hosted URL. All of them run on your own machine.</p>
+          <p>The free tier needs no key. Pro is a one-time payment. The source is on <a href={brand.links.github} rel="noopener">GitHub</a>.</p>
+        </div>
+        <div class="mt-10 flex flex-wrap gap-3"><a href="/servers/" class="btn btn-primary">Browse servers</a><a href="/developers/" class="btn">For developers</a></div>
+        <p class="muted mt-8 text-[.97rem]">Want a server for your own API, spreadsheet or docs? The maintainer takes custom work. <a href="/services/" class="text-accent underline underline-offset-4">See custom work</a>.</p>
+        <div class="mt-8"><TelegramCta /></div>
       </div>
-      <div class="mt-10 flex flex-wrap gap-3"><a href="/servers/" class="btn btn-primary">Browse servers</a><a href="/developers/" class="btn">For developers</a></div>
-      <p class="muted mt-8 text-[.97rem]">Want a server for your own API, spreadsheet or docs? The maintainer takes custom work. <a href="/services/" class="text-accent underline underline-offset-4">See custom work</a>.</p>
-      <div class="mt-8"><TelegramCta /></div>
+      <aside class="self-start lg:mt-20" aria-label="Project record">
+        <div class="sheet perf-top rec">
+          <div class="rec-head">
+            <span class="rec-kind">Record card</span>
+            <span class="rec-no">{brand.domain}</span>
+          </div>
+          <dl class="rec-list">
+            {record.map(([k, v]) => (<><dt>{k}</dt><dd>{v}</dd></>))}
+            <dt>Source</dt><dd><a href={brand.links.github} rel="noopener" class="rec-link">GitHub</a></dd>
+          </dl>
+          <p class="rec-foot sheet-muted">Counts come from the server catalog at build time.</p>
+        </div>
+      </aside>
     </div>
   </section>
   <SupportBand page="about" />
 </Layout>
+
+<style>
+  .rec { padding: 1.6rem 1.4rem 1.2rem; }
+  .rec-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: .7rem; border-bottom: 2px solid var(--text); }
+  .rec-kind { font-family: var(--font-display); font-stretch: 100%; font-weight: 750; font-size: 1.05rem; }
+  .rec-no { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .06em; color: var(--stamp); }
+  .rec-list { display: grid; grid-template-columns: minmax(0, 1fr) auto; margin: 0; font-size: .92rem; }
+  .rec-list dt, .rec-list dd { margin: 0; padding: .55rem 0; border-bottom: 1px solid var(--border); }
+  .rec-list dt { color: var(--muted); }
+  .rec-list dd { font-family: var(--font-mono); font-size: .86rem; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+  .rec-link { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .rec-foot { margin-top: .8rem; font-size: .78rem; }
+</style>
