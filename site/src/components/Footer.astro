@@ -11,7 +11,7 @@ const foot = upsell('all', 'footer', { copy: `All paid servers, one key, $${bran
 const year = new Date().getFullYear();
 ---
 <footer class="site-foot perf-top relative mt-24">
-  <div class="wrap grid gap-10 pb-12 pt-16 md:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
+  <div class="wrap grid gap-10 pb-12 pt-16 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
     <div>
       <a href="/" class="inline-flex" aria-label={`${brand.name} home`}><Wordmark size={30} /></a>
       <p class="muted mt-4 max-w-xs text-[.95rem]">{brand.tagline} Open-source MCP servers for Claude, Cursor and any MCP client.</p>

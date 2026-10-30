@@ -1,10 +1,15 @@
 ---
+// Section head (d-identity, BRANDKIT.md). Serial label (auto "No. 01" from .eyebrow), a form-style title, a short lead.
+// Left aligned by default; a form is read from the margin. `center` exists for short pages only.
 interface Props { eyebrow?: string; title: string; lead?: string; center?: boolean }
 const { eyebrow, title, lead, center = false } = Astro.props;
 ---
-<div class:list={['reveal max-w-3xl', center && 'mx-auto text-center']}>
+<div class:list={['section-head reveal max-w-3xl', center && 'mx-auto text-center']}>
   {eyebrow && <span class="eyebrow">{eyebrow}</span>}
   <h2 class="h2 mt-4">{title}</h2>
   {lead && <p class="lead mt-4">{lead}</p>}
   <slot />
 </div>
+<style>
+  .section-head .eyebrow { padding-bottom: .55rem; border-bottom: 1px solid var(--border-strong); }
+</style>
