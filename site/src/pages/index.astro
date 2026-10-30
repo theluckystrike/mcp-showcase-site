@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import HeroDemo from '../components/HeroDemo.astro';
 import OutputPreview from '../components/OutputPreview.astro';
+import InvoicePreview from '../components/InvoicePreview.astro';
 import ServerCard from '../components/ServerCard.astro';
 import CaseTurn from '../components/CaseTurn.astro';
 import SectionHead from '../components/SectionHead.astro';
@@ -148,6 +149,7 @@ const marquee = [...servers, ...servers];
             </div>
             <h3 class:list={['mt-6 font-semibold tracking-tight', i === 0 ? 'text-3xl' : 'text-xl']}>{c.name}</h3>
             <p class="muted mt-2 text-[.95rem]">{c.blurb}</p>
+            {i === 0 && <div class="pointer-events-none mt-6 hidden max-w-[24rem] rotate-[-1.5deg] lg:block" aria-hidden="true"><InvoicePreview compact caption={false} /></div>}
             {i < 2 && <div class="mt-auto flex flex-wrap gap-1.5 pt-6">{c.names.map((n) => <span class="chip">{n}</span>)}</div>}
           </a>
         ))}
