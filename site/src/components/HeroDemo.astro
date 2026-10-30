@@ -31,17 +31,21 @@ const due = '13 Nov 2026';
 <div class="desk" aria-label={`Example. You ask for an invoice in chat. The tools return INV-2026-0001 for Acme, total EUR ${fmt(total)}, later stamped paid.`} role="group">
   <!-- Chat: the real prompt and the real tool names, in order -->
   <div class="chat">
-    <p class="chat-label"><span>Claude, with {s?.name ?? 'Invoice'} connected</span><span class="ex">Example</span></p>
-    <p class="you">{prompt}</p>
-    <ol class="calls">
-      {steps.map((st, i) => (
-        <li style={`--d:${0.35 + i * 0.4}s`}><span class="tick" aria-hidden="true"></span><code>{st.tool}</code><span class="does">{st.does}</span></li>
-      ))}
-    </ol>
-    <p class="you you-2">Acme paid today. Mark it paid.</p>
-    <ol class="calls">
-      <li style="--d:1.45s"><span class="tick" aria-hidden="true"></span><code>invoice_mark_paid</code><span class="does">Status: paid</span></li>
-    </ol>
+    <p class="chat-label"><span>{s?.name ?? 'Invoice'} server connected</span><span class="ex">Example</span></p>
+    <div class="turn"><span class="who">You</span><p class="said">{prompt}</p></div>
+    <div class="turn"><span class="who">Claude</span>
+      <ol class="calls">
+        {steps.map((st, i) => (
+          <li style={`--d:${0.35 + i * 0.4}s`}><span class="tick" aria-hidden="true"></span><code>{st.tool}</code><span class="does">{st.does}</span></li>
+        ))}
+      </ol>
+    </div>
+    <div class="turn"><span class="who">You</span><p class="said">Acme paid today. Mark it paid.</p></div>
+    <div class="turn"><span class="who">Claude</span>
+      <ol class="calls">
+        <li style="--d:1.45s"><span class="tick" aria-hidden="true"></span><code>invoice_mark_paid</code><span class="does">Status: paid</span></li>
+      </ol>
+    </div>
   </div>
 
   <!-- The document the tools produce -->
@@ -90,21 +94,21 @@ const due = '13 Nov 2026';
   @media (min-width: 900px) { .desk { grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr); gap: 1.25rem; } }
 
   /* Chat column: a narrow transcript, not a window chrome */
-  .chat { display: grid; gap: .45rem; font-size: .84rem; line-height: 1.45; position: relative; z-index: 2; }
+  .chat { display: grid; grid-template-columns: minmax(0, 1fr); gap: .45rem; font-size: .84rem; line-height: 1.45; position: relative; z-index: 2; }
   @media (min-width: 900px) { .chat { margin-top: 1.6rem; } }
-  .chat-label { display: flex; justify-content: space-between; gap: .5rem; font-size: .72rem; color: var(--muted); font-weight: 560; }
+  .chat-label { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .25rem .5rem; margin: 0; font-size: .72rem; color: var(--muted); font-weight: 560; }
   .ex { border: 1px solid var(--border-strong); border-radius: 2px; padding: 0 .45rem; font-size: .66rem; line-height: 1.45; }
-  .you {
-    margin: 0; padding: .6rem .75rem; border-radius: 3px;
-    background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
-  }
-  .you-2 { justify-self: end; max-width: 85%; }
-  .calls { display: flex; flex-wrap: wrap; gap: .3rem .5rem; margin: 0; padding: 0 .15rem; list-style: none; }
+  /* A typed memo: a rule on top, a mono margin label, no bubbles */
+  .turn { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr); gap: .15rem .5rem; padding-top: .45rem; border-top: 1px solid var(--border-strong); }
+  @media (min-width: 900px) { .turn { grid-template-columns: minmax(0, 1fr); } }
+  .who { font-family: var(--font-mono); font-size: .64rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: .2rem; }
+  .said { margin: 0; color: var(--text); }
+  .calls { display: flex; flex-wrap: wrap; gap: .3rem .6rem; margin: 0; padding: .15rem 0 0; list-style: none; }
   @media (min-width: 900px) { .calls { flex-direction: column; } }
   .calls li { display: flex; align-items: center; gap: .4rem; min-width: 0; }
   .calls code { font-family: var(--font-mono); font-size: .74rem; color: var(--text); }
   .calls .does { display: none; color: var(--muted); font-size: .74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  @media (min-width: 900px) { .calls .does { display: inline; } .calls li { flex-wrap: wrap; } .calls .does { flex-basis: 100%; padding-left: 1.3rem; margin-top: -.15rem; } }
+  @media (min-width: 900px) { .calls .does { display: inline; white-space: normal; flex-basis: 100%; padding-left: 1.3rem; margin-top: -.15rem; } .calls li { flex-wrap: wrap; } }
   .tick {
     flex: none; width: .9rem; height: .9rem; border-radius: 2px; background: var(--accent);
     -webkit-mask: none; position: relative;

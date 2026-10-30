@@ -1,7 +1,7 @@
 ---
 // /pricing/ (d-money). A price list, not three tier cards. Data: data/content/pricing.json (t-money).
 // Picker: Buy $19 links to https://mcp.zovo.one/buy/<id>?src=site.pricing.picker (BRIEF section 2, t-review2 defect 8).
-// Mobile: the bundle line comes first (CSS order).
+// The bundle line comes first at every width (t-review2 defect 8, d-gate round 2).
 import Layout from '../layouts/Layout.astro';
 import Faq from '../components/Faq.astro';
 import SupportBand from '../components/SupportBand.astro';
@@ -44,17 +44,17 @@ const faq = p.faq.length ? p.faq : [
 ---
 <Layout title={meta.title} description={meta.description || `Free tier with no key. Pro for $${single} per server or $${bundle} for all ${st.paid} paid servers. One-time payment.`}
   crumbs={[{ name: 'Pricing', path: '/pricing/' }]}
-  jsonLd={[{ '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: `${brand.name} bundle`, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude, Cursor, VS Code',
+  jsonLd={[{ '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: `${brand.name} bundle`, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude Desktop, Claude Code, Cursor (MCP clients)',
       offers: [
         { '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free tier' },
         { '@type': 'Offer', price: String(single), priceCurrency: 'USD', name: 'Pro, one server, one-time' },
         { '@type': 'Offer', price: String(bundle), priceCurrency: 'USD', name: `Bundle, all ${st.paid} paid servers, one-time`, url: buyUrl(bundleUrl(), 'pricing', 'jsonld') },
       ] },
     { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]}>
-  <section class="wrap pb-6 pt-12 sm:pt-16">
+  <section class="wrap pb-4 pt-10 sm:pt-14">
     <span class="eyebrow">Pricing</span>
-    <h1 class="display mt-5 max-w-4xl font-display">{meta.h1 || 'Pay once. Keep it.'}</h1>
-    <p class="lead mt-5">Start free with no key. Pay only for the server you outgrow. Two singles cost ${single * 2}, and all {st.paid} paid servers cost ${bundle}.</p>
+    <h1 class="display mt-4 max-w-4xl font-display !text-[clamp(2.2rem,4.6vw,3.6rem)]">$0 to start. ${bundle} for all {st.paid}.</h1>
+    <p class="lead mt-5">Every server has a free tier with no key. Pay once for the one you outgrow, or for all of them. Two singles cost ${single * 2}.</p>
   </section>
 
   <section class="wrap py-6" aria-labelledby="pl-h">
@@ -64,18 +64,19 @@ const faq = p.faq.length ? p.faq : [
         <p class="font-mono text-[.8rem] text-faint">USD, one payment, no subscription</p>
       </div>
       <ol class="pl-lines flex flex-col">
-        <li class="pl-line order-3 md:order-1" id="free">
+        <li class="pl-line pl-bundle" id="bundle">
           <p class="pl-no">01</p>
           <div class="pl-body">
-            <h3 class="pl-name">{free.name}</h3>
-            <p class="muted mt-1">Every server has a free tier with no key, no account and no expiry. {st.hosted} answer at a hosted URL.</p>
-            <details class="pl-more mt-3"><summary>What's included</summary><ul>{free.features.map((f) => <li>{f}</li>)}</ul></details>
+            <p class="pl-tab font-mono">Best value</p>
+            <h3 class="pl-name">All {st.paid} paid servers</h3>
+            <p class="mt-1">One key turns on Pro everywhere, for life. It covers chains like time to invoice and quote to invoice.</p>
+            <details class="pl-more mt-3"><summary>What's included</summary><ul>{all.features.map((f) => <li>{f}</li>)}</ul></details>
           </div>
-          <p class="pl-price tnum">$0</p>
-          <div class="pl-act"><a href={href(free.cta_url)} rel={free.cta_url.startsWith('http') ? 'nofollow' : undefined} class="btn w-full">{free.cta_label}</a></div>
+          <p class="pl-price tnum">${bundle}</p>
+          <div class="pl-act"><a href={bundleHref} rel="nofollow" class="btn btn-primary w-full">Buy the bundle, ${bundle}</a></div>
         </li>
 
-        <li class="pl-line order-2 md:order-2" id="single">
+        <li class="pl-line" id="single">
           <p class="pl-no">02</p>
           <div class="pl-body">
             <h3 class="pl-name">Pro for one server</h3>
@@ -95,16 +96,15 @@ const faq = p.faq.length ? p.faq : [
           <div class="pl-act"><a href={first?.url} rel="nofollow" class="btn btn-primary w-full" data-pick-buy>Buy {first?.name} for ${single}</a></div>
         </li>
 
-        <li class="pl-line pl-bundle order-1 md:order-3" id="bundle">
+        <li class="pl-line" id="free">
           <p class="pl-no">03</p>
           <div class="pl-body">
-            <p class="pl-tab font-mono">Best value</p>
-            <h3 class="pl-name">All {st.paid} paid servers</h3>
-            <p class="mt-1">One key turns on Pro everywhere, for life. It covers chains like time to invoice and quote to invoice.</p>
-            <details class="pl-more mt-3"><summary>What's included</summary><ul>{all.features.map((f) => <li>{f}</li>)}</ul></details>
+            <h3 class="pl-name">{free.name}</h3>
+            <p class="muted mt-1">Every server has a free tier with no key, no account and no expiry. {st.hosted} answer at a hosted URL.</p>
+            <details class="pl-more mt-3"><summary>What's included</summary><ul>{free.features.map((f) => <li>{f}</li>)}</ul></details>
           </div>
-          <p class="pl-price tnum">${bundle}</p>
-          <div class="pl-act"><a href={bundleHref} rel="nofollow" class="btn btn-primary w-full">Buy the bundle, ${bundle}</a></div>
+          <p class="pl-price tnum">$0</p>
+          <div class="pl-act"><a href={href(free.cta_url)} rel={free.cta_url.startsWith('http') ? 'nofollow' : undefined} class="btn w-full">{free.cta_label}</a></div>
         </li>
       </ol>
       <div class="pl-foot grid gap-1 border-t-2 border-fg px-5 py-4 font-mono text-[.85rem] sm:px-7">

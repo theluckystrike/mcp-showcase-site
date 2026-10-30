@@ -8,7 +8,7 @@
   "show_prices": true,
   "eyebrow": "Custom work",
   "h1": "Get an MCP server built around your own data",
-  "lead": "The person who maintains the servers on this site also builds them to order. You tell us the job your team repeats. You get a tested server that does it inside Claude, Cursor or any other MCP client.",
+  "lead": "The person who maintains the servers on this site also builds them to order. You tell us the job your team repeats. You get a server that does it inside Claude, Cursor or any other MCP client, with a test for each tool.",
   "services": [
     {
       "id": "custom-server",
@@ -63,10 +63,22 @@
     }
   ],
   "steps": [
-    { "title": "Tell us the job", "text": "Write on Telegram or by email. Two or three lines are enough." },
-    { "title": "Get a fixed quote", "text": "We reply with questions, then a price and a date before any work starts." },
-    { "title": "We build in your repo", "text": "You see each commit. Every tool gets a test." },
-    { "title": "Handover", "text": "You own the code. We walk your team through it once." }
+    {
+      "title": "Tell us the job",
+      "text": "Write on Telegram or by email. Two or three lines are enough."
+    },
+    {
+      "title": "Get a fixed quote",
+      "text": "We reply with questions, then a price and a date before any work starts."
+    },
+    {
+      "title": "We build in your repo",
+      "text": "You see each commit. Every tool gets a test."
+    },
+    {
+      "title": "Handover",
+      "text": "You own the code. We walk your team through it once."
+    }
   ],
   "github": {
     "as_of": "2026-10-30",
@@ -77,18 +89,46 @@
     "merged_prs_elsewhere": 367,
     "merged_prs_repos": 231,
     "merged_prs_owners": 199,
-    "merged_prs_url": "https://github.com/search?q=author%3Atheluckystrike+is%3Apr+is%3Amerged+-user%3Atheluckystrike&type=pullrequests",
+    "merged_prs_url": "https://github.com/search?q=author%3Atheluckystrike+is%3Apr+is%3Amerged+-user%3Atheluckystrike+-org%3Azovo-one+-org%3ABeLikeNative&type=pullrequests",
     "examples": [
-      { "repo": "urllib3/urllib3", "title": "Honor Retry-After on PoolManager redirects", "url": "https://github.com/urllib3/urllib3/pull/5330" },
-      { "repo": "PrefectHQ/prefect", "title": "Validate PEP 508 deps in execute_bundle_in_subprocess", "url": "https://github.com/PrefectHQ/prefect/pull/21916" },
-      { "repo": "OWASP/cve-lite-cli", "title": "Make the ratchet gate work when no baseline exists", "url": "https://github.com/OWASP/cve-lite-cli/pull/1314" },
-      { "repo": "GoogleChrome/chrome-extensions-samples", "title": "Add chrome.commands API sample", "url": "https://github.com/GoogleChrome/chrome-extensions-samples/pull/1629" }
+      {
+        "repo": "urllib3/urllib3",
+        "title": "Honor Retry-After on PoolManager redirects",
+        "url": "https://github.com/urllib3/urllib3/pull/5330"
+      },
+      {
+        "repo": "PrefectHQ/prefect",
+        "title": "Validate PEP 508 deps in execute_bundle_in_subprocess",
+        "url": "https://github.com/PrefectHQ/prefect/pull/21916"
+      },
+      {
+        "repo": "OWASP/cve-lite-cli",
+        "title": "Make the ratchet gate work when no baseline exists",
+        "url": "https://github.com/OWASP/cve-lite-cli/pull/1314"
+      },
+      {
+        "repo": "GoogleChrome/chrome-extensions-samples",
+        "title": "Add chrome.commands API sample",
+        "url": "https://github.com/GoogleChrome/chrome-extensions-samples/pull/1629"
+      }
     ]
   },
   "faq": [
-    { "q": "Do you have client references?", "a": "Not on this page. We'd rather show code you can read. Every merged pull request above is public, and so is the source of all 58 servers on this site." },
-    { "q": "Who owns the code?", "a": "You do. It goes into your repository under the licence you choose." },
-    { "q": "Is the price fixed?", "a": "Yes, once we agree the scope. The prices on this page are starting points. Yours depends on how many tools and systems are involved." },
-    { "q": "Can you work with our private data?", "a": "We can build against a sample or a test account, so your real data never has to leave your side." }
+    {
+      "q": "Do you have client references?",
+      "a": "Not on this page. We'd rather show code you can read. Every merged pull request above is public, and so is the source of all 58 servers on this site."
+    },
+    {
+      "q": "Who owns the code?",
+      "a": "You do. It goes into your repository under the licence you choose."
+    },
+    {
+      "q": "Is the price fixed?",
+      "a": "Yes, once we agree the scope. The prices on this page are starting points. Yours depends on how many tools and systems are involved."
+    },
+    {
+      "q": "Can you work with our private data?",
+      "a": "We can build against a sample or a test account, so your real data never has to leave your side."
+    }
   ]
 }

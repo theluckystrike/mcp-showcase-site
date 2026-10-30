@@ -30,10 +30,10 @@ const jsonLd = [
 ];
 ---
 <Layout title={title} description={description} crumbs={[{ name: 'Custom work', path: '/services/' }]} jsonLd={jsonLd}>
-  <section class="wrap grid gap-10 pb-10 pt-12 sm:pt-16 lg:grid-cols-[1.25fr_1fr] lg:items-start">
+  <section class="wrap grid gap-10 pb-8 pt-10 sm:pt-14 lg:grid-cols-[1.25fr_1fr] lg:items-start">
     <div>
       <span class="eyebrow">{c.eyebrow}</span>
-      <h1 class="display mt-5 max-w-3xl font-display">{c.h1}</h1>
+      <h1 class="display mt-5 max-w-3xl font-display !text-[clamp(2.2rem,4.8vw,3.8rem)]">{c.h1}</h1>
       <p class="lead mt-5">{c.lead}</p>
       <div class="mt-8 flex flex-wrap items-center gap-3">
         <a href={tg} rel="noopener" target="_blank" class="btn btn-primary">Describe your job on Telegram</a>

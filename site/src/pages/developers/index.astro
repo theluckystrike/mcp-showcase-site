@@ -11,7 +11,7 @@ import UpsellBand from '../../components/UpsellBand.astro';
 
 const d = getDevelopers();
 const st = stats();
-const devMeta = seo('/developers/', { title: 'Developers: tested MCP servers with clear tool contracts', description: `${st.servers} open-source MCP servers. stdio and hosted HTTP.` });
+const devMeta = seo('/developers/', { title: 'MCP servers for developers, with clear tool contracts', description: `${st.servers} open-source MCP servers. stdio and hosted HTTP.` });
 const foot = upsell('developers', 'footer', { copy: 'Open source. Pro keys verify offline. Buying Pro funds the maintenance.', cta_url: buyUrl(bundleUrl(), 'developers', 'footer') });
 const quickstart = d.quickstart.length ? d.quickstart : [
   { client: 'Claude Code', steps: ['Get a free token.', 'Add the hosted server.'], lang: 'bash', tested: false,
@@ -26,7 +26,7 @@ const quickstart = d.quickstart.length ? d.quickstart : [
     <div class="grid-lines"></div>
     <div class="wrap pb-10 pt-14 sm:pt-20">
       <span class="eyebrow">Developers</span>
-      <h1 class="display mt-5 max-w-4xl">Tested servers. <span class="mark">Clear contracts.</span></h1>
+      <h1 class="display mt-5 max-w-4xl">Clear tool contracts. <span class="mark">Two ways to run.</span></h1>
       <p class="lead mt-5 max-w-2xl">{d.architecture?.summary || `${st.servers} open-source MCP servers. Run them over stdio on your machine, or call ${st.hosted} of them over hosted HTTP.`}</p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a href="#quickstart" class="btn btn-primary">Quickstart</a>
@@ -38,20 +38,21 @@ const quickstart = d.quickstart.length ? d.quickstart : [
   </section>
 
   <section id="quickstart" class="wrap py-12">
-    <h2 class="text-2xl font-semibold sm:text-3xl">Quickstart</h2>
-    <div class="mt-6 grid gap-4 lg:grid-cols-2">
-      {quickstart.map((q) => (
-        <div class="card flex flex-col p-6">
-          <div class="flex items-center justify-between gap-3">
-            <h3 class="text-lg font-semibold">{q.client}</h3>
-            {q.tested && <span class="chip"><span class="dot" style="--cat: var(--ok)"></span>Tested</span>}
+    <h2 class="h2 font-display">Quickstart</h2>
+    <ol class="mt-6 border-t-2 border-fg">
+      {quickstart.map((q, i) => (
+        <li class="grid gap-3 border-b border-line-strong py-6 md:grid-cols-[3.5rem_1fr_1.2fr] md:gap-6">
+          <p class="font-mono text-[.9rem] text-faint">{String(i + 1).padStart(2, '0')}</p>
+          <div>
+            <h3 class="font-display text-[1.25rem] font-bold leading-tight">{q.client}</h3>
+            {q.tested && <p class="mt-1 font-mono text-[.75rem] uppercase tracking-wider text-ok">Steps checked</p>}
+            {q.steps.length > 0 && <ol class="muted mt-3 list-decimal space-y-1 pl-5 text-[.95rem]">{q.steps.map((s) => <li>{s}</li>)}</ol>}
+            {CLIENTS.find((c) => q.client.startsWith(c.match[0])) && <a class="link mt-3 inline-block text-[.9rem]" href={`/connect/${CLIENTS.find((c) => q.client.startsWith(c.match[0]))!.slug}/`}>Full {q.client.split(' (')[0]} guide</a>}
           </div>
-          {q.steps.length > 0 && <ol class="muted mt-3 list-decimal space-y-1 pl-5 text-[.95rem]">{q.steps.map((s) => <li>{s}</li>)}</ol>}
-          {q.snippet && <div class="mt-4"><CopyCode code={q.snippet} /></div>}
-          {CLIENTS.find((c) => q.client.startsWith(c.match[0])) && <a class="link mt-4 text-[.9rem]" href={`/connect/${CLIENTS.find((c) => q.client.startsWith(c.match[0]))!.slug}/`}>Full {q.client.split(' (')[0]} guide</a>}
-        </div>
+          <div class="min-w-0">{q.snippet && <CopyCode code={q.snippet} />}</div>
+        </li>
       ))}
-    </div>
+    </ol>
   </section>
 
   {d.hosted && (
