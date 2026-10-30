@@ -49,7 +49,7 @@ const ex = cases[0];
 
 // Answer in 40 words or fewer: the job, the chat apps, the server and the result (seo.json h1_rules).
 const answer = job?.answer ? job.answer : main
-  ? `Yes. Connect the ${main.name} server to Claude or Cursor${main.hosted ? ' with one URL' : ''}. Then ask in plain words. ${main.tagline.replace(/\.$/, '')}.${main.paid ? ` Free tier first; Pro is $${single ? main.priceUsd : bundlePrice()} once.` : ' It is free.'}`
+  ? `Yes. Connect the ${main.name} server to Claude or Cursor${main.hosted ? ' with one URL' : ''}. Then ask in plain words. ${main.tagline.replace(/\.$/, '')}.${main.paid ? ` Free tier first, then Pro is $${single ? main.priceUsd : bundlePrice()} once.` : ' It\'s free.'}`
   : p.meta_description;
 
 // Related: same audience first, then same category, max 3.
@@ -99,7 +99,6 @@ const mainHasOutput = !!main && main.cases.length > 0;
 <Layout title={p.title} description={description} jsonLd={jsonLd} ogType="article" crumbs={[hub, { name: p.h1, path: p.path }]}>
   <div class="cat" style={`--hue:${cat.hue}`}>
     <section class="relative isolate overflow-hidden">
-      <div class="glow-bg"></div>
       <div class="grid-lines"></div>
       <div class="wrap pb-10 pt-10 sm:pt-16">
         <nav class="muted flex flex-wrap items-center gap-2 text-[.88rem]" aria-label="Breadcrumb">

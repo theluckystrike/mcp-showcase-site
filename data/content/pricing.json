@@ -142,7 +142,7 @@
     {
       "page": "developers",
       "slot": "footer",
-      "copy": "Open source, MIT. Pro keys are Ed25519-signed and verify offline. Buying Pro funds the maintenance.",
+      "copy": "Open source, MIT. Pro keys are Ed25519-signed and verify offline, and buying Pro pays for the maintenance.",
       "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.developers.footer"
     },
     {
@@ -179,7 +179,7 @@
     },
     {
       "q": "How do I pay?",
-      "a": "With a card on Stripe Checkout. The Buy button opens a short confirmation page, then Stripe. Prices are in US dollars."
+      "a": "With a card on Stripe Checkout. The Buy button opens a short confirmation page and then hands you to Stripe, with prices in US dollars."
     },
     {
       "q": "How do I get my key?",

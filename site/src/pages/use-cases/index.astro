@@ -9,7 +9,7 @@ import JobCard from '../../components/JobCard.astro';
 import { pagesOfType, seo } from '../../data/pages';
 const jobs = pagesOfType('use-case');
 const answers = pagesOfType('answer');
-const meta = seo('/use-cases/', { title: 'Use cases: back-office jobs done in chat', description: 'Example scenarios: invoices, expenses, PDFs, checks and reports done from Claude, ChatGPT or Cursor.' });
+const meta = seo('/use-cases/', { title: 'Back-office jobs done in chat, with examples', description: 'Example scenarios for invoices, expenses, PDFs, checks and reports, done from Claude, ChatGPT or Cursor.' });
 const after = upsell('use-cases', 'after_case', { copy: 'Every example here works on the free tier. Pro removes the limits.', cta_url: buyUrl(bundleUrl(), 'use-cases', 'after_case') });
 
 const cases = allCases();
@@ -19,7 +19,7 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
 ---
 <Layout title={meta.title} description={meta.description} crumbs={[{ name: 'Use cases', path: '/use-cases/' }]}>
   <section class="relative isolate overflow-hidden">
-    <div class="glow-bg opacity-60"></div>
+    <div class="grid-lines"></div>
     <div class="wrap pb-10 pt-14 sm:pt-20">
       <span class="eyebrow">Use cases</span>
       <h1 class="display mt-5 max-w-4xl">{meta.h1 || 'What you can do in chat'}</h1>

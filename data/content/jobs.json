@@ -733,7 +733,7 @@
    },
    "pitfalls": [
     "Scheduling in the weeks when the US and Europe have changed clocks on different dates.",
-    "Picking a time that is inside hours for two people and 7 am for the third.",
+    "Picking a time that's inside working hours for two people and 7 am for the third.",
     "Sending a time in your zone only, with no calendar file."
    ],
    "answer": "Claude knows time zones, but daylight saving gaps trip it up and it can't see calendars. With Timezone and Calendar connected, Claude ranks slots inside everyone's working hours on real dates, checks your imported calendar for clashes and writes a .ics invite."

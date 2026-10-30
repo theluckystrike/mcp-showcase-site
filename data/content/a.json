@@ -742,7 +742,7 @@
     },
     {
      "q": "Can I change a finalized bill of sale?",
-     "a": "No. Finalizing locks it. Edit while it's a draft."
+     "a": "No. Finalizing locks it, so make your edits while it's still a draft."
     }
    ]
   },
@@ -1912,7 +1912,7 @@
        "does": "Reads the series for the window"
       }
      ],
-     "result": "The daily series for the year. Windows past 90 days are Pro. Free answers the last 90 days and names the cap.",
+     "result": "The daily series for the year. Free answers the last 90 days and names the cap, and any window older than that is Pro.",
      "minutes_saved": 10,
      "minutes_basis": "INFERRED: downloading and filtering an ECB file takes 10 min"
     }
@@ -1974,7 +1974,7 @@
    "name": "Delivery Schedule",
    "category": "operations",
    "tagline": "Dated deliverables, sign-off and a plain list of what's late.",
-   "plain": "List what you owe a client and when, against a quote or work order. Mark items delivered and accepted, and ask what has slipped as at any date. On Pro it writes the schedule document and the milestone invoice lines.",
+   "plain": "List what you owe a client and when, against a quote or work order. Mark items delivered and accepted. Then ask what has slipped as at any date, and on Pro it also writes the schedule document and the milestone invoice lines.",
    "for_who": [
     "Agencies",
     "Contractors",
@@ -2518,7 +2518,7 @@
        "does": "Lists saved reports"
       }
      ],
-     "result": "The report is kept on disk. The free tier keeps 3 saved reports. Pro removes the cap.",
+     "result": "The report is kept on disk. Free keeps 3 saved reports at a time, and Pro removes that cap.",
      "minutes_saved": 5,
      "minutes_basis": "INFERRED: filing the result by hand takes 5 min"
     }
