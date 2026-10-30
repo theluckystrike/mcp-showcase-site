@@ -218,8 +218,7 @@ html[data-mode='dark'] {
   }
   .chip-tool {
     font-family: var(--font-mono); font-size: .76rem; color: var(--text); border-radius: 2px;
-    border-color: color-mix(in oklab, var(--cat, var(--accent)) 30%, var(--border));
-    background: color-mix(in oklab, var(--cat, var(--accent)) 6%, var(--surface-solid));
+    border-color: var(--border-strong); background: var(--surface-solid); /* ink only, no category tint (w7-finish) */
   }
   /* Ink-only (d-gate round 4): the dot is a graphite punch mark, not a category hue. Category names carry the meaning. */
   .dot { width: .45rem; height: .45rem; border-radius: 99px; background: currentColor; opacity: .8; flex: none; }
@@ -228,8 +227,8 @@ html[data-mode='dark'] {
   .cat { --cat: oklch(var(--cat-l) var(--cat-c) var(--hue, 160)); }
   .cat-text { color: var(--muted); }
   .cat-icon {
-    display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 3px; color: var(--cat);
-    background: color-mix(in oklab, var(--cat) 8%, var(--surface-solid)); border: 1px solid color-mix(in oklab, var(--cat) 30%, var(--border));
+    display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 3px; color: var(--text);
+    background: var(--surface-solid); border: 1px solid var(--border-strong);
   }
 
   /* No glow. Kept as a no-op so old markup does not break. */

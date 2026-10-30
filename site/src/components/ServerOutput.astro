@@ -114,7 +114,9 @@ const numeric = (v: string) => /^-?[\d.,]+$|^about [\d,]+$/.test(v);
   .out-table tfoot th { color: inherit; }
   .out-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-top: .6rem; }
   .out-totals { display: grid; grid-template-columns: 1fr auto; gap: .15rem 1.2rem; text-align: right; min-width: 11rem; }
-  .out-totals dt { opacity: .75; }
+  .out-totals dt { opacity: .75; white-space: nowrap; }
+  /* Narrow sheets (w7-finish): a long file name next to the stamp broke into 4 short lines at 390px. Stack the totals under the stamp. */
+  @media (max-width: 479px) { .out-foot { flex-wrap: wrap; } .out-totals { margin-left: auto; } .out-totals dd { overflow-wrap: anywhere; } }
   .out-totals .out-grand { opacity: 1; font-weight: 720; font-size: .98rem; border-top: 2px solid currentColor; padding-top: .35rem; margin-top: .25rem; }
   .out-totals dd.out-grand { color: var(--accent); }
   .out-result { margin-top: 1rem; padding-top: .8rem; border-top: 2px solid currentColor; font-weight: 560; line-height: 1.45; }
