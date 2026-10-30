@@ -35,7 +35,7 @@ const loose = paidServers.filter((s) => !CATEGORIES.some((c) => c.id === s.categ
 if (loose.length) groups.push({ name: 'Other', items: loose });
 const first = groups.flatMap((g) => g.items).find((x) => x.id === DEFAULT_ID) ?? groups[0]?.items[0];
 
-const refundSrc = 'https://github.com/theluckystrike/mcp-servers/blob/main/billing/src/index.js#L782';
+const refundSrc = 'https://github.com/theluckystrike/mcp-servers/blob/main/billing/src/index.js#L1217';
 const srcText = (s?: string) => (s ?? '').replace(/~\/mcp-servers\//g, 'mcp-servers/');
 const faq = p.faq.length ? p.faq : [
   { q: 'Is it a subscription?', a: `No. Pro is a one-time payment: $${single} for one server or $${bundle} for all ${st.paid} paid servers. Lifetime licence.` },
@@ -112,7 +112,7 @@ const faq = p.faq.length ? p.faq : [
         <p class="flex justify-between gap-4 font-semibold"><span>All {st.paid} paid servers</span><span class="tnum">${bundle}.00</span></p>
       </div>
     </div>
-    <p class="mt-4 text-[.95rem]">Refunds within 14 days. Email <span class="select-all font-mono">support@zovo.one</span> with your checkout details. <a class="text-faint underline underline-offset-2 text-[.82rem] font-mono" href={refundSrc} rel="noopener" target="_blank">Source: billing/src/index.js line 782</a></p>
+    <p class="mt-4 text-[.95rem]">Refunds within 14 days. Email <span class="select-all font-mono">support@zovo.one</span> with your checkout details. <a class="text-faint underline underline-offset-2 text-[.82rem] font-mono" href={refundSrc} rel="noopener" target="_blank">Source: billing/src/index.js line 1217</a></p>
   </section>
 
   {p.proFeatures.length > 0 && (

@@ -8,7 +8,7 @@ const st = stats();
 // Record card (w7-finish): the facts of the project on one ruled card, like a register entry. Every number comes from data.
 const record: [string, string][] = [
   ['Servers', String(st.servers)],
-  ['Tools, each in a SPEC.md', String(st.tools)],
+  ['Tools, each with a written contract', String(st.tools)],
   ['Hosted URLs', String(st.hosted)],
   ['Free tier', 'No key'],
   ['Pro, per server', `$${brand.pricing.serverUsd} once`],
@@ -24,7 +24,7 @@ const record: [string, string][] = [
         <h1 class="display mt-5 !text-[clamp(2.3rem,6vw,4.2rem)]">{brand.tagline}</h1>
         <div class="prose-site lead mt-8">
           <p>Most back-office work is small, repeated and boring. An invoice, a quote, a mileage log, a check that a supplier bill matches the order. You already ask an AI for help with words. {brand.name} lets it do the work and hand you the file.</p>
-          <p>We build {st.servers} focused MCP servers. Each one does one job, and every tool is listed in its SPEC.md. {st.hosted} of them run as a hosted URL. All of them run on your own machine.</p>
+          <p>We build {st.servers} focused MCP servers. Each one does one job, and every tool has a written contract: a SPEC.md for most servers, the README for the small plain-JS ones. {st.hosted} of them run as a hosted URL. All of them run on your own machine.</p>
           <p>The free tier needs no key. Pro is a one-time payment. The source is on <a href={brand.links.github} rel="noopener">GitHub</a>.</p>
         </div>
         <div class="mt-10 flex flex-wrap gap-3"><a href="/servers/" class="btn btn-primary">Browse servers</a><a href="/developers/" class="btn">For developers</a></div>

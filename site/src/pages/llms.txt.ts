@@ -15,7 +15,7 @@ export const GET: APIRoute = ({ site }) => {
   const lines = [
     `# ${brand.name}`,
     '',
-    `> ${brand.tagline} ${st.servers} MCP servers make real files (PDF invoices, Word, Excel, reports) from Claude, ChatGPT, Cursor and any MCP client.`,
+    `> ${brand.tagline} ${st.servers} MCP servers make real files (PDF invoices, Word, Excel, reports) from Claude, Cursor and any MCP client.`,
     `> ${st.hosted} servers run at one hosted URL: free token, no account, 600 calls an hour, valid 30 days.`,
     `> Every server has a free tier. Pro is $${brand.pricing.serverUsd} once per server, or $${bundlePrice()} once for all ${st.paid} paid servers. No subscription.`,
     `> Open source (MIT). Also ${st.satellites} free calculator servers.`,

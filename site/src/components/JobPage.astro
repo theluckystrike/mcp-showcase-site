@@ -174,7 +174,7 @@ const mainHasOutput = !!main && main.cases.length > 0;
       <section id="connect" class="wrap grid gap-10 py-12 lg:grid-cols-[1fr_1.3fr]">
         <div>
           <h2 class="text-2xl font-semibold sm:text-3xl">Connect in 1 minute</h2>
-          <p class="muted mt-3">{main.hosted ? 'Paste one URL into Claude.ai, Claude Desktop, Cursor, VS Code or Windsurf. No install, no account.' : `${main.name} runs on your machine. One line with Node.js, or the .mcpb file for Claude Desktop.`}</p>
+          <p class="muted mt-3">{main.hosted ? 'Paste one URL into Claude.ai, Claude Desktop, Cursor or VS Code. No install, no account.' : `${main.name} runs on your machine. One line with Node.js, or the .mcpb file for Claude Desktop.`}</p>
           <ul class="mt-5 flex flex-wrap gap-2 text-[.9rem]">
             {[['claude-ai', 'Claude.ai'], ['claude-desktop', 'Claude Desktop'], ['claude-code', 'Claude Code'], ['cursor', 'Cursor'], ['vs-code', 'VS Code']].map(([c, n]) => <li><a class="chip hover:text-fg" href={`/connect/${c}/`}>{n} guide</a></li>)}
           </ul>

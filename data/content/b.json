@@ -2303,7 +2303,7 @@
   {
    "id": "spreadsheet",
    "name": "Spreadsheet",
-   "category": "calculators",
+   "category": "documents",
    "tagline": "Ask questions of an Excel or CSV file and get exact answers.",
    "plain": "Point Claude at an xlsx or csv file. On the local install that's a path on your machine. It reads the sheet names, columns and types, then filters, groups, sums and sorts in one step, so the totals come from the file and not from guesswork. It can also add a computed column or convert between Excel, CSV and JSON, always into a new file.",
    "for_who": [

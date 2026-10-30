@@ -51,7 +51,7 @@ export const GET: APIRoute = ({ site }) => {
   const text = [
     `# ${brand.name}: full catalog`,
     '',
-    `> ${brand.tagline} ${st.servers} MCP servers and ${st.satellites} free calculator servers for Claude, ChatGPT, Cursor and any MCP client.`,
+    `> ${brand.tagline} ${st.servers} MCP servers and ${st.satellites} free calculator servers for Claude, Cursor and any MCP client.`,
     `> Pricing: free tier on every server. Pro is $${brand.pricing.serverUsd} once per server, or $${bundlePrice()} once for all ${st.paid} paid servers. No subscription.`,
     `> Hosted: ${st.hosted} servers run at one URL with a free token (no account). Source code: ${brand.links.github}`,
     `> Last reviewed: ${CONTENT_REVIEWED}. Short index: ${u('/llms.txt')}`,

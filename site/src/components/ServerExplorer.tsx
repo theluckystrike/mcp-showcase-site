@@ -96,7 +96,7 @@ export default function ServerExplorer({ items, categories, initialCategory = 'a
         ))}
       </div>
 
-      <p className="muted mt-6 min-h-[1.4em] text-[.9rem]" aria-live="polite">{shown.length === items.length ? 'Sorted by what people buy most.' : `${shown.length} match`}</p>
+      <p className="muted mt-6 min-h-[1.4em] text-[.9rem]" aria-live="polite">{shown.length === items.length ? 'Everyday billing jobs first, then the rest.' : `${shown.length} match`}</p>
 
       <div className="mt-3 grid gap-x-6 sm:grid-cols-2 lg:grid-cols-3">
         {shown.map((s) => {
