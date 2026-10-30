@@ -21,7 +21,7 @@
     {
      "title": "Check a bank's loan quote",
      "persona": "Owner of a bakery in Krakow",
-     "prompt": "The bank offers EUR 25,000 over 60 months at 6% a year. What is the monthly payment and how much interest do I pay in total?",
+     "prompt": "The bank offers EUR 25,000 over 60 months at 6% a year. What's the monthly payment and how much interest do I pay in total?",
      "steps": [
       {
        "tool": "loan_schedule",
@@ -118,7 +118,7 @@
     },
     {
      "q": "Does it round like my bank?",
-     "a": "It works in integer minor units, so every amount is exact to the cent. Your bank may round the last payment differently; the schedule shows each period so you can compare."
+     "a": "It works in integer minor units, so every amount is exact to the cent. Your bank may round the last payment differently. The schedule shows each period so you can compare."
     }
    ]
   },
@@ -251,7 +251,7 @@
    "name": "Backlink Checker",
    "category": "web-dev",
    "tagline": "See if a page really links to you, dofollow or nofollow.",
-   "plain": "Paste a page URL and your domain. It fetches the page and tells you if your link is there, the anchor text, the rel value and whether robots rules hide the page. Nothing is stored; every check is a fresh fetch.",
+   "plain": "Paste a page URL and your domain. It fetches the page and tells you if your link is there, the anchor text, the rel value and whether robots rules hide the page. Nothing is stored. Every check is a fresh fetch.",
    "for_who": [
     "SEO freelancers",
     "Content marketers",
@@ -356,7 +356,7 @@
    "faq": [
     {
      "q": "Is this a backlink database like the big SEO suites?",
-     "a": "No. It checks pages you name. It does not discover links you do not know about."
+     "a": "No. It checks pages you name. It doesn't discover links you don't know about."
     },
     {
      "q": "Does it store my results?",
@@ -369,7 +369,7 @@
    "name": "Bank Statement",
    "category": "bookkeeping",
    "tagline": "Import a bank CSV, categorise it and find the subscriptions.",
-   "plain": "Drop in the CSV export from your bank. It reads Revolut, Wise, mBank, PKO, ING, N26 and generic formats, sorts transactions into categories, summarises spend per currency, finds recurring charges and matches the statement against your expense log. The data stays on your machine.",
+   "plain": "Drop in the CSV export from your bank. It reads Revolut, Wise, mBank, PKO, ING, N26 and generic formats, sorts transactions into categories, summarises spend per currency, finds recurring charges and matches the statement against your expense log. With the local install, the data never leaves your machine.",
    "for_who": [
     "Freelancers",
     "Small business owners",
@@ -425,7 +425,7 @@
     {
      "title": "Tie the bank to the expense log",
      "persona": "Bookkeeper for a Lisbon café",
-     "prompt": "Reconcile October's bank lines against the expense ledger. What is missing?",
+     "prompt": "Reconcile October's bank lines against the expense ledger. What's missing?",
      "steps": [
       {
        "tool": "reconcile_expenses",
@@ -433,7 +433,7 @@
       },
       {
        "tool": "transactions_list",
-       "does": "Lists the unmatched lines"
+       "does": "Lists the lines with no match"
       }
      ],
      "result": "Matched pairs, plus bank lines with no expense and expenses with no bank line.",
@@ -489,7 +489,7 @@
    "faq": [
     {
      "q": "Does it connect to my bank?",
-     "a": "No. You export a CSV from your bank and import the file. There is no bank login."
+     "a": "No. You export a CSV from your bank and import the file. There's no bank login."
     },
     {
      "q": "Which banks are supported?",
@@ -557,7 +557,7 @@
        "does": "Lists what was generated"
       }
      ],
-     "result": "120 PNG barcode files ready for the label printer. Pro feature: batch and PNG.",
+     "result": "120 PNG barcode files ready for the label printer. Batch runs and PNG output are Pro features.",
      "minutes_saved": 60,
      "minutes_basis": "INFERRED: 120 codes one by one at 30 sec each"
     }
@@ -742,7 +742,7 @@
     },
     {
      "q": "Can I change a finalized bill of sale?",
-     "a": "No. Finalizing locks it. Edit while it is a draft."
+     "a": "No. Finalizing locks it. Edit while it's a draft."
     }
    ]
   },
@@ -875,8 +875,8 @@
    "id": "budget",
    "name": "Budget",
    "category": "calculators",
-   "tagline": "Set monthly caps and check what is left, right in the chat.",
-   "plain": "A simple envelope budget. Set a monthly cap per category, log what you spend, and ask what is left. No bank login and no finance app. The ledger lives in memory for the session, so it is for quick checks, not long-term records.",
+   "tagline": "Set monthly caps and ask what's left. No bank login.",
+   "plain": "A simple envelope budget. Set a monthly cap per category, log what you spend, and ask what's left. No bank login and no finance app. The ledger lives in memory for the session, so it's for quick checks, not long-term records.",
    "for_who": [
     "Individuals",
     "Freelancers",
@@ -920,7 +920,7 @@
        "does": "Shows cap, spent and remaining"
       }
      ],
-     "result": "A table of every category; eating out shows how much is left against the 60.",
+     "result": "A table of every category. Eating out shows how much is left against the 60.",
      "minutes_saved": 3,
      "minutes_basis": "INFERRED: mental arithmetic across categories"
     },
@@ -971,7 +971,7 @@
    "faq": [
     {
      "q": "Is my budget saved?",
-     "a": "The README describes an in-memory ledger for the session. Do not rely on it for long-term records."
+     "a": "The README describes an in-memory ledger for the session. Don't rely on it for long-term records."
     },
     {
      "q": "Does it connect to my bank?",
@@ -983,8 +983,8 @@
    "id": "calendar",
    "name": "Calendar",
    "category": "time-expenses",
-   "tagline": "Ask your .ics calendar when you are free and what clashes.",
-   "plain": "Point it at the .ics file your calendar already exports. Ask what is on this week, when you are free, what is double-booked, or turn a client meeting into a billable time entry. It reads locally and never writes to your calendar.",
+   "tagline": "Ask your .ics calendar when you're free and what clashes.",
+   "plain": "Point it at the .ics file your calendar already exports. Ask what's on this week, when you're free, what's double-booked, or turn a client meeting into a billable time entry. It only reads the file. It never writes to your calendar.",
    "for_who": [
     "Freelancers",
     "Consultants",
@@ -1063,7 +1063,7 @@
     },
     {
      "name": "events_list",
-     "plain": "What is on in a date range"
+     "plain": "What's on in a date range"
     },
     {
      "name": "event_to_time_entry",
@@ -1393,7 +1393,7 @@
       },
       {
        "tool": "change_order_list",
-       "does": "Lists what is still waiting"
+       "does": "Lists what's still waiting"
       }
      ],
      "result": "A dated approval trail and a list of change orders still waiting for the client.",
@@ -1492,7 +1492,7 @@
     {
      "title": "Daily opening check",
      "persona": "Café manager in Porto",
-     "prompt": "Start today's opening checklist. Fridge 4 C pass, coffee machine pass, card terminal failed, note: reboot did not help.",
+     "prompt": "Start today's opening checklist. Fridge 4 C pass, coffee machine pass, card terminal failed, note: reboot didn't help.",
      "steps": [
       {
        "tool": "run_start",
@@ -1604,7 +1604,7 @@
    "name": "Clauses",
    "category": "contracts-hr",
    "tagline": "Your own clause library, assembled into a Word contract in one call.",
-   "plain": "Start with 25 generic freelance clauses and add your own. Search them, then assemble a contract as a Word .docx. Any fact you did not give, like a client name or a fee, stays as a bracketed prompt so nothing is invented.",
+   "plain": "Start with 25 generic freelance clauses and add your own. Search them, then assemble a contract as a Word .docx. Any fact you didn't give, like a client name or a fee, stays as a bracketed prompt so nothing is invented.",
    "for_who": [
     "Freelancers",
     "Agencies",
@@ -1856,8 +1856,8 @@
    "id": "currency",
    "name": "Currency",
    "category": "calculators",
-   "tagline": "Convert money at official ECB rates, in chat, with no API key.",
-   "plain": "Ask for an exchange rate or a conversion and get the European Central Bank reference rate with its date. It caches rates on your machine and works offline. It also hands invoice and expense tools the rates they need.",
+   "tagline": "Convert money at official ECB rates, with no API key to sign up for.",
+   "plain": "Ask for an exchange rate or a conversion and get the European Central Bank reference rate with its date. The local install caches rates on disk, so it keeps working offline. And it hands invoice and expense tools the rates they need.",
    "for_who": [
     "Freelancers with foreign clients",
     "Bookkeepers",
@@ -1891,7 +1891,7 @@
     {
      "title": "Quote one price in four currencies",
      "persona": "Online course seller in Dublin",
-     "prompt": "What is EUR 149 in GBP, USD, PLN and SEK today?",
+     "prompt": "What's EUR 149 in GBP, USD, PLN and SEK today?",
      "steps": [
       {
        "tool": "convert_many",
@@ -1912,7 +1912,7 @@
        "does": "Reads the series for the window"
       }
      ],
-     "result": "The daily series for the year. Windows past 90 days are Pro; free answers the last 90 days and names the cap.",
+     "result": "The daily series for the year. Windows past 90 days are Pro. Free answers the last 90 days and names the cap.",
      "minutes_saved": 10,
      "minutes_basis": "INFERRED: downloading and filtering an ECB file takes 10 min"
     }
@@ -1944,7 +1944,7 @@
      "Latest rates and conversions, unlimited",
      "All currencies the ECB quotes",
      "History and rate_on for the last 90 days",
-     "Offline cache"
+     "Offline rate cache (local install)"
     ],
     "pro": [
      "History back to 1999-01-04",
@@ -1965,7 +1965,7 @@
     },
     {
      "q": "Do I need an API key?",
-     "a": "No. Rates are fetched from the ECB and cached on your machine."
+     "a": "No. Rates come from the ECB. The local install caches them on your machine."
     }
    ]
   },
@@ -1973,7 +1973,7 @@
    "id": "delivery-schedule",
    "name": "Delivery Schedule",
    "category": "operations",
-   "tagline": "Dated deliverables, sign-off and a clear list of what is late.",
+   "tagline": "Dated deliverables, sign-off and a plain list of what's late.",
    "plain": "List what you owe a client and when, against a quote or work order. Mark items delivered and accepted, and ask what has slipped as at any date. On Pro it writes the schedule document and the milestone invoice lines.",
    "for_who": [
     "Agencies",
@@ -2006,9 +2006,9 @@
      "minutes_basis": "INFERRED: a milestone table in a doc takes 15 min"
     },
     {
-     "title": "Monday: what slipped?",
+     "title": "The Monday check on what slipped",
      "persona": "Video production lead in Bristol",
-     "prompt": "What is late across all clients as of today?",
+     "prompt": "What's late across all clients as of today?",
      "steps": [
       {
        "tool": "late_report",
@@ -2086,7 +2086,7 @@
     },
     {
      "q": "Does it send reminders?",
-     "a": "No. You ask; it answers what is late as at the date you give."
+     "a": "No. You ask. It answers what's late as at the date you give."
     }
    ]
   },
@@ -2095,7 +2095,7 @@
    "name": "Deposits",
    "category": "invoicing",
    "tagline": "Hold client deposits, apply them to invoices, refund the rest.",
-   "plain": "Record a security deposit or a retainer when it arrives. Apply part of it to an invoice as a payment, refund what is left, and always know how much you hold for each client.",
+   "plain": "Record a security deposit or a retainer when it arrives. Apply part of it to an invoice as a payment, refund what's left, and always know how much you hold for each client.",
    "for_who": [
     "Landlords and rental businesses",
     "Agencies on retainer",
@@ -2133,7 +2133,7 @@
     {
      "title": "Return a security deposit",
      "persona": "Equipment hire shop in Glasgow",
-     "prompt": "Refund GBP 400 of the GBP 500 deposit to Mr Grant; GBP 100 kept for a damaged lens cap.",
+     "prompt": "Refund GBP 400 of the GBP 500 deposit to Mr Grant. GBP 100 kept for a damaged lens cap.",
      "steps": [
       {
        "tool": "deposit_refund",
@@ -2211,7 +2211,7 @@
     },
     {
      "q": "Can I apply more than the invoice owes?",
-     "a": "No. The amount defaults to the lesser of what is held and what is owed, and more is refused."
+     "a": "No. The amount defaults to the lesser of what is held and what's owed, and more is refused."
     }
    ]
   },
@@ -2219,8 +2219,8 @@
    "id": "docx",
    "name": "Docx",
    "category": "documents",
-   "tagline": "Proposals, contracts and letters as real Word files, from chat.",
-   "plain": "Describe the document and get a .docx you can open in Word or Google Docs. It writes proposals, contracts, statements of work and letters, reads existing .docx files, and fills your own templates. Files stay on your machine.",
+   "tagline": "Proposals, contracts and letters as real Word files you can open and edit.",
+   "plain": "Describe the document and get a .docx you can open in Word or Google Docs. It writes proposals, contracts, statements of work and letters, reads existing .docx files, and fills your own templates. With the local install, files stay on your machine.",
    "for_who": [
     "Freelancers",
     "Consultants",
@@ -2418,7 +2418,7 @@
     },
     {
      "name": "aging_summary",
-     "plain": "What is owed, by age"
+     "plain": "What's owed, by age"
     },
     {
      "name": "payment_record",
@@ -2459,7 +2459,7 @@
    "name": "Duplicate Invoice Check",
    "category": "payables",
    "tagline": "Catch duplicate supplier invoices before you pay twice.",
-   "plain": "Give it a batch of supplier invoices, up to 1,000 rows, and it groups the likely duplicates: the same reference, the same reference written differently, or the same amount on the same date. Every group says why it was flagged. It does not approve payments.",
+   "plain": "Give it a batch of supplier invoices, up to 1,000 rows, and it groups the likely duplicates: the same reference, the same reference written differently, or the same amount on the same date. Every group says why it was flagged. It doesn't approve payments.",
    "for_who": [
     "Accounts payable clerks",
     "Bookkeepers",
@@ -2518,7 +2518,7 @@
        "does": "Lists saved reports"
       }
      ],
-     "result": "The report is kept on disk. The free tier keeps 3 saved reports; Pro removes the cap.",
+     "result": "The report is kept on disk. The free tier keeps 3 saved reports. Pro removes the cap.",
      "minutes_saved": 5,
      "minutes_basis": "INFERRED: filing the result by hand takes 5 min"
     }
@@ -2740,7 +2740,7 @@
        "does": "Shows received, short and open per PO"
       }
      ],
-     "result": "One view of what has arrived and what is still owed by each supplier.",
+     "result": "One view of what has arrived and what's still owed by each supplier.",
      "minutes_saved": 20,
      "minutes_basis": "INFERRED: checking delivery notes against orders takes 20 min"
     },
@@ -2774,7 +2774,7 @@
     },
     {
      "name": "grn_status_report",
-     "plain": "What is received and what is open"
+     "plain": "What's received and what's open"
     },
     {
      "name": "grn_export_csv",
@@ -2799,7 +2799,7 @@
    ],
    "faq": [
     {
-     "q": "What is the tolerance for?",
+     "q": "What's the tolerance for?",
      "a": "Each PO can allow a small over or under delivery. Receipts outside it are flagged."
     },
     {
@@ -2912,8 +2912,8 @@
    "id": "image",
    "name": "Image",
    "category": "documents",
-   "tagline": "Resize, compress, crop and watermark images from a chat message.",
-   "plain": "Point it at an image on your machine and say what you need: smaller, a different format, cropped, thumbnails, a watermark or the metadata removed. No upload, no account and no extra software to install.",
+   "tagline": "Resize, compress, crop and watermark images with one sentence.",
+   "plain": "Point it at an image and say what you need: smaller, a different format, cropped, thumbnails, a watermark or the metadata removed. Run the local install and nothing gets uploaded. No account, no extra software.",
    "for_who": [
     "Online sellers",
     "Bloggers",
@@ -3045,7 +3045,7 @@
    "name": "Invoice",
    "category": "invoicing",
    "tagline": "Turn one sentence into a real, sendable PDF invoice.",
-   "plain": "Say who to bill, for what and at what rate, and get a numbered A4 PDF invoice with VAT lines and your bank details. It keeps your clients, never reuses an invoice number, records payments and tells you what is overdue. Everything is stored in plain files on your machine.",
+   "plain": "Say who to bill, for what and at what rate, and get a numbered A4 PDF invoice with VAT lines and your bank details. It keeps your clients, never reuses an invoice number, records payments and tells you what's overdue. On the local install, everything sits in plain files on your machine.",
    "for_who": [
     "Freelancers",
     "Consultants",
@@ -3179,7 +3179,7 @@
    "id": "job-card",
    "name": "Job Card",
    "category": "operations",
-   "tagline": "Job cards for trades: hours and parts per job, open to invoiced.",
+   "tagline": "Job cards for trades. Hours and parts per job, from open to invoiced.",
    "plain": "Open a card for each job, log labour and materials as you go, and see the running total. Move the job from open to in progress, done and invoiced, and print the card for the customer or the office.",
    "for_who": [
     "Plumbers and electricians",
@@ -3294,7 +3294,7 @@
     },
     {
      "q": "Can a job go back a step?",
-     "a": "No. Status moves one step forward at a time; a backwards step is refused."
+     "a": "No. Status moves one step forward at a time. A backwards step is refused."
     }
    ]
   },
@@ -3302,8 +3302,8 @@
    "id": "kanban",
    "name": "Kanban",
    "category": "operations",
-   "tagline": "A local task board per project, with estimates and a weekly review.",
-   "plain": "Keep a simple board for each project: backlog, to do, doing, review and done. Add tasks with due dates, priorities and estimates, log real time against them, and ask for the weekly review. Data stays on your machine.",
+   "tagline": "A task board per project, with estimates and a weekly review.",
+   "plain": "Keep a simple board for each project: backlog, to do, doing, review and done. Add tasks with due dates, priorities and estimates, log real time against them, and ask for the weekly review. With the local install, the data stays on your machine.",
    "for_who": [
     "Freelancers",
     "Small teams",
@@ -3337,7 +3337,7 @@
     {
      "title": "What is overdue",
      "persona": "Marketing consultant in Leeds",
-     "prompt": "What is overdue across all my projects?",
+     "prompt": "What's overdue across all my projects?",
      "steps": [
       {
        "tool": "overdue",
@@ -3416,11 +3416,11 @@
    "faq": [
     {
      "q": "Does it sync with Trello or Jira?",
-     "a": "No. It is a local board stored on your machine."
+     "a": "No. It's a standalone board. On the local install it lives in a file on your machine."
     },
     {
      "q": "Can it start a timer?",
-     "a": "task_start_timer returns the arguments for the time tracker's timer and records the link. It does not start a timer on its own."
+     "a": "task_start_timer returns the arguments for the time tracker's timer and records the link. It doesn't start a timer on its own."
     }
    ]
   },

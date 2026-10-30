@@ -194,7 +194,7 @@
  {
   "path": "/connect/chatgpt/",
   "title": "Add an MCP server to ChatGPT: 1-minute guide | {brand}",
-  "h1": "Connect to ChatGPT",
+  "h1": "ChatGPT setup, not tested yet",
   "meta_description": "Turn on developer mode, create a connector with one URL, then call the tools in chat.",
   "primary_keyword": "how to add mcp server to chatgpt",
   "intent": "informational",
@@ -249,7 +249,7 @@
  {
   "path": "/for/chatgpt-small-business/",
   "title": "ChatGPT for small business: invoices, PDFs, books in chat | {brand}",
-  "h1": "ChatGPT for small business",
+  "h1": "What ChatGPT can do for a small business",
   "meta_description": "Connect ChatGPT to real tools for invoices, quotes, bank CSVs and PDFs. Developer mode, one URL, free tier.",
   "primary_keyword": "chatgpt for small business",
   "intent": "commercial",
@@ -567,7 +567,7 @@
  {
   "path": "/use-cases/per-diem-travel-allowance/",
   "title": "Per diem travel allowance on GSA, HMRC and Polish rates | {brand}",
-  "h1": "Per diem from chat",
+  "h1": "Work out per diem in chat",
   "meta_description": "Daily travel allowances on bundled public rate tables for the US (GSA), UK (HMRC) and Poland.",
   "primary_keyword": "per diem rates 2026",
   "intent": "commercial",
@@ -1179,7 +1179,7 @@
  {
   "path": "/servers/bill-of-sale/",
   "title": "Bill Of Sale for Claude and Cursor | {brand}",
-  "h1": "Bill Of Sale",
+  "h1": "Bill of Sale",
   "meta_description": "Bills of sale for equipment, vehicles and stock: draft, finalize, print with signature. Free tier, $19 Pro once.",
   "primary_keyword": "bill of sale mcp",
   "intent": "commercial",
@@ -1613,7 +1613,7 @@
  {
   "path": "/servers/pdf/",
   "title": "Pdf for Claude and Cursor | {brand}",
-  "h1": "Pdf",
+  "h1": "PDF",
   "meta_description": "Merge, split, extract, rotate, reorder and stamp PDF files from chat: mark an invoice PAID, pull pages out of a scan,. Free tier, $19 Pro once.",
   "primary_keyword": "pdf mcp",
   "intent": "commercial",
@@ -1781,7 +1781,7 @@
  {
   "path": "/servers/statement-of-account/",
   "title": "Statement Of Account for Claude and Cursor | {brand}",
-  "h1": "Statement Of Account",
+  "h1": "Statement of Account",
   "meta_description": "Per-client statements of account, aging buckets and dunning letters from your own. Free tier, $19 Pro once.",
   "primary_keyword": "statement of account mcp",
   "intent": "commercial",
@@ -1851,7 +1851,7 @@
  {
   "path": "/servers/three-way-match/",
   "title": "Three Way Match for Claude and Cursor | {brand}",
-  "h1": "Three Way Match",
+  "h1": "Three-Way Match",
   "meta_description": "Match supplier invoice lines to purchase orders and accepted receipts by SKU with local. Free tier, $19 Pro once.",
   "primary_keyword": "three way match mcp",
   "intent": "commercial",

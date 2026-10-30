@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import HeroDemo from '../components/HeroDemo.astro';
+import InvoicePreview from '../components/InvoicePreview.astro';
 import ServerCard from '../components/ServerCard.astro';
 import CaseTurn from '../components/CaseTurn.astro';
 import SectionHead from '../components/SectionHead.astro';
@@ -50,32 +51,27 @@ const marquee = [...servers, ...servers];
   <section class="relative isolate overflow-hidden">
     <div class="glow-bg"></div>
     <div class="grid-lines"></div>
-    <div class="wrap grid items-center gap-12 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-28">
+    <div class="wrap grid items-center gap-10 pb-14 pt-10 sm:pt-16 lg:grid-cols-[1fr_1.02fr] lg:gap-14 lg:pb-20 lg:pt-20">
       <div>
-        <span class="eyebrow">For Claude, ChatGPT and Cursor</span>
-        <h1 class="display mt-6"><span class="text-gradient">{meta.h1 ? `${meta.h1}.` : brand.tagline}</span></h1>
-        <p class="lead mt-6 max-w-xl">
-          Ask Claude, ChatGPT or Cursor for an invoice, a bank summary or a merged PDF. Get the real file, not a draft to copy. Paste one URL to connect. Free to start.
+        <span class="eyebrow">For Claude, Cursor and any MCP client</span>
+        <h1 class="display mt-5">{meta.h1 ? `${meta.h1}.` : brand.tagline}</h1>
+        <p class="lead mt-5 max-w-xl">
+          Ask Claude or Cursor for an invoice, a bank summary or a merged PDF. You get the real file, numbered and ready to send, not a draft to copy. Paste one URL and start free.
         </p>
-        <div class="mt-8 flex flex-wrap gap-3">
+        <div class="mt-7 flex flex-wrap gap-3">
           <a href="/connect/" class="btn btn-primary">Connect free in 1 minute
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14m-6-6l6 6-6 6"/></svg>
           </a>
-          <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn">Get all {st.paid} paid servers, ${bundlePrice()} once</a>
+          <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn">All {st.paid} paid servers, ${bundlePrice()} once</a>
         </div>
-        <p class="mt-4 max-w-xl text-[.9rem] text-faint">{hero.copy}</p>
-        <ul class="mt-10 grid max-w-xl gap-4 border-t border-line pt-6 sm:grid-cols-3">
-          <li><p class="text-2xl font-semibold tracking-tight sm:text-3xl">{st.servers}</p><p class="muted text-[.85rem]">servers, {st.tools} tools, each listed with its real name and an example</p></li>
-          <li><p class="text-2xl font-semibold tracking-tight sm:text-3xl">{st.hosted}</p><p class="muted text-[.85rem]">run at one URL. Free token, no key, 600 calls an hour</p></li>
-          <li><p class="text-2xl font-semibold tracking-tight sm:text-3xl">${brand.pricing.serverUsd} / ${bundlePrice()}</p><p class="muted text-[.85rem]">pay once per server, or once for all {st.paid} paid. No subscription</p></li>
+        <p class="mt-4 hidden max-w-xl text-[.9rem] text-faint sm:block">{hero.copy}</p>
+        <ul class="mt-10 hidden max-w-xl gap-4 border-t border-line pt-6 sm:grid sm:grid-cols-3">
+          <li><p class="tnum text-2xl font-semibold tracking-tight sm:text-3xl">{st.servers}</p><p class="muted text-[.85rem]">servers, {st.tools} tools, each listed with its real name and an example</p></li>
+          <li><p class="tnum text-2xl font-semibold tracking-tight sm:text-3xl">{st.hosted}</p><p class="muted text-[.85rem]">run at one URL. Free token, no key, 600 calls an hour</p></li>
+          <li><p class="tnum text-2xl font-semibold tracking-tight sm:text-3xl">${brand.pricing.serverUsd} / ${bundlePrice()}</p><p class="muted text-[.85rem]">pay once per server, or once for all {st.paid} paid. No subscription</p></li>
         </ul>
       </div>
       <HeroDemo serverId="invoice" />
-    </div>
-    <div class="marquee border-y border-line py-4" aria-label="All servers">
-      <div>
-        {marquee.map((s, i) => <a href={`/servers/${s.id}/`} class="chip shrink-0 hover:text-fg" tabindex={i >= servers.length ? -1 : undefined} aria-hidden={i >= servers.length ? 'true' : undefined}>{s.name}</a>)}
-      </div>
     </div>
   </section>
 
@@ -96,15 +92,33 @@ const marquee = [...servers, ...servers];
   <section class="border-y border-line py-8">
     <div class="wrap flex flex-wrap items-center gap-x-8 gap-y-3">
       <span class="text-sm font-semibold uppercase tracking-[.08em] text-faint">Works in</span>
-      {CLIENTS.map((c) => <a href={`/connect/${c.slug}/`} class="text-lg font-semibold tracking-tight text-muted hover:text-fg">{c.name}</a>)}
+      {CLIENTS.filter((c) => c.slug !== 'chatgpt').map((c) => <a href={`/connect/${c.slug}/`} class="text-lg font-semibold tracking-tight text-muted hover:text-fg">{c.name}</a>)}
       <a href="/connect/paste-a-url/" class="text-lg font-semibold tracking-tight text-muted hover:text-fg">any MCP client</a>
+    </div>
+  </section>
+
+  <!-- WHAT YOU GET -->
+  <section class="section pb-0">
+    <div class="wrap grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+      <div class="reveal">
+        <span class="eyebrow">What you get</span>
+        <h2 class="h2 mt-4">A file you can send, not a table to copy.</h2>
+        <p class="lead mt-4">Claude on its own writes invoice text. With the Invoice server it keeps your clients, numbers each invoice in order and renders an A4 PDF with the VAT worked out.</p>
+        <ul class="mt-6 grid gap-2.5 text-[.98rem]">
+          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span>Numbering that carries on from the last invoice</li>
+          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span>VAT, discounts and currency per line</li>
+          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span>Paid and overdue tracking you can ask about later</li>
+        </ul>
+        <p class="mt-6"><a href="/servers/invoice/" class="link">See the Invoice server</a></p>
+      </div>
+      <div class="reveal rounded-2xl p-4 sm:p-8" style="background: var(--bg-2)"><InvoicePreview /></div>
     </div>
   </section>
 
   <!-- HOW IT WORKS -->
   <section class="section">
     <div class="wrap">
-      <SectionHead eyebrow="How it works" title="Three steps. No new app." lead="The servers plug into Claude, ChatGPT, Cursor or any MCP client. You keep talking. They do the paperwork." />
+      <SectionHead eyebrow="How it works" title="No new app to learn." lead="The servers plug into Claude, Cursor or any MCP client. You keep talking. They do the paperwork." />
       <ol class="mt-12 grid gap-4 md:grid-cols-3">
         {[
           { n: '01', t: 'Connect once', d: 'Paste one hosted URL with a free token, or install locally with npx or a .mcpb file.' },
@@ -112,7 +126,7 @@ const marquee = [...servers, ...servers];
           { n: '03', t: 'Get a real result', d: 'A PDF, a Word file, a CSV or a report, ready to send. A local install saves it on your machine.' },
         ].map((x) => (
           <li class="card reveal p-6">
-            <span class="font-mono text-sm text-accent-2">{x.n}</span>
+            <span class="tnum text-sm font-semibold text-accent">{x.n}</span>
             <h3 class="mt-3 text-xl font-semibold">{x.t}</h3>
             <p class="muted mt-2">{x.d}</p>
           </li>
@@ -128,7 +142,6 @@ const marquee = [...servers, ...servers];
       <div class="mt-12 grid auto-rows-[minmax(11rem,auto)] gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {bento.map((c, i) => (
           <a href={`/categories/${c.id}/`} class:list={['card card-hover cat reveal group relative flex flex-col overflow-hidden p-6', i === 0 && 'lg:col-span-2 lg:row-span-2', i === 1 && 'lg:col-span-2']} style={`--hue:${c.hue}`}>
-            <div class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-25 blur-3xl transition-opacity group-hover:opacity-50" style="background: var(--cat)"></div>
             <div class="flex items-center justify-between">
               <span class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={c.icon} /></svg></span>
               <span class="font-mono text-sm text-faint">{c.count} servers</span>
@@ -150,8 +163,7 @@ const marquee = [...servers, ...servers];
         <div class="mt-12 grid gap-4 lg:grid-cols-3">
           {cases.map((x) => <CaseTurn server={x.server} case={x.case} showServer compact />)}
         </div>
-        <UpsellBand copy={afterCases.copy} href={afterCases.cta_url} cta={`Bundle, $${bundlePrice()}`} />
-        <div class="mt-8"><a href="/use-cases/" class="link">See all use cases</a></div>
+        <p class="muted mt-6 text-[.95rem]">{afterCases.copy} <a href="/use-cases/" class="link">See all use cases</a></p>
       </div>
     </section>
   )}
@@ -173,13 +185,12 @@ const marquee = [...servers, ...servers];
   <section class="section pt-0">
     <div class="wrap">
       <div class="card relative grid gap-10 overflow-hidden p-6 sm:p-10 lg:grid-cols-2">
-        <div class="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full opacity-30 blur-3xl" style="background: var(--accent-2)"></div>
         <div>
           <span class="eyebrow">For developers</span>
           <h2 class="h2 mt-4">Clear tool contracts. stdio and hosted.</h2>
           <p class="lead mt-4">Open source servers with documented tools. Run them locally over stdio or call the hosted endpoint over HTTP.</p>
           <div class="mt-6 flex flex-wrap gap-3">
-            <a href="/developers/" class="btn btn-primary">Developer docs</a>
+            <a href="/developers/" class="btn">Developer docs</a>
             <a href={brand.links.github} class="btn" rel="noopener">GitHub</a>
           </div>
         </div>
@@ -201,11 +212,11 @@ npx -y @theluckystrike/mcp-invoice`}</pre>
     <div class="wrap">
       <SectionHead center eyebrow="Pricing" title="Free to start. Pay once if it earns its keep." />
       <div class="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">
-        <div class="card p-6"><p class="muted text-sm">Free</p><p class="mt-2 text-4xl font-semibold">$0</p><p class="muted mt-3 text-[.95rem]">Every server's free tier. No key, no sign-up.</p></div>
-        <div class="card p-6"><p class="muted text-sm">Pro, one server</p><p class="mt-2 text-4xl font-semibold">${brand.pricing.serverUsd}<span class="muted text-base font-normal"> once</span></p><p class="muted mt-3 text-[.95rem]">Lifetime Pro for the one server you use most.</p></div>
-        <div class="card relative p-6" style="border-color: color-mix(in oklab, var(--accent) 55%, var(--border))">
-          <span class="chip absolute right-4 top-4 !text-fg" style="background: color-mix(in oklab, var(--accent) 25%, transparent)">Best value</span>
-          <p class="muted text-sm">Bundle, all servers</p><p class="mt-2 text-4xl font-semibold">${bundlePrice()}<span class="muted text-base font-normal"> once</span></p>
+        <div class="card p-6"><p class="muted text-sm">Free</p><p class="tnum mt-2 text-4xl font-semibold">$0</p><p class="muted mt-3 text-[.95rem]">Every server's free tier. No key, no sign-up.</p></div>
+        <div class="card p-6"><p class="muted text-sm">Pro, one server</p><p class="tnum mt-2 text-4xl font-semibold">${brand.pricing.serverUsd}<span class="muted text-base font-normal"> once</span></p><p class="muted mt-3 text-[.95rem]">Lifetime Pro for the one server you use most.</p></div>
+        <div class="card relative p-6" style="border: 2px solid var(--accent)">
+          <span class="chip absolute right-4 top-4 !font-semibold" style="background: var(--accent-subtle); color: var(--accent); border-color: transparent">Best value</span>
+          <p class="muted text-sm">Bundle, all servers</p><p class="tnum mt-2 text-4xl font-semibold">${bundlePrice()}<span class="muted text-base font-normal"> once</span></p>
           <p class="muted mt-3 text-[.95rem]">Pro on all {st.paid} paid servers. About the price of two.</p>
           <a href={buyUrl(bundleUrl(), 'home', 'pricing_strip')} rel="nofollow" class="btn btn-primary mt-5 w-full">Get the bundle</a>
         </div>

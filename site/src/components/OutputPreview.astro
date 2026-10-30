@@ -1,0 +1,33 @@
+---
+// "What you get" card for a server. Invoice gets the full HTML invoice (real numbers from its example case).
+// Other servers whose example result is a file (PDF, Word, Excel, CSV) get a document sheet with the example's own
+// result sentence. No invented numbers. Renders nothing when no example produces a file.
+import InvoicePreview from './InvoicePreview.astro';
+import type { Server } from '../data/servers';
+interface Props { server: Server; compact?: boolean }
+const { server: s, compact = false } = Astro.props;
+const fileCase = s.cases.find((c) => /\b(PDF|DOCX|Word|Excel|XLSX|CSV)\b/i.test(`${c.result ?? ''}`));
+const kind = fileCase ? (fileCase.result!.match(/\b(PDF|DOCX|Word|Excel|XLSX|CSV)\b/i)?.[1] ?? 'PDF').toUpperCase().replace('WORD', 'DOCX').replace('EXCEL', 'XLSX') : '';
+const lastTool = fileCase?.steps[fileCase.steps.length - 1]?.tool;
+---
+{s.id === 'invoice' ? (
+  <InvoicePreview compact={compact} />
+) : fileCase ? (
+  <figure class="m-0">
+    <div class="sheet sheet-fold p-5 sm:p-6" aria-label={`Example output: ${fileCase.result}`}>
+      <div class="flex items-center justify-between gap-3 pr-5">
+        <p class="text-[1rem] font-bold tracking-tight">{fileCase.title}</p>
+        <span class="rounded px-1.5 py-0.5 text-[.62rem] font-bold tracking-[.08em] text-white" style="background:#1f6b4f">{kind}</span>
+      </div>
+      <p class="sheet-muted mt-0.5 text-[.75rem]">{s.name}{fileCase.persona && ` · ${fileCase.persona}`}</p>
+      <div class="sheet-rule mt-4 grid gap-2 border-t pt-4" aria-hidden="true">
+        <div class="h-2 w-11/12 rounded bg-[#ece6da]"></div>
+        <div class="h-2 w-9/12 rounded bg-[#ece6da]"></div>
+        <div class="h-2 w-10/12 rounded bg-[#ece6da]"></div>
+        <div class="h-2 w-7/12 rounded bg-[#ece6da]"></div>
+      </div>
+      <p class="sheet-rule mt-4 border-t pt-3 text-[.86rem] leading-snug">{fileCase.result}</p>
+    </div>
+    <figcaption class="mt-2.5 text-[.8rem] text-faint">Example output{lastTool && <> of <code class="font-mono">{lastTool}</code></>}. A scenario, not a customer file.</figcaption>
+  </figure>
+) : null}

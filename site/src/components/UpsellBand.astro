@@ -3,7 +3,7 @@
 interface Props { copy: string; href: string; cta?: string }
 const { copy, href, cta = 'Get Pro' } = Astro.props;
 ---
-<div class="card mt-6 flex flex-col items-start gap-4 p-5 sm:flex-row sm:items-center">
+<div class="mt-6 flex flex-col items-start gap-4 rounded-xl border border-line p-5 sm:flex-row sm:items-center" style="background: var(--accent-subtle)">
   <p class="flex-1 text-[.98rem]">{copy}</p>
-  <a href={href} class="btn btn-primary btn-sm shrink-0">{cta}</a>
+  <a href={href} class="btn btn-sm shrink-0">{cta}</a>
 </div>

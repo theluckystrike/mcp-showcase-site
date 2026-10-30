@@ -1,9 +1,9 @@
 {
  "jobs": {
   "/use-cases/create-invoice-in-claude/": {
-   "intro": "You searched this because you want an invoice you can send today, not a table you have to copy into Word. This page shows where Claude stops on its own, and how the Invoice server gives you a numbered A4 PDF that keeps counting from the last one.",
-   "without_tool": "Claude can lay out an invoice as text or a table and do the VAT math correctly. In Claude.ai with file creation turned on, it can also make a one-off PDF in its sandbox. It cannot remember your last invoice number between chats, so numbering repeats or skips, and it keeps no list of what is paid or overdue.",
-   "with_tool": "The Invoice server stores your business profile and clients, gives each invoice the next number that is never reused, and writes an A4 PDF with the VAT breakdown. It also records payments and lists what is overdue. With the local install the PDF is saved in a folder on your machine; on the hosted URL you get a short-lived download link.",
+   "intro": "You want an invoice you can send today, not a table to copy into Word. Claude on its own stops short of that. The Invoice server gives you a numbered A4 PDF that keeps counting from the last one.",
+   "without_tool": "Claude can lay out an invoice as text or a table and do the VAT math correctly. In Claude.ai with file creation turned on, it can also make a one-off PDF in its sandbox. It can't remember your last invoice number between chats, so numbering repeats or skips, and it keeps no list of what is paid or overdue.",
+   "with_tool": "The Invoice server stores your business profile and clients, gives each invoice the next number that's never reused, and writes an A4 PDF with the VAT breakdown. It also records payments and lists what's overdue. With the local install the PDF is saved in a folder on your machine. On the hosted URL you get a short-lived download link.",
    "example": {
     "persona": "Wedding photographer",
     "prompt": "Set my business details: Lens & Light, VAT GB123456789, IBAN on file. Then invoice the Harper family for one wedding day at GBP 1,600 and a print album at GBP 240, 20% VAT, due in 7 days, and give me the PDF.",
@@ -28,15 +28,15 @@
     "result": "A numbered A4 invoice for GBP 2,208.00 (GBP 1,840.00 net plus GBP 368.00 VAT), with bank details and a due date 7 days out."
    },
    "pitfalls": [
-    "Reusing or skipping invoice numbers when invoices are made in separate chats or files; tax offices expect one unbroken sequence.",
+    "Reusing or skipping invoice numbers when invoices are made in separate chats or files. Tax offices expect one unbroken sequence.",
     "Leaving out your VAT id or the client's address, which makes the invoice invalid for VAT in many countries.",
-    "Sending the invoice and never recording the payment, so you cannot tell later what is overdue."
+    "Sending the invoice and never recording the payment, so you can't tell later what's overdue."
    ],
-   "answer": "Claude can write invoice text and do the math, but it keeps no numbering or payment history between chats. Connect the Invoice server and Claude stores your clients, numbers each invoice in sequence, and writes an A4 PDF with VAT lines. The free tier works with no key; Pro removes the limits."
+   "answer": "Claude can write invoice text and do the math, but it keeps no numbering or payment history between chats. Connect the Invoice server and Claude stores your clients, numbers each invoice in sequence, and writes an A4 PDF with VAT lines. The free tier works with no key. Pro removes the limits."
   },
   "/use-cases/send-a-quote-from-chat/": {
-   "intro": "A quote that sits in a chat window does not win work. This page is for freelancers and small firms who want to price a job from their own price list, send a clean PDF, and turn it into an invoice when the client says yes.",
-   "without_tool": "Claude can draft quote wording, total the lines and add VAT. It does not know your current prices unless you paste them every time, it cannot track which quotes are open, expired or accepted, and it cannot hand an accepted quote to your invoicing.",
+   "intro": "A quote stuck in a chat window doesn't win work. Freelancers and small firms need to price a job from their own price list, send a clean PDF and turn it into an invoice when the client says yes. Here's how.",
+   "without_tool": "Claude can draft quote wording, total the lines and add VAT. It doesn't know your current prices unless you paste them every time, it can't track which quotes are open, expired or accepted, and it can't hand an accepted quote to your invoicing.",
    "with_tool": "Quotes stores each quote with a number, validity date and state, and writes an A4 PDF or a plain-text version for email. Catalogue keeps your SKUs and hourly rates with dates, so lines resolve to the price in force. quote_accept turns an accepted quote into an invoice in the Invoice server.",
    "example": {
     "persona": "Kitchen fitter",
@@ -62,15 +62,15 @@
     "No expiry date, so a client accepts an old price months later.",
     "Retyping an accepted quote as an invoice and making a typo in the amount."
    ],
-   "answer": "Yes, with a quote server connected. On its own, Claude drafts quote text but cannot store prices or quote states. The Quotes and Catalogue servers price lines from your list, number the quote, write a PDF, and turn an accepted quote into an invoice. Start on the free tier."
+   "answer": "Yes, with a quote server connected. On its own, Claude drafts quote text but can't store prices or quote states. The Quotes and Catalogue servers price lines from your list, number the quote, write a PDF, and turn an accepted quote into an invoice. Start on the free tier."
   },
   "/use-cases/chase-overdue-invoices/": {
-   "intro": "Late payers are the most common cash problem in a small business. This page shows how to know who to chase today, send the right letter for how late they are, and give each client a statement that shows every open invoice.",
-   "without_tool": "Claude writes a polite or firm reminder well if you give it the facts. It does not know which invoices are late today, what you already sent, or how much was part-paid. You have to keep that list yourself and paste it in each time.",
+   "intro": "Late payers are the most common cash problem in a small business. So you need three things: who to chase today, the right letter for how late they are, and a statement showing every open invoice.",
+   "without_tool": "Claude writes a polite or firm reminder well if you give it the facts. It doesn't know which invoices are late today, what you already sent, or how much was part-paid. You have to keep that list yourself and paste it in each time.",
    "with_tool": "Dunning Letters keeps each unpaid invoice, records part payments and letters sent, and tells you which invoices cross a stage today. Statement of Account builds a per-client statement with aging buckets and writes it as an A4 PDF or email text.",
    "example": {
     "persona": "Office manager at an IT support firm",
-    "prompt": "Make a statement of account for Brightwater Dental for September and October, with aging, as a PDF. Then write a firm chaser for everything they owe that is overdue.",
+    "prompt": "Make a statement of account for Brightwater Dental for September and October, with aging, as a PDF. Then write a firm chaser for everything they owe that's overdue.",
     "steps": [
      {
       "tool": "statement_build",
@@ -92,11 +92,11 @@
     "Chasing an invoice that was already part-paid, which annoys a client who did pay.",
     "Chasing invoice by invoice instead of sending one statement with the full balance."
    ],
-   "answer": "Claude can write good reminder letters, but it cannot see who is late today. Connect Dunning Letters to keep the chase list and letter stages, and Statement of Account to send a per-client statement PDF with aging. Both have a free tier with no key."
+   "answer": "Claude can write good reminder letters, but it can't see who is late today. Connect Dunning Letters to keep the chase list and letter stages, and Statement of Account to send a per-client statement PDF with aging. Both have a free tier with no key."
   },
   "/use-cases/categorize-bank-statement/": {
-   "intro": "Bookkeepers and owners search this when a month of bank lines needs categories before the accountant asks. This page shows what Claude does with a pasted statement, and what changes when the lines are stored with rules that apply next month too.",
-   "without_tool": "Paste a CSV into Claude and it will suggest a category for each line in that chat. Long statements can hit the context limit, the categories are not saved, and next month you start again with no rules and no history to compare.",
+   "intro": "A month of bank lines needs categories before the accountant asks. Claude can sort a pasted statement once. Store the lines with rules and next month sorts itself.",
+   "without_tool": "Paste a CSV into Claude and it will suggest a category for each line in that chat. Long statements can hit the context limit, the categories aren't saved, and next month you start again with no rules and no history to compare.",
    "with_tool": "Bank Statement imports the bank CSV into a stored ledger, applies your category rules to every line, and lets you set one-off categories by id. It finds recurring charges, summarizes spend by category and month, and exports a CSV or JSON file for your accountant.",
    "example": {
     "persona": "Owner of a small cafe",
@@ -129,9 +129,9 @@
    "answer": "Claude can suggest categories for a pasted statement, but it saves nothing. With the Bank Statement server, Claude imports the CSV, applies saved rules to every line, finds recurring charges and exports a categorized file for your accountant. Next month the same rules run again."
   },
   "/use-cases/track-billable-time-in-claude/": {
-   "intro": "If you bill by the hour, lost minutes are lost income. This page is for freelancers and consultants who want to start and stop a timer in the same chat where they work, and get invoice lines at the end of the week.",
-   "without_tool": "Claude cannot run a clock. It has no memory of when you started, and it cannot keep a timesheet between chats. It can only add up hours you type in yourself.",
-   "with_tool": "Time Tracker runs one stopwatch, logs entries with project, task and rate, and reports hours and money per period. It turns billable time into invoice lines, marks hours as billed so they are not billed twice, and exports the timesheet to CSV.",
+   "intro": "If you bill by the hour, lost minutes are lost income. Freelancers and consultants can start and stop a timer in the same chat where they work, then get invoice lines at the end of the week.",
+   "without_tool": "Claude can't run a clock. It has no memory of when you started, and it can't keep a timesheet between chats. It can only add up hours you type in yourself.",
+   "with_tool": "Time Tracker runs one stopwatch, logs entries with project, task and rate, and reports hours and money per period. It turns billable time into invoice lines, marks hours as billed so they aren't billed twice, and exports the timesheet to CSV.",
    "example": {
     "persona": "Freelance translator",
     "prompt": "I forgot to log yesterday: 2.5 hours on the Kowalski contract translation, billable, 160 PLN an hour. Then show this week's billable hours per project.",
@@ -156,11 +156,11 @@
     "Billing the same hours twice because nothing marks them as invoiced.",
     "One rate for every client when the contracts say otherwise."
    ],
-   "answer": "Claude has no clock, so it cannot track time on its own. With the Time Tracker server, you say 'start a timer on project X' and 'stop', and Claude logs entries, totals billable hours per project and turns them into invoice lines. A CSV export is included."
+   "answer": "Claude has no clock, so it can't track time on its own. With the Time Tracker server, you say 'start a timer on project X' and 'stop', and Claude logs entries, totals billable hours per project and turns them into invoice lines. A CSV export is included."
   },
   "/use-cases/log-expenses-and-receipts/": {
-   "intro": "Receipts get lost, and VAT you cannot prove you cannot reclaim. This page is for sole traders and small teams who want to log each expense the moment it happens, with the receipt attached and the VAT split done.",
-   "without_tool": "Claude can read a receipt photo and tell you the merchant, amount and VAT. It does not keep a ledger, so each expense lives only in that chat. There is no running total, no project tag that lasts, and no export at month end.",
+   "intro": "Receipts get lost, and you can't reclaim VAT you can't prove. Sole traders and small teams do better logging each expense the moment it happens, with the receipt attached and the VAT already split.",
+   "without_tool": "Claude can read a receipt photo and tell you the merchant, amount and VAT. It doesn't keep a ledger, so each expense lives only in that chat. There's no running total, no project tag that lasts, and no export at month end.",
    "with_tool": "Expense Tracker stores each expense with its net and VAT split, category, merchant and project, attaches the receipt file, and totals by category, project or month. It exports to CSV, XLSX or JSON, and turns billable expenses into invoice lines.",
    "example": {
     "persona": "Event planner",
@@ -189,12 +189,12 @@
    "answer": "Claude can read a receipt, but it keeps no ledger. Connect the Expense Tracker server and Claude stores each expense with its VAT split and project, attaches the receipt, totals by category and exports CSV or Excel at month end. Billable costs become invoice lines."
   },
   "/use-cases/mileage-log-for-taxes/": {
-   "intro": "Tax offices want a mileage log made at the time of the trip, with date, route, distance and purpose. This page is for drivers, trades and consultants who want to log each trip in one sentence and get the deductible total at year end.",
-   "without_tool": "Claude can multiply miles by a rate and write a log table if you list every trip. It does not keep the log between chats, it does not know which rate applied on which date, and it cannot give you one file for the whole year.",
+   "intro": "Tax offices want a mileage log made at the time of the trip, with date, route, distance and purpose. Drivers, trades and consultants can log each trip in one sentence. The deductible total is ready at year end.",
+   "without_tool": "Claude can multiply miles by a rate and write a log table if you list every trip. It doesn't keep the log between chats, it doesn't know which rate applied on which date, and it can't give you one file for the whole year.",
    "with_tool": "Mileage Log stores each trip with an id, date, route, distance and category, keeps rates per jurisdiction with the date each one starts, and gives the deductible total per category. It exports the whole log as CSV.",
    "example": {
     "persona": "Mobile dog groomer",
-    "prompt": "Log three trips today: home to Oak Street 6.2 miles, Oak Street to Bay Road 4.8 miles, Bay Road to home 9.1 miles, all business. What is my deductible mileage for October?",
+    "prompt": "Log three trips today: home to Oak Street 6.2 miles, Oak Street to Bay Road 4.8 miles, Bay Road to home 9.1 miles, all business. What's my deductible mileage for October?",
     "steps": [
      {
       "tool": "trip_add",
@@ -212,12 +212,12 @@
     "Using one rate for the whole year when the rate changed mid-year.",
     "Logging the commute from home to a regular workplace as business mileage."
    ],
-   "answer": "Claude can do mileage math, but it cannot keep a log across the year. The Mileage Log server stores every trip with date, route and purpose, applies the rate in force on each date, and gives the deductible total and a CSV for your tax return."
+   "answer": "Claude can do mileage math, but it can't keep a log across the year. The Mileage Log server stores every trip with date, route and purpose, applies the rate in force on each date, and gives the deductible total and a CSV for your tax return."
   },
   "/use-cases/merge-pdf-in-claude/": {
-   "intro": "You need one PDF out of several, or three PDFs out of one, and you do not want to upload client documents to a random website. This page shows what Claude can and cannot do with PDFs, and how the PDF server writes the new file.",
-   "without_tool": "Claude can read the text of a PDF you attach and summarize it. In Claude.ai with code execution and file creation turned on, it can sometimes merge files in its sandbox. In Claude Desktop, Cursor or a plain chat, it cannot write a new PDF.",
-   "with_tool": "The PDF server merges, splits, pulls pages, reorders, rotates, stamps words like PAID, and adds your business footer, each time writing a new PDF and returning the path. With the local install (npx or .mcpb) the files stay in your folders; on the hosted URL the files pass through the server for a short time.",
+   "intro": "You need one PDF out of several, or three PDFs out of one. And you don't want client documents on a random website. Below is what Claude can and can't do with PDFs, and how the PDF server writes the new file.",
+   "without_tool": "Claude can read the text of a PDF you attach and summarize it. In Claude.ai with code execution and file creation turned on, it can sometimes merge files in its sandbox. In Claude Desktop, Cursor or a plain chat, it can't write a new PDF.",
+   "with_tool": "The PDF server merges, splits, pulls pages, reorders, rotates, stamps words like PAID, and adds your business footer, each time writing a new PDF and returning the path. With the local install (npx or .mcpb) the files stay in your folders. On the hosted URL the files pass through the server for a short time.",
    "example": {
     "persona": "Tenant applying for a flat",
     "prompt": "Make one PDF from payslip-aug.pdf, payslip-sep.pdf, reference.pdf and id-scan.pdf in that order, but only page 1 of reference.pdf. Tell me the page count.",
@@ -240,13 +240,13 @@
    "pitfalls": [
     "Uploading contracts or ID scans to free online merge sites.",
     "Merging in the wrong order and sending a pack that starts with page 3.",
-    "Rotating a scan in a viewer, which does not save the rotation in the file."
+    "Rotating a scan in a viewer, which doesn't save the rotation in the file."
    ],
-   "answer": "Claude can read PDFs, but in most chat apps it cannot write a new one. Connect the PDF server and Claude merges, splits, reorders, rotates and stamps PDFs and returns the new file. Run it locally with npx if the files must stay on your machine."
+   "answer": "Claude can read PDFs, but in most chat apps it can't write a new one. Connect the PDF server and Claude merges, splits, reorders, rotates and stamps PDFs and returns the new file. Run it locally with npx if the files must stay on your machine."
   },
   "/use-cases/create-word-document-in-claude/": {
-   "intro": "Clients still want a .docx they can edit and track changes in. This page is for anyone who drafts in Claude and then spends 20 minutes pasting into Word and fixing the headings.",
-   "without_tool": "Claude writes the content well. In Claude.ai with file creation turned on it can generate a .docx in its sandbox. In Claude Desktop, Cursor or apps without that feature, you get text to copy and format by hand, and it cannot fill your own .docx template.",
+   "intro": "Clients still want a .docx they can edit and track changes in. If you draft in Claude and then spend 20 minutes pasting into Word and fixing headings, read on.",
+   "without_tool": "Claude writes the content well. In Claude.ai with file creation turned on it can generate a .docx in its sandbox. In Claude Desktop, Cursor or apps without that feature, you get text to copy and format by hand, and it can't fill your own .docx template.",
    "with_tool": "The DOCX server writes real .docx files from sections or markdown, fills {{placeholders}} in your own template, reads existing .docx files, and makes proposals and service agreements with your stored sender details.",
    "example": {
     "persona": "Charity volunteer coordinator",
@@ -260,16 +260,16 @@
     "result": "A .docx with one heading per team and a shift table, ready to share and edit in Word or Google Docs."
    },
    "pitfalls": [
-    "Pasting from chat into Word and losing the heading styles, so there is no navigation pane.",
+    "Pasting from chat into Word and losing the heading styles, so there's no navigation pane.",
     "Retyping a standard letter instead of filling a template.",
     "Sending a .docx with leftover {{placeholders}} because nobody checked."
    ],
-   "answer": "Yes. Claude.ai can make a .docx when file creation is on; other chat apps give you text only. The DOCX server works in any MCP client: it writes .docx files from markdown, fills your own templates and reads existing documents. Free tier first."
+   "answer": "Yes. Claude.ai can make a .docx when file creation is on. Other chat apps give you text only. The DOCX server works in any MCP client: it writes .docx files from markdown, fills your own templates and reads existing documents. Free tier first."
   },
   "/use-cases/edit-excel-files-in-claude/": {
-   "intro": "Most small business data lives in .xlsx and .csv files. This page is for people who want answers from a spreadsheet in plain words, and a new file with the change made, without writing formulas.",
-   "without_tool": "In Claude.ai with code execution, Claude can analyze an uploaded spreadsheet and create a new one. In Claude Desktop or Cursor without a tool, it cannot open a file path on your disk, and large files may not fit in the chat.",
-   "with_tool": "The Spreadsheet server reads, queries, searches and summarizes .xlsx and .csv files by path, adds computed columns and converts between xlsx, csv and json. Every change is written to a new file; the source file is not changed.",
+   "intro": "Most small business data lives in .xlsx and .csv files. You want answers from a spreadsheet in plain words, and a new file with the change made. No formulas.",
+   "without_tool": "In Claude.ai with code execution, Claude can analyze an uploaded spreadsheet and create a new one. In Claude Desktop or Cursor without a tool, it can't open a file path on your disk, and large files may not fit in the chat.",
+   "with_tool": "The Spreadsheet server reads, queries, searches and summarizes .xlsx and .csv files by path, adds computed columns and converts between xlsx, csv and json. Every change is written to a new file. The source file isn't changed.",
    "example": {
     "persona": "Shop owner on Shopify",
     "prompt": "Open ~/Downloads/orders_export.csv. Which 10 products sold the most units in October? Save that list as top-products.xlsx.",
@@ -287,7 +287,7 @@
       "does": "Writes the top 10 rows to top-products.xlsx"
      }
     ],
-    "result": "A ranked top-10 list in chat and a new top-products.xlsx file; the original export is unchanged."
+    "result": "A ranked top-10 list in chat and a new top-products.xlsx file. The original export is unchanged."
    },
    "pitfalls": [
     "Editing the only copy of a file and losing the original data.",
@@ -297,9 +297,9 @@
    "answer": "Claude.ai can analyze spreadsheets with code execution. To work with .xlsx and .csv files by path in Claude Desktop, Cursor or VS Code, connect the Spreadsheet server: it reads, queries, adds columns and converts, and writes each result to a new file."
   },
   "/use-cases/three-way-match-invoices/": {
-   "intro": "Accounts payable teams search this because paying an invoice for goods that never arrived is expensive. This page is for AP clerks and controllers who want a line-by-line check of invoice against purchase order and goods receipt before payment.",
-   "without_tool": "Claude can compare three documents you paste and point out differences. It can miss a mistake when two SKU errors cancel out and the totals agree, it does not know what was invoiced before, and it keeps no record of the check.",
-   "with_tool": "Three-Way Match compares each SKU, unit price and billed quantity with the PO, all accepted deliveries, and quantities already invoiced, and returns every exception with the source values. Goods Receipt stores POs and GRNs with damage and shortage. Three-Way Match runs locally; you give it structured data, not PDFs.",
+   "intro": "Paying for goods that never arrived is expensive. AP clerks and controllers check each invoice line against the purchase order and the goods receipt before payment. A server can do that check line by line.",
+   "without_tool": "Claude can compare three documents you paste and point out differences. It can miss a mistake when two SKU errors cancel out and the totals agree, it doesn't know what was invoiced before, and it keeps no record of the check.",
+   "with_tool": "Three-Way Match compares each SKU, unit price and billed quantity with the PO, all accepted deliveries, and quantities already invoiced, and returns every exception with the source values. Goods Receipt stores POs and GRNs with damage and shortage. Three-Way Match runs locally. You give it structured data, not PDFs.",
    "example": {
     "persona": "AP clerk at a food distributor",
     "prompt": "Record PO-7781 for 200 cases of tinned tomatoes, then a goods receipt with 180 cases accepted and 4 damaged. List the discrepancies before I match the invoice.",
@@ -328,12 +328,12 @@
     "Forgetting earlier partial invoices on the same PO, so the quantity gets paid twice.",
     "Booking damaged goods as received in full."
    ],
-   "answer": "Claude can compare documents you paste, but totals can hide line errors. The Three-Way Match server checks every SKU, price and quantity against the PO, accepted receipts and earlier invoices, and returns each exception with its source. It runs locally and does not read PDFs."
+   "answer": "Claude can compare documents you paste, but totals can hide line errors. The Three-Way Match server checks every SKU, price and quantity against the PO, accepted receipts and earlier invoices, and returns each exception with its source. It runs locally and doesn't read PDFs."
   },
   "/use-cases/find-duplicate-invoices/": {
-   "intro": "Duplicate supplier invoices are one of the most common ways money leaks out of accounts payable. This page is for bookkeepers and AP teams who want to check a payment run before it goes to the bank.",
-   "without_tool": "Claude can scan a short pasted list and spot obvious repeats. On a few hundred rows it can miss near-repeats, it cannot save the result as evidence, and it gives no CSV you can attach to the approval.",
-   "with_tool": "Duplicate Invoice Check takes a batch of invoice records, returns candidate duplicate groups with the reason for each, saves the report and exports it as CSV. It runs locally from a source checkout; it does not read PDFs or approve payment.",
+   "intro": "Duplicate supplier invoices are one of the most common ways money leaks out of accounts payable. Bookkeepers and AP teams can check a payment run before it goes to the bank.",
+   "without_tool": "Claude can scan a short pasted list and spot obvious repeats. On a few hundred rows it can miss near-repeats, it can't save the result as evidence, and it gives no CSV you can attach to the approval.",
+   "with_tool": "Duplicate Invoice Check takes a batch of invoice records, returns candidate duplicate groups with the reason for each, saves the report and exports it as CSV. It runs locally from a source checkout. It doesn't read PDFs or approve payment.",
    "example": {
     "persona": "Bookkeeper for three small clients",
     "prompt": "Check these 85 invoices from the Hartley Builders AP export for duplicates before Thursday's payment run, and give me the CSV.",
@@ -354,15 +354,15 @@
     "Running the check after the payment run instead of before.",
     "Deleting the suspected duplicate without asking the supplier which one is real."
    ],
-   "answer": "Claude can spot obvious repeats in a short list, but it saves no evidence. The Duplicate Invoice Check server scans a whole batch, groups candidate duplicates with a reason for each, and exports a CSV for the approver. It runs locally; it does not approve or block payments."
+   "answer": "Claude can spot obvious repeats in a short list, but it saves no evidence. The Duplicate Invoice Check server scans a whole batch, groups candidate duplicates with a reason for each, and exports a CSV for the approver. It runs locally. It doesn't approve or block payments."
   },
   "/use-cases/reconcile-supplier-statement/": {
-   "intro": "Every month a supplier sends a statement that does not agree with your ledger. This page is for AP and bookkeeping staff who want to know exactly which items differ, and why, before they call the supplier.",
-   "without_tool": "Claude can compare two short lists you paste and find some differences. With 40 or more open items it can lose track, it does not keep the result, and it cannot give you a CSV of the differences.",
-   "with_tool": "Supplier Statement Check compares the supplier's statement with your open items at a date, lists each difference with the source values, saves the report and exports CSV. It runs locally from a source checkout; it does not read PDFs or post payments.",
+   "intro": "Every month a supplier sends a statement that doesn't agree with your ledger. Before you call them, you want to know exactly which items differ, and why.",
+   "without_tool": "Claude can compare two short lists you paste and find some differences. With 40 or more open items it can lose track, it doesn't keep the result, and it can't give you a CSV of the differences.",
+   "with_tool": "Supplier Statement Check compares the supplier's statement with your open items at a date, lists each difference with the source values, saves the report and exports CSV. It runs only as a local install from a source checkout. It doesn't read PDFs or post payments.",
    "example": {
     "persona": "Accounts assistant at a print shop",
-    "prompt": "Here is the statement from Northern Paper Co at 31 October (28 lines) and our open items for them. What does not agree?",
+    "prompt": "Here is the statement from Northern Paper Co at 31 October (28 lines) and our open items for them. What doesn't agree?",
     "steps": [
      {
       "tool": "supplier_statement_check",
@@ -380,11 +380,11 @@
     "Ignoring timing: a payment sent on the 30th that the supplier books on the 2nd.",
     "Paying the statement balance without checking it."
    ],
-   "answer": "Claude can compare short lists, but long statements need a tool. The Supplier Statement Check server matches the supplier's statement against your open items, lists every difference with its source values, and exports a CSV. It runs on your machine and needs structured data, not PDF scans."
+   "answer": "Claude can compare short lists, but long statements need a tool. The Supplier Statement Check server matches the supplier's statement against your open items, lists every difference with its source values, and exports a CSV. It runs as a local install only and needs structured data, not PDF scans."
   },
   "/use-cases/depreciation-schedule/": {
-   "intro": "Depreciation is the job most small businesses hand to the accountant because the schedule is tedious, not hard. This page is for owners and bookkeepers who want the schedule and the monthly journal from one sentence per asset.",
-   "without_tool": "Claude knows the straight-line and declining-balance methods and can build a schedule for one asset in a chat. It does not keep a register, so next month it does not know what you own, what is fully written down, or what was sold.",
+   "intro": "Most small businesses hand depreciation to the accountant because the schedule is tedious, not hard. One sentence per asset gets you the schedule and the monthly journal.",
+   "without_tool": "Claude knows the straight-line and declining-balance methods and can build a schedule for one asset in a chat. It doesn't keep a register, so next month it doesn't know what you own, what's fully written down, or what was sold.",
    "with_tool": "Asset Register stores each fixed asset with cost, method, rate and life, builds the schedule, gives the monthly journal (debit depreciation expense, credit accumulated depreciation), records disposals with gain or loss, and reports net book value for the year.",
    "example": {
     "persona": "Owner of a small dental lab",
@@ -403,22 +403,22 @@
       "does": "Shows net book value at 31 December"
      }
     ],
-    "result": "A 7-year schedule and the net book value at year end; the machine stays in the register for next month's journal."
+    "result": "A 7-year schedule and the net book value at year end. The machine stays in the register for next month's journal."
    },
    "pitfalls": [
     "Starting depreciation from the wrong date (purchase date vs date in use).",
     "Forgetting to remove a sold asset, so it keeps depreciating on paper.",
     "Mixing the tax method and the book method in one schedule."
    ],
-   "answer": "Claude can explain and calculate depreciation for one asset, but it keeps no register. The Asset Register server stores your assets, builds schedules, gives the monthly journal and records disposals. Check the method and rates with your accountant; the server applies what you set."
+   "answer": "Claude can explain and calculate depreciation for one asset, but it keeps no register. The Asset Register server stores your assets, builds schedules, gives the monthly journal and records disposals. Check the method and rates with your accountant. The server applies what you set."
   },
   "/use-cases/loan-and-lease-amortization/": {
-   "intro": "This page is for owners and accountants who need a payment schedule for a loan or lease, the split of each payment into interest and principal, and the journal entries that go with it.",
-   "without_tool": "Claude can compute a level payment and a schedule for one loan if the inputs are clear, and it is usually right. It keeps no register of your loans, so it cannot tell you next month what is outstanding across all of them.",
+   "intro": "Owners and accountants need three things for a loan or lease. A payment schedule, the interest and principal split of each payment, and the journal entries that go with it.",
+   "without_tool": "Claude can compute a level payment and a schedule for one loan if the inputs are clear, and it's usually right. It keeps no register of your loans, so it can't tell you next month what's outstanding across all of them.",
    "with_tool": "Amortization stores each loan or lease, builds the schedule per period, gives the journal entry for any period or month, prices early repayment, and reports total debt outstanding at a date.",
    "example": {
     "persona": "Bakery owner buying an oven on finance",
-    "prompt": "Record an equipment loan: EUR 18,000 at 7.5% a year over 48 months. What is the monthly payment, and how much interest do I pay in 2027?",
+    "prompt": "Record an equipment loan: EUR 18,000 at 7.5% a year over 48 months. What's the monthly payment, and how much interest do I pay in 2027?",
     "steps": [
      {
       "tool": "loan_create",
@@ -439,8 +439,8 @@
    "answer": "Claude can calculate a loan payment, but it keeps no record of your loans. With the Amortization server, Claude stores each loan or lease, builds the full schedule, gives the interest and principal journal per month and prices early repayment."
   },
   "/use-cases/per-diem-travel-allowance/": {
-   "intro": "Per diem rules differ by country, scheme and trip length, and getting them wrong means over- or under-paying staff. This page is for ops and finance staff who need the right daily allowance for a trip and an expense line to match.",
-   "without_tool": "Claude can explain how a per diem scheme works, but its rates may be out of date and it may not cite the source. It does not save trips, so there is no monthly total per scheme.",
+   "intro": "Per diem rules differ by country, scheme and trip length. Get them wrong and you over- or under-pay staff. Ops and finance teams need the right daily allowance for a trip and an expense line to match.",
+   "without_tool": "Claude can explain how a per diem scheme works, but its rates may be out of date and it may not cite the source. It doesn't save trips, so there's no monthly total per scheme.",
    "with_tool": "Per Diem calculates the allowance for a trip from bundled scheme rates and lists each rate with its authority and source URL. It saves trips, reports monthly totals per scheme, and returns the exact expense_add arguments for the Expense Tracker.",
    "example": {
     "persona": "Office manager at an engineering firm",
@@ -466,11 +466,11 @@
     "Paying full days for partial travel days when the scheme pays less.",
     "Forgetting to reduce the allowance when meals were provided."
    ],
-   "answer": "Claude can explain per diem rules, but its rates may be out of date. The Per Diem server calculates the allowance from bundled scheme rates that list their source, saves each trip and returns expense lines. Check the scheme list first; if your scheme is missing, the server cannot calculate it."
+   "answer": "Claude can explain per diem rules, but its rates may be out of date. The Per Diem server calculates the allowance from bundled scheme rates that list their source, saves each trip and returns expense lines. Check the scheme list first. If your scheme is missing, the server can't calculate it."
   },
   "/use-cases/work-orders-and-job-cards/": {
-   "intro": "Trades and field service crews lose money when parts and hours never make it onto the invoice. This page is for plumbers, electricians and maintenance firms who want to raise a job, log what was used, and bill it from the van.",
-   "without_tool": "Claude can write a work order or job sheet as text. It does not number jobs, it cannot track a job from scheduled to done to invoiced, and it forgets the parts and hours logged in an earlier chat.",
+   "intro": "Trades and field service crews lose money when parts and hours never make it onto the invoice. Plumbers, electricians and maintenance firms can raise a job, log what was used and bill it from the van.",
+   "without_tool": "Claude can write a work order or job sheet as text. It doesn't number jobs, it can't track a job from scheduled to done to invoiced, and it forgets the parts and hours logged in an earlier chat.",
    "with_tool": "Work Order raises numbered jobs, adds parts and labour lines, moves each job through its status, writes an A4 completion report PDF, and builds an invoice payload. Job Card logs labour by worker and day, logs materials, and prints a card for the client.",
    "example": {
     "persona": "Electrician with two apprentices",
@@ -498,17 +498,17 @@
    "pitfalls": [
     "Writing parts on paper and forgetting them at invoice time.",
     "No status, so finished jobs sit unbilled for weeks.",
-    "Logging hours per job but not per worker, so payroll does not match."
+    "Logging hours per job but not per worker, so payroll doesn't match."
    ],
-   "answer": "Claude can draft a job sheet, but it does not number or track jobs. Connect Work Order and Job Card and Claude raises numbered jobs, logs labour and materials, moves each job to done and invoiced, and prints a completion report or job card."
+   "answer": "Claude can draft a job sheet, but it doesn't number or track jobs. Connect Work Order and Job Card and Claude raises numbered jobs, logs labour and materials, moves each job to done and invoiced, and prints a completion report or job card."
   },
   "/use-cases/change-orders/": {
-   "intro": "Scope creep without paperwork is unpaid work. This page is for contractors and agencies who need to record extra work against a quote, get the client to approve it, and bill the difference.",
-   "without_tool": "Claude can write a change order letter. It does not know the original quote value, it cannot keep a running contract total across several changes, and it does not track which changes were approved.",
+   "intro": "Scope creep without paperwork is unpaid work. Contractors and agencies need to record extra work against a quote, get the client to approve it and bill the difference.",
+   "without_tool": "Claude can write a change order letter. It doesn't know the original quote value, it can't keep a running contract total across several changes, and it doesn't track which changes were approved.",
    "with_tool": "Change Order raises numbered change orders against a quote or work order, adds and removes lines, moves each one from draft to sent to approved, gives the running contract value, and builds invoice lines for the approved difference.",
    "example": {
     "persona": "Landscaping contractor",
-    "prompt": "What is the contract value on quote Q-2026-022 now? Then raise a change order: remove the gravel path (EUR 1,100) and add a timber deck, EUR 3,400.",
+    "prompt": "What's the contract value on quote Q-2026-022 now? Then raise a change order: remove the gravel path (EUR 1,100) and add a timber deck, EUR 3,400.",
     "steps": [
      {
       "tool": "contract_value",
@@ -534,11 +534,11 @@
     "Billing the full new scope instead of the difference.",
     "Losing track of the current contract value after several changes."
    ],
-   "answer": "Claude can draft a change order letter, but it cannot track contract value across changes. The Change Order server records each change against the quote, tracks approval, shows the running contract value and builds invoice lines for the approved difference."
+   "answer": "Claude can draft a change order letter, but it can't track contract value across changes. The Change Order server records each change against the quote, tracks approval, shows the running contract value and builds invoice lines for the approved difference."
   },
   "/use-cases/purchase-orders-and-credit-notes/": {
-   "intro": "Purchase orders and credit notes are the two documents small firms most often make by editing an old file. This page is for owners and office staff who want both made correctly, numbered, and linked to the right supplier or invoice.",
-   "without_tool": "Claude can draft a purchase order or a credit note as text. It does not number them, it does not know the original invoice lines and VAT rates, and it cannot track which orders have arrived.",
+   "intro": "Small firms most often make purchase orders and credit notes by editing an old file. Both should be correct, numbered and linked to the right supplier or invoice.",
+   "without_tool": "Claude can draft a purchase order or a credit note as text. It doesn't number them, it doesn't know the original invoice lines and VAT rates, and it can't track which orders have arrived.",
    "with_tool": "Billing Docs raises numbered purchase orders, records full or partial receipt, and credits an invoice in full, by amount or by line, writing A4 PDFs or email text. Credit Note issues standalone or invoice-linked credit notes and finalizes them with a CN number.",
    "example": {
     "persona": "Owner of a bike repair shop",
@@ -564,11 +564,11 @@
     "Crediting the gross amount at the wrong VAT rate.",
     "Sending a purchase order with no expected delivery date, so nobody chases it."
    ],
-   "answer": "Claude can draft the wording, but it does not number documents or know your invoice lines. Connect Billing Docs and Credit Note and Claude raises numbered purchase orders, records deliveries, and issues credit notes linked to the right invoice with correct VAT."
+   "answer": "Claude can draft the wording, but it doesn't number documents or know your invoice lines. Connect Billing Docs and Credit Note and Claude raises numbered purchase orders, records deliveries, and issues credit notes linked to the right invoice with correct VAT."
   },
   "/use-cases/bill-of-sale/": {
-   "intro": "Selling a car, a boat, equipment or a business asset privately? A bill of sale protects both sides. This page is for private sellers and small dealers who want a correct, signable document in a few minutes.",
-   "without_tool": "Claude can write a bill of sale from a template and include the usual fields. It keeps no record of past sales, cannot freeze a final version, and leaves you to format and print it.",
+   "intro": "A bill of sale protects both sides when you sell a car, a boat, equipment or a business asset privately. Private sellers and small dealers can get a correct, signable document in a few minutes.",
+   "without_tool": "Claude can write a bill of sale from a template and include the usual fields. It keeps no record of past sales, can't freeze a final version, and leaves you to format and print it.",
    "with_tool": "Bill of Sale records the seller, buyer, item and identifier (VIN or serial), price and terms, renders the document as Markdown or a printable HTML file, and freezes it when finalized. It keeps a book of every sale with totals.",
    "example": {
     "persona": "Owner selling a used trailer",
@@ -590,19 +590,19 @@
     "result": "A finalized, printable bill of sale with both parties, the VIN, USD 2,350, 'as is' terms and signature lines."
    },
    "pitfalls": [
-    "Leaving out the VIN or serial number, so the document does not identify the item.",
-    "Not writing 'sold as is' when that is the deal.",
-    "Using a generic form when your state or country requires a specific one or a notary; check local rules."
+    "Leaving out the VIN or serial number, so the document doesn't identify the item.",
+    "Not writing 'sold as is' when that's the deal.",
+    "Using a generic form when your state or country requires a specific one or a notary. Check local rules."
    ],
-   "answer": "Claude can draft a bill of sale. The Bill of Sale server adds a numbered record, freezes the final version and renders a printable document with VIN or serial, price and terms. Some places require an official form or notary; check local rules."
+   "answer": "Claude can draft a bill of sale. The Bill of Sale server adds a numbered record, freezes the final version and renders a printable document with VIN or serial, price and terms. Some places require an official form or notary. Check local rules."
   },
   "/use-cases/tailored-resume-and-cover-letter/": {
-   "intro": "Job seekers search this to stop rewriting the same CV for every posting. This page shows how to keep one profile, see the gaps against a specific job, and get a Word resume and cover letter out of chat.",
-   "without_tool": "Claude is good at rewriting a CV for a job post you paste. It does not keep your profile between chats, so you paste the CV every time, and in most chat apps it gives you text, not a .docx you can send.",
+   "intro": "Stop rewriting the same CV for every posting. Keep one profile, see the gaps against a specific job, and get a Word resume and cover letter out of chat.",
+   "without_tool": "Claude is good at rewriting a CV for a job post you paste. It doesn't keep your profile between chats, so you paste the CV every time, and in most chat apps it gives you text, not a .docx you can send.",
    "with_tool": "Resume stores one CV profile, reads an existing .docx resume into it, runs a read-only gap analysis against a job posting, and writes the resume and cover letter as .docx files, or as HTML and markdown.",
    "example": {
     "persona": "Nurse moving into health tech",
-    "prompt": "Here is a posting for Clinical Product Specialist. What in my profile matches, what is missing? Then write a cover letter .docx for it.",
+    "prompt": "Here is a posting for Clinical Product Specialist. What in my profile matches, what's missing? Then write a cover letter .docx for it.",
     "steps": [
      {
       "tool": "profile_get",
@@ -610,7 +610,7 @@
      },
      {
       "tool": "tailor_to_job",
-      "does": "Lists matched and missing skills against the posting; changes nothing"
+      "does": "Lists matched and missing skills against the posting. Changes nothing"
      },
      {
       "tool": "cover_letter_create",
@@ -621,18 +621,18 @@
    },
    "pitfalls": [
     "Sending one generic CV to every job.",
-    "Adding skills you do not have to match keywords; interviews expose it.",
+    "Adding skills you don't have to match keywords. Interviews expose it.",
     "Fancy layouts with tables and columns that some applicant tracking systems read badly."
    ],
    "answer": "Claude rewrites CVs well, but it forgets your profile between chats. With the Resume server, Claude stores your profile once, shows the gaps against each job post and writes the resume and cover letter as Word files. The gap analysis changes nothing."
   },
   "/use-cases/freelance-service-agreement/": {
-   "intro": "Most freelance payment disputes start with no written scope. This page is for freelancers and small agencies who want a service agreement with scope, rate, deliverables and the right clauses before work starts.",
-   "without_tool": "Claude can draft a service agreement and explain common clauses. It keeps no list of your agreements, cannot reuse your own clause wording reliably, and does not check what is missing before you send. It is not a lawyer, and neither is a tool.",
+   "intro": "Most freelance payment disputes start with no written scope. Freelancers and small agencies need a service agreement with scope, rate, deliverables and the right clauses before work starts.",
+   "without_tool": "Claude can draft a service agreement and explain common clauses. It keeps no list of your agreements, can't reuse your own clause wording reliably, and doesn't check what's missing before you send. It isn't a lawyer, and neither is a tool.",
    "with_tool": "Service Agreement writes numbered agreements with parties, scope, deliverables and rate, runs a before-you-send checklist, renders the document and tracks status from draft to signed. Clauses stores your own clause library and assembles contracts as .docx or markdown.",
    "example": {
     "persona": "Freelance copywriter",
-    "prompt": "Agreement with Greenleaf Foods: 8 blog posts a month for 3 months at USD 2,400 a month, 2 revision rounds. What is missing before I send it?",
+    "prompt": "Agreement with Greenleaf Foods: 8 blog posts a month for 3 months at USD 2,400 a month, 2 revision rounds. What's missing before I send it?",
     "steps": [
      {
       "tool": "agreement_create",
@@ -651,14 +651,14 @@
    },
    "pitfalls": [
     "No limit on revisions, so the job never ends.",
-    "Not stating who owns the work until it is paid.",
+    "Not stating who owns the work until it's paid.",
     "Starting work before the agreement is signed. Have a lawyer check terms that matter."
    ],
-   "answer": "Claude can draft a contract, and the Service Agreement server adds structure: numbered agreements, a before-you-send checklist, your own clause library and status from draft to signed. Neither replaces legal advice; have a lawyer check terms that carry real risk."
+   "answer": "Claude can draft a contract, and the Service Agreement server adds structure: numbered agreements, a before-you-send checklist, your own clause library and status from draft to signed. Neither replaces legal advice. Have a lawyer check terms that carry real risk."
   },
   "/use-cases/recurring-monthly-invoices/": {
-   "intro": "Retainers and subscriptions should bill themselves. This page is for freelancers, agencies and service firms who send the same invoice every month and sometimes forget.",
-   "without_tool": "Claude cannot act on a schedule. It does not run on the 1st of the month, it does not know which periods were billed, and it cannot create invoices in a system that keeps numbers.",
+   "intro": "Retainers and subscriptions should bill themselves. If you send the same invoice every month and sometimes forget, this is for you.",
+   "without_tool": "Claude can't act on a schedule. It doesn't run on the 1st of the month, it doesn't know which periods were billed, and it can't create invoices in a system that keeps numbers.",
    "with_tool": "Recurring stores schedules (client, lines, cadence, start and end), creates real invoices in the Invoice server for every due occurrence when you ask, keeps an audit log per schedule, and forecasts recurring revenue per month.",
    "example": {
     "persona": "IT support company with 12 retainer clients",
@@ -680,15 +680,15 @@
     "result": "A list of upcoming retainer invoices, one skipped period, and today's invoices created with their numbers in the Invoice server."
    },
    "pitfalls": [
-    "Assuming the chat app sends invoices on its own; you still ask it to generate due invoices.",
+    "Assuming the chat app sends invoices on its own. You still ask it to generate due invoices.",
     "Pausing a client and forgetting the missed periods are still due when you resume.",
     "Changing the price in the invoice instead of the schedule, so next month is wrong again."
    ],
-   "answer": "Claude cannot run on a schedule by itself. With Recurring and Invoice connected, you ask once a week and Claude creates every invoice that is due, skips or pauses clients, keeps an audit log per schedule and forecasts your monthly recurring revenue."
+   "answer": "Claude can't run on a schedule by itself. With Recurring and Invoice connected, you ask once a week and Claude creates every invoice that's due, skips or pauses clients, keeps an audit log per schedule and forecasts your monthly recurring revenue."
   },
   "/use-cases/sepa-payment-qr-code/": {
-   "intro": "In much of Europe a client can pay an invoice by scanning a QR code in their banking app. This page is for euro-zone freelancers and firms who want that code on every invoice without a separate generator.",
-   "without_tool": "Claude can explain the EPC QR format and list the fields. It cannot draw an image, so it cannot make a code a banking app will scan.",
+   "intro": "In much of Europe a client can pay an invoice by scanning a QR code in their banking app. Euro-zone freelancers and firms can put that code on every invoice without a separate generator.",
+   "without_tool": "Claude can explain the EPC QR format and list the fields. It can't draw an image, so it can't make a code a banking app will scan.",
    "with_tool": "Barcode makes an EPC069-12 SEPA payment QR code from IBAN, beneficiary, amount and reference, or one for a stored invoice using the IBAN from your business profile. It writes SVG or PNG and also makes plain QR, vCard, WiFi and linear barcodes.",
    "example": {
     "persona": "Freelance architect in the Netherlands",
@@ -702,15 +702,15 @@
     "result": "A PNG payment QR code the client scans in their banking app to pay EUR 3,630.00 with reference 2026-118 filled in."
    },
    "pitfalls": [
-    "A typo in the IBAN; always test-scan the code with your own banking app first.",
-    "Leaving out the reference, so the payment cannot be matched to the invoice.",
-    "Using an EPC code for a non-euro payment; the standard is euro only."
+    "A typo in the IBAN. Always test-scan the code with your own banking app first.",
+    "Leaving out the reference, so the payment can't be matched to the invoice.",
+    "Using an EPC code for a non-euro payment. The standard is euro only."
    ],
-   "answer": "Claude cannot draw a scannable QR code by itself. The Barcode server makes an EPC069-12 SEPA payment QR from IBAN, name, amount and reference as SVG or PNG, so the client pays from their banking app. Test-scan it before you send."
+   "answer": "Claude can't draw a scannable QR code by itself. The Barcode server makes an EPC069-12 SEPA payment QR from IBAN, name, amount and reference as SVG or PNG, so the client pays from their banking app. Test-scan it before you send."
   },
   "/use-cases/schedule-across-time-zones/": {
-   "intro": "Remote teams lose hours to 'what time is that for you?'. This page is for ops staff, assistants and remote teams who want a meeting time that falls in everyone's working hours, and a calendar file to send.",
-   "without_tool": "Claude knows time zones, but it can get daylight saving dates wrong, especially in the weeks when the US and Europe change clocks on different days. It does not know your calendar or anyone's working hours.",
+   "intro": "Remote teams lose hours to 'what time is that for you?'. Ops staff and assistants need a meeting time inside everyone's working hours, and a calendar file to send.",
+   "without_tool": "Claude knows time zones, but it can get daylight saving dates wrong, especially in the weeks when the US and Europe change clocks on different days. It doesn't know your calendar or anyone's working hours.",
    "with_tool": "Timezone stores people with their zone and working hours, ranks meeting slots inside everyone's hours on real dates, lists clock changes and writes a .ics file. Calendar imports your .ics calendars, finds free and busy time, and flags double bookings.",
    "example": {
     "persona": "Executive assistant",
@@ -736,11 +736,11 @@
     "Picking a time that is inside hours for two people and 7 am for the third.",
     "Sending a time in your zone only, with no calendar file."
    ],
-   "answer": "Claude knows time zones, but daylight saving gaps trip it up and it cannot see calendars. With Timezone and Calendar connected, Claude ranks slots inside everyone's working hours on real dates, checks your imported calendar for clashes and writes a .ics invite."
+   "answer": "Claude knows time zones, but daylight saving gaps trip it up and it can't see calendars. With Timezone and Calendar connected, Claude ranks slots inside everyone's working hours on real dates, checks your imported calendar for clashes and writes a .ics invite."
   },
   "/use-cases/petty-cash-reconciliation/": {
-   "intro": "The petty cash tin never agrees with the book. This page is for office managers and bookkeepers who run an imprest float and want vouchers, a count and a top-up figure without a spreadsheet.",
-   "without_tool": "Claude can explain the imprest system and add up vouchers you type in. It does not keep the float, the voucher numbers or past counts, so each month starts from nothing.",
+   "intro": "The petty cash tin never agrees with the book. Office managers and bookkeepers who run an imprest float want vouchers, a count and a top-up figure without a spreadsheet.",
+   "without_tool": "Claude can explain the imprest system and add up vouchers you type in. It doesn't keep the float, the voucher numbers or past counts, so each month starts from nothing.",
    "with_tool": "Petty Cash opens a float, records numbered vouchers and top-ups, reconciles a cash count against the expected balance, and works out the top-up that restores the imprest.",
    "example": {
     "persona": "Office manager at a veterinary clinic",
@@ -765,8 +765,8 @@
    "answer": "Claude can explain petty cash, but it keeps no float or vouchers. The Petty Cash server records each voucher, reconciles your cash count against the expected balance, and calculates the top-up that restores the imprest. Each month continues from the last."
   },
   "/use-cases/employee-leave-tracker/": {
-   "intro": "Small teams track leave in a shared spreadsheet until two people book the same week. This page is for owners and HR staff who want requests, approvals, balances and 'who is out' in one place they can ask in plain words.",
-   "without_tool": "Claude can calculate a leave balance from numbers you give it. It keeps no record of employees, requests or approvals, and it cannot tell you who is out next week.",
+   "intro": "Small teams track leave in a shared spreadsheet until two people book the same week. Owners and HR staff want requests, approvals, balances and 'who is out' in one place they can ask in plain words.",
+   "without_tool": "Claude can calculate a leave balance from numbers you give it. It keeps no record of employees, requests or approvals, and it can't tell you who is out next week.",
    "with_tool": "Leave stores employees with their allowance, creates and approves requests, shows each balance with carry-over and pending days, and lists who is out in a date range. Pro adds CSV import and an .ics export of approved leave.",
    "example": {
     "persona": "Owner of a 9-person design studio",
@@ -799,8 +799,8 @@
    "answer": "Claude can do leave math, but it keeps no records. The Leave server stores employees and allowances, handles requests and approvals, shows each balance and lists who is out in any date range. Pro adds CSV import and calendar export."
   },
   "/use-cases/new-hire-onboarding-plan/": {
-   "intro": "A new hire's first week sets how long they stay. This page is for small business owners and HR staff who want a plan with owners and due dates, and a simple way to see what is late.",
-   "without_tool": "Claude can write a good onboarding plan for a role. It does not save it, assign tasks to owners with dates, or tell you next Friday which tasks are overdue.",
+   "intro": "A new hire's first week sets how long they stay. Small business owners and HR staff need a plan with owners and due dates, and a quick way to see what's late.",
+   "without_tool": "Claude can write a good onboarding plan for a role. It doesn't save it, assign tasks to owners with dates, or tell you next Friday which tasks are overdue.",
    "with_tool": "Onboarding adds hires, applies role templates, assigns tasks to HR, manager or IT with due dates, tracks progress and lists overdue tasks. Checklist runs reusable, versioned checklists with pass, fail and sign-off for first-day steps.",
    "example": {
     "persona": "Practice manager at a physiotherapy clinic",
@@ -826,11 +826,11 @@
     "No owner per task, so everyone assumes someone else did it.",
     "Skipping legal steps, such as right-to-work checks, in a busy week."
    ],
-   "answer": "Claude can draft an onboarding plan, but it cannot track it. With the Onboarding server, Claude adds hires, assigns tasks to HR, managers or IT with due dates, applies role templates and lists overdue tasks. Checklist adds signed-off first-day checklists."
+   "answer": "Claude can draft an onboarding plan, but it can't track it. With the Onboarding server, Claude adds hires, assigns tasks to HR, managers or IT with due dates, applies role templates and lists overdue tasks. Checklist adds signed-off first-day checklists."
   },
   "/use-cases/resize-and-compress-images/": {
-   "intro": "Shop owners and bloggers search this when photos are too big for a website or an email. This page shows how to resize, compress and convert a batch of images by asking in chat.",
-   "without_tool": "Claude can look at an image and describe it. In Claude.ai with code execution it can sometimes resize a file in its sandbox. In Claude Desktop or Cursor without a tool, it cannot write a new image file.",
+   "intro": "Your photos are too big for the website or the email. Shop owners and bloggers can resize, compress and convert a batch of images just by asking in chat.",
+   "without_tool": "Claude can look at an image and describe it. In Claude.ai with code execution it can sometimes resize a file in its sandbox. In Claude Desktop or Cursor without a tool, it can't write a new image file.",
    "with_tool": "The Image server resizes single images or batches, compresses and reports bytes before and after, converts formats, crops, makes thumbnails, adds a text watermark and strips metadata. Each result is a new file.",
    "example": {
     "persona": "Etsy seller of ceramics",
@@ -855,12 +855,12 @@
    "answer": "In most chat apps Claude can see an image but not write a new one. The Image server resizes, compresses, converts, crops, watermarks and strips metadata, in batches, and writes each result as a new file. Run it locally to keep photos on your machine."
   },
   "/use-cases/convert-currency-ecb-rates/": {
-   "intro": "Accountants and freelancers who invoice abroad need the official rate for a specific date, not a rate a chatbot remembers. This page is for anyone who must convert at the ECB reference rate and show where the number came from.",
-   "without_tool": "Claude has no live data in a plain chat. It may give a rate from its training data that is months old, and it cannot prove which date the rate is from.",
+   "intro": "Accountants and freelancers who invoice abroad need the official rate for a specific date, not a rate a chatbot remembers. If you must convert at the ECB reference rate and show where the number came from, start here.",
+   "without_tool": "Claude has no live data in a plain chat. It may give a rate from its training data that's months old, and it can't prove which date the rate is from.",
    "with_tool": "Currency uses European Central Bank daily reference rates: it converts on a given date, converts one amount into many currencies, gives the rate for a pair on a date, and returns rate history for a window.",
    "example": {
     "persona": "UK freelancer billing a German client",
-    "prompt": "What was the ECB EUR to GBP rate on 30 September 2026, and what is EUR 5,750 in GBP at that rate?",
+    "prompt": "What was the ECB EUR to GBP rate on 30 September 2026, and what's EUR 5,750 in GBP at that rate?",
     "steps": [
      {
       "tool": "rate_on",
@@ -881,9 +881,9 @@
    "answer": "Without a tool, Claude may quote an old rate from memory. The Currency server uses European Central Bank daily reference rates: it converts on any date, converts into many currencies at once and gives rate history, with the rate date stated."
   },
   "/can-claude/create-excel-files/": {
-   "intro": "Short answer: sometimes, depending on where you use Claude. This page explains which Claude apps can make an .xlsx today, and how to get the same result in Claude Desktop, Cursor and VS Code.",
-   "without_tool": "In Claude.ai with code execution and file creation turned on, Claude can create .xlsx files in a sandbox and give you a download. In Claude Desktop, Cursor and VS Code without a tool, it gives you CSV or table text to paste, and it cannot open a spreadsheet on your disk.",
-   "with_tool": "The Spreadsheet server writes rows to .xlsx, .csv, .tsv or .json, reads and queries existing spreadsheets by path, adds computed columns and converts formats. Each change is a new file; the source is not changed.",
+   "intro": "Sometimes. It depends on where you use Claude. Some Claude apps can make an .xlsx today, and Claude Desktop, Cursor and VS Code can get the same result with a server.",
+   "without_tool": "In Claude.ai with code execution and file creation turned on, Claude can create .xlsx files in a sandbox and give you a download. In Claude Desktop, Cursor and VS Code without a tool, it gives you CSV or table text to paste, and it can't open a spreadsheet on your disk.",
+   "with_tool": "The Spreadsheet server writes rows to .xlsx, .csv, .tsv or .json, reads and queries existing spreadsheets by path, adds computed columns and converts formats. Each change is a new file. The source isn't changed.",
    "example": {
     "persona": "Volunteer treasurer of a sports club",
     "prompt": "Make members-2026.xlsx with columns name, membership type, paid date and amount, from the list I paste below.",
@@ -901,14 +901,14 @@
    },
    "pitfalls": [
     "Copying a chat table into Excel and getting all values in one column.",
-    "Numbers saved as text, so totals do not work.",
+    "Numbers saved as text, so totals don't work.",
     "Expecting formulas to be kept when converting to CSV."
    ],
    "answer": "Claude.ai can create Excel files when code execution and file creation are on. In Claude Desktop, Cursor or VS Code, connect the Spreadsheet server: Claude then writes .xlsx and .csv files, reads existing spreadsheets by path, adds columns and converts formats."
   },
   "/can-claude/create-word-documents/": {
-   "intro": "Short answer: yes in Claude.ai with file creation on, and with a connected server everywhere else. This page shows the difference and what you can do with your own Word templates.",
-   "without_tool": "In Claude.ai with file creation turned on, Claude can generate a .docx in its sandbox. In Claude Desktop, Cursor or VS Code without a tool, you get text to paste into Word, and Claude cannot fill or read a .docx template on your disk.",
+   "intro": "Yes in Claude.ai with file creation on, and with a connected server everywhere else. Below is the difference, and what you can do with your own Word templates.",
+   "without_tool": "In Claude.ai with file creation turned on, Claude can generate a .docx in its sandbox. In Claude Desktop, Cursor or VS Code without a tool, you get text to paste into Word, and Claude can't fill or read a .docx template on your disk.",
    "with_tool": "The DOCX server writes .docx files from sections or markdown, fills {{placeholders}} in your own template, reads existing .docx files, converts .docx to HTML and makes proposals and service agreements.",
    "example": {
     "persona": "School administrator",
@@ -916,20 +916,20 @@
     "steps": [
      {
       "tool": "doc_fill_template",
-      "does": "Replaces each placeholder and reports any it could not fill"
+      "does": "Replaces each placeholder and reports any it couldn't fill"
      }
     ],
     "result": "letter-ito.docx with the school's own layout and every placeholder filled, plus a report of any missing fields."
    },
    "pitfalls": [
     "Expecting a chat answer to keep Word heading styles when pasted.",
-    "Placeholders that differ by one character, so they are not replaced.",
+    "Placeholders that differ by one character, so they aren't replaced.",
     "Starting from a blank document when the organization has a letterhead template."
    ],
-   "answer": "Claude.ai can create Word files when file creation is on; Claude Desktop, Cursor and VS Code cannot without a tool. The DOCX server works in any MCP client: it writes .docx files, fills your own templates and reads existing documents."
+   "answer": "Claude.ai can create Word files when file creation is on. Claude Desktop, Cursor and VS Code can't without a tool. The DOCX server works in any MCP client: it writes .docx files, fills your own templates and reads existing documents."
   },
   "/can-claude/make-a-pdf/": {
-   "intro": "Short answer: Claude.ai can make a PDF with file creation on, and other chat apps need a tool. This page shows the three PDF jobs people search for most: an invoice PDF, a business document PDF, and editing an existing PDF.",
+   "intro": "Claude.ai can make a PDF with file creation on. Other chat apps need a tool. These are the three PDF jobs people search for most: an invoice PDF, a business document PDF, and editing an existing PDF.",
    "without_tool": "In Claude.ai with code execution and file creation turned on, Claude can generate a PDF in its sandbox. In Claude Desktop, Cursor or VS Code without a tool, it gives you text only. In no case does it remember invoice numbers or your business details between chats.",
    "with_tool": "Invoice writes numbered A4 invoice PDFs. Billing Docs writes purchase order and credit note PDFs in the same layout. The PDF server merges, splits, stamps and watermarks existing PDFs. Each tool returns the path of the new PDF.",
    "example": {
@@ -945,7 +945,7 @@
       "does": "Adds the business name and VAT id from the shared profile to each footer"
      }
     ],
-    "result": "A new copy of INV-0091 stamped PAID with your business footer on every page; the original file is unchanged."
+    "result": "A new copy of INV-0091 stamped PAID with your business footer on every page. The original file is unchanged."
    },
    "pitfalls": [
     "Printing a chat answer to PDF and sending it as an invoice, with no number or VAT id.",
@@ -955,12 +955,12 @@
    "answer": "Claude.ai can make a PDF when file creation is on. In other apps, or for numbered invoices and edits to existing PDFs, connect a server: Invoice writes invoice PDFs, Billing Docs writes order and credit note PDFs, and PDF merges, splits and stamps."
   },
   "/can-claude/read-zip-files/": {
-   "intro": "Short answer: not in most chat apps, and you should check what is inside before you open it. This page shows how to list, read and safely unpack a zip from chat.",
-   "without_tool": "Claude.ai with code execution can sometimes unpack an uploaded zip in its sandbox. Claude Desktop, Cursor and VS Code cannot open a .zip without a tool.",
+   "intro": "Not in most chat apps. And you should check what's inside before you open it. Here's how to list, read and safely unpack a zip from chat.",
+   "without_tool": "Claude.ai with code execution can sometimes unpack an uploaded zip in its sandbox. Claude Desktop, Cursor and VS Code can't open a .zip without a tool.",
    "with_tool": "The Zip server lists entries with sizes and ratios, reads one text file from an archive without unpacking, unpacks safely (traversal, absolute-path and symlink entries are refused), creates archives with glob patterns and bundles a month of invoices for your accountant.",
    "example": {
     "persona": "Accountant receiving client files",
-    "prompt": "List what is inside ~/Downloads/client-records-q3.zip, then show me notes.txt from it without unpacking the rest.",
+    "prompt": "List what's inside ~/Downloads/client-records-q3.zip, then show me notes.txt from it without unpacking the rest.",
     "steps": [
      {
       "tool": "zip_list",
@@ -978,12 +978,12 @@
     "Ignoring a huge compression ratio, a sign of a zip bomb.",
     "Emailing a zip of invoices that misses half the month."
    ],
-   "answer": "Most chat apps cannot open a zip; Claude.ai with code execution sometimes can. The Zip server lets Claude list entries, read one text file without unpacking, unpack safely with traversal and symlink entries refused, and create new archives with glob patterns. Check the list before you unpack."
+   "answer": "Most chat apps can't open a zip. Claude.ai with code execution sometimes can. The Zip server lets Claude list entries, read one text file without unpacking, unpack safely with traversal and symlink entries refused, and create new archives with glob patterns. Check the list before you unpack."
   },
   "/can-chatgpt/create-an-invoice/": {
-   "intro": "Short answer: ChatGPT writes invoice text well and can make a file with its data analysis tool, but it keeps no numbering or client list. This page explains what a connected MCP server adds, and what is still unknown for ChatGPT.",
-   "without_tool": "ChatGPT can draft an invoice, do the VAT math and, with its code tool, produce a PDF or spreadsheet file. It does not keep a reliable invoice sequence, stored clients or payment status between chats.",
-   "with_tool": "The Invoice server stores your business profile and clients, numbers each invoice in sequence, writes an A4 PDF and tracks payments and overdue invoices. ChatGPT connects to remote MCP servers only in some plans and modes; our setup steps for ChatGPT are not tested yet, so treat them as unknown.",
+   "intro": "ChatGPT writes invoice text well and can make a file with its data analysis tool, but it keeps no numbering or client list. Below is what a connected MCP server adds. We haven't tested the ChatGPT setup, so that part stays unknown.",
+   "without_tool": "ChatGPT can draft an invoice, do the VAT math and, with its code tool, produce a PDF or spreadsheet file. It doesn't keep a reliable invoice sequence, stored clients or payment status between chats.",
+   "with_tool": "The Invoice server stores your business profile and clients, numbers each invoice in sequence, writes an A4 PDF and tracks payments and overdue invoices. ChatGPT connects to remote MCP servers only in some plans and modes. Our setup steps for ChatGPT aren't tested yet, so treat them as unknown.",
    "example": {
     "persona": "Hairdresser renting a chair",
     "prompt": "Invoice Salon Nova for October chair rental, EUR 450, no VAT (small business exemption), due 10 November. Then list my unpaid invoices.",
@@ -1001,14 +1001,14 @@
       "does": "Lists invoices with their status"
      }
     ],
-    "result": "A numbered EUR 450 invoice PDF with the due date, and a list of every invoice that is still unpaid."
+    "result": "A numbered EUR 450 invoice PDF with the due date, and a list of every invoice that's still unpaid."
    },
    "pitfalls": [
     "Restarting at INV-001 in every new chat.",
     "Writing 'no VAT' with no exemption reason when your country requires one.",
-    "Assuming every ChatGPT plan can add custom connectors; check your plan first."
+    "Assuming every ChatGPT plan can add custom connectors. Check your plan first."
    ],
-   "answer": "ChatGPT can draft an invoice and make a file, but it keeps no numbering or client list. The Invoice server adds numbered A4 PDFs, stored clients and payment tracking. It works in Claude and Cursor; ChatGPT connector setup is plan-dependent and not tested by us."
+   "answer": "ChatGPT can draft an invoice and make a file, but it keeps no numbering or client list. The Invoice server adds numbered A4 PDFs, stored clients and payment tracking. It works in Claude and Cursor. ChatGPT connector setup is plan-dependent and not tested by us."
   }
  }
 }

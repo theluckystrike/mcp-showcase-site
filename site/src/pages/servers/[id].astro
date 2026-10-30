@@ -4,6 +4,7 @@ import CaseTurn from '../../components/CaseTurn.astro';
 import InstallTabs from '../../components/InstallTabs.astro';
 import Faq from '../../components/Faq.astro';
 import ServerCard from '../../components/ServerCard.astro';
+import OutputPreview from '../../components/OutputPreview.astro';
 import StickyCta from '../../components/StickyCta.astro';
 import { brand } from '../../config/brand';
 import { getCategory } from '../../data/categories';
@@ -40,6 +41,7 @@ const afterCase = single
 const fvpNote = upsell('server', 'free_vs_pro', { copy: '', cta_url: buy('free_vs_pro') }, vars);
 const sticky = upsell('server', 'sticky_bar', { copy: `${s.name} Pro: $${s.priceUsd} once. Or all ${paidCount} paid servers for $${bundlePrice()}.`, cta_url: buy('sticky_bar') }, vars);
 const stickyBundle = upsell('server', 'sticky_bar_bundle', { copy: `All ${paidCount} for $${bundlePrice()}`, cta_url: bundle('sticky_bar_bundle') }, vars);
+const hasOutput = s.id === 'invoice' || s.cases.some((c) => /\b(PDF|DOCX|Word|Excel|XLSX|CSV)\b/i.test(c.result ?? ''));
 const visibleTools = s.tools.filter((t) => !t.name.startsWith('license_'));
 const url = new URL(`/servers/${s.id}/`, Astro.site).href;
 const jsonLd = [
@@ -61,7 +63,7 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
   <div class="cat" style={`--hue:${cat.hue}`}>
     <!-- HERO -->
     <section class="relative isolate overflow-hidden">
-      <div class="pointer-events-none absolute inset-x-0 -top-40 -z-10 h-[34rem] opacity-50 blur-3xl" style="background: radial-gradient(40rem 20rem at 30% 40%, color-mix(in oklab, var(--cat) 45%, transparent), transparent 70%)"></div>
+      <div class="glow-bg"></div>
       <div class="grid-lines"></div>
       <div class="wrap pb-12 pt-10 sm:pt-16">
         <nav class="muted flex flex-wrap items-center gap-2 text-[.88rem]" aria-label="Breadcrumb">
@@ -77,7 +79,7 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
               {s.version && <span class="chip font-mono">v{s.version}</span>}
               {s.satellite && <span class="chip">Free calculator</span>}
             </div>
-            <h1 class="display mt-6 !text-[clamp(2.4rem,6vw,4.4rem)]">{s.name}</h1>
+            <h1 class="display mt-5 !text-[clamp(2.3rem,5.4vw,4rem)]">{s.name}</h1>
             <p class="lead mt-5 max-w-2xl !text-fg">{s.tagline}</p>
             {s.outcomeChips.length > 0 && <div class="mt-6 flex flex-wrap gap-2">{s.outcomeChips.map((c) => <span class="chip">{c}</span>)}</div>}
           </div>
@@ -96,7 +98,7 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
                 <div class="mt-4 grid gap-2.5">
                   <a href="#install" class="btn w-full">Install free</a>
                   <a href={buy('hero')} class="btn btn-primary w-full" rel="nofollow">Buy {s.name} Pro, ${s.priceUsd}</a>
-                  <a href={bundle('hero')} rel="nofollow" class="muted text-center text-[.88rem] hover:text-fg">or Pro on all {paidCount} paid servers for ${bundlePrice()}</a>
+                  <a href="/pricing/" class="muted text-center text-[.88rem] hover:text-fg">or Pro on all {paidCount} paid servers for ${bundlePrice()}, see pricing</a>
                 </div>
               </>
             ) : (
@@ -126,6 +128,13 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
           <div class="mt-6"><p class="text-sm font-semibold">Made for</p><div class="mt-2 flex flex-wrap gap-2">{s.forWho.map((w) => <span class="chip">{w}</span>)}</div></div>
         )}
       </div>
+      <div class="grid content-start gap-6">
+      {hasOutput && (
+        <div class="rounded-2xl p-4 sm:p-6" style="background: var(--bg-2)">
+          <p class="mb-3 text-[.8rem] font-semibold text-muted">What you get</p>
+          <OutputPreview server={s} />
+        </div>
+      )}
       {s.topTools.length > 0 && (
         <div class="card p-6">
           <h3 class="text-sm font-semibold uppercase tracking-[.08em] text-faint">Key tools</h3>
@@ -139,6 +148,7 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
           </ul>
         </div>
       )}
+      </div>
     </section>
 
     <!-- CASES -->
@@ -153,7 +163,7 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
             {s.tryPrompts.map((p) => <li class="card px-5 py-4 text-[.98rem]">"{p}"</li>)}
           </ul>
         )}
-        <UpsellBand copy={afterCase.copy} href={afterCase.cta_url} cta={single ? `Get Pro, $${s.priceUsd}` : `Bundle, $${bundlePrice()}`} />
+        <p class="muted mt-6 text-[.95rem]">{afterCase.copy} <a href="#pricing" class="link">Free vs Pro</a></p>
       </section>
     )}
 
@@ -168,38 +178,38 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
     <section id="install" class="wrap grid gap-10 py-12 lg:grid-cols-[1fr_1.3fr]">
       <div>
         <h2 class="text-2xl font-semibold sm:text-3xl">Install</h2>
-        <p class="muted mt-3">Works with Claude, ChatGPT, Cursor, VS Code and any MCP client. {s.hosted ? 'The hosted URL needs no install at all.' : 'This server runs on your machine.'}</p>
+        <p class="muted mt-3">Works with Claude, Cursor, VS Code and any MCP client. {s.hosted ? 'The hosted URL needs no install at all.' : 'This server runs on your machine.'}</p>
         {s.npm && <p class="mt-4 text-[.9rem]"><span class="text-faint">npm:</span> <code class="font-mono">{s.npm}</code></p>}
       </div>
       <InstallTabs server={s} />
     </section>
 
     <!-- FREE VS PRO -->
-    <section class="wrap py-12">
+    <section id="pricing" class="wrap py-12">
       <h2 class="text-2xl font-semibold sm:text-3xl">{s.paid ? 'Free vs Pro' : 'Free'}</h2>
       {single && fvpNote.copy && <p class="muted mt-2">{fvpNote.copy}</p>}
       <div class:list={['mt-8 grid gap-4', s.paid && 'md:grid-cols-2']}>
         <div class="card p-6">
-          <p class="text-sm font-semibold">Free</p><p class="mt-1 text-3xl font-semibold">$0</p>
+          <p class="text-sm font-semibold">Free</p><p class="tnum mt-1 text-3xl font-semibold">$0</p>
           <ul class="muted mt-5 grid gap-2.5 text-[.95rem]">
             {(s.freeVsPro?.free.length ? s.freeVsPro.free : ['Free tier of this server', 'No key, no sign-up']).map((f) => <li class="flex gap-2.5"><span class="text-ok">+</span>{f}</li>)}
           </ul>
         </div>
         {s.paid && (
-          <div class="card p-6" style="border-color: color-mix(in oklab, var(--cat) 50%, var(--border))">
-            <p class="text-sm font-semibold cat-text">Pro</p><p class="mt-1 text-3xl font-semibold">${single ? s.priceUsd : bundlePrice()}<span class="muted text-base font-normal"> once, lifetime{s.bundleOnly && ', bundle'}</span></p>
+          <div class="card p-6" style="border: 2px solid var(--accent)">
+            <p class="text-sm font-semibold text-accent">Pro</p><p class="tnum mt-1 text-3xl font-semibold">${single ? s.priceUsd : bundlePrice()}<span class="muted text-base font-normal"> once, lifetime{s.bundleOnly && ', bundle'}</span></p>
             <ul class="muted mt-5 grid gap-2.5 text-[.95rem]">
-              {(s.freeVsPro?.pro.length ? s.freeVsPro.pro : ['Pro tools of this server (exact list: unknown, see source)', 'Key verified offline']).map((f) => <li class="flex gap-2.5"><span class="cat-text">+</span>{f}</li>)}
+              {(s.freeVsPro?.pro.length ? s.freeVsPro.pro : ['Pro tools of this server (exact list: unknown, see source)', 'Key verified offline']).map((f) => <li class="flex gap-2.5"><span class="text-accent">+</span>{f}</li>)}
             </ul>
             <a href={single ? fvpNote.cta_url : bundle('free_vs_pro')} rel="nofollow" class="btn btn-primary mt-6 w-full">{single ? `Buy ${s.name} Pro` : `Get the bundle, $${bundlePrice()}`}</a>
           </div>
         )}
       </div>
-      <p class="mt-3 break-words font-mono text-[.72rem] text-faint">Source: {s.freeVsPro?.source || 'unknown'}</p>
-      {single && capMsg.copy && <UpsellBand copy={capMsg.copy} href={capMsg.cta_url} cta={`Remove the limit, $${s.priceUsd}`} />}
+      {single && capMsg.copy && <p class="muted mt-5 max-w-3xl text-[.95rem]">{capMsg.copy}</p>}
       {s.paid && worksWith.copy && ['invoice', 'time-tracker', 'expense-tracker', 'quotes', 'recurring', 'cash-book', 'bank-statement', 'statement-of-account', 'dunning-letters'].includes(s.id) && (
-        <UpsellBand copy={worksWith.copy} href={worksWith.cta_url} cta={`Bundle, $${bundlePrice()}`} />
+        <p class="muted mt-3 max-w-3xl text-[.95rem]">{worksWith.copy} <a href="/pricing/" class="link">See the bundle</a></p>
       )}
+      <details class="mt-4 text-[.78rem] text-faint"><summary class="cursor-pointer">Where these limits come from</summary><p class="mt-1 break-words font-mono">{s.freeVsPro?.source || 'unknown'}</p></details>
     </section>
 
     <!-- ALL TOOLS -->

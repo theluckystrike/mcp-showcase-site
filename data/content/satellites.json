@@ -148,7 +148,7 @@
     {
      "title": "Check a deal before calling the lender",
      "persona": "Rental investor in Columbus, Ohio",
-     "prompt": "A duplex rents for $2,600 a month. Loan $300,000 at 7.25% for 30 years, taxes $400 and insurance $120 a month. What is the DSCR?",
+     "prompt": "A duplex rents for $2,600 a month. Loan $300,000 at 7.25% for 30 years, taxes $400 and insurance $120 a month. What's the DSCR?",
      "steps": [
       {
        "tool": "calculate_dscr",
@@ -162,7 +162,7 @@
     {
      "title": "Find the loan that hits 1.25",
      "persona": "Mortgage broker in Phoenix, Arizona",
-     "prompt": "Same duplex. What is the largest loan at 7.25%, 30 years that keeps DSCR at 1.25? And what rent would I need at $300,000?",
+     "prompt": "Same duplex. What's the largest loan at 7.25%, 30 years that keeps DSCR at 1.25? And what rent would I need at $300,000?",
      "steps": [
       {
        "tool": "max_loan_for_target_dscr",
@@ -274,7 +274,7 @@
     {
      "title": "Price an old ring before selling it",
      "persona": "Retiree in Gdansk, Poland",
-     "prompt": "I have an 18K gold ring that weighs 6.2 g. What is it worth in PLN today? The shop takes about 15%.",
+     "prompt": "I have an 18K gold ring that weighs 6.2 g. What's it worth in PLN today? The shop takes about 15%.",
      "steps": [
       {
        "tool": "calculate_jewelry_value",
@@ -497,7 +497,7 @@
    "name": "Minimum Wage",
    "category": "contracts-hr",
    "tagline": "US state minimum wages for 2026 and 2027, with tipped rates.",
-   "plain": "Ask for the minimum wage in any US state or DC on a date in 2026 or 2027. You get the standard rate, the tipped cash wage, the effective date and every scheduled increase. It never invents a rate that is not yet announced.",
+   "plain": "Ask for the minimum wage in any US state or DC on a date in 2026 or 2027. You get the standard rate, the tipped cash wage, the effective date and every scheduled increase. It never invents a rate that isn't yet announced.",
    "for_who": [
     "Small business owners",
     "Restaurant managers",
@@ -514,7 +514,7 @@
     {
      "title": "Plan for the next raise",
      "persona": "Restaurant owner in Orlando, Florida",
-     "prompt": "What is the Florida minimum wage and tipped wage now, and what changes on September 30, 2026?",
+     "prompt": "What's the Florida minimum wage and tipped wage now, and what changes on September 30, 2026?",
      "steps": [
       {
        "tool": "get_minimum_wage",
@@ -603,12 +603,12 @@
      "a": "Dates in 2026 and 2027, for all 50 states and DC."
     },
     {
-     "q": "What if a 2027 rate is not published yet?",
-     "a": "It is listed as announced: false. The server never invents a number."
+     "q": "What if a 2027 rate isn't published yet?",
+     "a": "It's listed as announced: false. The server never invents a number."
     },
     {
      "q": "Does it cover city or county minimum wages?",
-     "a": "The README describes state rates and the federal floor. City rates are not listed."
+     "a": "The README describes state rates and the federal floor. City rates aren't listed."
     }
    ],
    "npm": "minimum-wage-mcp",
@@ -734,7 +734,7 @@
     },
     {
      "q": "Is it tax advice?",
-     "a": "No. It is a calculator that applies the published IRS caps, phase-outs and brackets. Each result links the irs.gov source."
+     "a": "No. It's a calculator that applies the published IRS caps, phase-outs and brackets. Each result links the irs.gov source."
     },
     {
      "q": "Why does my overtime count for less than I thought?",
@@ -766,7 +766,7 @@
     {
      "title": "Check a job offer's real pay",
      "persona": "Software tester moving to Raleigh, North Carolina",
-     "prompt": "I got an offer of $92,000 a year, paid biweekly, single, in North Carolina, with 6% to a 401(k). What is my take-home per check in 2026?",
+     "prompt": "I got an offer of $92,000 a year, paid biweekly, single, in North Carolina, with 6% to a 401(k). What's my take-home per check in 2026?",
      "steps": [
       {
        "tool": "calculate_take_home_pay",
@@ -787,14 +787,14 @@
        "does": "Ranks four states by take-home pay with each state's method"
       }
      ],
-     "result": "Four states ranked by net pay. Washington and Texas are labeled no_wage_income_tax; California and New York use exact 2026 schedules.",
+     "result": "Four states ranked by net pay. Washington and Texas are labeled no_wage_income_tax. California and New York use exact 2026 schedules.",
      "minutes_saved": 20,
      "minutes_basis": "INFERRED: four separate calculator runs take about 20 minutes"
     },
     {
      "title": "Turn an hourly offer into a salary",
      "persona": "Nurse aide in Columbus, Ohio",
-     "prompt": "I make $24.50 an hour, 40 hours plus 6 overtime hours a week at 1.5x. What is that a year, and what is $58,000 a year per hour?",
+     "prompt": "I make $24.50 an hour, 40 hours plus 6 overtime hours a week at 1.5x. What's that a year, and what's $58,000 a year per hour?",
      "steps": [
       {
        "tool": "hourly_to_salary",
@@ -835,7 +835,7 @@
    "free_vs_pro": {
     "free": [
      "All tools, no limit found in code",
-     "Exact schedules for 7 states; other states labeled estimate",
+     "Exact schedules for 7 states. Other states labeled estimate",
      "Hosted URL needs no token and no sign-in (README)"
     ],
     "pro": [
@@ -860,7 +860,7 @@
     },
     {
      "q": "Does it handle 401(k) and HSA?",
-     "a": "Yes. A 401(k) lowers income tax only; a payroll HSA lowers income tax, Social Security and Medicare."
+     "a": "Yes. A 401(k) lowers income tax only. A payroll HSA lowers income tax, Social Security and Medicare."
     }
    ],
    "npm": "paycheck-calculator-mcp",
@@ -888,7 +888,7 @@
     {
      "title": "Check a pay rise above 100k",
      "persona": "Engineering manager in Bristol, UK",
-     "prompt": "I earn GBP 104,000 and may get GBP 112,000. How much of the rise do I keep, and what is my marginal rate?",
+     "prompt": "I earn GBP 104,000 and may get GBP 112,000. How much of the rise do I keep, and what's my marginal rate?",
      "steps": [
       {
        "tool": "compare_salaries",
@@ -1013,7 +1013,7 @@
        "does": "Checks 2026-07-03 on the fed_banking calendar"
       }
      ],
-     "result": "Yes on the Federal Reserve calendar. It is a federal holiday for government staff, but Reserve Banks are open when the holiday falls on Saturday.",
+     "result": "Yes on the Federal Reserve calendar. It's a federal holiday for government staff, but Reserve Banks are open when the holiday falls on Saturday.",
      "minutes_saved": 10,
      "minutes_basis": "INFERRED: checking OPM and Federal Reserve rules takes about 10 minutes"
     },
@@ -1034,7 +1034,7 @@
     {
      "title": "Count working days for a deadline",
      "persona": "Paralegal in Washington, DC",
-     "prompt": "How many business days are there between December 1, 2026 and January 15, 2027? And what is 10 business days after December 18?",
+     "prompt": "How many business days are there between December 1, 2026 and January 15, 2027? And what's 10 business days after December 18?",
      "steps": [
       {
        "tool": "count_business_days",

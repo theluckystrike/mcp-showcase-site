@@ -35,7 +35,7 @@
         "Removes the free-tier limits on one server, for life",
         "Pro outputs on that server: for example unbranded invoice PDFs with your logo, full time and expense history, unlimited quotes",
         "One payment, no subscription",
-        "Key checks offline on your machine; no licence server is called",
+        "On the local install the key checks offline. No licence server is called",
         "Works locally (MCP_LICENSE_KEY) and on the hosted URL",
         "Refund within 14 days by email to support"
       ],
@@ -51,9 +51,9 @@
       "features": [
         "Pro on all 49 paid servers with one key, for life",
         "Two single servers cost $38. All 49 cost $39.",
-        "Servers that pass work to each other all unlocked: time to invoice, quote to invoice, expenses to rebill, invoices to cash book",
+        "Pro on every server in a chain, such as time to invoice, quote to invoice, expenses to rebill, invoices to cash book",
         "One payment, no subscription",
-        "Key checks offline on your machine; no licence server is called",
+        "On the local install the key checks offline. No licence server is called",
         "Works locally (MCP_LICENSE_KEY) and on every hosted URL",
         "Refund within 14 days by email to support"
       ],
@@ -64,7 +64,7 @@
     {
       "page": "home",
       "slot": "hero",
-      "copy": "Start free with no account. When you outgrow a free limit, one $39 key unlocks Pro on all 49 paid servers, for life.",
+      "copy": "Start free with no account. When you outgrow a free limit, one $39 key turns on Pro for all 49 paid servers, for life.",
       "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.home.hero"
     },
     {
@@ -106,13 +106,13 @@
     {
       "page": "server",
       "slot": "cap_message",
-      "copy": "Saw a message that says the free tier allows a set number per month? That is the limit Pro removes. Paste the key where the token goes, or set MCP_LICENSE_KEY.",
+      "copy": "Saw a message that says the free tier allows a set number per month? That's the limit Pro removes. Paste the key where the token goes, or set MCP_LICENSE_KEY.",
       "cta_url": "https://mcp.zovo.one/buy/{id}?src=site.server.cap_message"
     },
     {
       "page": "server",
       "slot": "works_with",
-      "copy": "{name} passes its output to other servers. The bundle unlocks the whole chain for $39.",
+      "copy": "{name} passes its output to other servers. The bundle covers the whole chain for $39.",
       "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.server.works_with"
     },
     {
@@ -130,7 +130,7 @@
     {
       "page": "compare",
       "slot": "table",
-      "copy": "Ours: free tier, then $19 once or $39 for all 49. Local or hosted. No account.",
+      "copy": "Ours has a free tier, then costs $19 once or $39 for all 49. Local or hosted. No account.",
       "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.compare.table"
     },
     {
@@ -160,7 +160,7 @@
     {
       "page": "pricing",
       "slot": "faq_end",
-      "copy": "Still unsure? Use the free tier as long as you like. Refund within 14 days if Pro is not for you.",
+      "copy": "Still unsure? Use the free tier as long as you like. Refund within 14 days if Pro isn't for you.",
       "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.pricing.faq_end"
     }
   ],
@@ -171,7 +171,7 @@
     },
     {
       "q": "What can I do without paying?",
-      "a": "Every server has a free tier with no key, no account and no expiry. Eight servers have no paid tier at all. The free tier is not a trial: it does not end."
+      "a": "Every server has a free tier with no key, no account and no expiry. Eight servers have no paid tier at all. The free tier isn't a trial: it doesn't end."
     },
     {
       "q": "What exactly does Pro remove?",
@@ -191,11 +191,11 @@
     },
     {
       "q": "Does the key send data anywhere?",
-      "a": "No. A local server checks the key signature on your machine. It does not call a licence server. Your invoices, timesheets and files stay in your own data folder."
+      "a": "No. On the local install, the server checks the key signature on your machine and never calls a licence server. Your invoices, timesheets and files stay in your own data folder."
     },
     {
       "q": "Do I need an account?",
-      "a": "No. There is no sign-up. Stripe asks only for what a card payment needs."
+      "a": "No. There's no sign-up. Stripe asks only for what a card payment needs."
     },
     {
       "q": "Can I get a refund?",
@@ -224,7 +224,7 @@
       "source": "~/mcp-servers/packages/mcp-license/src/index.ts:50 (exp absent = lifetime); https://mcp.zovo.one/ (snapshot data/live-home.html) 'Pro is $19 once ... lifetime'"
     },
     {
-      "text": "The Pro key verifies offline on your machine. No licence server is called.",
+      "text": "On the local install, the Pro key verifies offline. No licence server is called.",
       "source": "~/mcp-servers/packages/mcp-license/src/index.ts:86 (Ed25519 verify with node:crypto); https://mcp.zovo.one/ (snapshot data/live-home.html) 'verify the license signature offline'"
     },
     {
@@ -322,11 +322,11 @@
       "source": "~/mcp-servers/servers/calendar/src/index.ts:37-39"
     },
     {
-      "text": "Supplier Statement Check, Duplicate Invoice Check, Three-Way Match: unlimited saved reports (free: 3); all checks and evidence stay free",
+      "text": "Supplier Statement Check, Duplicate Invoice Check, Three-Way Match: unlimited saved reports (free: 3). All checks and evidence stay free",
       "source": "~/mcp-servers/servers/three-way-match/src/store.ts:9"
     },
     {
-      "text": "Bundle key unlocks every paid server: a '*' key verifies for any product id",
+      "text": "One bundle key works on every paid server, because a '*' key verifies for any product id",
       "source": "~/mcp-servers/packages/mcp-license/src/index.ts:90"
     },
     {

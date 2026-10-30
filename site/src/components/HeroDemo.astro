@@ -1,59 +1,57 @@
 ---
-// Animated "chat -> tool calls -> result" demo. Pure CSS (see .demo in global.css). Zero JS.
+// Static "chat -> tool calls -> result" demo. The first paint shows the WHOLE turn: prompt, tool calls, the finished file.
+// Motion (global.css .demo) only pops the check marks and lands the stamp. Nothing starts hidden. Zero JS.
 // Uses the first content case of the featured server when it exists; else a fallback built on real invoice tool names.
 import { getServer } from '../data/servers';
 import { getCategory } from '../data/categories';
+import InvoicePreview from './InvoicePreview.astro';
 interface Props { serverId?: string }
 const { serverId = 'invoice' } = Astro.props;
 const s = getServer(serverId);
 const cat = getCategory(s?.category ?? 'invoicing');
 const c = s?.cases[0];
-const prompt = c?.prompt ?? 'Make an invoice for Acme Ltd: 12 hours of design at 90 EUR, 23% VAT, due in 14 days.';
+const prompt = c?.prompt ?? 'Invoice Acme for 12 hours of API work at 90 EUR plus a 300 EUR setup fee, 23% VAT, due in 14 days, and give me the PDF.';
 const steps = (c?.steps.length ? c.steps : [
-  { tool: 'client_add', does: 'Saves Acme Ltd as a client' },
-  { tool: 'invoice_create', does: 'Numbers the invoice, adds the VAT line' },
-  { tool: 'invoice_pdf', does: 'Renders an A4 PDF' },
+  { tool: 'invoice_create', does: 'Creates INV-2026-0001 with two lines' },
+  { tool: 'invoice_pdf', does: 'Renders the A4 PDF' },
 ]).slice(0, 3);
-const result = c?.result ?? 'A numbered PDF invoice with a VAT line and a totals block, ready to send.';
-const base = 0.4;
+const result = c?.result ?? 'EUR 1,380.00 subtotal, EUR 317.40 VAT, EUR 1,697.40 total, as a PDF ready to email.';
+const showInvoice = serverId === 'invoice';
 ---
-<div class="demo cat relative" style={`--hue:${cat.hue}`} aria-label="Example: a chat turn that calls tools and returns a document" role="img">
-  <div class="absolute -inset-6 -z-10 rounded-[2rem] opacity-70 blur-3xl" style="background: radial-gradient(closest-side, color-mix(in oklab, var(--accent) 40%, transparent), transparent)"></div>
-  <div class="card overflow-hidden" style="background: color-mix(in oklab, var(--surface-solid) 92%, transparent)">
-    <div class="flex items-center gap-2 border-b border-line px-4 py-3">
-      <span class="h-2.5 w-2.5 rounded-full bg-[#ff5f57]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#febc2e]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#28c840]"></span>
-      <span class="ml-3 font-mono text-[.72rem] text-faint">chat · {s?.name ?? 'Invoice'} connected</span>
-      <span class="ml-auto chip !py-0 !text-[.65rem]">Example</span>
+<div class="demo cat relative" style={`--hue:${cat.hue}`}>
+  <div class="card overflow-hidden">
+    <div class="flex items-center gap-2 border-b border-line px-4 py-2.5" style="background: var(--surface)">
+      <span class="h-2.5 w-2.5 rounded-full bg-[#e5dfd4]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#e5dfd4]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#e5dfd4]"></span>
+      <span class="ml-2 text-[.78rem] text-faint">Claude, with {s?.name ?? 'Invoice'} connected</span>
+      <span class="ml-auto chip !py-0 !text-[.7rem]">Example</span>
     </div>
-    <div class="flex min-h-[25rem] flex-col gap-3 p-4 sm:p-5">
-      <div data-step style="--d:0; background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 60%, var(--accent-2)))" class="ml-auto max-w-[88%] rounded-2xl rounded-br-md px-4 py-3 text-[.92rem] leading-relaxed text-white">{prompt}</div>
-      <div data-step style={`--d:${base + 0.6}`} class="typing flex items-center gap-1 pl-1" aria-hidden="true"><span></span><span></span><span></span></div>
-      <ol class="flex flex-col gap-2">
+    <div class="flex flex-col gap-3 p-4 sm:p-5">
+      <p class="sr-only">Example chat turn. You type:</p>
+      <div data-step class="ml-auto max-w-[90%] rounded-2xl rounded-br-md px-4 py-3 text-[.92rem] leading-relaxed" style="background: var(--surface-2); border: 1px solid var(--border)">{prompt}</div>
+      <p class="sr-only">The assistant calls these tools:</p>
+      <ol class="flex flex-col gap-1.5">
         {steps.map((st, i) => (
-          <li data-step style={`--d:${base + 1.4 + i * 0.9}`} class="shimmer flex items-center gap-2.5 rounded-xl border border-line px-3 py-2 text-[.82rem]">
-            <span class="grid h-5 w-5 place-items-center rounded-md cat-text" style="background: color-mix(in oklab, var(--cat) 18%, transparent)">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+          <li data-step style={`--d:${0.25 + i * 0.35}`} class="shimmer flex items-center gap-2.5 rounded-lg border border-line px-3 py-2 text-[.82rem]" >
+            <span class="tick grid h-5 w-5 shrink-0 place-items-center rounded-full" style={`--d:${0.25 + i * 0.35}; background: var(--accent); color: var(--accent-text)`}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
             </span>
-            <code class="font-mono text-[.8rem]">{st.tool}</code>
+            <code class="font-mono text-[.79rem]">{st.tool}</code>
             <span class="muted hidden truncate sm:inline">{st.does}</span>
           </li>
         ))}
       </ol>
-      <div data-step style={`--d:${base + 1.6 + steps.length * 0.9}`} class="mt-auto rounded-xl border border-line p-4">
-        <div class="flex items-start gap-3.5">
-          <div class="relative grid h-16 w-12 shrink-0 place-items-end rounded-md border border-line-strong bg-white p-1.5 shadow-lg" aria-hidden="true">
-            <div class="absolute left-1.5 right-1.5 top-2 h-1 rounded bg-neutral-800"></div>
-            <div class="absolute left-1.5 right-4 top-4.5 h-0.5 rounded bg-neutral-300"></div>
-            <div class="absolute left-1.5 right-3 top-6 h-0.5 rounded bg-neutral-300"></div>
-            <div class="absolute left-1.5 right-5 top-7.5 h-0.5 rounded bg-neutral-300"></div>
-            <span class="rounded-sm px-1 text-[.5rem] font-bold text-white" style="background: var(--cat)">PDF</span>
-          </div>
-          <div class="min-w-0">
-            <div class="flex items-center gap-2 text-[.7rem] font-semibold uppercase tracking-[.08em] cat-text"><span class="dot"></span>Result</div>
-            <p class="mt-1 text-[.9rem] leading-snug">{result}</p>
-          </div>
+      <p class="sr-only">Result:</p>
+      {showInvoice ? (
+        <div data-step class="mt-1 rounded-xl p-3 sm:p-4" style="background: var(--bg-2)">
+          <InvoicePreview compact caption={false} />
+          <p class="mt-3 flex items-center gap-2 text-[.82rem] text-muted"><span class="dot" style="--cat: var(--accent)"></span>{result}</p>
         </div>
-      </div>
+      ) : (
+        <div data-step class="mt-1 rounded-xl border border-line p-4" style="background: var(--surface)">
+          <p class="text-[.72rem] font-semibold cat-text">Result</p>
+          <p class="mt-1 text-[.92rem] leading-snug">{result}</p>
+        </div>
+      )}
     </div>
   </div>
 </div>

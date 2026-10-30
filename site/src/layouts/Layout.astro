@@ -5,6 +5,9 @@ import '../styles/global.css';
 import { brand } from '../config/brand';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { buildGraph, citationFor, CONTENT_REVIEWED } from '../data/schema';
+// Preload the body font (same hashed file the @font-face rule uses; fontsource exports ./files/*.woff2).
+import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -40,28 +43,50 @@ function fitDescription(d: string): string {
 }
 const metaDescription = fitDescription(description);
 const ogImage = new URL('/og.png', site).href;
-const breadcrumb = crumbs.length
-  ? [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ name: 'Home', path: '/' }, ...crumbs].map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(c.path, site).href })) }]
-  : [];
-const ld = [
-  { '@context': 'https://schema.org', '@type': 'Organization', name: brand.name, url: site.href, logo: new URL('/favicon.svg', site).href, sameAs: [brand.links.github] },
-  { '@context': 'https://schema.org', '@type': 'WebSite', name: brand.name, url: site.href },
-  ...breadcrumb,
-  ...jsonLd,
-];
+
+// GEO (t-seo, goal5 2.1 + 3.4): on job and answer pages, mark the visible 40-word answer as the quotable answer
+// (class="qas", data-keyword). Only an attribute is added; the design does not change. No match = no marking.
+let body = await Astro.slots.render('default');
+const citation = noindex ? null : citationFor(Astro.url.pathname);
+let speakable: string | undefined;
+if (citation) {
+  const esc = (x: string) => x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  // Astro escapes ' as &#39;. Also try the raw and &#x27; forms so a renderer change does not drop the marking.
+  const head = esc(citation.text.slice(0, 48));
+  const at = [head, head.replace(/&#39;/g, "'"), head.replace(/&#39;/g, '&#x27;')].map((n) => body.indexOf(n)).find((i) => i > 0) ?? -1;
+  const open = at > 0 ? body.lastIndexOf('<p', at) : -1;
+  const close = open >= 0 ? body.indexOf('>', open) : -1;
+  if (open >= 0 && close > open && close < at && body.slice(close + 1, at).trim() === '') {
+    const tag = body.slice(open, close + 1);
+    const marked = (/\sclass="/.test(tag) ? tag.replace(/\sclass="/, ' class="qas ') : tag.replace(/^<p/, '<p class="qas"'))
+      .replace(/^<p/, `<p data-keyword="${esc(citation.keyword)}"`);
+    body = body.slice(0, open) + marked + body.slice(close + 1);
+    speakable = '.qas';
+  }
+}
+// One JSON-LD @graph per page: Organization, WebSite, WebPage, BreadcrumbList + the page's own nodes (src/data/schema.ts).
+const graph = buildGraph(site, { url: canonical, title: fullTitle, description: metaDescription, hasBreadcrumb: crumbs.length > 0, speakable, citation: speakable ? citation : null }, crumbs, jsonLd);
+// Escape "<" so no string in the data can close the script tag.
+const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
 ---
 <!doctype html>
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
+    {noindex ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />}
+    {!noindex && <link rel="alternate" hreflang="en" href={canonical} />}
+    {!noindex && <link rel="alternate" hreflang="x-default" href={canonical} />}
+    <meta name="author" content={brand.name} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap.xml" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+    <link rel="alternate" type="text/plain" href="/llms-full.txt" title="llms-full.txt" />
+    <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#07070b" />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={brand.name} />
@@ -71,20 +96,23 @@ const ld = [
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${brand.name}: ${brand.tagline}`} />
+    <meta property="og:locale" content="en_US" />
+    {ogType === 'article' && <meta property="article:modified_time" content={CONTENT_REVIEWED} />}
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={metaDescription} />
     <script is:inline>
-      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') { document.documentElement.dataset.theme = t; if (t === 'light') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fbfbfd'); } } catch (e) {}
     </script>
-    {ld.map((o) => <script type="application/ld+json" set:html={JSON.stringify(o)} />)}
+    <script type="application/ld+json" set:html={graphJson} />
   </head>
   <body>
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 btn btn-sm">Skip to content</a>
     <Header />
     <main id="main">
-      <slot />
+      <Fragment set:html={body} />
     </main>
     <Footer />
     <script is:inline>

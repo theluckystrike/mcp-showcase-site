@@ -12,7 +12,7 @@
       "snippet": "https://mcp.zovo.one/mcp/currency/t/<token>",
       "lang": "text",
       "tested": false,
-      "note": "The URL was tested with curl (initialize, tools/list, tools/call: HTTP 200). The Claude.ai dialog was not tested (no browser in this run)."
+      "note": "The URL was tested with curl (initialize, tools/list, tools/call: HTTP 200). The Claude.ai dialog wasn't tested (no browser in this run)."
     },
     {
       "client": "Claude Desktop (.mcpb bundle)",
@@ -21,12 +21,12 @@
         "Open https://mcp.zovo.one/downloads#currency and download currency.mcpb.",
         "Double-click the file. Claude Desktop opens the install dialog.",
         "Click Install. No Node.js, no JSON, no terminal.",
-        "Restart Claude Desktop if the tools do not appear."
+        "Restart Claude Desktop if the tools don't appear."
       ],
       "snippet": "https://github.com/theluckystrike/mcp-servers/releases/download/v0.22.0/currency.mcpb",
       "lang": "text",
       "tested": false,
-      "note": "The download URL answers (HTTP 206 on a range request, 2026-10-30). The install was not run. Bundles are v0.22.0; npm is 0.22.6. Do not use releases/latest: it holds only hourly-rate.mcpb."
+      "note": "The download URL answers (HTTP 206 on a range request, 2026-10-30). The install wasn't run. Bundles are v0.22.0. Npm is 0.22.6. Don't use releases/latest: it holds only hourly-rate.mcpb."
     },
     {
       "client": "Claude Desktop (JSON config)",
@@ -34,14 +34,14 @@
       "steps": [
         "Install Node.js 18 or newer.",
         "Open claude_desktop_config.json. macOS: ~/Library/Application Support/Claude/claude_desktop_config.json. Windows: %APPDATA%\\Claude\\claude_desktop_config.json.",
-        "Merge the entry below into the mcpServers object. Do not overwrite other entries.",
+        "Merge the entry below into the mcpServers object. Don't overwrite other entries.",
         "Quit and restart Claude Desktop.",
-        "For the hosted server, do not use this file: use Settings, then Connectors, and paste the URL as for Claude.ai."
+        "For the hosted server, don't use this file: use Settings, then Connectors, and paste the URL as for Claude.ai."
       ],
       "snippet": "{\n  \"mcpServers\": {\n    \"currency\": {\n      \"command\": \"npx\",\n      \"args\": [\n        \"-y\",\n        \"@theluckystrike/mcp-currency\"\n      ]\n    }\n  }\n}",
       "lang": "json",
       "tested": false,
-      "note": "Package is published (npm view @theluckystrike/mcp-currency: 0.22.6, bin mcp-currency). The same dist/index.js passed initialize, tools/list and tools/call over stdio. npx was not run."
+      "note": "Package is published (npm view @theluckystrike/mcp-currency: 0.22.6, bin mcp-currency). The same dist/index.js passed initialize, tools/list and tools/call over stdio. npx wasn't run."
     },
     {
       "client": "Claude Code (claude mcp add, hosted)",
@@ -54,7 +54,7 @@
       "snippet": "claude mcp add --transport http currency https://mcp.zovo.one/mcp/currency --header \"Authorization: Bearer <token>\"",
       "lang": "sh",
       "tested": false,
-      "note": "The Bearer header form was tested with curl (tools/call HTTP 200). Flags checked against claude mcp add --help. The add command was not run, to keep the owner's config unchanged."
+      "note": "The Bearer header form was tested with curl (tools/call HTTP 200). The flags match the claude mcp add help output. We didn't run the add command itself."
     },
     {
       "client": "Claude Code (claude mcp add, local)",
@@ -67,7 +67,7 @@
       "snippet": "claude mcp add currency -- npx -y @theluckystrike/mcp-currency",
       "lang": "sh",
       "tested": false,
-      "note": "Package published at 0.22.6. Local stdio run of the same build passed. npx was not run."
+      "note": "Package published at 0.22.6. Local stdio run of the same build passed. npx wasn't run."
     },
     {
       "client": "Cursor",
@@ -80,7 +80,7 @@
       "snippet": "{\n  \"mcpServers\": {\n    \"currency\": {\n      \"url\": \"https://mcp.zovo.one/mcp/currency/t/<token>\"\n    }\n  }\n}",
       "lang": "json",
       "tested": false,
-      "note": "URL tested with curl. Cursor itself was not tested."
+      "note": "URL tested with curl. Cursor itself wasn't tested."
     },
     {
       "client": "VS Code",
@@ -93,7 +93,7 @@
       "snippet": "{\n  \"servers\": {\n    \"currency\": {\n      \"type\": \"http\",\n      \"url\": \"https://mcp.zovo.one/mcp/currency/t/<token>\"\n    }\n  }\n}",
       "lang": "json",
       "tested": false,
-      "note": "URL tested with curl. VS Code itself was not tested. The live setup page omits \"type\": \"http\"; this snippet sets it."
+      "note": "URL tested with curl. VS Code itself wasn't tested. The live setup page omits \"type\": \"http\". This snippet sets it."
     },
     {
       "client": "Windsurf",
@@ -106,7 +106,7 @@
       "snippet": "{\n  \"mcpServers\": {\n    \"currency\": {\n      \"serverUrl\": \"https://mcp.zovo.one/mcp/currency/t/<token>\"\n    }\n  }\n}",
       "lang": "json",
       "tested": false,
-      "note": "URL tested with curl. Windsurf itself was not tested. Windsurf documents serverUrl for remote servers; the live setup page uses url. Unknown which one this Windsurf version accepts."
+      "note": "URL tested with curl. Windsurf itself wasn't tested. Windsurf documents serverUrl for remote servers. The live setup page uses url. Unknown which one this Windsurf version accepts."
     },
     {
       "client": "ChatGPT",
@@ -114,7 +114,7 @@
       "steps": [
         "Status: unknown. Not tested.",
         "ChatGPT accepts remote MCP servers only in developer mode on some plans.",
-        "The server publishes OAuth discovery documents (/.well-known/oauth-protected-resource returns 200), so the URL form may work. This is not verified."
+        "The server publishes OAuth discovery documents (/.well-known/oauth-protected-resource returns 200), so the URL form may work. This isn't verified."
       ],
       "snippet": "https://mcp.zovo.one/mcp/currency/t/<token>",
       "lang": "text",
@@ -213,9 +213,9 @@
       "calls_pro": "6000 per hour",
       "token_mints": "10 per hour per IP. Reuse your token.",
       "token_life": "30 days, refreshed on every write",
-      "data_retention": "30 days on free; idle data swept after 35 days",
+      "data_retention": "30 days on free. Idle data swept after 35 days",
       "request_body": "256 KB per request (base64 files: about 190 KB)",
-      "stored_per_token_per_server": "512 KB default; 2 MB for spreadsheet, docx, resume, pdf, calendar, image, bank-statement, zip, cash-book",
+      "stored_per_token_per_server": "512 KB default. 2 MB for spreadsheet, docx, resume, pdf, calendar, image, bank-statement, zip, cash-book",
       "server_free_limits": "Each server keeps its own free-tier limits (example: invoice_create 3 per month).",
       "source": "~/mcp-servers/remote/src/index.ts lines 83-105; GET https://mcp.zovo.one/mcp (limits)"
     },
@@ -227,7 +227,7 @@
       },
       {
         "code": "HTTP 401 unknown_token",
-        "meaning": "Token has the right form but the server does not know it (expired, mistyped, or never minted).",
+        "meaning": "Token has the right form but the server doesn't know it (expired, mistyped, or never minted).",
         "fix": "Mint a new token: curl -s -X POST https://mcp.zovo.one/mcp/token"
       },
       {
@@ -253,7 +253,7 @@
       {
         "code": "HTTP 406 Not Acceptable",
         "meaning": "A GET without Accept: text/event-stream (for example, opening the URL in a browser).",
-        "fix": "Send POST with a JSON-RPC body. A browser cannot test the URL."
+        "fix": "Send POST with a JSON-RPC body. A browser can't test the URL."
       },
       {
         "code": "HTTP 405 method_not_allowed",
@@ -270,19 +270,19 @@
   "architecture": {
     "summary": "Each server is a small TypeScript program that speaks MCP. It runs on your machine over stdio, or on a hosted endpoint over streamable HTTP. The tool contract is the same on both paths.",
     "points": [
-      "Local (stdio): your MCP client starts node dist/index.js. Nothing leaves your machine except calls the tool itself needs (example: currency fetches ECB rates).",
-      "Local data: JSON files under ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/. Writes are atomic (temp file + rename). Delete the folder to reset a server.",
-      "Shared business profile: business_set writes ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/profile/business.json. Invoice, quotes, credit notes and the other document servers read it, so you set your name, address, VAT id and defaults once.",
-      "Pro key: MCP_LICENSE_KEY env var, then ${XDG_CONFIG_HOME:-~/.config}/mcp-servers/license.json, then free tier. Keys (MCPL1.<payload>.<signature>) are checked offline with Ed25519. No phone-home.",
-      "Hosted (streamable HTTP): 46 of 58 servers run on a Cloudflare Worker at https://mcp.zovo.one/mcp/<server>. Data is stored per token, kept 30 days, and file tools take inline uploads and return download URLs that expire.",
-      "Local-only: office-suite, three-way-match, duplicate-invoice-check and supplier-statement-check have no hosted URL. Use the .mcpb bundle, npm or a source build.",
+      "On the local stdio path, your MCP client starts node dist/index.js. Nothing leaves your machine except calls the tool itself needs (example: currency fetches ECB rates).",
+      "The local install keeps JSON files under ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/. Writes are atomic (temp file + rename). Delete the folder to reset a server.",
+      "business_set writes one shared business profile to ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/profile/business.json. Invoice, quotes, credit notes and the other document servers read it, so you set your name, address, VAT id and defaults once.",
+      "The Pro key is read from MCP_LICENSE_KEY, then ${XDG_CONFIG_HOME:-~/.config}/mcp-servers/license.json, then the free tier applies. Keys (MCPL1.<payload>.<signature>) are checked offline with Ed25519. No phone-home.",
+      "On the hosted path (streamable HTTP), 46 of 58 servers run on a Cloudflare Worker at https://mcp.zovo.one/mcp/<server>. Data is stored per token, kept 30 days, and file tools take inline uploads and return download URLs that expire.",
+      "Four servers are local only: office-suite, three-way-match, duplicate-invoice-check and supplier-statement-check have no hosted URL. Use the .mcpb bundle, npm or a source build.",
       "Every server registers license_status and license_activate. Call license_status first to prove the transport works."
     ]
   },
   "conventions": [
     {
       "title": "Tool results",
-      "text": "Success: {content:[{type:\"text\",text}]}. Failure: the same shape with isError: true and text that starts with Error:. Servers do not throw across the transport."
+      "text": "Success: {content:[{type:\"text\",text}]}. Failure: the same shape with isError: true and text that starts with Error:. Servers don't throw across the transport."
     },
     {
       "title": "Money in minor units",
@@ -290,7 +290,7 @@
     },
     {
       "title": "Free tier inside the tool",
-      "text": "A free-tier limit is a normal tool result that names the limit and the upgrade URL. It is not a protocol error."
+      "text": "A free-tier limit is a normal tool result that names the limit and the upgrade URL. It isn't a protocol error."
     },
     {
       "title": "Logging",
@@ -312,7 +312,7 @@
   "faq": [
     {
       "q": "Is the npm package published?",
-      "a": "Yes. npm view @theluckystrike/mcp-currency returns 0.22.6 (checked 2026-10-30). Some older pages and llms-install.md files still say it is not published. They are out of date."
+      "a": "Yes. npm view @theluckystrike/mcp-currency returns 0.22.6 (checked 2026-10-30). Some older pages and llms-install.md files still say it isn't published. They are out of date."
     },
     {
       "q": "Why does my hosted URL list tools but every call fails?",
@@ -320,7 +320,7 @@
     },
     {
       "q": "Is the URL with the token a secret?",
-      "a": "Yes. The token in the URL is the credential and your data space. Do not share it or commit it."
+      "a": "Yes. The token in the URL is the credential and your data space. Don't share it or commit it."
     },
     {
       "q": "Can I test the hosted URL in a browser?",
@@ -328,11 +328,11 @@
     },
     {
       "q": "Does the hosted endpoint support OAuth?",
-      "a": "The server publishes OAuth discovery documents and an authorize endpoint. The /mcp index says it has no OAuth flow. Use the token forms; they are tested."
+      "a": "The server publishes OAuth discovery documents and an authorize endpoint. The /mcp index says it has no OAuth flow. Use the token forms. They are tested."
     },
     {
       "q": "Where is my data?",
-      "a": "Local: ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/. Hosted: stored per token for 30 days, refreshed on every write."
+      "a": "On the local install, in ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/. On the hosted path, on the server per token for 30 days, refreshed on every write."
     },
     {
       "q": "How do I move from free to Pro?",

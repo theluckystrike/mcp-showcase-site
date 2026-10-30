@@ -4,6 +4,7 @@ import { brand } from '../config/brand';
 import { getServers, stats, bundlePrice } from '../data/servers';
 import { pagesOfType } from '../data/pages';
 import { COMPARISONS } from '../data/compare';
+import { CONTENT_REVIEWED } from '../data/schema';
 
 export const GET: APIRoute = ({ site }) => {
   const u = (p: string) => new URL(p, site).href;
@@ -18,6 +19,7 @@ export const GET: APIRoute = ({ site }) => {
     `> ${st.hosted} servers run at one hosted URL: free token, no account, 600 calls an hour, valid 30 days.`,
     `> Every server has a free tier. Pro is $${brand.pricing.serverUsd} once per server, or $${bundlePrice()} once for all ${st.paid} paid servers. No subscription.`,
     `> Open source (MIT). Also ${st.satellites} free calculator servers.`,
+    `> Full catalog with every tool, price and connect URL: ${u('/llms-full.txt')}. Last reviewed: ${CONTENT_REVIEWED}.`,
     '',
     '## Jobs',
     ...pagesOfType('use-case').map((p) => `- [${p.h1}](${u(p.path)}): ${p.meta_description} Server: ${p.servers.join(', ')}.`),

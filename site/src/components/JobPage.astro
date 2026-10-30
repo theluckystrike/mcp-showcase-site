@@ -1,4 +1,5 @@
 ---
+import OutputPreview from './OutputPreview.astro';
 // The money page template (t-angle ANGLE.md "Page template for a use-case page"):
 // H1 = the job, 40-word answer, Example (prompt -> tool calls -> result), connect in 1 minute, free vs Pro with source,
 // buy + bundle buttons, related jobs, audience page, FAQ. Used by /use-cases/<job>/, /can-claude/<x>/, /can-chatgpt/<x>/.
@@ -82,7 +83,7 @@ if (main && ex) {
       ...(ex.case.result ? [{ '@type': 'HowToStep', name: 'Result', text: ex.case.result }] : []),
     ],
   });
-  jsonLd.push({ '@context': 'https://schema.org', '@type': 'SoftwareApplication', '@id': new URL(`/servers/${main.id}/#app`, Astro.site).href, name: main.name, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude, ChatGPT, Cursor, VS Code, Windsurf', offers: [{ '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free tier' }, ...(single ? [{ '@type': 'Offer', price: String(main.priceUsd), priceCurrency: 'USD', name: 'Pro, one-time' }] : [])] });
+  jsonLd.push({ '@context': 'https://schema.org', '@type': 'SoftwareApplication', '@id': new URL(`/servers/${main.id}/#app`, Astro.site).href, name: main.name, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude, Cursor, VS Code, Windsurf', offers: [{ '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free tier' }, ...(single ? [{ '@type': 'Offer', price: String(main.priceUsd), priceCurrency: 'USD', name: 'Pro, one-time' }] : [])] });
 }
 // Meta description: with jobs.json, whole sentences of the page's own answer up to about 160 characters
 // (the 5 answer pages share one generic sitemap meta). Otherwise the old rule.
@@ -93,11 +94,12 @@ for (const x of (job?.answer ?? '').split(/(?<=[.!?])\s+/)) {
 }
 const description = (kind === 'answer' && jobMeta) || (kind === 'answer' && main ? answer.replace(' Then ask in plain words.', '') : p.meta_description);
 const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { name: 'Answers', path: '/use-cases/#answers' };
+const mainHasOutput = !!main && (main.id === 'invoice' || main.cases.some((c) => /\b(PDF|DOCX|Word|Excel|XLSX|CSV)\b/i.test(c.result ?? '')));
 ---
 <Layout title={p.title} description={description} jsonLd={jsonLd} ogType="article" crumbs={[hub, { name: p.h1, path: p.path }]}>
   <div class="cat" style={`--hue:${cat.hue}`}>
     <section class="relative isolate overflow-hidden">
-      <div class="pointer-events-none absolute inset-x-0 -top-40 -z-10 h-[32rem] opacity-50 blur-3xl" style="background: radial-gradient(40rem 20rem at 30% 40%, color-mix(in oklab, var(--cat) 45%, transparent), transparent 70%)"></div>
+      <div class="glow-bg"></div>
       <div class="grid-lines"></div>
       <div class="wrap pb-10 pt-10 sm:pt-16">
         <nav class="muted flex flex-wrap items-center gap-2 text-[.88rem]" aria-label="Breadcrumb">
@@ -105,7 +107,7 @@ const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { 
           {aud && <><a href={aud.path} class="hover:text-fg">{aud.h1}</a><span class="text-faint">/</span></>}
           <span class="text-fg">{p.h1}</span>
         </nav>
-        <div class="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div class="mt-8 grid gap-10 lg:grid-cols-[1.25fr_1fr] lg:items-start">
           <div>
             <span class="chip cat-text"><span class="dot"></span>{cat.name}</span>
             <h1 class="display mt-6 !text-[clamp(2.2rem,5.5vw,4rem)]">{p.h1}</h1>
@@ -116,12 +118,18 @@ const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { 
               {main && <a href={`/servers/${main.id}/`} class="btn">{main.name}: all tools</a>}
             </div>
           </div>
-          {main && (
-            <div class="card p-5">
+          {main && mainHasOutput ? (
+            <div class="lg:pt-4">
+              <div class="rounded-2xl p-4 sm:p-6" style="background: var(--bg-2)"><OutputPreview server={main} /></div>
+              <p class="muted mt-4 text-[.9rem]">{single ? `Free to start. ${main.name} Pro is $${main.priceUsd} once.` : main.bundleOnly ? `Sold as the $${bundlePrice()} bundle.` : `${main.name} is free.`} <a href="#pricing" class="link">Free vs Pro</a></p>
+            </div>
+          ) : main && (
+            <div class="card p-5 lg:mt-4">
               <p class="text-sm font-semibold">{single ? `Free to start. ${main.name} Pro: $${main.priceUsd} once.` : main.bundleOnly ? `Sold as the $${bundlePrice()} bundle.` : `${main.name} is free.`}</p>
               <div class="mt-4 grid gap-2.5">
-                {single && <a href={buy('main')} rel="nofollow" class="btn btn-primary w-full">Buy {main.name} Pro, ${main.priceUsd}</a>}
-                <a href={bundle('bundle')} rel="nofollow" class:list={['btn w-full', !single && 'btn-primary']}>All {st.paid} paid servers, ${bundlePrice()} once</a>
+                {single
+                  ? <a href={buy('main')} rel="nofollow" class="btn btn-primary w-full">Buy {main.name} Pro, ${main.priceUsd}</a>
+                  : <a href={bundle('bundle')} rel="nofollow" class="btn btn-primary w-full">All {st.paid} paid servers, ${bundlePrice()} once</a>}
               </div>
               <p class="muted mt-3 text-[.82rem]">One payment. No subscription. Refund within 14 days.</p>
             </div>
@@ -151,7 +159,7 @@ const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { 
         <h2 class="text-2xl font-semibold sm:text-3xl">Example: the prompt, the tool calls, the result</h2>
         <p class="muted mt-2">Example scenarios built on the real tools of {servers.map((s) => s.name).join(' and ')}. Names and amounts are invented.</p>
         <div class:list={['mt-8 grid gap-4', cases.length > 1 && 'lg:grid-cols-3']}>{cases.map((x) => <CaseTurn server={x.server} case={x.case} showServer={servers.length > 1} />)}</div>
-        <UpsellBand copy={after.copy} href={afterUrl} cta={`Bundle, $${bundlePrice()}`} />
+        <p class="muted mt-6 text-[.95rem]">{after.copy} <a href="/pricing/" class="link">Pricing</a></p>
       </section>
     )}
 
@@ -168,7 +176,7 @@ const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { 
           <h2 class="text-2xl font-semibold sm:text-3xl">Connect in 1 minute</h2>
           <p class="muted mt-3">{main.hosted ? 'Paste one URL into Claude.ai, Claude Desktop, Cursor, VS Code or Windsurf. No install, no account.' : `${main.name} runs on your machine. One line with Node.js, or the .mcpb file for Claude Desktop.`}</p>
           <ul class="mt-5 flex flex-wrap gap-2 text-[.9rem]">
-            {[['claude-ai', 'Claude.ai'], ['claude-desktop', 'Claude Desktop'], ['claude-code', 'Claude Code'], ['cursor', 'Cursor'], ['vs-code', 'VS Code'], ['chatgpt', 'ChatGPT']].map(([c, n]) => <li><a class="chip hover:text-fg" href={`/connect/${c}/`}>{n} guide</a></li>)}
+            {[['claude-ai', 'Claude.ai'], ['claude-desktop', 'Claude Desktop'], ['claude-code', 'Claude Code'], ['cursor', 'Cursor'], ['vs-code', 'VS Code']].map(([c, n]) => <li><a class="chip hover:text-fg" href={`/connect/${c}/`}>{n} guide</a></li>)}
           </ul>
         </div>
         <div class="grid gap-4">
@@ -180,7 +188,7 @@ const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { 
     )}
 
     {main && main.paid && (
-      <section class="wrap py-12">
+      <section id="pricing" class="wrap py-12">
         <h2 class="text-2xl font-semibold sm:text-3xl">Free vs Pro for {main.name}</h2>
         <div class="mt-6 card overflow-x-auto">
           <table class="table">
@@ -192,11 +200,12 @@ const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { 
             </tbody>
           </table>
         </div>
-        <p class="mt-3 break-words font-mono text-[.72rem] text-faint">Source: {main.freeVsPro?.source || 'unknown'}</p>
+        <details class="mt-3 text-[.78rem] text-faint"><summary class="cursor-pointer">Where these limits come from</summary><p class="mt-1 break-words font-mono">{main.freeVsPro?.source || 'unknown'}</p></details>
         <div class="mt-6 flex flex-wrap gap-3">
-          {single && <a href={buy('free_vs_pro')} rel="nofollow" class="btn btn-primary">Buy {main.name} Pro, ${main.priceUsd}</a>}
-          <a href={bundle('free_vs_pro')} rel="nofollow" class:list={['btn', !single && 'btn-primary']}>All {st.paid} paid servers, ${bundlePrice()}</a>
-          <a href="/pricing/" class="btn">Pricing</a>
+          {single
+            ? <a href={buy('free_vs_pro')} rel="nofollow" class="btn btn-primary">Buy {main.name} Pro, ${main.priceUsd}</a>
+            : <a href={bundle('free_vs_pro')} rel="nofollow" class="btn btn-primary">All {st.paid} paid servers, ${bundlePrice()}</a>}
+          <a href="/pricing/" class="btn">Compare plans</a>
         </div>
       </section>
     )}

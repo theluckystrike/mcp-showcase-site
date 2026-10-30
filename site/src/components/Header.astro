@@ -1,6 +1,6 @@
 ---
 import { brand } from '../config/brand';
-import { bundleUrl, buyUrl } from '../data/servers';
+import Wordmark from './Wordmark.astro';
 const path = Astro.url.pathname;
 const nav = [
   { href: '/servers/', label: 'Servers' },
@@ -10,22 +10,26 @@ const nav = [
   { href: '/developers/', label: 'Developers' },
 ];
 ---
-<header class="sticky top-0 z-40 border-b border-line backdrop-blur-xl" style="background: color-mix(in oklab, var(--bg) 72%, transparent)">
+<script is:inline>
+  // Light is the default. Dark only when the visitor picked it (t-design). Runs before the page paints below the header.
+  try { if (localStorage.getItem('mode') === 'dark') document.documentElement.dataset.mode = 'dark'; } catch (e) {}
+  (function () { var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', document.documentElement.dataset.mode === 'dark' ? '#151412' : '#f7f4ee'); })();
+</script>
+<header class="sticky top-0 z-40 border-b border-line backdrop-blur-xl" style="background: color-mix(in oklab, var(--bg) 86%, transparent)">
   <div class="wrap flex h-16 items-center gap-4">
-    <a href="/" class="flex items-center gap-2.5 font-semibold tracking-tight" aria-label={`${brand.name} home`}>
-      <img src="/favicon.svg" alt="" width="28" height="28" class="rounded-lg" />
-      <span class="text-[1.02rem]">{brand.name}</span>
+    <a href="/" class="flex items-center" aria-label={`${brand.name} home`}>
+      <Wordmark />
     </a>
     <nav class="ml-6 hidden items-center gap-1 md:flex" aria-label="Main">
       {nav.map((n) => (
-        <a href={n.href} class:list={['rounded-lg px-3 py-1.5 text-[.93rem] transition-colors hover:text-fg', path.startsWith(n.href) ? 'text-fg bg-surface-2' : 'text-muted']} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
+        <a href={n.href} class:list={['rounded-lg px-3 py-1.5 text-[.93rem] transition-colors hover:text-fg', path.startsWith(n.href) ? 'text-fg font-semibold bg-surface-2' : 'text-muted']} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
       ))}
     </nav>
     <div class="ml-auto flex items-center gap-2">
-      <button id="theme-toggle" type="button" class="btn btn-sm !px-2.5" aria-label="Switch color theme">
+      <button id="theme-toggle" type="button" class="btn btn-sm !px-2.5" aria-label="Switch between light and dark">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9z"/></svg>
       </button>
-      <a href={buyUrl(bundleUrl(), 'header', 'bundle')} class="btn btn-primary btn-sm hidden sm:inline-flex">Bundle ${brand.pricing.bundleUsd}</a>
+      <a href="/connect/" class="btn btn-primary btn-sm hidden sm:inline-flex">Connect free</a>
       <details class="relative md:hidden">
         <summary class="btn btn-sm !px-2.5 list-none [&::-webkit-details-marker]:hidden" aria-label="Menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -33,7 +37,7 @@ const nav = [
         <nav class="card absolute right-0 top-12 grid w-56 gap-1 p-2" style="background: var(--surface-solid)" aria-label="Mobile">
           {nav.map((n) => <a href={n.href} class="rounded-lg px-3 py-2.5 hover:bg-surface-2">{n.label}</a>)}
           <a href="/about/" class="rounded-lg px-3 py-2.5 hover:bg-surface-2">About</a>
-          <a href={buyUrl(bundleUrl(), 'header', 'menu')} class="btn btn-primary btn-sm mt-1">Bundle ${brand.pricing.bundleUsd}</a>
+          <a href="/connect/" class="btn btn-primary btn-sm mt-1">Connect free</a>
         </nav>
       </details>
     </div>
@@ -41,7 +45,9 @@ const nav = [
 </header>
 <script is:inline>
   document.getElementById('theme-toggle')?.addEventListener('click', function () {
-    var h = document.documentElement; var next = h.dataset.theme === 'light' ? 'dark' : 'light';
-    h.dataset.theme = next; try { localStorage.setItem('theme', next); } catch (e) {}
+    var h = document.documentElement; var dark = h.dataset.mode !== 'dark';
+    if (dark) h.dataset.mode = 'dark'; else delete h.dataset.mode;
+    try { localStorage.setItem('mode', dark ? 'dark' : 'light'); } catch (e) {}
+    var m = document.querySelector('meta[name="theme-color"]'); if (m) m.setAttribute('content', dark ? '#151412' : '#f7f4ee');
   });
 </script>

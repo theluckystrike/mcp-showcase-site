@@ -5,7 +5,7 @@
    "name": "Loan Calculator",
    "category": "calculators",
    "tagline": "Monthly payment, total interest and a yearly schedule in one ask.",
-   "plain": "Ask for the monthly payment on any loan and get the payment, the total you will pay and the total interest. Ask again and get a year-by-year schedule of principal, interest and balance. The math runs on your machine, with no lead forms and no ads.",
+   "plain": "Ask for the monthly payment on any loan and get the payment, the total you'll pay and the total interest. Ask again and get a year-by-year schedule of principal, interest and balance. It's a local install only, so the math runs on your machine. No lead forms, no ads.",
    "for_who": [
     "Home buyers",
     "Small business owners",
@@ -22,7 +22,7 @@
     {
      "title": "Compare two mortgage offers",
      "persona": "Dana Ruiz, first-time buyer in Austin, Texas",
-     "prompt": "Two offers on a 380,000 USD mortgage over 30 years: 6.5% and 6.1%. What is the monthly payment and total interest for each?",
+     "prompt": "Two offers on a 380,000 USD mortgage over 30 years: 6.5% and 6.1%. What's the monthly payment and total interest for each?",
      "steps": [
       {
        "tool": "loan_payment",
@@ -55,7 +55,7 @@
        "does": "Lists principal, interest and balance for each of the 20 years"
       }
      ],
-     "result": "1,432.49 a month over 25 years versus 1,622.39 over 20 years. The 20-year term costs about 40,400 less in interest. A 20-row schedule shows the balance at the end of each year. (Figures print with a $ sign; the math is the same in pounds.)",
+     "result": "1,432.49 a month over 25 years versus 1,622.39 over 20 years. The 20-year term costs about 40,400 less in interest. A 20-row schedule shows the balance at the end of each year. (Figures print with a $ sign. The math is the same in pounds.)",
      "minutes_saved": 20,
      "minutes_basis": "INFERRED: building an amortization sheet by hand takes 20-30 min"
     },
@@ -93,7 +93,7 @@
      "All tools, no limit in code"
     ],
     "pro": [
-     "unknown: no Pro gate in src; $19 buy link exists"
+     "unknown: no Pro gate in src. $19 buy link exists"
     ],
     "source": "servers/loan-calculator/src/index.js (no license code) + https://mcp.zovo.one/s/loan-calculator"
    },
@@ -122,8 +122,8 @@
    "id": "maintenance-log",
    "name": "Maintenance Log",
    "category": "operations",
-   "tagline": "Log service work on your equipment and see what is overdue.",
-   "plain": "Keep one register of the machines, vans and boilers you look after. Log each service with the date, the cost, who did it and when the next one is due. Ask what is overdue and get a list with days late, or export the log to a spreadsheet.",
+   "tagline": "Log service work on your equipment and see what's overdue.",
+   "plain": "Keep one register of the machines, vans and boilers you look after. Log each service with the date, the cost, who did it and when the next one is due. Ask what's overdue and get a list with days late, or export the log to a spreadsheet.",
    "for_who": [
     "Workshop owners",
     "Landlords",
@@ -166,7 +166,7 @@
        "does": "Lists overdue items with days late, then items due within 30 days"
       }
      ],
-     "result": "Two boilers overdue (by 12 and 41 days), one smoke alarm check due in 9 days, one flat with no schedule set. Pro feature: the due report needs a key, and 6 flats need more than 3 assets.",
+     "result": "Two boilers overdue (by 12 and 41 days), one smoke alarm check due in 9 days, one flat with no schedule set. The due report is a Pro feature that needs a key, and 6 flats need more than 3 assets.",
      "minutes_saved": 20,
      "minutes_basis": "INFERRED: checking six flat folders or a sheet by hand takes 20-30 min"
     },
@@ -200,7 +200,7 @@
     },
     {
      "name": "maintenance_due",
-     "plain": "Lists what is overdue and what is due soon"
+     "plain": "Lists what's overdue and what's due soon"
     },
     {
      "name": "asset_history",
@@ -233,7 +233,7 @@
    "faq": [
     {
      "q": "Where is my data stored?",
-     "a": "In local JSON files under ~/.local/share/mcp-servers/maintenance-log/. Nothing is sent anywhere."
+     "a": "On the local install, in JSON files under ~/.local/share/mcp-servers/maintenance-log/, and nothing is sent anywhere. The hosted URL stores it on the server under your token for 30 days, refreshed on every write."
     },
     {
      "q": "Does the free tier ever hide my records?",
@@ -274,14 +274,14 @@
        "does": "Saves trip TR-2026-0047 as business, 23.4 miles"
       }
      ],
-     "result": "A numbered trip in the log. With a 0.45 GBP per mile rate on file, it is worth 10.53 GBP.",
+     "result": "A numbered trip in the log. With a 0.45 GBP per mile rate on file, it's worth 10.53 GBP.",
      "minutes_saved": 3,
      "minutes_basis": "INFERRED: writing a trip into a paper logbook or sheet takes 2-4 min"
     },
     {
      "title": "Mid-year rate change, priced right",
      "persona": "Ryan Cole, sales rep in Phoenix, Arizona",
-     "prompt": "My business rate was 0.67 USD a mile until June 30 and 0.70 from July 1. What is my deductible business mileage for 2026?",
+     "prompt": "My business rate was 0.67 USD a mile until June 30 and 0.70 from July 1. What's my deductible business mileage for 2026?",
      "steps": [
       {
        "tool": "rate_set",
@@ -384,7 +384,7 @@
    "id": "office-suite",
    "name": "Office Suite",
    "category": "documents",
-   "tagline": "The whole back office as one local install: 50 servers, one entry.",
+   "tagline": "The whole back office as one local install. 50 servers, one config entry.",
    "plain": "Office Suite starts the time tracker, invoicing, quotes, spreadsheets, PDF tools and the other servers behind one config entry in Claude Desktop, Cursor or Claude Code. You install once and every tool shows up in the same chat. One bundle key turns all of them to Pro in a single step.",
    "for_who": [
     "Freelancers",
@@ -449,7 +449,7 @@
        "does": "Shows the tier of each connected server"
       }
      ],
-     "result": "A table with one row per server. Any child that did not accept the key is named so it can be fixed.",
+     "result": "A table with one row per server. Any child that didn't accept the key is named so it can be fixed.",
      "minutes_saved": 30,
      "minutes_basis": "INFERRED: activating a key in 50 separate servers takes 30+ min"
     }
@@ -588,7 +588,7 @@
     },
     {
      "name": "onboarding_progress",
-     "plain": "One hire's plan, percent complete and what is left"
+     "plain": "One hire's plan, percent complete and what's left"
     },
     {
      "name": "onboarding_overdue",
@@ -636,7 +636,7 @@
    "name": "Packing List",
    "category": "purchasing",
    "tagline": "Pack an order into cartons, check nothing is short, print the slip.",
-   "plain": "Open a packing list for an order, state what the order says should ship, and record what goes into each carton with weights. You see what is still short, the gross and chargeable weight per carton, and a packing slip with no prices on it. Mark it shipped with the carrier and tracking number, and the list is frozen as the record.",
+   "plain": "Open a packing list for an order, state what the order says should ship, and record what goes into each carton with weights. You see what's still short, the gross and chargeable weight per carton, and a packing slip with no prices on it. Mark it shipped with the carrier and tracking number, and the list is frozen as the record.",
    "for_who": [
     "Small e-commerce sellers",
     "Warehouse leads",
@@ -653,7 +653,7 @@
     {
      "title": "Catch a short shipment before the courier comes",
      "persona": "Tomasz Lewandowski, ceramics wholesaler in Boleslawiec, Poland",
-     "prompt": "Order ZAM-2211 for Haus & Tisch, Munich: 48 mugs SKU MUG-12 and 24 plates SKU PLT-27. I packed 48 mugs and 20 plates. What is short?",
+     "prompt": "Order ZAM-2211 for Haus & Tisch, Munich: 48 mugs SKU MUG-12 and 24 plates SKU PLT-27. I packed 48 mugs and 20 plates. What's short?",
      "steps": [
       {
        "tool": "packing_list_create",
@@ -672,7 +672,7 @@
        "does": "Compares ordered against packed"
       }
      ],
-     "result": "PLT-27 is 4 short. The list is not ready to ship, and it says why.",
+     "result": "PLT-27 is 4 short. The list isn't ready to ship, and it says why.",
      "minutes_saved": 15,
      "minutes_basis": "INFERRED: counting against a printed order and fixing a short delivery later costs 15+ min"
     },
@@ -728,7 +728,7 @@
     },
     {
      "name": "packing_shortfall",
-     "plain": "Shows what is short, over-packed or not on the order"
+     "plain": "Shows what's short, over-packed or not on the order"
     },
     {
      "name": "carton_report",
@@ -781,8 +781,8 @@
    "id": "payroll",
    "name": "Payroll",
    "category": "calculators",
-   "tagline": "Gross to net for hourly staff, worked out in the chat.",
-   "plain": "Give hours, an hourly rate and a flat tax percent, and get gross pay, an estimated tax figure and net pay, with a half-time premium for hours above 40. A second tool adds up a list of hours and rates into one contractor payout total. It is an estimator for small teams, not a payroll system: there are no tax tables and no payslips.",
+   "tagline": "Gross to net for hourly staff, worked out while you ask.",
+   "plain": "Give hours, an hourly rate and a flat tax percent, and get gross pay, an estimated tax figure and net pay, with a half-time premium for hours above 40. A second tool adds up a list of hours and rates into one contractor payout total. It's an estimator for small teams, not a payroll system: there are no tax tables and no payslips.",
    "for_who": [
     "Small business owners",
     "Solo operators who pay contractors",
@@ -833,7 +833,7 @@
        "does": "Sums hours times rate across the three entries"
       }
      ],
-     "result": "Contractor total 5,596.00 across 3 entries. The figure prints with a $ sign; the sum is the same in pounds.",
+     "result": "Contractor total 5,596.00 across 3 entries. The figure prints with a $ sign. The sum is the same in pounds.",
      "minutes_saved": 5,
      "minutes_basis": "INFERRED: adding three lines in a spreadsheet takes about 5 min"
     }
@@ -853,7 +853,7 @@
      "All tools, no limit in code"
     ],
     "pro": [
-     "unknown: no Pro gate in src; $19 buy link exists"
+     "unknown: no Pro gate in src. $19 buy link exists"
     ],
     "source": "servers/payroll/src/index.js (no license code) + https://mcp.zovo.one/s/payroll"
    },
@@ -870,7 +870,7 @@
     },
     {
      "q": "How is overtime handled?",
-     "a": "Hours above 40 earn a half-time premium. The premium is added to net pay and is not taxed in the estimate."
+     "a": "Hours above 40 earn a half-time premium. The premium is added to net pay and isn't taxed in the estimate."
     },
     {
      "q": "Does it make payslips or file taxes?",
@@ -882,8 +882,8 @@
    "id": "pdf",
    "name": "PDF",
    "category": "documents",
-   "tagline": "Merge, split, rotate and stamp PDFs from chat. Originals untouched.",
-   "plain": "Ask Claude to join documents into one file, pull pages out of a scan, turn sideways pages, or stamp PAID across an invoice. Every job writes a new file and never changes the original. Nothing is uploaded: the server works on files on your own machine.",
+   "tagline": "Merge, split, rotate and stamp PDFs by asking. Originals stay untouched.",
+   "plain": "Ask Claude to join documents into one file, pull pages out of a scan, turn sideways pages, or stamp PAID across an invoice. Every job writes a new file and never changes the original. With the local install nothing is uploaded, because the server works on files on your own machine.",
    "for_who": [
     "Freelancers",
     "Bookkeepers",
@@ -1005,15 +1005,15 @@
    "faq": [
     {
      "q": "Are my PDFs uploaded?",
-     "a": "No. The server reads and writes files on your machine and makes no network request."
+     "a": "Not on the local install. It reads and writes files on your machine and makes no network request. The hosted URL is different. You send the file in the request and the server keeps it under your token for a limited time."
     },
     {
      "q": "Can it read a scanned PDF?",
-     "a": "No. There is no OCR. pdf_text tells you when a page is probably a scan."
+     "a": "No. There's no OCR. pdf_text tells you when a page is probably a scan."
     },
     {
      "q": "Can it fill PDF forms?",
-     "a": "No. It reads form field values but does not fill them."
+     "a": "No. It reads form field values but doesn't fill them."
     }
    ]
   },
@@ -1039,7 +1039,7 @@
     {
      "title": "Delegacja to Berlin, done right",
      "persona": "Marta Kowalczyk, HR and payroll at a 30-person firm in Warsaw, Poland",
-     "prompt": "Delegacja for Piotr: Warsaw to Berlin, Monday 06:00 to Wednesday 20:00, breakfast at the hotel on two days. What is the dieta?",
+     "prompt": "Delegacja for Piotr: Warsaw to Berlin, Monday 06:00 to Wednesday 20:00, breakfast at the hotel on two days. What's the dieta?",
      "steps": [
       {
        "tool": "perdiem_calc",
@@ -1068,7 +1068,7 @@
        "does": "Places a 12.5-hour journey in the 10-hour band"
       }
      ],
-     "result": "10.00 GBP for the two-meal rate, with the note that it is payable only for meals actually bought on a qualifying journey.",
+     "result": "10.00 GBP for the two-meal rate, with the note that it's payable only for meals actually bought on a qualifying journey.",
      "minutes_saved": 5,
      "minutes_basis": "INFERRED: finding the right HMRC band takes about 5 min"
     },
@@ -1140,7 +1140,7 @@
    "faq": [
     {
      "q": "Which rate tables are included?",
-     "a": "The Polish delegation regulation (domestic and per country), the HMRC domestic benchmark scale rates, and the GSA CONUS standard rate. HMRC overseas and GSA non-standard localities are not bundled."
+     "a": "The Polish delegation regulation (domestic and per country), the HMRC domestic benchmark scale rates, and the GSA CONUS standard rate. HMRC overseas and GSA non-standard localities aren't bundled."
     },
     {
      "q": "Does it fetch rates online?",
@@ -1156,8 +1156,8 @@
    "id": "petty-cash",
    "name": "Petty Cash",
    "category": "bookkeeping",
-   "tagline": "Run the petty cash tin: vouchers, the count and the top-up.",
-   "plain": "Open a float with a fixed amount, record each payout from the tin as a numbered voucher, and count the cash when you want. The count shows what should be there, what is there and every voucher since the last count. When the tin runs low you get the exact top-up, the totals per category and the double entry for the books.",
+   "tagline": "Run the petty cash tin, from vouchers to the count and the top-up.",
+   "plain": "Open a float with a fixed amount, record each payout from the tin as a numbered voucher, and count the cash when you want. The count shows what should be there, what's there and every voucher since the last count. When the tin runs low you get the exact top-up, the totals per category and the double entry for the books.",
    "for_who": [
     "Office managers",
     "Shop owners",
@@ -1207,7 +1207,7 @@
     {
      "title": "Month-end top-up for the accountant",
      "persona": "Nicole Harris, bookkeeper for a property office in Tampa, Florida",
-     "prompt": "Close the tin for October. How much do I put back to restore the 500 USD float, and what is the journal entry?",
+     "prompt": "Close the tin for October. How much do I put back to restore the 500 USD float, and what's the journal entry?",
      "steps": [
       {
        "tool": "reconcile",
@@ -1290,7 +1290,7 @@
    "name": "Pomodoro",
    "category": "time-expenses",
    "tagline": "Split the time you have into 25-minute focus blocks and breaks.",
-   "plain": "Tell Claude how much time you have, or how many focus blocks you want. It returns a plain list: 25-minute focus blocks, 5-minute short breaks, and a 15-minute long break after every fourth block. It runs on your machine with no account and no network calls.",
+   "plain": "Tell Claude how much time you have, or how many focus blocks you want. It returns a plain list: 25-minute focus blocks, 5-minute short breaks, and a 15-minute long break after every fourth block. It's a local install only, with no account and no network calls.",
    "for_who": [
     "Freelancers",
     "Students",
@@ -1356,7 +1356,7 @@
      "All tools, no limit in code"
     ],
     "pro": [
-     "unknown: no Pro gate in src; $19 buy link exists"
+     "unknown: no Pro gate in src. $19 buy link exists"
     ],
     "source": "servers/pomodoro/src/index.js (no license code) + https://mcp.zovo.one/s/pomodoro"
    },
@@ -1386,7 +1386,7 @@
    "name": "Price Tracker",
    "category": "purchasing",
    "tagline": "Watch product prices from chat and see what dropped below target.",
-   "plain": "Give Claude a product link and it reads the current price, currency and title from the page. Add a watch with a target price, refresh it when you want, and ask what got cheaper. The history stays on your machine.",
+   "plain": "Give Claude a product link and it reads the current price, currency and title from the page. Add a watch with a target price, refresh it when you want, and ask what got cheaper. On the local install, the history stays on your machine.",
    "for_who": [
     "Small business buyers",
     "Office managers",
@@ -1402,7 +1402,7 @@
     {
      "title": "Buy the laptop when it hits budget",
      "persona": "Piotr Zielinski, office manager at a 12-person accounting firm in Poznan",
-     "prompt": "Watch this ThinkPad page and tell me when it is at or below 4,999 PLN: https://example-shop.pl/thinkpad-t14",
+     "prompt": "Watch this ThinkPad page and tell me when it's at or below 4,999 PLN: https://example-shop.pl/thinkpad-t14",
      "steps": [
       {
        "tool": "watch_add",
@@ -1511,7 +1511,7 @@
     },
     {
      "q": "Where is my data?",
-     "a": "The watches and history are stored locally on your machine."
+     "a": "On the local install, the watches and history sit in the server's data folder on your machine. The hosted URL stores them on the server under your token for 30 days, refreshed on every write."
     }
    ]
   },
@@ -1584,7 +1584,7 @@
      "steps": [
       {
        "tool": "run_show",
-       "does": "Shows one failed step: only 2 of 3 quotes attached, so it cannot be signed off"
+       "does": "Shows one failed step: only 2 of 3 quotes attached, so it can't be signed off"
       },
       {
        "tool": "run_report",
@@ -1619,7 +1619,7 @@
     },
     {
      "name": "run_report",
-     "plain": "Prints the run as text; Pro writes it to a .txt file"
+     "plain": "Prints the run as text. Pro writes it to a .txt file"
     }
    ],
    "free_vs_pro": {
@@ -1648,7 +1648,7 @@
     },
     {
      "q": "Can a signed run be changed?",
-     "a": "No. A sign-off freezes the run, and a signed-off run cannot be deleted."
+     "a": "No. A sign-off freezes the run, and a signed-off run can't be deleted."
     },
     {
      "q": "Are runs limited on the free tier?",
@@ -1779,11 +1779,11 @@
    "faq": [
     {
      "q": "What happens when a client accepts?",
-     "a": "quote_accept marks the quote accepted and creates the invoice in the Invoice server store when it is present, or returns invoice-ready lines. The numbers are copied, not recomputed."
+     "a": "quote_accept marks the quote accepted and creates the invoice in the Invoice server store when it's present, or returns invoice-ready lines. The numbers are copied, not recomputed."
     },
     {
      "q": "Does a closed quote count toward the free limit?",
-     "a": "No. The limit is 5 open quotes. Accepted, declined and expired quotes do not hold a slot, and deleting an unsent draft gives its slot back."
+     "a": "No. The limit is 5 open quotes. Accepted, declined and expired quotes don't hold a slot, and deleting an unsent draft gives its slot back."
     },
     {
      "q": "Can I get a PDF on the free tier?",
@@ -1796,7 +1796,7 @@
    "name": "Receipts",
    "category": "time-expenses",
    "tagline": "Paste receipt lines, get an itemized subtotal, tax and total.",
-   "plain": "Paste the lines from a receipt, such as \"2 x Coffee 4.50\", and give a tax rate. Claude returns each line as quantity times price, then the subtotal, the tax and the total. It runs on your machine with no account and no bank connection.",
+   "plain": "Paste the lines from a receipt, such as \"2 x Coffee 4.50\", and give a tax rate. Claude returns each line as quantity times price, then the subtotal, the tax and the total. It's a local install only. No account, no bank connection.",
    "for_who": [
     "Freelancers",
     "Employees filing expenses",
@@ -1819,7 +1819,7 @@
        "does": "Reads 3 lines, multiplies 2 x 4.50, adds 8.25% tax"
       }
      ],
-     "result": "Lines of 9.00, 3.20 and 2.75; subtotal 14.95, tax 1.23, total 16.18 for her expense report.",
+     "result": "Lines of 9.00, 3.20 and 2.75. Subtotal 14.95, tax 1.23, total 16.18 for her expense report.",
      "minutes_saved": 3,
      "minutes_basis": "INFERRED: adding up a receipt and its tax with a calculator takes 2-4 min"
     },
@@ -1863,7 +1863,7 @@
      "All tools, no limit in code"
     ],
     "pro": [
-     "unknown: no Pro gate in src; $19 buy link exists"
+     "unknown: no Pro gate in src. $19 buy link exists"
     ],
     "source": "servers/receipts/src/index.js (no license code) + https://mcp.zovo.one/s/receipts"
    },
@@ -1893,7 +1893,7 @@
    "name": "Recurring",
    "category": "invoicing",
    "tagline": "Define a monthly invoice once, then generate the ones that are due.",
-   "plain": "Set up a repeating invoice once: the client, the line items, how often to bill and when it starts. When you ask, Claude creates the real invoices that are due, with PDFs, through the Invoice server. You can also see what is coming up and the expected revenue per month. Everything stays on your machine.",
+   "plain": "Set up a repeating invoice once: the client, the line items, how often to bill and when it starts. When you ask, Claude creates the real invoices that are due, with PDFs, through the Invoice server. You can also see what's coming up and the expected revenue per month. With the local install, everything stays on your machine.",
    "for_who": [
     "Freelancers on retainer",
     "Agencies",
@@ -1928,7 +1928,7 @@
     {
      "title": "Monthly billing run in one sentence",
      "persona": "Michal Wojcik, IT support contractor in Lodz",
-     "prompt": "Generate every invoice that is due as of today.",
+     "prompt": "Generate every invoice that's due as of today.",
      "steps": [
       {
        "tool": "invoice_generate_due",
@@ -1965,7 +1965,7 @@
     },
     {
      "name": "invoice_generate_due",
-     "plain": "Creates every invoice that is due, with PDFs, once per period"
+     "plain": "Creates every invoice that's due, with PDFs, once per period"
     },
     {
      "name": "schedule_upcoming",
@@ -2010,7 +2010,7 @@
    "faq": [
     {
      "q": "Does it send invoices on its own?",
-     "a": "No. Nothing runs in the background. Invoices are created when you ask, for example with \"generate every invoice that is due\"."
+     "a": "No. Nothing runs in the background. Invoices are created when you ask, for example with \"generate every invoice that's due\"."
     },
     {
      "q": "Can it bill the same period twice?",
@@ -2027,7 +2027,7 @@
    "name": "Resume",
    "category": "contracts-hr",
    "tagline": "A tailored Word resume and cover letter that invent nothing.",
-   "plain": "Store your CV facts once: roles, bullets, skills, education. Claude then writes a Word resume that fits your page limit, checks it against a job posting for matched and missing keywords, and drafts a cover letter. Where a fact is missing, it leaves a bracketed prompt instead of making something up. Everything stays on your machine.",
+   "plain": "Store your CV facts once: roles, bullets, skills, education. Claude then writes a Word resume that fits your page limit, checks it against a job posting for matched and missing keywords, and drafts a cover letter. Where a fact is missing, it leaves a bracketed prompt instead of making something up. With the local install, everything stays on your machine.",
    "for_who": [
     "Job seekers",
     "Career changers",
@@ -2051,7 +2051,7 @@
       },
       {
        "tool": "tailor_to_job",
-       "does": "Reports 14 of 19 keywords matched; dbt and A/B testing missing"
+       "does": "Reports 14 of 19 keywords matched. dbt and A/B testing missing"
       },
       {
        "tool": "resume_create",
@@ -2062,7 +2062,7 @@
        "does": "Writes a one-page .docx with bracketed prompts where a fact is missing"
       }
      ],
-     "result": "A 2-page Word resume, a 1-page cover letter, and an honest list of 5 keywords she cannot claim.",
+     "result": "A 2-page Word resume, a 1-page cover letter, and an honest list of 5 keywords she can't claim.",
      "minutes_saved": 60,
      "minutes_basis": "INFERRED: tailoring a resume and writing a cover letter by hand takes 1-2 hours"
     },
@@ -2073,7 +2073,7 @@
      "steps": [
       {
        "tool": "resume_read",
-       "does": "Reads the .docx into profile shape and lists unplaced lines; saves nothing"
+       "does": "Reads the .docx into profile shape and lists unplaced lines. Saves nothing"
       },
       {
        "tool": "profile_set",
@@ -2106,7 +2106,7 @@
     },
     {
      "name": "tailor_to_job",
-     "plain": "Matched and missing keywords against a posting; changes nothing"
+     "plain": "Matched and missing keywords against a posting. Changes nothing"
     },
     {
      "name": "resume_create",
@@ -2170,7 +2170,7 @@
    "name": "Service Agreement",
    "category": "contracts-hr",
    "tagline": "Write a freelance service agreement before the work starts.",
-   "plain": "Tell Claude the client, the scope, the deliverables, the rate and the terms. It stores a numbered agreement, lists any missing terms before you send it, and renders a version ready to sign with a signature block for both parties. Each agreement carries a line that it is a template, not legal advice.",
+   "plain": "Tell Claude the client, the scope, the deliverables, the rate and the terms. It stores a numbered agreement, lists any missing terms before you send it, and renders a version ready to sign with a signature block for both parties. Each agreement carries a line that it's a template, not legal advice.",
    "for_who": [
     "Freelancers",
     "Consultants",
@@ -2208,7 +2208,7 @@
     {
      "title": "Track which contracts are signed",
      "persona": "Callum Reid, video editor in Glasgow with 3 live clients",
-     "prompt": "The Thistle Media agreement came back signed today. Mark it, and show me what is still out for signature.",
+     "prompt": "The Thistle Media agreement came back signed today. Mark it, and show me what's still out for signature.",
      "steps": [
       {
        "tool": "agreement_update_status",
@@ -2216,7 +2216,7 @@
       },
       {
        "tool": "agreement_list",
-       "does": "Lists agreements by status; one is still sent"
+       "does": "Lists agreements by status. One is still sent"
       }
      ],
      "result": "A dated status history for each contract and one clear chase: the 2,400 GBP retainer still unsigned.",
@@ -2230,7 +2230,7 @@
      "steps": [
       {
        "tool": "clause_library",
-       "does": "Lists the five clauses; on Pro shows full texts with the agreement's values filled in"
+       "does": "Lists the five clauses. On Pro shows full texts with the agreement's values filled in"
       },
       {
        "tool": "agreement_render",
@@ -2266,7 +2266,7 @@
    ],
    "free_vs_pro": {
     "free": [
-     "3 active agreements (expired ones do not count)",
+     "3 active agreements (expired ones don't count)",
      "Core template with signature block",
      "Markdown rendering",
      "Before-you-send checklist",
@@ -2288,11 +2288,11 @@
    "faq": [
     {
      "q": "Is this legal advice?",
-     "a": "No. Every rendered agreement ends with \"This agreement is a template, not legal advice.\" The checklist describes gaps neutrally and does not tell you what the law is."
+     "a": "No. Every rendered agreement ends with \"This agreement is a template, not legal advice.\" The checklist describes gaps neutrally and doesn't tell you what the law is."
     },
     {
      "q": "What counts toward the free limit?",
-     "a": "Active agreements. An agreement stops counting once it is marked expired."
+     "a": "Active agreements. An agreement stops counting once it's marked expired."
     },
     {
      "q": "Can I add standard clauses on the free tier?",
@@ -2305,7 +2305,7 @@
    "name": "Spreadsheet",
    "category": "calculators",
    "tagline": "Ask questions of an Excel or CSV file and get exact answers.",
-   "plain": "Point Claude at an xlsx or csv file on your machine. It reads the sheet names, columns and types, then filters, groups, sums and sorts in one step, so the totals come from the file and not from guesswork. It can also add a computed column or convert between Excel, CSV and JSON, always into a new file.",
+   "plain": "Point Claude at an xlsx or csv file. On the local install that's a path on your machine. It reads the sheet names, columns and types, then filters, groups, sums and sorts in one step, so the totals come from the file and not from guesswork. It can also add a computed column or convert between Excel, CSV and JSON, always into a new file.",
    "for_who": [
     "Bookkeepers",
     "Ops managers",
@@ -2366,7 +2366,7 @@
        "does": "Converts the new file to CSV for her web shop import"
       }
      ],
-     "result": "A 420-row CSV with gross prices in EUR. The original file is not changed.",
+     "result": "A 420-row CSV with gross prices in EUR. The original file isn't changed.",
      "minutes_saved": 10,
      "minutes_basis": "INFERRED: adding a formula column and exporting by hand takes about 10 min"
     }
@@ -2436,7 +2436,7 @@
    "name": "Statement of Account",
    "category": "invoicing",
    "tagline": "Client statements, aging and payment chasers from your own books.",
-   "plain": "Claude reads your invoices, payments, credit notes and deposits and builds a statement for one client: opening balance, movements and closing balance. It ages what is overdue into 0-30, 31-60, 61-90 and 90+ days, and writes a friendly, firm or final payment reminder. It reads your books and never changes them.",
+   "plain": "Claude reads your invoices, payments, credit notes and deposits and builds a statement for one client: opening balance, movements and closing balance. It ages what's overdue into 0-30, 31-60, 61-90 and 90+ days, and writes a friendly, firm or final payment reminder. It reads your books and never changes them.",
    "for_who": [
     "Freelancers",
     "Small businesses",
@@ -2565,7 +2565,7 @@
    "name": "Stripe Billing",
    "category": "invoicing",
    "tagline": "Check your Stripe balance from chat with your own API key.",
-   "plain": "A small two-tool server for people who sell through Stripe. It reads your available and pending Stripe balance with your own secret key, and it writes out the two exact API calls that create a payment link for a product and price. It runs on your machine only. There is no hosted URL.",
+   "plain": "A small two-tool server for people who sell through Stripe. It reads your available and pending Stripe balance with your own secret key, and it writes out the two exact API calls that create a payment link for a product and price. It's a local install only. There's no hosted URL.",
    "for_who": [
     "Solo founders on Stripe",
     "Course and template sellers",
@@ -2580,7 +2580,7 @@
     {
      "title": "Know what you can pay out today",
      "persona": "Dana Ruiz, sells Notion templates from Austin, Texas",
-     "prompt": "What is my Stripe balance right now? Split available and pending.",
+     "prompt": "What's my Stripe balance right now? Split available and pending.",
      "steps": [
       {
        "tool": "stripe_balance",
@@ -2601,7 +2601,7 @@
        "does": "Converts 29 to 2900 cents and writes the two curl commands: create the price, then create the link"
       }
      ],
-     "result": "Two ready curl commands with unit_amount=2900 and the product name filled in. Oliver runs them, pastes the price id into the second call and gets a buy.stripe.com link. Note: the command uses currency=usd; edit it for GBP.",
+     "result": "Two ready curl commands with unit_amount=2900 and the product name filled in. Oliver runs them, pastes the price id into the second call and gets a buy.stripe.com link. The command uses currency=usd. Edit it for GBP.",
      "minutes_saved": 5,
      "minutes_basis": "INFERRED: looking up the Stripe prices and payment_links API docs for the right parameters takes 5-10 min"
     },
@@ -2635,7 +2635,7 @@
      "All tools, no limit in code"
     ],
     "pro": [
-     "unknown: no Pro gate in src; $19 buy link exists"
+     "unknown: no Pro gate in src. $19 buy link exists"
     ],
     "source": "servers/stripe-billing/src/index.js (no license code) + https://mcp.zovo.one/s/stripe-billing"
    },
@@ -2652,7 +2652,7 @@
     },
     {
      "q": "Is my Stripe key sent anywhere else?",
-     "a": "No. The server runs on your machine and calls api.stripe.com with the key in STRIPE_SECRET_KEY. Use a restricted key with balance read access."
+     "a": "No. It's a local install only, and it calls api.stripe.com with the key in STRIPE_SECRET_KEY. Use a restricted key with balance read access."
     },
     {
      "q": "Does it work with GBP or EUR accounts?",
@@ -2665,7 +2665,7 @@
    "name": "Supplier List",
    "category": "purchasing",
    "tagline": "A supplier directory with terms, lead times and review dates.",
-   "plain": "Keep every supplier in one list you can ask questions of: who to call, what they supply, payment terms and lead time in days. Each record carries the date you last checked it, so you can see which details are going stale. Data stays on your machine.",
+   "plain": "Keep every supplier in one list you can ask questions of: who to call, what they supply, payment terms and lead time in days. Each record carries the date you last checked it, so you can see which details are going stale. With the local install, the data stays on your machine.",
    "for_who": [
     "Small shop owners",
     "Office managers",
@@ -2787,7 +2787,7 @@
     },
     {
      "q": "Where is the data stored?",
-     "a": "In two local files under ~/.local/share/mcp-servers/supplier-list/. There is no account and no network call."
+     "a": "On the local install, in two files under ~/.local/share/mcp-servers/supplier-list/, with no account and no network call. The hosted URL stores them on the server under your token for 30 days, refreshed on every write."
     },
     {
      "q": "Can I get the list into a spreadsheet?",
@@ -2800,7 +2800,7 @@
    "name": "Supplier Statement Check",
    "category": "payables",
    "tagline": "Match a supplier statement to your ledger, line by line.",
-   "plain": "Give it the open items from a supplier's statement and the open items in your accounts payable ledger. It pairs them by exact reference and shows what matches, what differs in amount or date, and what is on only one side. Every original row stays in the report, so you can show the supplier the evidence.",
+   "plain": "Give it the open items from a supplier's statement and the open items in your accounts payable ledger. It pairs them by exact reference and shows what matches, what differs in amount or date, and what's on only one side. Every original row stays in the report, so you can show the supplier the evidence.",
    "for_who": [
     "Bookkeepers",
     "Accounts payable clerks",
@@ -2816,7 +2816,7 @@
     {
      "title": "Month-end statement from a key supplier",
      "persona": "Priya Shah, AP clerk at a food wholesaler in Manchester, UK",
-     "prompt": "Here is the October statement from Fresh Fields Ltd (42 open items) and our ledger for them (40 items), both as at 31 Oct. Check them and tell me what does not agree.",
+     "prompt": "Here is the October statement from Fresh Fields Ltd (42 open items) and our ledger for them (40 items), both as at 31 Oct. Check them and tell me what doesn't agree.",
      "steps": [
       {
        "tool": "supplier_statement_check",
@@ -2911,11 +2911,11 @@
    "faq": [
     {
      "q": "Does it read the PDF statement?",
-     "a": "No. You supply the open items as structured records. There is no OCR, no ERP link and no currency conversion."
+     "a": "No. You supply the open items as structured records. There's no OCR, no ERP link and no currency conversion."
     },
     {
      "q": "How does it match items?",
-     "a": "Only by exact entity, supplier, currency, document type and reference. It does not guess. A reference that appears twice on one side is marked ambiguous."
+     "a": "Only by exact entity, supplier, currency, document type and reference. It doesn't guess. A reference that appears twice on one side is marked ambiguous."
     },
     {
      "q": "What does Pro add?",
@@ -2928,7 +2928,7 @@
    "name": "Tax Calc",
    "category": "calculators",
    "tagline": "A quick US federal income tax estimate from one number.",
-   "plain": "Type a gross annual income and get an estimate of US federal income tax for a single filer with the standard deduction. You see taxable income, the tax, the effective rate and what is left after tax. It is a planning estimate, not a tax return.",
+   "plain": "Type a gross annual income and get an estimate of US federal income tax for a single filer with the standard deduction. You see taxable income, the tax, the effective rate and what's left after tax. It's a planning estimate, not a tax return.",
    "for_who": [
     "US freelancers",
     "US job seekers comparing offers",
@@ -2999,7 +2999,7 @@
      "All tools, no limit in code"
     ],
     "pro": [
-     "unknown: no Pro gate in src; $19 buy link exists"
+     "unknown: no Pro gate in src. $19 buy link exists"
     ],
     "source": "servers/tax-calc/src/index.js (no license code) + https://mcp.zovo.one/s/tax-calc"
    },
@@ -3012,7 +3012,7 @@
    "faq": [
     {
      "q": "Which filers does it cover?",
-     "a": "Single filers with the standard deduction of $15,750, using the bracket table in the code. It does not cover joint filing, itemized deductions, credits, state tax, FICA or self-employment tax."
+     "a": "Single filers with the standard deduction of $15,750, using the bracket table in the code. It doesn't cover joint filing, itemized deductions, credits, state tax, FICA or self-employment tax."
     },
     {
      "q": "Is it accurate enough to file?",
@@ -3063,7 +3063,7 @@
     {
      "title": "Partial delivery, second invoice",
      "persona": "Piotr Zielinski, purchasing manager at a furniture workshop in Lodz, Poland",
-     "prompt": "This is the second invoice on PO ZAM/2026/118 for oak boards. 300 boards were already billed. Check FV 77/10 against the PO and both deliveries.",
+     "prompt": "Second invoice on PO ZAM/2026/118 for oak boards. 300 boards were already billed. Check FV 77/10 against the PO and both deliveries.",
      "steps": [
       {
        "tool": "three_way_match",
@@ -3256,7 +3256,7 @@
     },
     {
      "name": "entry_mark_billed",
-     "plain": "Stamps hours with an invoice number so they are not billed twice"
+     "plain": "Stamps hours with an invoice number so they aren't billed twice"
     },
     {
      "name": "export_csv",
@@ -3287,7 +3287,7 @@
    "faq": [
     {
      "q": "Where are my hours stored?",
-     "a": "Locally, in the server's data folder on your machine. There is no account."
+     "a": "On the local install, in the server's data folder on your machine. On the hosted URL, on the server under your token for 30 days, refreshed on every write. No account either way."
     },
     {
      "q": "Can I use different currencies per client?",
@@ -3304,7 +3304,7 @@
    "name": "Timezone",
    "category": "operations",
    "tagline": "Find a meeting time that works across time zones, and send the invite.",
-   "plain": "Ask what time it is for a client, when your working hours overlap, or which slot is fair for everyone on a call. It knows daylight saving dates, so a call does not quietly move by an hour in March or October. It can write a .ics invite that lands at the right time in any calendar.",
+   "plain": "Ask what time it is for a client, when your working hours overlap, or which slot is fair for everyone on a call. It knows daylight saving dates, so a call doesn't quietly move by an hour in March or October. It can write a .ics invite that lands at the right time in any calendar.",
    "for_who": [
     "Freelancers with clients abroad",
     "Remote team leads",
@@ -3376,7 +3376,7 @@
        "does": "Shows each contact's local time now and whether they are in working hours"
       }
      ],
-     "result": "At 14:30 in Gdansk, Lena is in hours and Mark is not (07:30 in Austin). Zofia calls Lena now and messages Mark for later.",
+     "result": "At 14:30 in Gdansk, Lena is in hours and Mark isn't (07:30 in Austin). Zofia calls Lena now and messages Mark for later.",
      "minutes_saved": 3,
      "minutes_basis": "INFERRED: checking two time zones and remembering each client's hours takes 2-5 min each time"
     }
@@ -3449,7 +3449,7 @@
    "id": "work-order",
    "name": "Work Order",
    "category": "operations",
-   "tagline": "Job cards for trades: parts, hours, status and a signed report.",
+   "tagline": "Work orders with parts, hours, status and a signed report.",
    "plain": "Raise a numbered work order for each job, add the parts and labour hours as you go, and move it from scheduled to done. At the end you get a completion report for the customer to sign and the lines ready for an invoice. Totals are always worked out from the lines, so they never drift.",
    "for_who": [
     "Plumbers and electricians",
@@ -3597,7 +3597,7 @@
     },
     {
      "q": "Can the customer sign the report?",
-     "a": "The report has a sign-off block. The PDF is Pro; the plain-text report is free."
+     "a": "The report has a sign-off block. The PDF is Pro. The plain-text report is free."
     }
    ]
   },
@@ -3606,7 +3606,7 @@
    "name": "Zip",
    "category": "documents",
    "tagline": "Make, check and unpack zip files from chat, safely.",
-   "plain": "Pack a folder into a zip, look inside a zip someone sent you, or pull out one file without unpacking the rest. Before anything is unpacked it checks for the tricks that make zips dangerous, such as paths that escape the folder or a zip bomb. It runs on your machine with no network.",
+   "plain": "Pack a folder into a zip, look inside a zip someone sent you, or pull out one file without unpacking the rest. Before anything is unpacked it checks for the tricks that make zips dangerous, such as paths that escape the folder or a zip bomb. The local install works with no network at all.",
    "for_who": [
     "Freelancers sending files to clients",
     "Bookkeepers collecting month-end documents",
@@ -3641,7 +3641,7 @@
     {
      "title": "Check a zip from an unknown sender",
      "persona": "Mark Davies, office manager at a recruitment firm in Reading, UK",
-     "prompt": "A candidate sent CV_and_portfolio.zip. Is it safe? Show me what is in it and read the cover letter text.",
+     "prompt": "A candidate sent CV_and_portfolio.zip. Is it safe? Show me what's in it and read the cover letter text.",
      "steps": [
       {
        "tool": "zip_list",
@@ -3667,7 +3667,7 @@
       },
       {
        "tool": "zip_add",
-       "does": "Adds the invoice PDF; the archive is rebuilt and swapped in only when complete"
+       "does": "Adds the invoice PDF. The archive is rebuilt and swapped in only when complete"
       },
       {
        "tool": "zip_history",
@@ -3732,7 +3732,7 @@
     },
     {
      "q": "Does it upload my files?",
-     "a": "No. It makes no network call of any kind. Everything happens on your machine."
+     "a": "Not on the local install. It makes no network call of any kind, and everything happens on your machine. The hosted URL takes the zip in the request and keeps it on the server for a limited time."
     },
     {
      "q": "Can it open password-protected zips?",
