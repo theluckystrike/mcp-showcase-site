@@ -81,7 +81,7 @@
     "examples": [
       { "repo": "urllib3/urllib3", "title": "Honor Retry-After on PoolManager redirects", "url": "https://github.com/urllib3/urllib3/pull/5330" },
       { "repo": "PrefectHQ/prefect", "title": "Validate PEP 508 deps in execute_bundle_in_subprocess", "url": "https://github.com/PrefectHQ/prefect/pull/21916" },
-      { "repo": "OWASP/cve-lite-cli", "title": "Gate like --fail-on when no baseline exists", "url": "https://github.com/OWASP/cve-lite-cli/pull/1314" },
+      { "repo": "OWASP/cve-lite-cli", "title": "Make the ratchet gate work when no baseline exists", "url": "https://github.com/OWASP/cve-lite-cli/pull/1314" },
       { "repo": "GoogleChrome/chrome-extensions-samples", "title": "Add chrome.commands API sample", "url": "https://github.com/GoogleChrome/chrome-extensions-samples/pull/1629" }
     ]
   },

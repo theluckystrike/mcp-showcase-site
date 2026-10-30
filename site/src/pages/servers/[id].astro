@@ -148,24 +148,24 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
       </section>
     )}
 
-    <!-- FREE VS PRO ledger -->
+    <!-- FREE VS PRO fvp -->
     <section id="pricing" class="wrap py-14">
       <h2 class="h2">{s.paid ? 'Free and Pro, line by line' : 'Free, every tool'}</h2>
       {single && fvpNote.copy && <p class="muted mt-3 max-w-2xl">{fvpNote.copy}</p>}
-      <div class:list={['ledger mt-8', s.paid && 'ledger-2']}>
-        <div class="ledger-head">
-          <div><p class="ledger-name">Free</p><p class="ledger-price tnum">$0<span> no key</span></p></div>
-          {s.paid && <div class="ledger-pro"><p class="ledger-name">Pro</p><p class="ledger-price tnum">${single ? s.priceUsd : bundlePrice()}<span> once, lifetime{s.bundleOnly && ', bundle'}</span></p></div>}
+      <div class:list={['fvp mt-8', s.paid && 'fvp-2']}>
+        <div class="fvp-head">
+          <div><p class="fvp-name">Free</p><p class="fvp-price tnum">$0<span> no key</span></p></div>
+          {s.paid && <div class="fvp-pro"><p class="fvp-name">Pro</p><p class="fvp-price tnum">${single ? s.priceUsd : bundlePrice()}<span> once, lifetime{s.bundleOnly && ', bundle'}</span></p></div>}
         </div>
         {Array.from({ length: rows }).map((_, i) => (
-          <div class="ledger-row">
+          <div class="fvp-row">
             <div>{freeList[i] ?? ''}</div>
-            {s.paid && <div class="ledger-pro">{proList[i] ?? ''}</div>}
+            {s.paid && <div class="fvp-pro">{proList[i] ?? ''}</div>}
           </div>
         ))}
-        <div class="ledger-row ledger-cta">
+        <div class="fvp-row fvp-cta">
           <div><a href="#install" class="btn btn-sm">Install free</a></div>
-          {s.paid && <div class="ledger-pro"><a href={single ? fvpNote.cta_url || buy('free_vs_pro') : bundle('free_vs_pro')} rel="nofollow" class="btn btn-primary btn-sm">{single ? `Buy ${s.name} Pro, $${s.priceUsd}` : `Get the bundle, $${bundlePrice()}`}</a></div>}
+          {s.paid && <div class="fvp-pro"><a href={single ? fvpNote.cta_url || buy('free_vs_pro') : bundle('free_vs_pro')} rel="nofollow" class="btn btn-primary btn-sm">{single ? `Buy ${s.name} Pro, $${s.priceUsd}` : `Get the bundle, $${bundlePrice()}`}</a></div>}
         </div>
       </div>
       {single && capMsg.copy && <p class="muted mt-5 max-w-3xl text-[.95rem]">{capMsg.copy}</p>}
@@ -247,24 +247,24 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
     background: var(--accent-subtle); color: var(--text); font-size: .97rem; line-height: 1.5; font-weight: 520;
   }
 
-  .ledger { border-top: 2px solid var(--text); border-bottom: 2px solid var(--text); }
-  .ledger-head, .ledger-row { display: grid; grid-template-columns: 1fr; }
-  .ledger-2 .ledger-head, .ledger-2 .ledger-row { grid-template-columns: 1fr 1fr; }
-  .ledger-head > div, .ledger-row > div { padding: .8rem 1rem .8rem 0; }
-  .ledger-head > div + div, .ledger-row > div + div { padding-left: 1.2rem; border-left: 1px solid var(--border); }
-  .ledger-head { border-bottom: 1px solid var(--text); }
-  .ledger-row { border-bottom: 1px solid var(--border); font-size: .96rem; }
-  .ledger-row:last-child { border-bottom: 0; }
-  .ledger-name { font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-  .ledger-price { font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-top: .2rem; }
-  .ledger-price span { font-size: .9rem; font-weight: 450; color: var(--muted); letter-spacing: 0; }
-  .ledger-pro { background: color-mix(in oklab, var(--accent) 5%, transparent); }
-  .ledger-head .ledger-pro .ledger-name { color: var(--accent); }
-  .ledger-cta > div { padding-top: 1rem; padding-bottom: 1rem; }
+  .fvp { border-top: 2px solid var(--text); border-bottom: 2px solid var(--text); }
+  .fvp-head, .fvp-row { display: grid; grid-template-columns: 1fr; }
+  .fvp-2 .fvp-head, .fvp-2 .fvp-row { grid-template-columns: 1fr 1fr; }
+  .fvp-head > div, .fvp-row > div { padding: .8rem 1rem .8rem 0; }
+  .fvp-head > div + div, .fvp-row > div + div { padding-left: 1.2rem; border-left: 1px solid var(--border); }
+  .fvp-head { border-bottom: 1px solid var(--text); }
+  .fvp-row { border-bottom: 1px solid var(--border); font-size: .96rem; }
+  .fvp-row:last-child { border-bottom: 0; }
+  .fvp-name { font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .fvp-price { font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-top: .2rem; }
+  .fvp-price span { font-size: .9rem; font-weight: 450; color: var(--muted); letter-spacing: 0; }
+  .fvp-pro { background: color-mix(in oklab, var(--accent) 5%, transparent); }
+  .fvp-head .fvp-pro .fvp-name { color: var(--accent); }
+  .fvp-cta > div { padding-top: 1rem; padding-bottom: 1rem; }
   @media (max-width: 520px) {
-    .ledger-2 .ledger-row, .ledger-2 .ledger-head { font-size: .88rem; }
-    .ledger-head > div + div, .ledger-row > div + div { padding-left: .7rem; }
-    .ledger-price { font-size: 1.5rem; }
-    .ledger-cta .btn { white-space: normal; text-align: center; }
+    .fvp-2 .fvp-row, .fvp-2 .fvp-head { font-size: .88rem; }
+    .fvp-head > div + div, .fvp-row > div + div { padding-left: .7rem; }
+    .fvp-price { font-size: 1.5rem; }
+    .fvp-cta .btn { white-space: normal; text-align: center; }
   }
 </style>

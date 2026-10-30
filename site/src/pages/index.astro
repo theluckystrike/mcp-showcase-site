@@ -39,8 +39,8 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
     <div class="wrap grid items-center gap-7 pb-14 pt-7 sm:pt-12 lg:grid-cols-[minmax(0,.86fr)_minmax(0,1.14fr)] lg:gap-12 lg:pb-20 lg:pt-16">
       <div class="hero-copy">
         <h1 class="display">{h1}</h1>
-        <p class="lead mt-4 sm:mt-5">Type the job in Claude or Cursor. Get the numbered invoice, quote or PDF back as a real file, then mark it paid when the money lands.</p>
-        <div class="mt-6 flex flex-wrap gap-3">
+        <p class="lead mt-5 hidden sm:block">Type the job in Claude or Cursor. Get the numbered invoice, quote or PDF back as a real file, then mark it paid when the money lands.</p>
+        <div class="mt-5 flex flex-wrap gap-3 sm:mt-6">
           <a href="/connect/" class="btn btn-primary">Connect free in 1 minute</a>
           <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn hidden sm:inline-flex">All {st.paid} paid servers, ${bundlePrice()} once</a>
         </div>
@@ -50,6 +50,7 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
         <p class="works mt-3 hidden sm:block">Works in {clients.map((c, i) => (<><a href={`/connect/${c.slug}/`}>{c.name}</a>{i < clients.length - 1 ? ', ' : ''}</>))} and <a href="/connect/paste-a-url/">any MCP client</a>.</p>
       </div>
       <HeroDemo />
+      <p class="lead -mt-2 sm:hidden">Type the job in Claude or Cursor. Get the real file back, numbered and ready to send. Free to start, no key.</p>
     </div>
   </section>
 

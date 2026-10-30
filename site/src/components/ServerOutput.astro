@@ -3,6 +3,7 @@
 // (data in pages/servers/_outputs.ts). Servers without a hand preview get a result slip from their first case:
 // the tool calls as ledger lines and the case result as the closing line. A stamp appears only for a document state.
 import type { Server } from '../data/servers';
+import Stamp from './Stamp.astro';
 import { PREVIEWS, outputType } from '../pages/servers/_outputs';
 interface Props { server: Server }
 const { server: s } = Astro.props;
@@ -35,7 +36,7 @@ const numeric = (v: string) => /^-?[\d.,]+$|^about [\d,]+$/.test(v);
           <tbody>{p.rows.map((r) => <tr>{r.map((v, i) => <td class:list={[i && 'r', i && numeric(v) && 'tnum', p.cols[i] === 'Tool' && 'font-mono text-[.76rem]']}>{v}</td>)}</tr>)}</tbody>
         </table>
         <div class="out-foot">
-          {p.stamp ? <span class:list={['stamp', `stamp-${p.stamp.tone}`]}>{p.stamp.text}</span> : <span></span>}
+          {p.stamp ? <Stamp state={p.stamp.text} sub={p.stamp.sub} size={52} land /> : <span></span>}
           <dl class="out-totals">
             {p.totals.map(([k, v], i) => (
               <>
@@ -60,7 +61,7 @@ const numeric = (v: string) => /^-?[\d.,]+$|^about [\d,]+$/.test(v);
           <tbody>{p.rows.map((r) => <tr>{r.map((v, i) => <td class:list={[i && 'r tnum']}>{v}</td>)}</tr>)}</tbody>
           {p.foot && <tfoot><tr><th scope="row" colspan={p.cols.length - 1}>{p.foot[0]}</th><td class="r tnum">{p.foot[1]}</td></tr></tfoot>}
         </table>
-        {p.stamp && <div class="mt-3 flex justify-end"><span class:list={['stamp', `stamp-${p.stamp.tone}`]}>{p.stamp.text}</span></div>}
+        {p.stamp && <div class="mt-3 flex justify-end"><Stamp state={p.stamp.text} sub={p.stamp.sub} size={48} /></div>}
       </div>
     ) : c ? (
       <div class="out-body">
@@ -117,6 +118,4 @@ const numeric = (v: string) => /^-?[\d.,]+$|^about [\d,]+$/.test(v);
   .out-totals .out-grand { opacity: 1; font-weight: 720; font-size: .98rem; border-top: 2px solid currentColor; padding-top: .35rem; margin-top: .25rem; }
   .out-totals dd.out-grand { color: var(--accent); }
   .out-result { margin-top: 1rem; padding-top: .8rem; border-top: 2px solid currentColor; font-weight: 560; line-height: 1.45; }
-  .out .stamp { font-size: .78rem; margin: 0 0 .3rem .2rem; }
-  .out .stamp-ok { --stamp: var(--accent); }
 </style>

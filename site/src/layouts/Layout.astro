@@ -1,6 +1,4 @@
 ---
-import '@fontsource-variable/geist';
-import '@fontsource-variable/geist-mono';
 import '../styles/global.css';
 import { brand } from '../config/brand';
 import Header from '../components/Header.astro';
@@ -8,8 +6,6 @@ import Footer from '../components/Footer.astro';
 import { buildGraph, citationFor, CONTENT_REVIEWED } from '../data/schema';
 import { getServer } from '../data/servers';
 import { pageMeta } from '../data/pages';
-// Preload the body font (same hashed file the @font-face rule uses; fontsource exports ./files/*.woff2).
-import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -80,7 +76,8 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/publicsans-var.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin />
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
     <link rel="canonical" href={canonical} />
@@ -94,7 +91,7 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
     <link rel="alternate" type="text/plain" href="/llms-full.txt" title="llms-full.txt" />
     <!-- t-design tokens: warm light is the default (--bg #f7f4ee); dark is opt-in (localStorage 'mode', --bg #151412). -->
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#f7f4ee" />
+    <meta name="theme-color" content="#eef0ea" />
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={brand.name} />
     <meta property="og:title" content={fullTitle} />
@@ -111,7 +108,7 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={metaDescription} />
     <script is:inline>
-      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; if (localStorage.getItem('mode') === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#151412'); } catch (e) {}
+      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; if (localStorage.getItem('mode') === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#10141f'); } catch (e) {}
     </script>
     <script type="application/ld+json" set:html={graphJson} />
     {brand.analytics?.ga4 && (

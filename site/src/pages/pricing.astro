@@ -1,90 +1,208 @@
 ---
+// /pricing/ (d-money). A price list, not three tier cards. Data: data/content/pricing.json (t-money).
+// Picker: Buy $19 links to https://mcp.zovo.one/buy/<id>?src=site.pricing.picker (BRIEF section 2, t-review2 defect 8).
+// Mobile: the bundle line comes first (CSS order).
 import Layout from '../layouts/Layout.astro';
 import Faq from '../components/Faq.astro';
+import SupportBand from '../components/SupportBand.astro';
+import TelegramCta from '../components/TelegramCta.astro';
 import { brand } from '../config/brand';
-import { getPricing, upsell } from '../data/content';
+import { getPricing } from '../data/content';
+import { CATEGORIES } from '../data/categories';
 import { stats, getServers, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
 import { seo } from '../data/pages';
-import UpsellBand from '../components/UpsellBand.astro';
 const meta = seo('/pricing/', { title: 'Pricing', description: '' });
-const end = upsell('pricing', 'faq_end', { copy: 'Still unsure? Use the free tier as long as you like.', cta_url: buyUrl(bundleUrl(), 'pricing', 'faq_end') });
 // Internal links never carry src tags (seo.json canonical rule). src tags go only on mcp.zovo.one buy links.
 const href = (u: string) => (u.startsWith('/') ? u.replace(/\?src=[^#]*/, '') : u);
-const paidServers = getServers().filter((s) => s.paid && !s.bundleOnly);
-const freeServers = getServers().filter((s) => !s.paid);
-
+const servers = getServers();
+const paidServers = servers.filter((s) => s.paid && !s.bundleOnly && !s.satellite);
+const freeServers = servers.filter((s) => !s.paid && !s.satellite);
 const p = getPricing();
 const st = stats();
+const single = brand.pricing.serverUsd;
+const bundle = bundlePrice();
+const plan = (id: string, i: number) => p.plans.find((x) => x.id === id) ?? p.plans[i];
+const free = plan('free', 0);
+const one = plan('pro-single', 1);
+const all = plan('bundle', 2);
+const bundleHref = buyUrl(bundleUrl(), 'pricing', 'plan_bundle');
+
+// Picker: grouped by category, invoice selected first. Each option carries its buy URL and one Pro line.
+const DEFAULT_ID = 'invoice';
+const pick = (s: (typeof paidServers)[number]) => ({ id: s.id, name: s.name, url: buyUrl(s.buyBase || `${brand.backend.origin}/buy/${s.id}`, 'pricing', 'picker'), pro: (s.freeVsPro?.pro ?? []).find((x) => x && !/^unknown/i.test(x)) ?? '' });
+const groups = CATEGORIES.map((c) => ({ name: c.name, items: paidServers.filter((s) => s.category === c.id).sort((a, b) => a.name.localeCompare(b.name)).map(pick) })).filter((g) => g.items.length);
+const loose = paidServers.filter((s) => !CATEGORIES.some((c) => c.id === s.category)).map(pick);
+if (loose.length) groups.push({ name: 'Other', items: loose });
+const first = groups.flatMap((g) => g.items).find((x) => x.id === DEFAULT_ID) ?? groups[0]?.items[0];
+
+const refundSrc = 'https://github.com/theluckystrike/mcp-servers/blob/main/billing/src/index.js#L782';
+const srcText = (s?: string) => (s ?? '').replace(/~\/mcp-servers\//g, 'mcp-servers/');
 const faq = p.faq.length ? p.faq : [
-  { q: 'Is it a subscription?', a: `No. Pro is a one-time payment: $${brand.pricing.serverUsd} for one server or $${brand.pricing.bundleUsd} for all ${st.paid} paid servers. Lifetime licence.` },
+  { q: 'Is it a subscription?', a: `No. Pro is a one-time payment: $${single} for one server or $${bundle} for all ${st.paid} paid servers. Lifetime licence.` },
   { q: 'Do I need an account for the free tier?', a: 'No. The free tier needs no key and no sign-up. The hosted URL uses a free token you request with one POST.' },
-  { q: 'How do I activate Pro?', a: 'Checkout gives you a licence key. Ask your AI to run license_activate with that key. The key is verified offline.' },
 ];
 ---
-<Layout title={meta.title} description={meta.description || `Free tier with no key. Pro for $${brand.pricing.serverUsd} per server or $${brand.pricing.bundleUsd} for all ${st.paid} paid servers. One-time payment.`}
+<Layout title={meta.title} description={meta.description || `Free tier with no key. Pro for $${single} per server or $${bundle} for all ${st.paid} paid servers. One-time payment.`}
   crumbs={[{ name: 'Pricing', path: '/pricing/' }]}
-  jsonLd={[{ '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: `${brand.name} bundle`, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude, ChatGPT, Cursor, VS Code, Windsurf',
+  jsonLd={[{ '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: `${brand.name} bundle`, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude, Cursor, VS Code',
       offers: [
         { '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free tier' },
-        { '@type': 'Offer', price: String(brand.pricing.serverUsd), priceCurrency: 'USD', name: 'Pro, one server, one-time' },
-        { '@type': 'Offer', price: String(bundlePrice()), priceCurrency: 'USD', name: `Bundle, all ${st.paid} paid servers, one-time`, url: buyUrl(bundleUrl(), 'pricing', 'jsonld') },
+        { '@type': 'Offer', price: String(single), priceCurrency: 'USD', name: 'Pro, one server, one-time' },
+        { '@type': 'Offer', price: String(bundle), priceCurrency: 'USD', name: `Bundle, all ${st.paid} paid servers, one-time`, url: buyUrl(bundleUrl(), 'pricing', 'jsonld') },
       ] },
     { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }]}>
-  <section class="relative isolate overflow-hidden">
-    <div class="glow-bg opacity-70"></div>
-    <div class="wrap pb-6 pt-14 text-center sm:pt-20">
-      <span class="eyebrow">Pricing</span>
-      <h1 class="display mx-auto mt-5 max-w-4xl">{meta.h1 || 'Pay once. Keep it.'}</h1>
-      <p class="lead mx-auto mt-5 max-w-2xl">Start free. Upgrade the servers that save you time. No subscription.</p>
-    </div>
+  <section class="wrap pb-6 pt-12 sm:pt-16">
+    <span class="eyebrow">Pricing</span>
+    <h1 class="display mt-5 max-w-4xl font-display">{meta.h1 || 'Pay once. Keep it.'}</h1>
+    <p class="lead mt-5">Start free with no key. Pay only for the server you outgrow. Two singles cost ${single * 2}, and all {st.paid} paid servers cost ${bundle}.</p>
   </section>
-  <section class="wrap py-10">
-    <div class:list={['mx-auto grid max-w-6xl gap-4', p.plans.length >= 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3']}>
-      {p.plans.map((plan) => (
-        <div class="card relative flex flex-col p-6" style={plan.highlight ? 'border: 2px solid var(--accent); box-shadow: var(--shadow-lift)' : ''}>
-          {plan.highlight && <span class="chip absolute right-4 top-4 !font-semibold" style="background: var(--accent-subtle); color: var(--accent); border-color: transparent">Best value</span>}
-          <h2 class="text-lg font-semibold">{plan.name}</h2>
-          <p class="tnum mt-3 text-5xl font-semibold tracking-tight">{plan.price}</p>
-          <p class="muted mt-1 text-sm">{plan.period}</p>
-          <ul class="mt-6 grid gap-2.5 text-[.95rem]">
-            {plan.features.map((f) => <li class="flex gap-2.5"><span class="text-accent">+</span><span class="muted">{f}</span></li>)}
-          </ul>
-          <div class="mt-auto pt-6"><a href={href(plan.cta_url)} rel={plan.cta_url.startsWith('http') ? 'nofollow' : undefined} class:list={['btn w-full', plan.highlight && 'btn-primary']}>{plan.cta_label}</a></div>
-        </div>
-      ))}
+
+  <section class="wrap py-6" aria-labelledby="pl-h">
+    <div class="pl-sheet border border-line-strong bg-surface-solid">
+      <div class="flex flex-wrap items-baseline justify-between gap-2 border-b-2 border-fg px-5 py-4 sm:px-7">
+        <h2 id="pl-h" class="font-display text-lg font-bold uppercase tracking-wide">Price list</h2>
+        <p class="font-mono text-[.8rem] text-faint">USD, one payment, no subscription</p>
+      </div>
+      <ol class="pl-lines flex flex-col">
+        <li class="pl-line order-3 md:order-1" id="free">
+          <p class="pl-no">01</p>
+          <div class="pl-body">
+            <h3 class="pl-name">{free.name}</h3>
+            <p class="muted mt-1">Every server has a free tier with no key, no account and no expiry. {st.hosted} answer at a hosted URL.</p>
+            <details class="pl-more mt-3"><summary>What's included</summary><ul>{free.features.map((f) => <li>{f}</li>)}</ul></details>
+          </div>
+          <p class="pl-price tnum">$0</p>
+          <div class="pl-act"><a href={href(free.cta_url)} rel={free.cta_url.startsWith('http') ? 'nofollow' : undefined} class="btn w-full">{free.cta_label}</a></div>
+        </li>
+
+        <li class="pl-line order-2 md:order-2" id="single">
+          <p class="pl-no">02</p>
+          <div class="pl-body">
+            <h3 class="pl-name">Pro for one server</h3>
+            <p class="muted mt-1">Removes the free-tier limits on the server you pick, for life.</p>
+            <label for="pick-server" class="mt-4 block text-[.85rem] font-semibold">Pick a server</label>
+            <select id="pick-server" class="pick mt-1.5 w-full max-w-md" data-picker>
+              {groups.map((g) => (
+                <optgroup label={g.name}>
+                  {g.items.map((o) => <option value={o.id} data-url={o.url} data-name={o.name} data-pro={o.pro} selected={o.id === first?.id}>{o.name}</option>)}
+                </optgroup>
+              ))}
+            </select>
+            <p class="pick-pro mt-2 text-[.9rem] text-faint" data-pick-pro>{first?.pro ? `With Pro: ${first.pro}` : ''}</p>
+            <details class="pl-more mt-3"><summary>What's included</summary><ul>{one.features.map((f) => <li>{f}</li>)}</ul></details>
+          </div>
+          <p class="pl-price tnum">${single}</p>
+          <div class="pl-act"><a href={first?.url} rel="nofollow" class="btn btn-primary w-full" data-pick-buy>Buy {first?.name} for ${single}</a></div>
+        </li>
+
+        <li class="pl-line pl-bundle order-1 md:order-3" id="bundle">
+          <p class="pl-no">03</p>
+          <div class="pl-body">
+            <p class="pl-tab font-mono">Best value</p>
+            <h3 class="pl-name">All {st.paid} paid servers</h3>
+            <p class="mt-1">One key turns on Pro everywhere, for life. It covers chains like time to invoice and quote to invoice.</p>
+            <details class="pl-more mt-3"><summary>What's included</summary><ul>{all.features.map((f) => <li>{f}</li>)}</ul></details>
+          </div>
+          <p class="pl-price tnum">${bundle}</p>
+          <div class="pl-act"><a href={bundleHref} rel="nofollow" class="btn btn-primary w-full">Buy the bundle, ${bundle}</a></div>
+        </li>
+      </ol>
+      <div class="pl-foot grid gap-1 border-t-2 border-fg px-5 py-4 font-mono text-[.85rem] sm:px-7">
+        <p class="flex justify-between gap-4"><span>2 single servers</span><span class="tnum">${single * 2}.00</span></p>
+        <p class="flex justify-between gap-4 font-semibold"><span>All {st.paid} paid servers</span><span class="tnum">${bundle}.00</span></p>
+      </div>
     </div>
+    <p class="mt-4 text-[.95rem]">Refunds within 14 days. Email <span class="select-all font-mono">support@zovo.one</span> with your checkout details. <a class="text-faint underline underline-offset-2 text-[.82rem] font-mono" href={refundSrc} rel="noopener" target="_blank">Source: billing/src/index.js line 782</a></p>
   </section>
+
   {p.proFeatures.length > 0 && (
-    <section class="wrap py-10">
-      <h2 class="text-2xl font-semibold sm:text-3xl">What Pro adds</h2>
-      <ul class="mt-6 grid gap-3 md:grid-cols-2">
-        {p.proFeatures.map((f) => <li class="card p-4"><p>{f.text}</p>{f.source && <p class="mt-1 break-words font-mono text-[.72rem] text-faint" title="Source of this limit">{f.source}</p>}</li>)}
+    <section class="wrap py-10" aria-labelledby="pro-h">
+      <h2 id="pro-h" class="h2 font-display">What Pro removes, server by server</h2>
+      <p class="muted mt-2 max-w-2xl">Each limit below is read from the server code. The file and line sit under each one.</p>
+      <ul class="pro-list mt-6 grid md:grid-cols-2">
+        {p.proFeatures.map((f) => <li class="py-3"><p>{f.text}</p>{f.source && <p class="mt-1 break-words font-mono text-[.72rem] text-faint">{srcText(f.source)}</p>}</li>)}
       </ul>
     </section>
   )}
-  {p.trust.length > 0 && (
-    <section class="wrap py-10">
-      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {p.trust.map((t) => <li class="card p-5 text-[.95rem]">{t.text}</li>)}
-      </ul>
-    </section>
-  )}
-  <section class="wrap py-10">
-    <h2 class="text-2xl font-semibold sm:text-3xl">Payment questions</h2>
-    <div class="mt-6 max-w-3xl"><Faq items={faq} /></div>
-    <p class="muted mt-6">{end.copy}</p>
+
+  <section class="wrap py-10" aria-labelledby="faq-h">
+    <div class="grid gap-8 lg:grid-cols-[1fr_1.6fr]">
+      <div>
+        <h2 id="faq-h" class="h2 font-display">Paying and keys</h2>
+        {p.trust.length > 0 && (
+          <ul class="mt-6 grid gap-2 text-[.95rem]">
+            {p.trust.slice(0, 6).map((t) => <li class="trust-li pl-5">{t.text}</li>)}
+          </ul>
+        )}
+      </div>
+      <div><Faq items={faq} /></div>
+    </div>
   </section>
-  <section class="wrap py-10">
-    <h2 class="text-2xl font-semibold sm:text-3xl">Buy one server</h2>
-    <p class="muted mt-2">${brand.pricing.serverUsd} once each. Two singles cost ${brand.pricing.serverUsd * 2}; the bundle with all {st.paid} costs ${bundlePrice()}.</p>
-    <ul class="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+
+  <section class="wrap py-10" aria-labelledby="list-h">
+    <h2 id="list-h" class="h2 font-display">Every paid server, ${single} once</h2>
+    <p class="muted mt-2">Click a name for its Free and Pro columns. Click the price to buy.</p>
+    <ul class="srv-list mt-6 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
       {paidServers.map((s) => (
-        <li class="card flex items-center justify-between gap-3 px-4 py-3">
+        <li class="flex items-baseline justify-between gap-3 py-2">
           <a href={`/servers/${s.id}/`} class="font-medium hover:underline">{s.name}</a>
-          <a href={`/servers/${s.id}/#pricing`} class="tnum text-[.92rem] font-semibold text-accent hover:underline" aria-label={`${s.name} Pro, $${s.priceUsd}, Free vs Pro`}>${s.priceUsd}</a>
+          <span class="leader" aria-hidden="true"></span>
+          <a href={buyUrl(s.buyBase || `${brand.backend.origin}/buy/${s.id}`, 'pricing', 'list')} rel="nofollow" class="tnum font-mono text-[.92rem] font-semibold text-accent hover:underline" aria-label={`Buy ${s.name} Pro for $${single}`}>${single}</a>
         </li>
       ))}
     </ul>
-    <p class="muted mt-6 text-[.92rem]">Free, no paid tier: {freeServers.map((s, i) => <>{i > 0 && ', '}<a class="link" href={`/servers/${s.id}/`}>{s.name}</a></>)}.</p>
+    <p class="muted mt-6 text-[.92rem]">Free, no paid tier: {freeServers.map((s, i) => <>{i > 0 && ', '}<a class="underline underline-offset-2" href={`/servers/${s.id}/`}>{s.name}</a></>)}.</p>
   </section>
+
+  <section class="wrap py-4">
+    <TelegramCta text="Not sure which server you need? Ask in the community chat." />
+  </section>
+  <SupportBand page="pricing" />
+  <section class="wrap pb-12 pt-2"><p class="muted text-[.95rem]">Need a server for your own system? <a href="/services/" class="text-accent underline underline-offset-4">See custom work</a>.</p></section>
 </Layout>
+
+<script>
+  const sel = document.querySelector<HTMLSelectElement>('[data-picker]');
+  const buy = document.querySelector<HTMLAnchorElement>('[data-pick-buy]');
+  const pro = document.querySelector<HTMLElement>('[data-pick-pro]');
+  const sync = () => {
+    const o = sel?.selectedOptions[0];
+    if (!o || !buy) return;
+    buy.href = o.dataset.url || buy.href;
+    buy.textContent = `Buy ${o.dataset.name} for $${buy.textContent?.match(/\$(\d+)/)?.[1] ?? '19'}`;
+    if (pro) pro.textContent = o.dataset.pro ? `With Pro: ${o.dataset.pro}` : '';
+  };
+  sel?.addEventListener('change', sync);
+  sync();
+</script>
+
+<style>
+  .pl-sheet { border-radius: 3px; box-shadow: var(--shadow-lift); }
+  .pl-line { display: grid; grid-template-columns: 1fr; gap: .25rem 1rem; padding: 1.4rem 1.25rem; border-bottom: 1px solid var(--border); }
+  .pl-line:last-child { border-bottom: 0; }
+  @media (max-width: 767px) { .pl-bundle { border-bottom: 1px solid var(--border-strong); } .pl-line:last-child { border-bottom: 0; } }
+  .pl-no { display: none; font-family: var(--font-mono); font-size: .8rem; color: var(--faint); padding-top: .35rem; }
+  .pl-name { font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; line-height: 1.15; }
+  .pl-price { font-family: var(--font-mono); font-size: 2rem; font-weight: 600; line-height: 1; margin-top: .75rem; }
+  .pl-act { margin-top: .75rem; }
+  @media (min-width: 768px) {
+    .pl-line { grid-template-columns: 3rem 1fr 7rem 15rem; align-items: start; padding: 1.6rem 1.75rem; }
+    .pl-no { display: block; }
+    .pl-price, .pl-act { margin-top: 0; }
+    .pl-price { text-align: right; padding-top: .1rem; }
+  }
+  .pl-bundle { background: var(--manila); color: var(--manila-ink); }
+  .pl-bundle .pl-no, .pl-bundle .pl-more summary { color: var(--manila-ink); }
+  .pl-tab { display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; padding: .15rem .5rem; margin-bottom: .45rem; border: 1px solid currentColor; border-radius: 2px; }
+  .pl-more summary { cursor: pointer; font-size: .88rem; color: var(--accent); width: fit-content; }
+  .pl-more ul { margin-top: .5rem; display: grid; gap: .35rem; font-size: .92rem; padding-left: 1rem; list-style: square; }
+  .pick { font: inherit; font-size: .97rem; padding: .6rem .75rem; border: 1px solid var(--border-strong); border-radius: 3px; background: var(--surface-solid); color: var(--text); }
+  .pl-foot { background: var(--surface); }
+  .pro-list { border-top: 1px solid var(--border-strong); column-gap: 2rem; }
+  .pro-list li { border-bottom: 1px solid var(--rule); }
+  .trust-li { position: relative; }
+  .trust-li::before { content: ''; position: absolute; left: 0; top: .62em; width: .55rem; height: 1px; background: var(--text); }
+  .srv-list { border-top: 1px solid var(--border-strong); }
+  .srv-list li { border-bottom: 1px solid var(--rule); }
+  .leader { flex: 1; border-bottom: 1px dotted var(--border-strong); transform: translateY(-.3em); min-width: 1rem; }
+</style>

@@ -1,7 +1,8 @@
 ---
+// Footer (d-identity, BRANDKIT.md). The end of the ledger: a perforated tear edge, columns like a form, a mono serial line.
 import { brand } from '../config/brand';
 import Wordmark from './Wordmark.astro';
-import { CATEGORIES } from '../data/categories';
+import SupportBand from './SupportBand.astro';
 import { pagesOfType } from '../data/pages';
 import { upsell } from '../data/content';
 import { bundleUrl, buyUrl } from '../data/servers';
@@ -9,43 +10,66 @@ const audiences = pagesOfType('audience');
 const foot = upsell('all', 'footer', { copy: `All paid servers, one key, $${brand.pricing.bundleUsd} once.`, cta_url: buyUrl(bundleUrl(), 'footer', 'bundle') });
 const year = new Date().getFullYear();
 ---
-<footer class="relative mt-24 border-t border-line" style="background: var(--bg-2)">
-  <div class="wrap grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+<footer class="site-foot perf-top relative mt-24">
+  <div class="wrap grid gap-10 pb-12 pt-16 md:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
     <div>
-      <a href="/" class="inline-flex" aria-label={`${brand.name} home`}><Wordmark size={26} /></a>
+      <a href="/" class="inline-flex" aria-label={`${brand.name} home`}><Wordmark size={30} /></a>
       <p class="muted mt-4 max-w-xs text-[.95rem]">{brand.tagline} Open-source MCP servers for Claude, Cursor and any MCP client.</p>
       <p class="mt-5 text-[.93rem]"><a href="/pricing/" class="link">{foot.copy}</a></p>
     </div>
     <div>
-      <h2 class="mb-3 text-sm font-semibold">For you</h2>
-      <ul class="grid gap-2 text-[.93rem]">
-        {audiences.map((a) => <li><a class="muted hover:text-fg" href={a.path}>{a.h1}</a></li>)}
+      <h2 class="foot-h">For you</h2>
+      <ul class="foot-list">
+        {audiences.map((a) => <li><a href={a.path}>{a.h1}</a></li>)}
       </ul>
     </div>
     <div>
-      <h2 class="mb-3 text-sm font-semibold">Product</h2>
-      <ul class="grid gap-2 text-[.93rem]">
-        <li><a class="muted hover:text-fg" href="/servers/">All servers</a></li>
-        <li><a class="muted hover:text-fg" href="/use-cases/">Use cases</a></li>
-        <li><a class="muted hover:text-fg" href="/connect/">Connect</a></li>
-        <li><a class="muted hover:text-fg" href="/categories/invoicing/">Categories</a></li>
-        <li><a class="muted hover:text-fg" href="/compare/">Compare</a></li>
-        <li><a class="muted hover:text-fg" href="/pricing/">Pricing</a></li>
+      <h2 class="foot-h">Product</h2>
+      <ul class="foot-list">
+        <li><a href="/servers/">All servers</a></li>
+        <li><a href="/use-cases/">Use cases</a></li>
+        <li><a href="/connect/">Connect</a></li>
+        <li><a href="/categories/invoicing/">Categories</a></li>
+        <li><a href="/compare/">Compare</a></li>
+        <li><a href="/pricing/">Pricing</a></li>
       </ul>
     </div>
     <div>
-      <h2 class="mb-3 text-sm font-semibold">Build</h2>
-      <ul class="grid gap-2 text-[.93rem]">
-        <li><a class="muted hover:text-fg" href="/developers/">Developers</a></li>
-        <li><a class="muted hover:text-fg" href={brand.links.github} rel="noopener">GitHub</a></li>
-        <li><a class="muted hover:text-fg" href={brand.links.registry} rel="noopener">MCP Registry</a></li>
-        <li><a class="muted hover:text-fg" href="/llms.txt">llms.txt</a></li>
-        <li><a class="muted hover:text-fg" href="/about/">About</a></li>
+      <h2 class="foot-h">Build</h2>
+      <ul class="foot-list">
+        <li><a href="/developers/">Developers</a></li>
+        <li><a href={brand.links.github} rel="noopener">Source on GitHub</a></li>
+        <li><a href={brand.links.registry} rel="noopener">MCP Registry</a></li>
+        <li><a href="/llms.txt">llms.txt</a></li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="foot-h">People</h2>
+      <ul class="foot-list">
+        <li><a href={brand.links.telegram} rel="noopener" target="_blank">Join Zovo Chat on Telegram</a></li>
+        <li><a href={brand.links.githubProfile} rel="noopener" target="_blank">Maintainer on GitHub</a></li>
+        <li><a href="/services/">Hire the maintainer</a></li>
+        <li><a href={brand.links.buyMeACoffee} rel="noopener nofollow" target="_blank">Buy Me a Coffee</a></li>
+        <li><a href={brand.links.paypal} rel="noopener nofollow" target="_blank">PayPal</a></li>
       </ul>
     </div>
   </div>
-  <div class="wrap flex flex-wrap justify-between gap-3 border-t border-line py-6 text-sm text-faint">
-    <span>&copy; {year} {brand.name}</span>
-    <span>Case examples are scenarios, labeled "Example".</span>
+  <div class="wrap border-t border-dashed border-line-strong py-5">
+    <SupportBand compact />
+  </div>
+  <div class="foot-base">
+    <div class="wrap flex flex-wrap justify-between gap-3 py-5">
+      <span>&copy; {year} {brand.name} &middot; {brand.domain}</span>
+      <span>Case examples are scenarios, labeled "Example".</span>
+    </div>
   </div>
 </footer>
+<style>
+  .site-foot { background: var(--bg-2); border-top: 1px solid var(--border); }
+  .foot-h { margin-bottom: .8rem; font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+  .foot-list { display: grid; gap: .5rem; font-size: .93rem; }
+  .foot-list a { color: var(--muted); }
+  .foot-list a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+  .foot-base { border-top: 1px solid var(--border-strong); font-family: var(--font-mono); font-size: .76rem; color: var(--faint); letter-spacing: .02em; }
+</style>

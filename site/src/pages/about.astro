@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import { brand } from '../config/brand';
 import { stats } from '../data/servers';
+import SupportBand from '../components/SupportBand.astro';
+import TelegramCta from '../components/TelegramCta.astro';
 const st = stats();
 ---
 <Layout title="About" description={`${brand.name}: ${brand.tagline} Open-source MCP servers for back-office work.`}>
@@ -16,6 +18,9 @@ const st = stats();
         <p>The free tier needs no key. Pro is a one-time payment. The source is on <a href={brand.links.github} rel="noopener">GitHub</a>.</p>
       </div>
       <div class="mt-10 flex flex-wrap gap-3"><a href="/servers/" class="btn btn-primary">Browse servers</a><a href="/developers/" class="btn">For developers</a></div>
+      <p class="muted mt-8 text-[.97rem]">Want a server for your own API, spreadsheet or docs? The maintainer takes custom work. <a href="/services/" class="text-accent underline underline-offset-4">See custom work</a>.</p>
+      <div class="mt-8"><TelegramCta /></div>
     </div>
   </section>
+  <SupportBand page="about" />
 </Layout>

@@ -5,6 +5,7 @@
 import type { Server } from '../../data/servers';
 
 export type Tone = 'ok' | 'warn';
+export type StampState = 'PAID' | 'SENT' | 'READY' | 'RECEIVED' | 'OVERDUE';
 export interface DocPreview {
   kind: 'doc';
   case: number;
@@ -16,7 +17,7 @@ export interface DocPreview {
   cols: string[];
   rows: string[][];
   totals: [string, string][]; // last one is the grand total
-  stamp?: { text: string; tone: Tone };
+  stamp?: { text: StampState; sub?: string };
   note?: string;
 }
 export interface TablePreview {
@@ -28,7 +29,7 @@ export interface TablePreview {
   cols: string[];
   rows: string[][];
   foot?: [string, string];
-  stamp?: { text: string; tone: Tone };
+  stamp?: { text: StampState; sub?: string };
   note?: string;
 }
 export type Preview = DocPreview | TablePreview;
@@ -41,7 +42,7 @@ export const PREVIEWS: Record<string, Preview> = {
     cols: ['Item', 'Qty', 'Price', 'EUR'],
     rows: [['API work', '12 h', '90.00', '1,080.00'], ['Setup fee', '1', '300.00', '300.00']],
     totals: [['Subtotal', '1,380.00'], ['VAT 23%', '317.40'], ['Total EUR', '1,697.40']],
-    stamp: { text: 'Ready to send', tone: 'ok' },
+    stamp: { text: 'READY', sub: 'INV-2026-0001' },
   },
   // 6,500 + 400 = 6,900; VAT 23% = 1,587.00; gross 8,487.00
   quotes: {
@@ -50,7 +51,7 @@ export const PREVIEWS: Record<string, Preview> = {
     cols: ['Item', 'Qty', 'Price', 'PLN'],
     rows: [['5-page website', '1', '6,500.00', '6,500.00'], ['Hosting setup', '1', '400.00', '400.00']],
     totals: [['Net', '6,900.00'], ['VAT 23%', '1,587.00'], ['Gross PLN', '8,487.00']],
-    stamp: { text: 'Sent', tone: 'ok' },
+    stamp: { text: 'SENT' },
     note: 'Free tier gives email-ready text. The A4 PDF of a quote is Pro.',
   },
   // 2 x 24 = 48.00; VAT 22% = 10.56; total 58.56
@@ -60,7 +61,7 @@ export const PREVIEWS: Record<string, Preview> = {
     cols: ['Item', 'Qty', 'Price', 'EUR'],
     rows: [['Mug, returned', '2', '24.00', '48.00']],
     totals: [['Net', '48.00'], ['VAT 22%', '10.56'], ['Credit EUR', '58.56']],
-    stamp: { text: 'Final', tone: 'ok' },
+    stamp: { text: 'READY' },
   },
   // 6,200 + 0 + 12,250 = 18,450
   'statement-of-account': {
@@ -68,7 +69,7 @@ export const PREVIEWS: Record<string, Preview> = {
     cols: ['Bucket', 'PLN'],
     rows: [['0-30 days', '6,200.00'], ['31-60 days', '0.00'], ['Over 60 days', '12,250.00']],
     foot: ['Outstanding', '18,450.00'],
-    stamp: { text: 'Overdue', tone: 'warn' },
+    stamp: { text: 'OVERDUE' },
   },
   // 1.5 h x 95 = 142.50; 2 h 40 min x 95 = 253.33; total 4 h 10 min, 395.83
   'time-tracker': {
@@ -96,7 +97,7 @@ export const PREVIEWS: Record<string, Preview> = {
     cols: ['Step', 'Tool'],
     rows: [['Read pages and size', 'pdf_info'], ['Stamp PAID on the copy', 'pdf_stamp']],
     totals: [['Saved as', 'FV-2026-031-paid.pdf']],
-    stamp: { text: 'Paid', tone: 'ok' },
+    stamp: { text: 'PAID' },
   },
   // 49 + 89 + 120 = 258 a month
   'bank-statement': {
@@ -137,7 +138,7 @@ export const PREVIEWS: Record<string, Preview> = {
     cols: ['Item', 'GBP'],
     rows: [['INV-0388', '2,400.00'], ['Late fee', '2% a month']],
     totals: [['Send date', 'on record']],
-    stamp: { text: 'Overdue', tone: 'warn' },
+    stamp: { text: 'OVERDUE' },
   },
   docx: {
     kind: 'doc', case: 0, file: 'DOCX', doc: 'Proposal', number: 'Riverbend Clinics', to: ['Project', 'Dashboard rebuild'],
