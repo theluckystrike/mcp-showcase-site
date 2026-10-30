@@ -1,0 +1,36 @@
+name: build
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', 'data/**', '.github/workflows/build.yml']
+  workflow_dispatch:
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        working-directory: site
+        run: npm install --no-audit --no-fund
+      - name: Build
+        working-directory: site
+        run: npm run build 2>&1 | tee ../build.log
+      - name: Stats
+        run: |
+          echo "pages=$(find site/dist -name '*.html' | wc -l)"
+          du -sh site/dist
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dist
+          path: |
+            site/dist
+            build.log
+          retention-days: 7

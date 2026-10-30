@@ -1,0 +1,216 @@
+{
+ "cups-to-grams": {
+  "hosted_url": "https://cups-to-grams-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "convert_ingredient",
+    "description": "Converts an amount between volume and weight for a named ingredient (cup, tbsp, tsp, fl oz, mL, L to g, oz, lb and back). Supports US, metric, imperial, US legal and Japanese cups, US, metric and Australian spoons, sticks of butter. Says which cup it used and cites the density source."
+   },
+   {
+    "name": "search_ingredients",
+    "description": "Fuzzy search over 271 ingredients. Returns canonical names, grams per US cup and per tablespoon, and the source (USDA FDC id or King Arthur chart)."
+   },
+   {
+    "name": "scale_recipe",
+    "description": "Scales ingredient lines by a factor or from one servings count to another. Parses mixed numbers and fraction characters. Optionally gives grams for every line."
+   },
+   {
+    "name": "convert_oven_temperature",
+    "description": "Fahrenheit, Celsius and gas mark (1/4 to 10), with a 20 C fan oven adjustment."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/cups-to-grams-mcp/README.md"
+ },
+ "dscr-loan-calculator": {
+  "hosted_url": "https://dscr-loan-calculator-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "calculate_dscr",
+    "description": "DSCR = qualifying rent / PITIA. Exact P&I or interest-only payment, tax, insurance, HOA and other housing costs, and the lender band (1.25+, 1.00-1.24, 0.75-0.99, under 0.75)."
+   },
+   {
+    "name": "max_loan_for_target_dscr",
+    "description": "Largest whole-dollar loan that keeps DSCR at or above a target. Optional purchase price and LTV cap give the minimum down payment and which limit binds."
+   },
+   {
+    "name": "rent_needed_for_target_dscr",
+    "description": "Smallest monthly rent that reaches a target DSCR, plus the rent for 0.75, 1.00 and 1.25."
+   },
+   {
+    "name": "compare_scenarios",
+    "description": "Up to 5 rate, down payment, term and interest-only scenarios side by side, with DSCR, band, rent minus PITIA and total interest."
+   },
+   {
+    "name": "amortization_summary",
+    "description": "Monthly payment, number of payments, final payment, total interest, total paid and balance after N years. Supports an interest-only period first."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/dscr-loan-calculator-mcp/README.md"
+ },
+ "gold-price-per-gram": {
+  "hosted_url": "https://gold-price-per-gram-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "get_gold_price_per_gram",
+    "description": "Gold price per gram, troy ounce, tola and kilogram for 24K, 22K, 21K, 18K, 14K, 10K and 9K in any currency, with the spot time stamp and FX date."
+   },
+   {
+    "name": "get_metal_prices",
+    "description": "Spot price of gold, silver, platinum and palladium per troy ounce, gram and kilogram in any currency. A metal whose feed is down is reported, not fatal."
+   },
+   {
+    "name": "calculate_jewelry_value",
+    "description": "Melt value of a gold item from weight, unit and karat, with an optional dealer spread percent. States that retail and buyback prices differ from melt value."
+   },
+   {
+    "name": "convert_gold_units",
+    "description": "Exact conversion between gram, kilogram, troy ounce, pennyweight, grain, avoirdupois ounce, tola, Thai baht, Vietnamese chi and luong, Hong Kong tael, Taiwan tael and China liang, with the definition and source of each unit."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/gold-price-per-gram-mcp/README.md"
+ },
+ "lake-level": {
+  "hosted_url": "https://lake-level-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "search_lakes",
+    "description": "Covered lakes by name, river, operator or state, with slug, full pool and gauge."
+   },
+   {
+    "name": "get_lake_level",
+    "description": "Current elevation, measurement time, change over 24 hours, 7 days and 30 days, feet below full pool, the operator seasonal target where one is published, percent full where the agency publishes storage, gauge id and data URL."
+   },
+   {
+    "name": "get_lake_history",
+    "description": "Daily or weekly elevation series for up to 365 days, with first, last, low, high and mean."
+   },
+   {
+    "name": "compare_lakes",
+    "description": "2 to 10 lakes side by side, ranked by feet below full pool. A lake whose gauge is down is reported, not fatal."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/lake-level-mcp/README.md"
+ },
+ "minimum-wage": {
+  "hosted_url": "https://minimum-wage-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "get_minimum_wage",
+    "description": "Standard hourly rate, tipped cash wage, tip credit and effective date for one state (or DC) on a date in 2026-2027. Applies the $7.25 federal floor where a state has no law or a lower rate, and says so."
+   },
+   {
+    "name": "list_upcoming_increases",
+    "description": "Every scheduled state change from today (or a given date) through 2027-12-31, sorted by date, with old rate, new rate and change. Inflation-indexed 2027 rates not yet published are listed as `announced: false`."
+   },
+   {
+    "name": "compare_states",
+    "description": "2 to 10 states side by side on one date, highest first, with full-time annual pay and the gap between highest and lowest."
+   },
+   {
+    "name": "annual_income_at_minimum_wage",
+    "description": "Gross weekly, monthly and annual pay at a state's minimum wage for your hours per week and weeks per year."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/minimum-wage-mcp/README.md"
+ },
+ "no-tax-on-overtime": {
+  "hosted_url": "https://no-tax-on-overtime-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "calculate_overtime_deduction",
+    "description": "Deduction for qualified overtime after the $12,500 cap ($25,000 joint) and the MAGI phase-out. Takes the W-2 box 12 code TT amount, or hourly rate + overtime hours + multiplier, or total overtime pay, and keeps only the FLSA half-time premium."
+   },
+   {
+    "name": "calculate_tips_deduction",
+    "description": "Deduction for qualified tips after the $25,000 per-return cap and the MAGI phase-out. Limits self-employed tips to net income."
+   },
+   {
+    "name": "calculate_senior_deduction",
+    "description": "Enhanced $6,000 deduction per person age 65 or older, reduced by 6% of MAGI over $75,000 ($150,000 joint). Accepts birth dates."
+   },
+   {
+    "name": "estimate_tax_savings",
+    "description": "Combines the three deductions and runs taxable income through the IRS bracket tables for the year to estimate federal income tax saved."
+   },
+   {
+    "name": "explain_eligibility",
+    "description": "Who qualifies, the excluded filing status, the SSN rule, FLSA exemptions, the W-2 and 1099 boxes, Schedule 1-A lines, and the years covered."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/no-tax-on-overtime-mcp/README.md"
+ },
+ "paycheck-calculator": {
+  "hosted_url": "https://paycheck-calculator-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "calculate_take_home_pay",
+    "description": "Net pay per period and per year from annual or per-period gross pay, pay frequency, filing status, state and tax year. Returns federal income tax, Social Security (with the wage base), Medicare plus the 0.9% Additional Medicare tax, state income tax and the method used for it. Handles pre-tax 401(k) and payroll HSA contributions."
+   },
+   {
+    "name": "compare_states_take_home",
+    "description": "The same pay in 2 to 10 states, ranked by take-home pay, with each state's tax and method."
+   },
+   {
+    "name": "salary_to_hourly",
+    "description": "Annual salary to hourly, weekly, biweekly, semimonthly and monthly gross pay."
+   },
+   {
+    "name": "hourly_to_salary",
+    "description": "Hourly wage, with optional overtime hours and multiplier, to weekly, monthly and annual gross pay."
+   },
+   {
+    "name": "get_federal_tax_brackets",
+    "description": "Exact federal brackets and standard deduction for 2025 or 2026 and a filing status, plus the Social Security wage base and Medicare thresholds."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/paycheck-calculator-mcp/README.md"
+ },
+ "uk-income-tax-salary": {
+  "hosted_url": "https://uk-income-tax-salary-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "calculate_uk_take_home",
+    "description": "Net pay a year, a month and a week. Income tax by band (England, Wales and NI, or the six Scottish bands), employee Class 1 NI, student loan (Plan 1, 2, 4, 5, Postgraduate), pension by salary sacrifice or relief at source, tax codes (1257L, S1257L, K475, BR, D0, SD1, 0T, NT) and the Personal Allowance taper above \u00a3100,000."
+   },
+   {
+    "name": "get_uk_tax_bands",
+    "description": "Official bands for a tax year and region, as taxable-income bands and as gross-salary bands. Also the allowance taper, NI thresholds and rates by category letter, and student loan thresholds."
+   },
+   {
+    "name": "compare_salaries",
+    "description": "Up to 5 salaries side by side: net pay, effective and marginal rates, and how much of each rise you keep."
+   },
+   {
+    "name": "marginal_rate_at_income",
+    "description": "The true marginal rate on the next pounds of pay: income tax, NI and student loan together, including the \u00a3100,000 to \u00a3125,140 taper."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/uk-income-tax-salary-mcp/README.md"
+ },
+ "us-federal-holidays-business-days": {
+  "hosted_url": "https://us-federal-holidays-business-days-mcp.lipmichal.workers.dev/mcp",
+  "tools": [
+   {
+    "name": "list_federal_holidays",
+    "description": "All holidays for a year 1971-2100. Legal date, OPM observed date, Federal Reserve closure date, and Inauguration Day flagged as DC-area only."
+   },
+   {
+    "name": "is_business_day",
+    "description": "Says if a date is a business day on the `federal` (OPM) or `fed_banking` (Federal Reserve) calendar. Names the holiday and gives the previous and next business day."
+   },
+   {
+    "name": "add_business_days",
+    "description": "Adds or subtracts N business days. Lists every holiday it skipped."
+   },
+   {
+    "name": "count_business_days",
+    "description": "Counts business days between two dates. Start and end are included by default, like Excel NETWORKDAYS."
+   },
+   {
+    "name": "invoice_due_date",
+    "description": "Due date from an issue date and net terms (Net 30 = 30 calendar days). Rolls a weekend or holiday due date with `following`, `preceding` or `modified_following`."
+   }
+  ],
+  "source": "~/mcp-servers/satellites/us-federal-holidays-business-days-mcp/README.md"
+ }
+}

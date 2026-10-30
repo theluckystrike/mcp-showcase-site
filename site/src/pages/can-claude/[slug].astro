@@ -1,0 +1,13 @@
+---
+// can-claude job pages from the t-angle sitemap (page_type "answer"). Template: components/JobPage.astro.
+import JobPage from '../../components/JobPage.astro';
+import { pagesOfType, slugOf, type PageMeta } from '../../data/pages';
+
+export function getStaticPaths() {
+  return pagesOfType('answer')
+    .filter((p) => p.path.startsWith('/can-claude/'))
+    .map((p) => ({ params: { slug: slugOf(p.path) }, props: { page: p } }));
+}
+const { page } = Astro.props as { page: PageMeta };
+---
+<JobPage page={page} kind="answer" />

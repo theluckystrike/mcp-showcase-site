@@ -1,0 +1,102 @@
+---
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
+import '../styles/global.css';
+import { brand } from '../config/brand';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Extra JSON-LD objects for this page. Organization + WebSite are always added. */
+  jsonLd?: Record<string, unknown>[];
+  ogType?: 'website' | 'product' | 'article';
+  noindex?: boolean;
+  /** Breadcrumb trail (without Home). Adds BreadcrumbList JSON-LD (seo.json: all pages). */
+  crumbs?: { name: string; path: string }[];
+}
+const { title, description = brand.description, jsonLd = [], ogType = 'website', noindex = false, crumbs = [] } = Astro.props;
+const site = Astro.site ?? new URL(`https://${brand.domain}`);
+const canonical = new URL(Astro.url.pathname, site).href;
+// QA (t-qa): titles <= 60 chars. Add the brand suffix only when it fits. Drop a sitemap suffix that makes the title too long.
+const suffix = ` | ${brand.name}`;
+const baseTitle = title.endsWith(suffix) && title.length > 60 ? title.slice(0, -suffix.length) : title;
+const fullTitle = baseTitle.includes(brand.name) || (baseTitle + suffix).length > 60 ? baseTitle : baseTitle + suffix;
+// QA (t-qa): meta description 120-160 chars. Pad short ones with true, generic sentences. Cut long ones at a sentence end.
+const FILLERS = [' Works in Claude and Cursor.', ' Open source, with a free tier.', ` ${brand.tagline}`];
+function fitDescription(d: string): string {
+  let out = String(d ?? '').replace(/\s+/g, ' ').trim();
+  if (out && !/[.!?]$/.test(out)) out += '.';
+  if (out.length > 160) {
+    const end = out.lastIndexOf('. ', 159);
+    out = end >= 90 ? out.slice(0, end + 1) : out.slice(0, out.lastIndexOf(' ', 158)).replace(/[,;:]$/, '') + '.';
+  }
+  for (const f of FILLERS) {
+    if (out.length >= 120) break;
+    if (!out.includes(f.trim()) && (out + f).length <= 160) out += f;
+  }
+  return out;
+}
+const metaDescription = fitDescription(description);
+const ogImage = new URL('/og.png', site).href;
+const breadcrumb = crumbs.length
+  ? [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ name: 'Home', path: '/' }, ...crumbs].map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(c.path, site).href })) }]
+  : [];
+const ld = [
+  { '@context': 'https://schema.org', '@type': 'Organization', name: brand.name, url: site.href, logo: new URL('/favicon.svg', site).href, sameAs: [brand.links.github] },
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: brand.name, url: site.href },
+  ...breadcrumb,
+  ...jsonLd,
+];
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+    <meta name="theme-color" content="#07070b" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={brand.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    <script is:inline>
+      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+    </script>
+    {ld.map((o) => <script type="application/ld+json" set:html={JSON.stringify(o)} />)}
+  </head>
+  <body>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 btn btn-sm">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script is:inline>
+      // Copy buttons: <button data-copy="text"> or data-copy-target="#id". One delegated handler, no framework.
+      document.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-copy],[data-copy-target]');
+        if (!b) return;
+        var t = b.getAttribute('data-copy');
+        if (t == null) { var el = document.querySelector(b.getAttribute('data-copy-target')); t = el ? el.textContent : ''; }
+        var done = function () { var o = b.textContent; b.textContent = 'Copied'; setTimeout(function () { b.textContent = o; }, 1400); };
+        if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, function () {}); 
+      });
+    </script>
+  </body>
+</html>

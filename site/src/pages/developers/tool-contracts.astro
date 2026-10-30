@@ -1,0 +1,40 @@
+---
+// /developers/tool-contracts/: conventions every server follows, then every server with its tool count. Data: developers.json + catalog.
+import Layout from '../../layouts/Layout.astro';
+import { brand } from '../../config/brand';
+import { getDevelopers } from '../../data/content';
+import { getServers, stats } from '../../data/servers';
+import { getCategory } from '../../data/categories';
+import { seo } from '../../data/pages';
+const d = getDevelopers();
+const st = stats();
+const servers = getServers();
+const meta = seo('/developers/tool-contracts/', { title: `MCP tool contracts: conventions and every tool | ${brand.name}`, description: `${st.tools} documented tools across ${st.servers} servers. Result shape, errors, money units, free-tier results.` });
+---
+<Layout title={meta.title} description={meta.description} ogType="article" crumbs={[{ name: 'Developers', path: '/developers/' }, { name: 'Tool contracts', path: '/developers/tool-contracts/' }]}>
+  <section class="wrap pb-8 pt-14 sm:pt-20">
+    <span class="eyebrow">Developers</span>
+    <h1 class="display mt-5 !text-[clamp(2.2rem,5.5vw,4rem)]">{meta.h1 || 'Tool contracts'}</h1>
+    <p class="lead mt-5 max-w-2xl">{st.tools} documented tools across {st.servers} servers (license tools not counted). Each server has a generated SPEC.md in <a class="link" href={brand.links.github} rel="noopener">the repository</a>.</p>
+  </section>
+  {d.conventions.length > 0 && (
+    <section class="wrap py-6">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Conventions</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">{d.conventions.map((c) => <div class="card p-5"><h3 class="font-semibold">{c.title}</h3><p class="muted mt-2 text-[.95rem]">{c.text}</p></div>)}</div>
+    </section>
+  )}
+  <section class="wrap py-10">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Every server</h2>
+    <div class="card mt-6 overflow-x-auto">
+      <table class="table min-w-[40rem]">
+        <thead><tr><th scope="col">Server</th><th scope="col">Category</th><th scope="col">Tools</th><th scope="col">npm</th></tr></thead>
+        <tbody>{servers.map((s) => (
+          <tr><td><a class="font-medium hover:underline" href={`/servers/${s.id}/#install`}>{s.name}</a><p class="muted line-clamp-1 text-[.82rem] font-mono">{s.tools.filter((t) => !t.name.startsWith('license_')).slice(0, 4).map((t) => t.name).join(', ')}</p></td>
+            <td class="whitespace-nowrap text-[.88rem]">{getCategory(s.category).short}</td>
+            <td class="font-mono">{s.tools.filter((t) => !t.name.startsWith('license_')).length}</td>
+            <td class="font-mono text-[.8rem]">{s.npm || 'unknown'}</td></tr>
+        ))}</tbody>
+      </table>
+    </div>
+  </section>
+</Layout>

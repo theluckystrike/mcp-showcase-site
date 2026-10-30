@@ -1,0 +1,1110 @@
+{
+ "servers": [
+  {
+   "id": "cups-to-grams",
+   "name": "Cups to Grams",
+   "category": "calculators",
+   "tagline": "Cups to grams by ingredient, from measured weights, not guesses.",
+   "plain": "Ask how many grams are in a cup of flour, sugar or honey and get the measured weight from USDA and King Arthur tables. It knows which cup a recipe uses (US, metric, imperial, Japanese) and can scale a whole recipe.",
+   "for_who": [
+    "Home bakers",
+    "Recipe writers",
+    "Food bloggers",
+    "Cooking teachers"
+   ],
+   "outcome_chips": [
+    "Grams per cup",
+    "Scaled recipe",
+    "Oven temperature",
+    "Source per ingredient"
+   ],
+   "cases": [
+    {
+     "title": "Convert a US recipe for a metric kitchen",
+     "persona": "Home baker in Krakow, Poland",
+     "prompt": "Convert this US cookie recipe to grams: 2 1/4 cups all-purpose flour, 1 cup butter, 3/4 cup granulated sugar. Oven is 375 F, my oven is fan.",
+     "steps": [
+      {
+       "tool": "scale_recipe",
+       "does": "Parses each line and gives grams per ingredient"
+      },
+      {
+       "tool": "convert_oven_temperature",
+       "does": "Turns 375 F into Celsius with the 20 C fan adjustment"
+      }
+     ],
+     "result": "Flour 270 g (120 g per cup), butter 227 g, sugar 150 g, and the fan-oven temperature in Celsius. Each line names its source.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: weighing out and looking up 3-5 ingredient densities by hand takes about 10 minutes"
+    },
+    {
+     "title": "Check which cup an Australian recipe means",
+     "persona": "Food blogger in Manchester, UK",
+     "prompt": "My Australian recipe says 1 cup of flour. How many grams is that, and is it the same as a US cup?",
+     "steps": [
+      {
+       "tool": "convert_ingredient",
+       "does": "Converts 1 Australian metric cup of flour to grams and states the cup it used"
+      },
+      {
+       "tool": "search_ingredients",
+       "does": "Shows grams per US cup and per tablespoon for flour"
+      }
+     ],
+     "result": "About 127 g for the 250 mL cup against 120 g for a US cup, with both cup sizes stated.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: comparing cup standards across two or three sites takes about 5 minutes"
+    },
+    {
+     "title": "Halve a bread recipe with the right numbers",
+     "persona": "Cooking teacher in Austin, Texas",
+     "prompt": "Scale this bread recipe from 12 servings to 6 and give grams for every line: 4 cups bread flour, 1 1/2 cups water, 2 tbsp honey.",
+     "steps": [
+      {
+       "tool": "scale_recipe",
+       "does": "Scales 12 servings to 6 and adds grams per line"
+      },
+      {
+       "tool": "search_ingredients",
+       "does": "Shows where USDA and King Arthur disagree on bread flour"
+      }
+     ],
+     "result": "A halved recipe in cups and grams. Bread flour shows the value used and the other published value, so the class sees the spread.",
+     "minutes_saved": 8,
+     "minutes_basis": "INFERRED: halving fractions and converting by hand takes 8-10 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "convert_ingredient",
+     "plain": "Cups, spoons and ounces to grams for a named ingredient, and back"
+    },
+    {
+     "name": "search_ingredients",
+     "plain": "Finds one of 271 ingredients with grams per cup and its source"
+    },
+    {
+     "name": "scale_recipe",
+     "plain": "Scales recipe lines by a factor or servings, with grams"
+    },
+    {
+     "name": "convert_oven_temperature",
+     "plain": "Fahrenheit, Celsius and gas mark, with fan adjustment"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "271 ingredients with a source on each row",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/cups-to-grams-mcp/src/tools.ts:25 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "cups to grams mcp",
+    "convert cups to grams in claude",
+    "flour cups to grams",
+    "recipe converter mcp server"
+   ],
+   "faq": [
+    {
+     "q": "Where do the weights come from?",
+     "a": "USDA FoodData Central and the King Arthur Baking weight chart. Each of the 271 rows names its source."
+    },
+    {
+     "q": "Does it know a UK or Australian cup is different?",
+     "a": "Yes. It supports US, metric, imperial, US legal and Japanese cups and states which cup it used."
+    },
+    {
+     "q": "Does it cost anything?",
+     "a": "No. No license check exists in the code and the hosted URL needs no token."
+    }
+   ],
+   "npm": "cups-to-grams-mcp",
+   "repo": "https://github.com/theluckystrike/cups-to-grams-mcp"
+  },
+  {
+   "id": "dscr-loan-calculator",
+   "name": "DSCR Loan Calculator",
+   "category": "calculators",
+   "tagline": "Cent-exact DSCR, max loan and rent needed for rental property loans.",
+   "plain": "Give it the rent, the loan and the monthly costs. It returns the debt service coverage ratio a lender uses, the lender band, the largest loan that meets a target, and the rent you need. Payments are exact to the cent.",
+   "for_who": [
+    "Real estate investors",
+    "Mortgage brokers",
+    "Loan officers"
+   ],
+   "outcome_chips": [
+    "DSCR ratio",
+    "Lender band",
+    "Max loan",
+    "Rent needed",
+    "Scenario table"
+   ],
+   "cases": [
+    {
+     "title": "Check a deal before calling the lender",
+     "persona": "Rental investor in Columbus, Ohio",
+     "prompt": "A duplex rents for $2,600 a month. Loan $300,000 at 7.25% for 30 years, taxes $400 and insurance $120 a month. What is the DSCR?",
+     "steps": [
+      {
+       "tool": "calculate_dscr",
+       "does": "Computes P&I, PITIA and DSCR with the lender band"
+      }
+     ],
+     "result": "P&I $2,046.53, PITIA $2,566.53, DSCR 1.01 (band 1.00-1.24). The deal clears a 1.00 lender but not a 1.25 lender.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: building a DSCR spreadsheet with an annuity formula takes 15-20 minutes"
+    },
+    {
+     "title": "Find the loan that hits 1.25",
+     "persona": "Mortgage broker in Phoenix, Arizona",
+     "prompt": "Same duplex. What is the largest loan at 7.25%, 30 years that keeps DSCR at 1.25? And what rent would I need at $300,000?",
+     "steps": [
+      {
+       "tool": "max_loan_for_target_dscr",
+       "does": "Solves the largest whole-dollar loan at DSCR 1.25"
+      },
+      {
+       "tool": "rent_needed_for_target_dscr",
+       "does": "Solves the smallest rent for 0.75, 1.00 and 1.25"
+      }
+     ],
+     "result": "A max loan of about $228,680 at 1.25, and a rent of about $3,210 a month to carry $300,000 at 1.25.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: solving backward by trial in a spreadsheet takes about 20 minutes"
+    },
+    {
+     "title": "Compare rate and interest-only offers",
+     "persona": "Investor in Tampa, Florida",
+     "prompt": "Compare 7.25% fixed, 6.8% fixed and 7.25% interest-only for 10 years on a $300,000 loan, rent $2,600, costs $520 a month.",
+     "steps": [
+      {
+       "tool": "compare_scenarios",
+       "does": "Puts the three offers side by side with DSCR and total interest"
+      },
+      {
+       "tool": "amortization_summary",
+       "does": "Shows payment, total interest and balance after 10 years for the interest-only option"
+      }
+     ],
+     "result": "DSCR about 1.01, 1.05 and 1.11. The table shows rent minus PITIA and total interest for each, and the IO loan balance after 10 years.",
+     "minutes_saved": 25,
+     "minutes_basis": "INFERRED: three amortization schedules by hand take 25-30 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "calculate_dscr",
+     "plain": "DSCR from rent and PITIA, with the lender band"
+    },
+    {
+     "name": "max_loan_for_target_dscr",
+     "plain": "Largest loan that keeps DSCR at a target"
+    },
+    {
+     "name": "rent_needed_for_target_dscr",
+     "plain": "Smallest rent that reaches a target DSCR"
+    },
+    {
+     "name": "compare_scenarios",
+     "plain": "Up to 5 loan offers side by side"
+    },
+    {
+     "name": "amortization_summary",
+     "plain": "Payment, total interest and balance after N years"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "Up to 5 scenarios per comparison (tool limit, not a paywall)",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/dscr-loan-calculator-mcp/src/tools.ts:49 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "dscr calculator mcp",
+    "dscr loan calculator claude",
+    "debt service coverage ratio calculator",
+    "rental property loan calculator ai"
+   ],
+   "faq": [
+    {
+     "q": "How does it define PITIA?",
+     "a": "Principal, interest, taxes, insurance, association dues, ground rent and special assessments, per Fannie Mae Selling Guide B3-6-03."
+    },
+    {
+     "q": "Why not ask the model to do the math?",
+     "a": "Models often get the annuity formula wrong by a few dollars. This server rounds to the cent and truncates DSCR, so 1.2499 is never shown as 1.25."
+    },
+    {
+     "q": "Is it a loan offer?",
+     "a": "No. It does math on the numbers you give. Lender rules differ, and each result lists its sources."
+    }
+   ],
+   "npm": "dscr-loan-calculator-mcp",
+   "repo": "https://github.com/theluckystrike/dscr-loan-calculator-mcp"
+  },
+  {
+   "id": "gold-price-per-gram",
+   "name": "Gold Price per Gram",
+   "category": "calculators",
+   "tagline": "Live gold price per gram by karat, in about 160 currencies.",
+   "plain": "Ask for today's gold price per gram in your currency and karat. It reads the spot price at call time, converts it with central-bank FX rates, and works out the melt value of a ring or chain from its weight.",
+   "for_who": [
+    "Jewelry sellers",
+    "Gold buyers",
+    "Pawn and resale shops",
+    "Savers"
+   ],
+   "outcome_chips": [
+    "Price per gram",
+    "Karat prices",
+    "Melt value",
+    "Unit conversion"
+   ],
+   "cases": [
+    {
+     "title": "Price an old ring before selling it",
+     "persona": "Retiree in Gdansk, Poland",
+     "prompt": "I have an 18K gold ring that weighs 6.2 g. What is it worth in PLN today? The shop takes about 15%.",
+     "steps": [
+      {
+       "tool": "calculate_jewelry_value",
+       "does": "Melt value of 6.2 g at 18K in PLN with a 15% dealer spread"
+      }
+     ],
+     "result": "The melt value in PLN at today's spot and FX date, the amount after a 15% spread, and a note that retail and buyback prices differ.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: finding spot, FX and karat purity on three sites takes about 10 minutes"
+    },
+    {
+     "title": "Quote 22K by the gram in two currencies",
+     "persona": "Jeweler in Birmingham, UK",
+     "prompt": "Give me today's 22K and 24K gold price per gram in GBP and EUR.",
+     "steps": [
+      {
+       "tool": "get_gold_price_per_gram",
+       "does": "Returns per-gram prices for each karat in GBP"
+      },
+      {
+       "tool": "get_gold_price_per_gram",
+       "does": "Repeats the call in EUR"
+      }
+     ],
+     "result": "A per-gram table for 24K to 9K in GBP and in EUR, with the spot time stamp and FX date on each.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: converting spot per troy ounce to per gram per karat by hand takes about 5 minutes"
+    },
+    {
+     "title": "Convert tola and baht weights",
+     "persona": "Bullion buyer in Houston, Texas",
+     "prompt": "A seller quotes 2 tola and a 1 baht chain. How many grams is that, and what are silver and platinum doing today in USD?",
+     "steps": [
+      {
+       "tool": "convert_gold_units",
+       "does": "Converts 2 tola and 1 Thai baht to grams with each definition"
+      },
+      {
+       "tool": "get_metal_prices",
+       "does": "Returns spot gold, silver, platinum and palladium in USD"
+      }
+     ],
+     "result": "2 tola = 23.3276 g (180 grains each) and 1 baht = 15.244 g, plus per-ounce and per-gram spot prices for four metals.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: looking up unit definitions and spot prices takes about 5 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "get_gold_price_per_gram",
+     "plain": "Gold price per gram, ounce and kilo for each karat, any currency"
+    },
+    {
+     "name": "calculate_jewelry_value",
+     "plain": "Melt value of an item from weight and karat"
+    },
+    {
+     "name": "get_metal_prices",
+     "plain": "Spot gold, silver, platinum and palladium"
+    },
+    {
+     "name": "convert_gold_units",
+     "plain": "Exact conversion between gram, troy ounce, tola, baht and more"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "Live spot and FX on each call, no API key",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/gold-price-per-gram-mcp/src/tools.ts:37 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "gold price per gram mcp",
+    "gold price in claude",
+    "gold melt value calculator",
+    "22k gold price per gram"
+   ],
+   "faq": [
+    {
+     "q": "Is the price live?",
+     "a": "Yes. It reads the spot price at call time and shows the time stamp and the FX date."
+    },
+    {
+     "q": "Is melt value what a shop will pay?",
+     "a": "No. The result says that retail and buyback prices differ from melt value. You can add a dealer spread percent."
+    },
+    {
+     "q": "Does it need an API key?",
+     "a": "No."
+    }
+   ],
+   "npm": "gold-price-per-gram-mcp",
+   "repo": "https://github.com/theluckystrike/gold-price-per-gram-mcp"
+  },
+  {
+   "id": "lake-level",
+   "name": "Lake Level",
+   "category": "calculators",
+   "tagline": "Live US lake and reservoir levels, read from the agency gauge.",
+   "plain": "Ask how full Lake Travis or Lake Mead is today. It reads the official gauge at call time and tells you the elevation, the change this week and month, and how far it sits below full pool. It covers 44 lakes in 12 US states.",
+   "for_who": [
+    "Boaters and anglers",
+    "Lakefront owners",
+    "Marina staff",
+    "Water reporters"
+   ],
+   "outcome_chips": [
+    "Current elevation",
+    "Feet below full",
+    "30-day trend",
+    "Lake comparison"
+   ],
+   "cases": [
+    {
+     "title": "Check the ramp before a weekend trip",
+     "persona": "Boat owner in Austin, Texas",
+     "prompt": "Is Lake Travis high enough this weekend? How much has it moved in the last 7 days?",
+     "steps": [
+      {
+       "tool": "search_lakes",
+       "does": "Finds Lake Travis and its gauge"
+      },
+      {
+       "tool": "get_lake_level",
+       "does": "Returns current elevation, 24 h, 7 day and 30 day change, and feet below full pool"
+      }
+     ],
+     "result": "Today's elevation with its time stamp, the 7-day change, feet below full pool and the agency data URL.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: finding the right gauge page and reading it takes about 10 minutes"
+    },
+    {
+     "title": "Show a year of drawdown",
+     "persona": "Reporter in Las Vegas, Nevada",
+     "prompt": "Give me Lake Mead's weekly level for the last 365 days with the low and the high.",
+     "steps": [
+      {
+       "tool": "get_lake_history",
+       "does": "Returns a weekly series for 365 days with first, last, low, high and mean"
+      }
+     ],
+     "result": "52 weekly readings plus low, high and mean, ready to chart, with the Reclamation source URL.",
+     "minutes_saved": 30,
+     "minutes_basis": "INFERRED: downloading and cleaning a gauge export takes about 30 minutes"
+    },
+    {
+     "title": "Compare lakes on one chain",
+     "persona": "Marina manager in Georgia",
+     "prompt": "Compare Lake Lanier, Lake Texoma and Kentucky Lake. Which is furthest below full pool?",
+     "steps": [
+      {
+       "tool": "compare_lakes",
+       "does": "Ranks the three lakes by feet below full pool"
+      }
+     ],
+     "result": "A ranked table with elevation, feet below full pool and the seasonal target where one is published. A down gauge is reported, not fatal.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: opening three agency sites takes about 15 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "get_lake_level",
+     "plain": "Current elevation, trend and feet below full pool"
+    },
+    {
+     "name": "get_lake_history",
+     "plain": "Daily or weekly levels for up to 365 days"
+    },
+    {
+     "name": "compare_lakes",
+     "plain": "2 to 10 lakes ranked by feet below full"
+    },
+    {
+     "name": "search_lakes",
+     "plain": "Finds a covered lake by name, river or state"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "44 lakes in 12 states, live gauge reads",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/lake-level-mcp/src/tools.ts:39 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "lake level mcp",
+    "lake travis level today",
+    "lake mead water level claude",
+    "reservoir level api"
+   ],
+   "faq": [
+    {
+     "q": "Which lakes are covered?",
+     "a": "44 lakes in 12 US states, including Lake Mead, Lake Powell, Lake Travis, Shasta, Oroville, Lake Lanier and Kentucky Lake."
+    },
+    {
+     "q": "Where does the data come from?",
+     "a": "USGS, USACE, CDEC, Reclamation and TWDB gauges, read at call time. Each result links the agency source."
+    },
+    {
+     "q": "Does it cover lakes outside the US?",
+     "a": "No."
+    }
+   ],
+   "npm": "lake-level-mcp",
+   "repo": "https://github.com/theluckystrike/lake-level-mcp"
+  },
+  {
+   "id": "minimum-wage",
+   "name": "Minimum Wage",
+   "category": "contracts-hr",
+   "tagline": "US state minimum wages for 2026 and 2027, with tipped rates.",
+   "plain": "Ask for the minimum wage in any US state or DC on a date in 2026 or 2027. You get the standard rate, the tipped cash wage, the effective date and every scheduled increase. It never invents a rate that is not yet announced.",
+   "for_who": [
+    "Small business owners",
+    "Restaurant managers",
+    "Payroll staff",
+    "HR people"
+   ],
+   "outcome_chips": [
+    "State rate",
+    "Tipped wage",
+    "Upcoming increases",
+    "State comparison"
+   ],
+   "cases": [
+    {
+     "title": "Plan for the next raise",
+     "persona": "Restaurant owner in Orlando, Florida",
+     "prompt": "What is the Florida minimum wage and tipped wage now, and what changes on September 30, 2026?",
+     "steps": [
+      {
+       "tool": "get_minimum_wage",
+       "does": "Returns the Florida rate, tipped cash wage and tip credit for a date"
+      },
+      {
+       "tool": "list_upcoming_increases",
+       "does": "Lists the September 30, 2026 step to $15.00"
+      }
+     ],
+     "result": "Current standard and tipped rates, and the step to $15.00 on September 30, 2026, with the state source URL.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: reading state labor pages and checking dates takes about 10 minutes"
+    },
+    {
+     "title": "Budget payroll across states",
+     "persona": "Ops manager with stores in Michigan and Ohio",
+     "prompt": "Compare the minimum wage in Michigan, Ohio and Indiana on January 1, 2027, and full-time annual pay at each.",
+     "steps": [
+      {
+       "tool": "compare_states",
+       "does": "Ranks three states on one date with full-time annual pay"
+      },
+      {
+       "tool": "list_upcoming_increases",
+       "does": "Shows which 2027 rates are announced"
+      }
+     ],
+     "result": "Michigan at $15.00 from January 1, 2027, the other states ranked with annual pay, and any unpublished indexed rate marked announced: false.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: checking three state sites takes about 15 minutes"
+    },
+    {
+     "title": "Show a worker the yearly total",
+     "persona": "HR coordinator in Atlanta, Georgia",
+     "prompt": "What does a 30-hour-a-week worker earn in a year at Georgia's minimum wage, 50 weeks?",
+     "steps": [
+      {
+       "tool": "annual_income_at_minimum_wage",
+       "does": "Gross weekly, monthly and annual pay for 30 hours and 50 weeks"
+      }
+     ],
+     "result": "Pay at the $7.25 federal floor, with a note that the federal floor overrides Georgia's lower state rate.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: looking up the rate and doing the math takes about 5 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "get_minimum_wage",
+     "plain": "Standard and tipped rate for one state on a date"
+    },
+    {
+     "name": "list_upcoming_increases",
+     "plain": "Every scheduled increase through 2027"
+    },
+    {
+     "name": "compare_states",
+     "plain": "2 to 10 states side by side with annual pay"
+    },
+    {
+     "name": "annual_income_at_minimum_wage",
+     "plain": "Weekly, monthly and annual pay at minimum wage"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "All 50 states and DC, 2026 and 2027",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/minimum-wage-mcp/src/server.ts:46 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "minimum wage mcp",
+    "state minimum wage 2027",
+    "tipped minimum wage by state",
+    "minimum wage in claude"
+   ],
+   "faq": [
+    {
+     "q": "Which years does it cover?",
+     "a": "Dates in 2026 and 2027, for all 50 states and DC."
+    },
+    {
+     "q": "What if a 2027 rate is not published yet?",
+     "a": "It is listed as announced: false. The server never invents a number."
+    },
+    {
+     "q": "Does it cover city or county minimum wages?",
+     "a": "The README describes state rates and the federal floor. City rates are not listed."
+    }
+   ],
+   "npm": "minimum-wage-mcp",
+   "repo": "https://github.com/theluckystrike/minimum-wage-mcp"
+  },
+  {
+   "id": "no-tax-on-overtime",
+   "name": "No Tax on Overtime",
+   "category": "calculators",
+   "tagline": "2025-2028 overtime, tips and senior deductions, to IRS rules.",
+   "plain": "Works out the new federal deductions for overtime, tips and people 65 or older from the One Big Beautiful Bill Act. It applies the caps and the MAGI phase-out the way Schedule 1-A does, and estimates the federal tax you save.",
+   "for_who": [
+    "Hourly workers",
+    "Tipped workers",
+    "Tax preparers",
+    "Retirees"
+   ],
+   "outcome_chips": [
+    "Overtime deduction",
+    "Tips deduction",
+    "Senior deduction",
+    "Tax saved"
+   ],
+   "cases": [
+    {
+     "title": "Count only the overtime premium",
+     "persona": "Warehouse worker in Dayton, Ohio",
+     "prompt": "I worked 10 double-time hours at $20 an hour. How much of that is qualified overtime for the deduction?",
+     "steps": [
+      {
+       "tool": "calculate_overtime_deduction",
+       "does": "Keeps only the FLSA premium and applies the cap and phase-out"
+      }
+     ],
+     "result": "$100 of qualified overtime, not $200, because only the premium counts (IRS FS-2026-13 A16).",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: reading IRS guidance to find the premium rule takes 15-20 minutes"
+    },
+    {
+     "title": "Estimate a couple's savings",
+     "persona": "Tax preparer in Phoenix, Arizona",
+     "prompt": "Married filing jointly, MAGI $142,000, W-2 box 12 TT $9,400, tips $6,000, one spouse is 67. Estimate 2025 federal tax saved.",
+     "steps": [
+      {
+       "tool": "calculate_overtime_deduction",
+       "does": "Applies the $25,000 joint cap to the box 12 TT amount"
+      },
+      {
+       "tool": "calculate_tips_deduction",
+       "does": "Applies the $25,000 per-return tips cap"
+      },
+      {
+       "tool": "calculate_senior_deduction",
+       "does": "Applies $6,000 for the spouse 65 or older"
+      },
+      {
+       "tool": "estimate_tax_savings",
+       "does": "Runs taxable income through the 2025 brackets"
+      }
+     ],
+     "result": "Each deduction with its cap and phase-out, then an estimate of 2025 federal tax saved, with the irs.gov source.",
+     "minutes_saved": 30,
+     "minutes_basis": "INFERRED: working Schedule 1-A by hand takes about 30 minutes"
+    },
+    {
+     "title": "Check who qualifies",
+     "persona": "Bartender in Las Vegas, Nevada",
+     "prompt": "Do I qualify for no tax on tips if I file married filing separately?",
+     "steps": [
+      {
+       "tool": "explain_eligibility",
+       "does": "Explains filing status, SSN, FLSA and Schedule 1-A rules"
+      }
+     ],
+     "result": "No. Married filing separately gets none of the three deductions. The answer names the rule and the form lines.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: searching IRS fact sheets takes about 10 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "calculate_overtime_deduction",
+     "plain": "Qualified overtime deduction after cap and phase-out"
+    },
+    {
+     "name": "calculate_tips_deduction",
+     "plain": "Qualified tips deduction after the $25,000 cap"
+    },
+    {
+     "name": "calculate_senior_deduction",
+     "plain": "The $6,000 deduction for each person 65 or older"
+    },
+    {
+     "name": "estimate_tax_savings",
+     "plain": "Federal tax saved from all three deductions"
+    },
+    {
+     "name": "explain_eligibility",
+     "plain": "Who qualifies and which form lines apply"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "Tax years 2025-2028 per the README",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/no-tax-on-overtime-mcp/src/tools.ts:49 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "no tax on overtime calculator",
+    "no tax on tips calculator",
+    "senior deduction 2025 calculator",
+    "obbba overtime deduction mcp"
+   ],
+   "faq": [
+    {
+     "q": "Which law is this?",
+     "a": "The One Big Beautiful Bill Act (P.L. 119-21), signed July 4, 2025. The deductions start in tax year 2025."
+    },
+    {
+     "q": "Is it tax advice?",
+     "a": "No. It is a calculator that applies the published IRS caps, phase-outs and brackets. Each result links the irs.gov source."
+    },
+    {
+     "q": "Why does my overtime count for less than I thought?",
+     "a": "Only the FLSA premium part of overtime pay qualifies, not the whole overtime wage."
+    }
+   ],
+   "npm": "no-tax-on-overtime-mcp",
+   "repo": "https://github.com/theluckystrike/no-tax-on-overtime-mcp"
+  },
+  {
+   "id": "paycheck-calculator",
+   "name": "Paycheck Calculator",
+   "category": "calculators",
+   "tagline": "US take-home pay for 2025 and 2026, federal and all 50 states.",
+   "plain": "Give a salary or hourly rate, a state and a filing status. It returns net pay per paycheck and per year with federal tax, Social Security, Medicare and state tax. It uses the 2025 and 2026 IRS tables, including the mid-2025 standard deduction change.",
+   "for_who": [
+    "Job seekers",
+    "Employees",
+    "Freelancers comparing offers",
+    "Small business owners"
+   ],
+   "outcome_chips": [
+    "Net pay per check",
+    "State comparison",
+    "Hourly to salary",
+    "Federal brackets"
+   ],
+   "cases": [
+    {
+     "title": "Check a job offer's real pay",
+     "persona": "Software tester moving to Raleigh, North Carolina",
+     "prompt": "I got an offer of $92,000 a year, paid biweekly, single, in North Carolina, with 6% to a 401(k). What is my take-home per check in 2026?",
+     "steps": [
+      {
+       "tool": "calculate_take_home_pay",
+       "does": "Net pay per biweekly check with federal, FICA and NC tax"
+      }
+     ],
+     "result": "Net pay per check and per year, with each tax line. The 401(k) lowers income tax but not Social Security or Medicare.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: a careful paycheck estimate with brackets and FICA takes about 15 minutes"
+    },
+    {
+     "title": "Pick a state for a remote job",
+     "persona": "Remote designer in Seattle, Washington",
+     "prompt": "Same $110,000 salary: compare take-home in Washington, California, New York and Texas for 2026.",
+     "steps": [
+      {
+       "tool": "compare_states_take_home",
+       "does": "Ranks four states by take-home pay with each state's method"
+      }
+     ],
+     "result": "Four states ranked by net pay. Washington and Texas are labeled no_wage_income_tax; California and New York use exact 2026 schedules.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: four separate calculator runs take about 20 minutes"
+    },
+    {
+     "title": "Turn an hourly offer into a salary",
+     "persona": "Nurse aide in Columbus, Ohio",
+     "prompt": "I make $24.50 an hour, 40 hours plus 6 overtime hours a week at 1.5x. What is that a year, and what is $58,000 a year per hour?",
+     "steps": [
+      {
+       "tool": "hourly_to_salary",
+       "does": "Weekly, monthly and annual gross with overtime"
+      },
+      {
+       "tool": "salary_to_hourly",
+       "does": "Hourly, weekly and monthly gross for $58,000"
+      }
+     ],
+     "result": "Annual gross with overtime, and $58,000 broken into hourly, weekly, biweekly and monthly gross.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: two conversions by hand take about 5 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "calculate_take_home_pay",
+     "plain": "Net pay per period and per year, every tax line shown"
+    },
+    {
+     "name": "compare_states_take_home",
+     "plain": "Same pay in 2 to 10 states, ranked"
+    },
+    {
+     "name": "salary_to_hourly",
+     "plain": "Salary to hourly, weekly and monthly gross"
+    },
+    {
+     "name": "hourly_to_salary",
+     "plain": "Hourly with overtime to annual gross"
+    },
+    {
+     "name": "get_federal_tax_brackets",
+     "plain": "Exact 2025 or 2026 brackets and standard deduction"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "Exact schedules for 7 states; other states labeled estimate",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/paycheck-calculator-mcp/src/tools.ts:58 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "paycheck calculator mcp",
+    "take home pay calculator 2026",
+    "salary after tax by state",
+    "paycheck calculator in claude"
+   ],
+   "faq": [
+    {
+     "q": "Are all states exact?",
+     "a": "No. California, New York, New Jersey, Illinois, Pennsylvania, Georgia and North Carolina use exact 2026 schedules. Other states are labeled method: estimate."
+    },
+    {
+     "q": "Which tax years?",
+     "a": "2025 and 2026, with the P.L. 119-21 standard deduction and Rev. Proc. 2025-32."
+    },
+    {
+     "q": "Does it handle 401(k) and HSA?",
+     "a": "Yes. A 401(k) lowers income tax only; a payroll HSA lowers income tax, Social Security and Medicare."
+    }
+   ],
+   "npm": "paycheck-calculator-mcp",
+   "repo": "https://github.com/theluckystrike/paycheck-calculator-mcp"
+  },
+  {
+   "id": "uk-income-tax-salary",
+   "name": "UK Income Tax and Salary",
+   "category": "calculators",
+   "tagline": "UK take-home pay for 2025/26 and 2026/27, Scottish bands included.",
+   "plain": "Give a UK salary and get net pay a year, a month and a week. It applies income tax by band, National Insurance, student loans and pension, from HMRC's published rates. It also shows the real marginal rate, including the 60% trap above 100,000 GBP.",
+   "for_who": [
+    "UK employees",
+    "Contractors weighing PAYE roles",
+    "Recruiters",
+    "Payroll staff"
+   ],
+   "outcome_chips": [
+    "Monthly net pay",
+    "Marginal rate",
+    "Student loan",
+    "Salary comparison"
+   ],
+   "cases": [
+    {
+     "title": "Check a pay rise above 100k",
+     "persona": "Engineering manager in Bristol, UK",
+     "prompt": "I earn GBP 104,000 and may get GBP 112,000. How much of the rise do I keep, and what is my marginal rate?",
+     "steps": [
+      {
+       "tool": "compare_salaries",
+       "does": "Puts both salaries side by side with net pay and how much of the rise is kept"
+      },
+      {
+       "tool": "marginal_rate_at_income",
+       "does": "Shows the combined rate inside the allowance taper"
+      }
+     ],
+     "result": "Net pay for both salaries and a marginal rate of 62% in England with NI inside the GBP 100,000 to 125,140 taper.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: working the taper and NI by hand takes about 15 minutes"
+    },
+    {
+     "title": "Plan a Scottish salary with a student loan",
+     "persona": "Junior doctor in Glasgow, Scotland",
+     "prompt": "Salary GBP 48,000 in Scotland, 2026/27, Plan 2 student loan, 5% pension by salary sacrifice. What do I take home a month?",
+     "steps": [
+      {
+       "tool": "calculate_uk_take_home",
+       "does": "Scottish bands, NI, Plan 2 and salary sacrifice for 2026/27"
+      }
+     ],
+     "result": "Monthly and weekly net pay with tax by each Scottish band, NI, student loan and pension shown line by line.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: a manual calculation across six Scottish bands takes about 15 minutes"
+    },
+    {
+     "title": "Read the official bands",
+     "persona": "Payroll assistant in Leeds, UK",
+     "prompt": "Show the 2026/27 bands for England and Scotland, NI thresholds and student loan thresholds.",
+     "steps": [
+      {
+       "tool": "get_uk_tax_bands",
+       "does": "Returns bands, NI thresholds and student loan thresholds for the year"
+      }
+     ],
+     "result": "Bands as taxable income and as gross salary, NI rates by category letter, and Plan 1, 2, 4, 5 and Postgraduate thresholds.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: collecting these from several gov.uk pages takes about 10 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "calculate_uk_take_home",
+     "plain": "Net pay with tax, NI, student loan and pension"
+    },
+    {
+     "name": "marginal_rate_at_income",
+     "plain": "True marginal rate on the next pounds of pay"
+    },
+    {
+     "name": "compare_salaries",
+     "plain": "Up to 5 salaries side by side"
+    },
+    {
+     "name": "get_uk_tax_bands",
+     "plain": "Official bands and thresholds for a year and region"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "England, Wales, NI and Scotland for 2025/26 and 2026/27",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/uk-income-tax-salary-mcp/src/tools.ts:63 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "uk salary calculator mcp",
+    "take home pay uk 2026/27",
+    "scottish income tax calculator",
+    "60% tax trap calculator"
+   ],
+   "faq": [
+    {
+     "q": "Does it handle Scotland?",
+     "a": "Yes. It applies the six Scottish bands, including the 2026/27 changes."
+    },
+    {
+     "q": "Which student loan plans?",
+     "a": "Plan 1, 2, 4, 5 and Postgraduate. Plan 5 has no threshold in 2025/26."
+    },
+    {
+     "q": "Is it HMRC-approved?",
+     "a": "No. It uses HMRC and gov.uk published rates, and each result links the source page."
+    }
+   ],
+   "npm": "uk-income-tax-salary-mcp",
+   "repo": "https://github.com/theluckystrike/uk-income-tax-salary-mcp"
+  },
+  {
+   "id": "us-federal-holidays-business-days",
+   "name": "US Federal Holidays and Business Days",
+   "category": "calculators",
+   "tagline": "Exact US federal holidays and business-day math, 1971 to 2100.",
+   "plain": "Ask if a date is a business day, add 10 business days, or find the due date of a Net 30 invoice. It knows the observed-holiday rules and the different Federal Reserve calendar, so payment dates come out right.",
+   "for_who": [
+    "Bookkeepers",
+    "Accounts payable staff",
+    "Paralegals",
+    "Project managers"
+   ],
+   "outcome_chips": [
+    "Holiday list",
+    "Business-day count",
+    "Due date",
+    "Bank calendar"
+   ],
+   "cases": [
+    {
+     "title": "Set an ACH date around July 4",
+     "persona": "AP clerk in Chicago, Illinois",
+     "prompt": "Is Friday July 3, 2026 a business day for an ACH payment?",
+     "steps": [
+      {
+       "tool": "is_business_day",
+       "does": "Checks 2026-07-03 on the fed_banking calendar"
+      }
+     ],
+     "result": "Yes on the Federal Reserve calendar. It is a federal holiday for government staff, but Reserve Banks are open when the holiday falls on Saturday.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: checking OPM and Federal Reserve rules takes about 10 minutes"
+    },
+    {
+     "title": "Find a Net 30 due date",
+     "persona": "Bookkeeper in Denver, Colorado",
+     "prompt": "Invoice dated November 27, 2026, Net 30. If the due date is a weekend or holiday, roll to the next business day.",
+     "steps": [
+      {
+       "tool": "invoice_due_date",
+       "does": "Adds 30 calendar days and rolls with following"
+      }
+     ],
+     "result": "Monday, December 28, 2026. Day 30 lands on Sunday, December 27, so the date rolls forward one business day.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: a calendar check by hand takes about 5 minutes"
+    },
+    {
+     "title": "Count working days for a deadline",
+     "persona": "Paralegal in Washington, DC",
+     "prompt": "How many business days are there between December 1, 2026 and January 15, 2027? And what is 10 business days after December 18?",
+     "steps": [
+      {
+       "tool": "count_business_days",
+       "does": "Counts business days, start and end included"
+      },
+      {
+       "tool": "add_business_days",
+       "does": "Adds 10 business days and lists skipped holidays"
+      }
+     ],
+     "result": "A count that matches Excel NETWORKDAYS, and January 5, 2027 as the date 10 business days after December 18, skipping Christmas Day and New Year's Day.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: counting on a calendar takes about 10 minutes"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "is_business_day",
+     "plain": "Business day check on the federal or Fed banking calendar"
+    },
+    {
+     "name": "add_business_days",
+     "plain": "Adds or subtracts N business days"
+    },
+    {
+     "name": "count_business_days",
+     "plain": "Counts business days between two dates"
+    },
+    {
+     "name": "invoice_due_date",
+     "plain": "Due date from net terms, rolled past weekends and holidays"
+    },
+    {
+     "name": "list_federal_holidays",
+     "plain": "All holidays for a year with observed and Fed dates"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All tools, no limit found in code",
+     "Any date 1971-2100, no network call",
+     "Hosted URL needs no token and no sign-in (README)"
+    ],
+    "pro": [
+     "None found in code. No paid tier and no buy link."
+    ],
+    "source": "satellites/us-federal-holidays-business-days-mcp/src/tools.ts:68 (tool registry; /usr/bin/grep for license|isPro|MCP_LICENSE in src finds nothing)"
+   },
+   "keywords": [
+    "federal holidays mcp",
+    "business days calculator claude",
+    "net 30 due date calculator",
+    "federal reserve holidays 2026"
+   ],
+   "faq": [
+    {
+     "q": "Why is July 3, 2026 a banking day?",
+     "a": "When a holiday falls on Saturday, federal staff get Friday off, but Reserve Banks stay open. Use the fed_banking calendar for ACH and wires."
+    },
+    {
+     "q": "How accurate is it?",
+     "a": "All 212 holiday rows in OPM's tables for 2011-2030 match its output, and a test checks this."
+    },
+    {
+     "q": "Does it cover state holidays?",
+     "a": "No. It covers US federal holidays only."
+    }
+   ],
+   "npm": "us-federal-holidays-business-days-mcp",
+   "repo": "https://github.com/theluckystrike/us-federal-holidays-business-days-mcp"
+  }
+ ]
+}

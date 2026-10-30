@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CaseTurn from '../../components/CaseTurn.astro';
+import { CATEGORIES, getCategory } from '../../data/categories';
+import { allCases, getServers, bundleUrl, bundlePrice, buyUrl } from '../../data/servers';
+import { upsell } from '../../data/content';
+import UpsellBand from '../../components/UpsellBand.astro';
+import JobCard from '../../components/JobCard.astro';
+import { pagesOfType, seo } from '../../data/pages';
+const jobs = pagesOfType('use-case');
+const answers = pagesOfType('answer');
+const meta = seo('/use-cases/', { title: 'Use cases: back-office jobs done in chat', description: 'Example scenarios: invoices, expenses, PDFs, checks and reports done from Claude, ChatGPT or Cursor.' });
+const after = upsell('use-cases', 'after_case', { copy: 'Every example here works on the free tier. Pro removes the limits.', cta_url: buyUrl(bundleUrl(), 'use-cases', 'after_case') });
+
+const cases = allCases();
+const groups = CATEGORIES.map((c) => ({ cat: c, items: cases.filter((x) => x.server.category === c.id) })).filter((g) => g.items.length);
+// Fallback when no content cases exist yet: README prompts per server.
+const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.length).map((s) => ({ s, p: s.tryPrompts[0] }));
+---
+<Layout title={meta.title} description={meta.description} crumbs={[{ name: 'Use cases', path: '/use-cases/' }]}>
+  <section class="relative isolate overflow-hidden">
+    <div class="glow-bg opacity-60"></div>
+    <div class="wrap pb-10 pt-14 sm:pt-20">
+      <span class="eyebrow">Use cases</span>
+      <h1 class="display mt-5 max-w-4xl">{meta.h1 || 'What you can do in chat'}</h1>
+      <p class="lead mt-5 max-w-2xl">One sentence in. Real tool calls. A finished file out. {jobs.length} jobs below, then {cases.length} example scenarios across {groups.length} categories. Each one uses the real tools of a server.</p>
+      {groups.length > 1 && (
+        <nav class="mt-8 flex flex-wrap gap-2" aria-label="Jump to category">
+          {groups.map((g) => <a href={`#${g.cat.id}`} class="chip cat hover:text-fg" style={`--hue:${g.cat.hue}`}><span class="dot"></span>{g.cat.short}</a>)}
+        </nav>
+      )}
+    </div>
+  </section>
+  <section class="wrap py-10">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Pick your job</h2>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{jobs.map((j) => <JobCard page={j} />)}</div>
+  </section>
+  {answers.length > 0 && (
+    <section id="answers" class="wrap py-10">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Short answers</h2>
+      <ul class="mt-6 grid gap-3 sm:grid-cols-2">{answers.map((a) => <li><a href={a.path} class="card card-hover block px-5 py-4 font-medium">{a.h1}</a></li>)}</ul>
+    </section>
+  )}
+  <section class="wrap pt-10"><h2 class="text-2xl font-semibold sm:text-3xl">All examples by category</h2></section>
+  {groups.map((g) => (
+    <section id={g.cat.id} class="wrap py-10">
+      <h2 class="text-2xl font-semibold sm:text-3xl"><a href={`/categories/${g.cat.id}/`} class="hover:underline">{g.cat.name}</a></h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{g.items.map((x) => <CaseTurn server={x.server} case={x.case} showServer />)}</div>
+    </section>
+  ))}
+  <section class="wrap pb-10"><UpsellBand copy={after.copy} href={after.cta_url} cta={`Bundle, $${bundlePrice()}`} /></section>
+  {prompts.length > 0 && (
+    <section class="wrap py-10">
+      <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        {prompts.map(({ s, p }) => (
+          <a href={`/servers/${s.id}/`} class="card card-hover cat flex flex-col gap-3 p-5" style={`--hue:${getCategory(s.category).hue}`}>
+            <span class="chip self-start cat-text"><span class="dot"></span>{s.name}</span>
+            <p class="text-[.98rem]">"{p}"</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</Layout>

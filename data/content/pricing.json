@@ -1,0 +1,337 @@
+{
+  "meta": {
+    "author": "t-money",
+    "date": "2026-10-30",
+    "placeholders": "{id} = server id from catalog.json; {name} = display name. Replace per server page.",
+    "server_count_paid": 49,
+    "server_count_paid_source": "~/mcp-servers/packages/mcp-license/src/index.ts:21 SERVER_COUNT = 49 (tested against servers on disk)",
+    "note": "Live llms.txt says 'all 57' and catalog.json gives price_usd 19 to all 58. Both disagree with the code; use 49."
+  },
+  "plans": [
+    {
+      "id": "free",
+      "name": "Free",
+      "price": 0,
+      "period": "forever",
+      "cta_label": "Get a free URL",
+      "cta_url": "https://mcp.zovo.one/mcp/connect?src=site.pricing.plan_free",
+      "features": [
+        "A free tier on every server, with no key, no account and no expiry",
+        "46 servers answer at a hosted URL: one free token, 600 calls an hour, good for 30 days",
+        "Run any server on your own machine from the .mcpb bundle, npm or a clone",
+        "8 servers have no paid tier: Budget, Hourly Rate, Loan Calculator, Payroll, Pomodoro, Receipts, Stripe Billing, Tax Calc",
+        "Open source, MIT licence"
+      ],
+      "highlight": false
+    },
+    {
+      "id": "pro-single",
+      "name": "Pro, one server",
+      "price": 19,
+      "period": "once",
+      "cta_label": "Choose a server",
+      "cta_url": "/servers/?src=site.pricing.plan_single",
+      "features": [
+        "Removes the free-tier limits on one server, for life",
+        "Pro outputs on that server: for example unbranded invoice PDFs with your logo, full time and expense history, unlimited quotes",
+        "One payment, no subscription",
+        "Key checks offline on your machine; no licence server is called",
+        "Works locally (MCP_LICENSE_KEY) and on the hosted URL",
+        "Refund within 14 days by email to support"
+      ],
+      "highlight": false
+    },
+    {
+      "id": "bundle",
+      "name": "Bundle, all 49 paid servers",
+      "price": 39,
+      "period": "once",
+      "cta_label": "Buy the bundle, $39",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.pricing.plan_bundle",
+      "features": [
+        "Pro on all 49 paid servers with one key, for life",
+        "Two single servers cost $38. All 49 cost $39.",
+        "Servers that pass work to each other all unlocked: time to invoice, quote to invoice, expenses to rebill, invoices to cash book",
+        "One payment, no subscription",
+        "Key checks offline on your machine; no licence server is called",
+        "Works locally (MCP_LICENSE_KEY) and on every hosted URL",
+        "Refund within 14 days by email to support"
+      ],
+      "highlight": true
+    }
+  ],
+  "upsell_slots": [
+    {
+      "page": "home",
+      "slot": "hero",
+      "copy": "Start free with no account. When you outgrow a free limit, one $39 key unlocks Pro on all 49 paid servers, for life.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.home.hero"
+    },
+    {
+      "page": "home",
+      "slot": "pricing_strip",
+      "copy": "Free on every server. $19 once for one server. $39 once for all 49. No subscription.",
+      "cta_url": "/pricing/?src=site.home.pricing_strip"
+    },
+    {
+      "page": "home",
+      "slot": "after_cases",
+      "copy": "These examples run on the free tier. Pro removes the monthly caps and adds the client-ready outputs: logo, PDF, full history.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.home.after_cases"
+    },
+    {
+      "page": "server",
+      "slot": "sticky_bar",
+      "copy": "{name} Pro: $19 once. Or all 49 paid servers for $39.",
+      "cta_url": "https://mcp.zovo.one/buy/{id}?src=site.server.sticky_bar"
+    },
+    {
+      "page": "server",
+      "slot": "sticky_bar_bundle",
+      "copy": "All 49 for $39",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.server.sticky_bar_bundle"
+    },
+    {
+      "page": "server",
+      "slot": "free_vs_pro",
+      "copy": "The free column is yours with no key. The Pro column costs $19 once, or comes with the $39 bundle.",
+      "cta_url": "https://mcp.zovo.one/buy/{id}?src=site.server.free_vs_pro"
+    },
+    {
+      "page": "server",
+      "slot": "after_case",
+      "copy": "Example done on the free tier. Doing this every week? Pro removes the limit for $19, once.",
+      "cta_url": "https://mcp.zovo.one/buy/{id}?src=site.server.after_case"
+    },
+    {
+      "page": "server",
+      "slot": "cap_message",
+      "copy": "Saw a message that says the free tier allows a set number per month? That is the limit Pro removes. Paste the key where the token goes, or set MCP_LICENSE_KEY.",
+      "cta_url": "https://mcp.zovo.one/buy/{id}?src=site.server.cap_message"
+    },
+    {
+      "page": "server",
+      "slot": "works_with",
+      "copy": "{name} passes its output to other servers. The bundle unlocks the whole chain for $39.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.server.works_with"
+    },
+    {
+      "page": "use-cases",
+      "slot": "after_case",
+      "copy": "Every example here works on the free tier. One $39 key removes the limits on all of them.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.use-cases.after_case"
+    },
+    {
+      "page": "category",
+      "slot": "footer",
+      "copy": "Every server in this category, and every other paid one, for $39 once.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.category.footer"
+    },
+    {
+      "page": "compare",
+      "slot": "table",
+      "copy": "Ours: free tier, then $19 once or $39 for all 49. Local or hosted. No account.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.compare.table"
+    },
+    {
+      "page": "compare",
+      "slot": "footer",
+      "copy": "Try it free first. Buy only if it does the job better for you.",
+      "cta_url": "/pricing/?src=site.compare.footer"
+    },
+    {
+      "page": "developers",
+      "slot": "footer",
+      "copy": "Open source, MIT. Pro keys are Ed25519-signed and verify offline. Buying Pro funds the maintenance.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.developers.footer"
+    },
+    {
+      "page": "servers",
+      "slot": "list_end",
+      "copy": "Need more than one? Two servers cost $38. All 49 cost $39.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.servers.list_end"
+    },
+    {
+      "page": "all",
+      "slot": "footer",
+      "copy": "All 49 paid servers, one key, $39 once.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.footer.bundle"
+    },
+    {
+      "page": "pricing",
+      "slot": "faq_end",
+      "copy": "Still unsure? Use the free tier as long as you like. Refund within 14 days if Pro is not for you.",
+      "cta_url": "https://mcp.zovo.one/buy/bundle?src=site.pricing.faq_end"
+    }
+  ],
+  "faq": [
+    {
+      "q": "Is this a subscription?",
+      "a": "No. You pay once. Pro is $19 for one server or $39 for all 49 paid servers. The key has no expiry date."
+    },
+    {
+      "q": "What can I do without paying?",
+      "a": "Every server has a free tier with no key, no account and no expiry. Eight servers have no paid tier at all. The free tier is not a trial: it does not end."
+    },
+    {
+      "q": "What exactly does Pro remove?",
+      "a": "It depends on the server. Each server page has a Free and a Pro column taken from the server code. Examples: Invoice goes from 3 invoices a month with a footer line to unlimited, no branding, your logo and your own prefix. Time Tracker goes from a 7-day report window to full history."
+    },
+    {
+      "q": "How do I pay?",
+      "a": "With a card on Stripe Checkout. The Buy button opens a short confirmation page, then Stripe. Prices are in US dollars."
+    },
+    {
+      "q": "How do I get my key?",
+      "a": "The key shows on the success page right after payment. Reloading that page shows the same key. If you lose the tab, the recover page gets it back with your checkout session id. If you bought while connected through a hosted URL, that URL's token becomes Pro with nothing to paste."
+    },
+    {
+      "q": "How do I turn Pro on?",
+      "a": "On a local server, set MCP_LICENSE_KEY to the key in the client config. On a hosted URL, put the key where the free token goes."
+    },
+    {
+      "q": "Does the key send data anywhere?",
+      "a": "No. A local server checks the key signature on your machine. It does not call a licence server. Your invoices, timesheets and files stay in your own data folder."
+    },
+    {
+      "q": "Do I need an account?",
+      "a": "No. There is no sign-up. Stripe asks only for what a card payment needs."
+    },
+    {
+      "q": "Can I get a refund?",
+      "a": "Yes, within 14 days. Email support with your checkout details."
+    },
+    {
+      "q": "Should I buy one server or the bundle?",
+      "a": "If you use one server, $19 is enough. If you use two or more, the bundle is cheaper: two singles cost $38, the bundle costs $39 and covers all 49. Many servers pass work to each other, for example time entries to invoices."
+    },
+    {
+      "q": "The code is open source. Why pay?",
+      "a": "The free tier covers light use. Pro removes the limits, adds the client-ready outputs, and pays for the tests and the hosted endpoints."
+    }
+  ],
+  "trust": [
+    {
+      "text": "Open source under the MIT licence.",
+      "source": "~/mcp-servers/LICENSE; servers/<id>/package.json \"license\": \"MIT\"; public repo github.com/theluckystrike/mcp-servers"
+    },
+    {
+      "text": "Refunds within 14 days.",
+      "source": "https://mcp.zovo.one/ (snapshot data/live-home.html) text: 'Refunds within 14 days'"
+    },
+    {
+      "text": "One payment, no subscription. Keys without an expiry date never expire.",
+      "source": "~/mcp-servers/packages/mcp-license/src/index.ts:50 (exp absent = lifetime); https://mcp.zovo.one/ (snapshot data/live-home.html) 'Pro is $19 once ... lifetime'"
+    },
+    {
+      "text": "The Pro key verifies offline on your machine. No licence server is called.",
+      "source": "~/mcp-servers/packages/mcp-license/src/index.ts:86 (Ed25519 verify with node:crypto); https://mcp.zovo.one/ (snapshot data/live-home.html) 'verify the license signature offline'"
+    },
+    {
+      "text": "No account, no email, no OAuth for the free hosted token.",
+      "source": "https://mcp.zovo.one/ (snapshot data/live-home.html) 'No account, no email, no OAuth'"
+    },
+    {
+      "text": "Local servers keep your data in a folder on your own machine.",
+      "source": "~/mcp-servers/servers/invoice/src/index.ts:942 (data in dataDir()); live compare pages 'where your data lives'"
+    },
+    {
+      "text": "Free tier on every server, with no key, no account and no expiry.",
+      "source": "https://mcp.zovo.one/ (snapshot data/live-home.html) 'Free tier on every one of them, with no key, no account and no expiry'"
+    },
+    {
+      "text": "Card payment by Stripe Checkout.",
+      "source": "~/mcp-servers/billing/PAYMENTS.md section 1; BRIEF.md section 2"
+    },
+    {
+      "text": "Comparison pages name the tools where another server does more than ours.",
+      "source": "https://mcp.zovo.one/compare (snapshot data/live-compare.html)"
+    }
+  ],
+  "pro_features": [
+    {
+      "text": "Invoice: unlimited invoices (free: 3 a calendar month)",
+      "source": "~/mcp-servers/servers/invoice/src/index.ts:23"
+    },
+    {
+      "text": "Invoice: PDF without the 'Generated with' footer line, with your logo",
+      "source": "~/mcp-servers/servers/invoice/src/index.ts:847,858"
+    },
+    {
+      "text": "Invoice: custom invoice number prefix (free keeps INV)",
+      "source": "~/mcp-servers/servers/invoice/src/index.ts:202"
+    },
+    {
+      "text": "Time Tracker: full report history (free: last 7 days) and unlimited rated projects (free: 2)",
+      "source": "~/mcp-servers/servers/time-tracker/src/index.ts:15-16"
+    },
+    {
+      "text": "Expense Tracker: full history (free: 30 days), unlimited projects (free: 3) and rules (free: 5), CSV beyond 200 rows",
+      "source": "~/mcp-servers/servers/expense-tracker/src/index.ts:23-27"
+    },
+    {
+      "text": "Recurring Invoices: unlimited schedules (free: 3) and a 12-month forecast (free: 30-day view)",
+      "source": "~/mcp-servers/servers/recurring/src/index.ts:25-34"
+    },
+    {
+      "text": "Quotes: unlimited open quotes (free: 5), PDF, win-rate report",
+      "source": "~/mcp-servers/servers/quotes/src/index.ts:25; live home Free/Pro line"
+    },
+    {
+      "text": "Bank Statement: unlimited accounts (free: 2), history (free: 12 months) and rules (free: 5), reconcile with expenses",
+      "source": "~/mcp-servers/servers/bank-statement/src/index.ts:25-35"
+    },
+    {
+      "text": "Spreadsheet: no row or size limits (free: 5,000 rows read, 5 MB, 500 rows written)",
+      "source": "~/mcp-servers/servers/spreadsheet/src/sheet.ts:14-16"
+    },
+    {
+      "text": "PDF Tools: unlimited files and pages (free: merge 5 files, 30 pages), custom stamps, watermark",
+      "source": "~/mcp-servers/servers/pdf/src/index.ts:18-19"
+    },
+    {
+      "text": "Docx: unlimited proposals and contracts (free: 3 a month), letterhead",
+      "source": "~/mcp-servers/servers/docx/src/index.ts:20-21"
+    },
+    {
+      "text": "Statement of Account: unlimited statements (free: 5 a month), A4 PDF with logo, final-demand letter",
+      "source": "~/mcp-servers/servers/statement-of-account/src/index.ts:38"
+    },
+    {
+      "text": "Dunning Letters: unlimited concurrent chases (free: 3 unpaid invoices at once)",
+      "source": "~/mcp-servers/servers/dunning-letters/src/index.ts:23"
+    },
+    {
+      "text": "Image Tools: no size or batch limits (free: 4 MP, batches of 5), custom watermark text",
+      "source": "~/mcp-servers/servers/image/src/index.ts:24-28"
+    },
+    {
+      "text": "Zip: unlimited size, entries and archives (free: 25 MB, 200 entries, 20 archives a month)",
+      "source": "~/mcp-servers/servers/zip/src/index.ts:44-46"
+    },
+    {
+      "text": "Price Tracker: unlimited watches (free: 3) and full history (free: 30 observations)",
+      "source": "~/mcp-servers/servers/price-tracker/src/index.ts:23-24"
+    },
+    {
+      "text": "Currency Converter: full rate history back to 1999 (free: 90 days)",
+      "source": "~/mcp-servers/servers/currency/src/index.ts:17"
+    },
+    {
+      "text": "Calendar: unlimited calendars (free: 2), any window (free: 31 days), unlimited exports (free: 50 events)",
+      "source": "~/mcp-servers/servers/calendar/src/index.ts:37-39"
+    },
+    {
+      "text": "Supplier Statement Check, Duplicate Invoice Check, Three-Way Match: unlimited saved reports (free: 3); all checks and evidence stay free",
+      "source": "~/mcp-servers/servers/three-way-match/src/store.ts:9"
+    },
+    {
+      "text": "Bundle key unlocks every paid server: a '*' key verifies for any product id",
+      "source": "~/mcp-servers/packages/mcp-license/src/index.ts:90"
+    },
+    {
+      "text": "Pro works on the hosted URL too: put the key where the token goes, or a purchase made through a hosted URL binds that token",
+      "source": "https://mcp.zovo.one/bundle (snapshot data/live-bundle.html) 'How the key arrives'; ~/mcp-servers/billing/PAYMENTS.md (decideBinding)"
+    }
+  ]
+}

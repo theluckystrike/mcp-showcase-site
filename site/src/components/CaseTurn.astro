@@ -1,0 +1,40 @@
+---
+// A case example that looks like a real chat turn: user prompt, tool call chips, result card.
+import type { Server, ServerCase } from '../data/servers';
+import { getCategory } from '../data/categories';
+interface Props { server: Server; case: ServerCase; compact?: boolean; showServer?: boolean }
+const { server: s, case: c, compact = false, showServer = false } = Astro.props;
+const cat = getCategory(s.category);
+---
+<article class="card cat flex flex-col overflow-hidden" style={`--hue:${cat.hue}`}>
+  <header class="flex items-center justify-between gap-3 border-b border-line px-5 py-3.5">
+    <div class="min-w-0">
+      <span class="text-[.7rem] font-semibold uppercase tracking-[.08em] text-faint">Example{c.persona && ` · ${c.persona}`}</span>
+      <h3 class="truncate text-[1.02rem] font-semibold tracking-tight">{c.title}</h3>
+    </div>
+    {showServer && <a href={`/servers/${s.id}/`} class="chip shrink-0 hover:text-fg"><span class="dot"></span>{s.name}</a>}
+  </header>
+  <div class="flex flex-1 flex-col gap-3.5 p-5">
+    <div class="ml-auto max-w-[92%] rounded-2xl rounded-br-md px-4 py-3 text-[.95rem] leading-relaxed" style="background: color-mix(in oklab, var(--accent) 16%, var(--surface-2)); border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent)">
+      {c.prompt}
+    </div>
+    {c.steps.length > 0 && (
+      <ol class="flex flex-col gap-1.5" aria-label="Tool calls">
+        {c.steps.map((st) => (
+          <li class="flex flex-wrap items-center gap-2 text-[.86rem]">
+            <span class="chip chip-tool"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>{st.tool}</span>
+            {st.via && <span class="text-[.78rem] text-faint">via {st.via}</span>}
+            {!compact && st.does && <span class="muted">{st.does}</span>}
+          </li>
+        ))}
+      </ol>
+    )}
+    {c.result && (
+      <div class="mt-auto rounded-xl border border-line p-4" style="background: var(--surface-solid)">
+        <div class="mb-1 flex items-center gap-2 text-[.72rem] font-semibold uppercase tracking-[.08em] cat-text"><span class="dot"></span>Result</div>
+        <p class="text-[.95rem]">{c.result}</p>
+        {c.minutes_saved && !compact && <p class="mt-2 text-[.8rem] text-faint" title={c.minutes_basis}>About {c.minutes_saved} min saved (estimate)</p>}
+      </div>
+    )}
+  </div>
+</article>

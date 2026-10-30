@@ -1,0 +1,218 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroDemo from '../components/HeroDemo.astro';
+import ServerCard from '../components/ServerCard.astro';
+import CaseTurn from '../components/CaseTurn.astro';
+import SectionHead from '../components/SectionHead.astro';
+import StickyCta from '../components/StickyCta.astro';
+import { brand } from '../config/brand';
+import { CATEGORIES } from '../data/categories';
+import { getServers, getServer, getServersByCategory, allCases, stats, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
+import { upsell } from '../data/content';
+import UpsellBand from '../components/UpsellBand.astro';
+import JobCard from '../components/JobCard.astro';
+import { pagesOfType, seo } from '../data/pages';
+import { CLIENTS } from '../data/content';
+
+const st = stats();
+const servers = getServers();
+const featuredIds = ['invoice', 'time-tracker', 'pdf', 'expense-tracker', 'quotes', 'bank-statement'];
+const featured = featuredIds.map((id) => getServer(id)).filter((s) => s !== undefined);
+
+// Case examples: content cases first; fallback to README "Try it" prompts (prompt only, no invented results).
+let cases = allCases().filter((x) => x.case.steps.length > 0 && x.case.result);
+const seen = new Set<string>();
+cases = cases.filter((x) => (seen.has(x.server.id) ? false : (seen.add(x.server.id), true))).slice(0, 3);
+if (cases.length < 3) {
+  for (const s of featured) {
+    if (cases.length >= 3) break;
+    if (cases.some((x) => x.server.id === s.id) || !s.tryPrompts[0]) continue;
+    cases.push({ server: s, case: { title: `Ask ${s.name}`, prompt: s.tryPrompts[0], steps: s.topTools.slice(0, 2).map((t) => ({ tool: t.name, does: t.plain })) } });
+  }
+}
+const meta = seo('/', { title: `${brand.name}: ${brand.tagline}`, description: brand.description });
+// "Pick your job": the 12 top use-case pages by priority, then volume (ANGLE.md "Below the fold").
+const jobs = pagesOfType('use-case').slice(0, 12);
+const audiences = pagesOfType('audience');
+const strip = upsell('home', 'pricing_strip', { copy: `Free on every server. $${brand.pricing.serverUsd} once for one server. $${bundlePrice()} once for all ${st.paid}. No subscription.`, cta_url: '/pricing/' });
+const hero = upsell('home', 'hero', { copy: `Start free with no account. One $${bundlePrice()} key turns on Pro on all ${st.paid} paid servers, for life.`, cta_url: buyUrl(bundleUrl(), 'home', 'hero') });
+const afterCases = upsell('home', 'after_cases', { copy: 'These examples run on the free tier. Pro removes the free-tier limits.', cta_url: buyUrl(bundleUrl(), 'home', 'after_cases') });
+const bento = CATEGORIES.map((c) => ({ ...c, count: getServersByCategory(c.id).length, names: getServersByCategory(c.id).slice(0, 4).map((s) => s.name) }));
+const marquee = [...servers, ...servers];
+---
+<Layout
+  title={meta.title}
+  description={meta.description}
+  jsonLd={[{ '@context': 'https://schema.org', '@type': 'ItemList', name: 'Back-office jobs you can do in chat', numberOfItems: jobs.length,
+    itemListElement: jobs.map((j, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(j.path, Astro.site).href, name: j.h1 })) }]}
+>
+  <!-- HERO -->
+  <section class="relative isolate overflow-hidden">
+    <div class="glow-bg"></div>
+    <div class="grid-lines"></div>
+    <div class="wrap grid items-center gap-12 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24 lg:pt-28">
+      <div>
+        <span class="eyebrow">For Claude, ChatGPT and Cursor</span>
+        <h1 class="display mt-6"><span class="text-gradient">{meta.h1 ? `${meta.h1}.` : brand.tagline}</span></h1>
+        <p class="lead mt-6 max-w-xl">
+          Ask Claude, ChatGPT or Cursor for an invoice, a bank summary or a merged PDF. Get the real file, not a draft to copy. Paste one URL to connect. Free to start.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/connect/" class="btn btn-primary">Connect free in 1 minute
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14m-6-6l6 6-6 6"/></svg>
+          </a>
+          <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn">Get all {st.paid} paid servers, ${bundlePrice()} once</a>
+        </div>
+        <p class="mt-4 max-w-xl text-[.9rem] text-faint">{hero.copy}</p>
+        <ul class="mt-10 grid max-w-xl gap-4 border-t border-line pt-6 sm:grid-cols-3">
+          <li><p class="text-2xl font-semibold tracking-tight sm:text-3xl">{st.servers}</p><p class="muted text-[.85rem]">servers, {st.tools} tools, each listed with its real name and an example</p></li>
+          <li><p class="text-2xl font-semibold tracking-tight sm:text-3xl">{st.hosted}</p><p class="muted text-[.85rem]">run at one URL. Free token, no key, 600 calls an hour</p></li>
+          <li><p class="text-2xl font-semibold tracking-tight sm:text-3xl">${brand.pricing.serverUsd} / ${bundlePrice()}</p><p class="muted text-[.85rem]">pay once per server, or once for all {st.paid} paid. No subscription</p></li>
+        </ul>
+      </div>
+      <HeroDemo serverId="invoice" />
+    </div>
+    <div class="marquee border-y border-line py-4" aria-label="All servers">
+      <div>
+        {marquee.map((s, i) => <a href={`/servers/${s.id}/`} class="chip shrink-0 hover:text-fg" tabindex={i >= servers.length ? -1 : undefined} aria-hidden={i >= servers.length ? 'true' : undefined}>{s.name}</a>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- PICK YOUR JOB -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead eyebrow="Pick your job" title="What do you want done today?" lead="Each page shows the prompt, the tools it calls and the file you get." />
+      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{jobs.map((j) => <JobCard page={j} />)}</div>
+      <div class="mt-8 flex flex-wrap items-center gap-2">
+        <span class="mr-2 text-sm font-semibold">For:</span>
+        {audiences.map((a) => <a href={a.path} class="chip hover:text-fg">{a.h1}</a>)}
+        <a href="/use-cases/" class="link ml-2">All use cases</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKS IN -->
+  <section class="border-y border-line py-8">
+    <div class="wrap flex flex-wrap items-center gap-x-8 gap-y-3">
+      <span class="text-sm font-semibold uppercase tracking-[.08em] text-faint">Works in</span>
+      {CLIENTS.map((c) => <a href={`/connect/${c.slug}/`} class="text-lg font-semibold tracking-tight text-muted hover:text-fg">{c.name}</a>)}
+      <a href="/connect/paste-a-url/" class="text-lg font-semibold tracking-tight text-muted hover:text-fg">any MCP client</a>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="wrap">
+      <SectionHead eyebrow="How it works" title="Three steps. No new app." lead="The servers plug into Claude, ChatGPT, Cursor or any MCP client. You keep talking. They do the paperwork." />
+      <ol class="mt-12 grid gap-4 md:grid-cols-3">
+        {[
+          { n: '01', t: 'Connect once', d: 'Paste one hosted URL with a free token, or install locally with npx or a .mcpb file.' },
+          { n: '02', t: 'Ask in plain words', d: '"Invoice Acme for 12 hours." The AI picks the right tool and fills in the fields.' },
+          { n: '03', t: 'Get a real result', d: 'A PDF, a Word file, a CSV or a report, ready to send. A local install saves it on your machine.' },
+        ].map((x) => (
+          <li class="card reveal p-6">
+            <span class="font-mono text-sm text-accent-2">{x.n}</span>
+            <h3 class="mt-3 text-xl font-semibold">{x.t}</h3>
+            <p class="muted mt-2">{x.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- BENTO CATEGORIES -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead eyebrow="Categories" title="A whole back office, one job at a time." lead={`${st.servers} servers in ${CATEGORIES.length} areas. Pick the job you do every week.`} />
+      <div class="mt-12 grid auto-rows-[minmax(11rem,auto)] gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {bento.map((c, i) => (
+          <a href={`/categories/${c.id}/`} class:list={['card card-hover cat reveal group relative flex flex-col overflow-hidden p-6', i === 0 && 'lg:col-span-2 lg:row-span-2', i === 1 && 'lg:col-span-2']} style={`--hue:${c.hue}`}>
+            <div class="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full opacity-25 blur-3xl transition-opacity group-hover:opacity-50" style="background: var(--cat)"></div>
+            <div class="flex items-center justify-between">
+              <span class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={c.icon} /></svg></span>
+              <span class="font-mono text-sm text-faint">{c.count} servers</span>
+            </div>
+            <h3 class:list={['mt-6 font-semibold tracking-tight', i === 0 ? 'text-3xl' : 'text-xl']}>{c.name}</h3>
+            <p class="muted mt-2 text-[.95rem]">{c.blurb}</p>
+            {i < 2 && <div class="mt-auto flex flex-wrap gap-1.5 pt-6">{c.names.map((n) => <span class="chip">{n}</span>)}</div>}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CASES -->
+  {cases.length > 0 && (
+    <section class="section relative pt-0">
+      <div class="wrap">
+        <SectionHead eyebrow="Examples" title="What a chat turn looks like." lead="One sentence in. Real tool calls. A finished result out. These are example scenarios built on each server's real tools." />
+        <div class="mt-12 grid gap-4 lg:grid-cols-3">
+          {cases.map((x) => <CaseTurn server={x.server} case={x.case} showServer compact />)}
+        </div>
+        <UpsellBand copy={afterCases.copy} href={afterCases.cta_url} cta={`Bundle, $${bundlePrice()}`} />
+        <div class="mt-8"><a href="/use-cases/" class="link">See all use cases</a></div>
+      </div>
+    </section>
+  )}
+
+  <!-- FEATURED -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <SectionHead eyebrow="Popular jobs" title="Start with the paperwork you hate most." />
+        <a href="/servers/" class="btn">All {st.servers} servers</a>
+      </div>
+      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {featured.map((s) => <ServerCard server={s} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVELOPERS -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <div class="card relative grid gap-10 overflow-hidden p-6 sm:p-10 lg:grid-cols-2">
+        <div class="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full opacity-30 blur-3xl" style="background: var(--accent-2)"></div>
+        <div>
+          <span class="eyebrow">For developers</span>
+          <h2 class="h2 mt-4">Clear tool contracts. stdio and hosted.</h2>
+          <p class="lead mt-4">Open source servers with documented tools. Run them locally over stdio or call the hosted endpoint over HTTP.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="/developers/" class="btn btn-primary">Developer docs</a>
+            <a href={brand.links.github} class="btn" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <pre class="code self-center">{`# free token: 30 days, 600 calls per hour
+curl -s -X POST ${brand.backend.tokenEndpoint}
+
+# hosted
+claude mcp add --transport http invoice \\
+  ${brand.backend.origin}/mcp/invoice/t/<token>
+
+# or local over stdio
+npx -y @theluckystrike/mcp-invoice`}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING TEASER -->
+  <section class="section pt-0">
+    <div class="wrap">
+      <SectionHead center eyebrow="Pricing" title="Free to start. Pay once if it earns its keep." />
+      <div class="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">
+        <div class="card p-6"><p class="muted text-sm">Free</p><p class="mt-2 text-4xl font-semibold">$0</p><p class="muted mt-3 text-[.95rem]">Every server's free tier. No key, no sign-up.</p></div>
+        <div class="card p-6"><p class="muted text-sm">Pro, one server</p><p class="mt-2 text-4xl font-semibold">${brand.pricing.serverUsd}<span class="muted text-base font-normal"> once</span></p><p class="muted mt-3 text-[.95rem]">Lifetime Pro for the one server you use most.</p></div>
+        <div class="card relative p-6" style="border-color: color-mix(in oklab, var(--accent) 55%, var(--border))">
+          <span class="chip absolute right-4 top-4 !text-fg" style="background: color-mix(in oklab, var(--accent) 25%, transparent)">Best value</span>
+          <p class="muted text-sm">Bundle, all servers</p><p class="mt-2 text-4xl font-semibold">${bundlePrice()}<span class="muted text-base font-normal"> once</span></p>
+          <p class="muted mt-3 text-[.95rem]">Pro on all {st.paid} paid servers. About the price of two.</p>
+          <a href={buyUrl(bundleUrl(), 'home', 'pricing_strip')} rel="nofollow" class="btn btn-primary mt-5 w-full">Get the bundle</a>
+        </div>
+      </div>
+      <p class="muted mx-auto mt-6 max-w-2xl text-center">{strip.copy} <a href="/pricing/" class="link">Compare plans</a></p>
+    </div>
+  </section>
+
+  <StickyCta label={`Pro on all ${st.paid} paid servers: $${bundlePrice()} once`} sub="Lifetime licence. Free tier stays free." href={buyUrl(bundleUrl(), 'home', 'sticky')} cta="Get bundle" secondary={{ label: 'Pricing', href: '/pricing/' }} />
+</Layout>

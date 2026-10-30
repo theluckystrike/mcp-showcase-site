@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ServerExplorer from '../../components/ServerExplorer';
+import { CATEGORIES } from '../../data/categories';
+import { getServers, stats, bundleUrl, bundlePrice, buyUrl } from '../../data/servers';
+import { upsell } from '../../data/content';
+import UpsellBand from '../../components/UpsellBand.astro';
+import { seo } from '../../data/pages';
+
+const st = stats();
+const items = getServers().map((s) => ({
+  id: s.id,
+  name: s.name,
+  category: s.category,
+  tagline: s.tagline,
+  hosted: s.hosted,
+  chips: (s.outcomeChips.length ? s.outcomeChips : []).slice(0, 3),
+  search: [s.name, s.id, s.tagline, s.category, ...s.keywords, ...s.outcomeChips, ...s.topTools.map((t) => t.name)].join(' ').toLowerCase(),
+}));
+const end = upsell('servers', 'list_end', { copy: `Need more than one? All ${stats().paid} paid servers cost $${bundlePrice()} once.`, cta_url: buyUrl(bundleUrl(), 'servers', 'list_end') });
+const meta = seo('/servers/', { title: `All ${st.servers} MCP servers`, description: `Search ${st.servers} MCP servers. ${st.hosted} run hosted with one URL.` });
+const cats = CATEGORIES.map((c) => ({ id: c.id, short: c.short, hue: c.hue }));
+---
+<Layout title={meta.title} description={meta.description} crumbs={[{ name: 'Servers', path: '/servers/' }]}>
+  <section class="relative isolate overflow-hidden">
+    <div class="glow-bg opacity-60"></div>
+    <div class="wrap pb-10 pt-14 sm:pt-20">
+      <span class="eyebrow">Directory</span>
+      <h1 class="display mt-5 max-w-4xl">Every server. <span class="text-gradient">One search.</span></h1>
+      <p class="lead mt-5 max-w-2xl">{st.servers} servers, {st.hosted} available as a hosted URL, plus {st.satellites} free calculators. Filter by the job you need done.</p>
+    </div>
+  </section>
+  <section class="wrap pb-10">
+    <ServerExplorer client:load items={items} categories={cats} />
+    <UpsellBand copy={end.copy} href={end.cta_url} cta={`Bundle, $${bundlePrice()}`} />
+  </section>
+</Layout>

@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StickyCta from '../../components/StickyCta.astro';
+import UpsellBand from '../../components/UpsellBand.astro';
+import { brand } from '../../config/brand';
+import { stats, bundleUrl, bundlePrice, buyUrl } from '../../data/servers';
+import { upsell } from '../../data/content';
+import { pageMeta } from '../../data/pages';
+import { COMPARISONS, type Comparison } from '../../data/compare';
+
+export function getStaticPaths() {
+  return COMPARISONS.map((c) => ({ params: { slug: c.slug }, props: { c } }));
+}
+const { c } = Astro.props as { c: Comparison };
+const path = `/compare/${c.slug}/`;
+const m = pageMeta(path);
+const st = stats();
+const table = upsell('compare', 'table', { copy: '', cta_url: '' });
+const foot = upsell('compare', 'footer', { copy: 'Try it free first. Buy only if it does the job better for you.', cta_url: '/pricing/' });
+const rows = [
+  ['What it is', c.what, `${st.servers} MCP servers for back-office jobs (invoices, PDFs, bank CSVs, checks), plus ${st.satellites} free calculators. ${st.hosted} run at one URL.`],
+  ['Price', c.price, `Free tier on every server. Pro: $${brand.pricing.serverUsd} once per server or $${bundlePrice()} once for all ${st.paid} paid servers.`],
+  ['Where data lives', c.data, 'Local servers keep data on your computer. Hosted URLs keep it with the hosted server for your token.'],
+  ['Output', 'Actions and records in other apps.', 'Files you keep: PDF, .docx, .xlsx, CSV, plus local records.'],
+];
+const title = m?.title ?? `${brand.name} vs ${c.name}`;
+---
+<Layout title={title} description={m?.meta_description?.replace(/^Honest comparison:/, `${brand.name} vs ${c.name}, compared honestly:`) ?? `Honest comparison of ${brand.name} and ${c.name}.`} ogType="article" crumbs={[{ name: 'Compare', path: '/compare/' }, { name: c.name, path }]}
+  jsonLd={[{ '@context': 'https://schema.org', '@type': 'Article', headline: title, url: new URL(path, Astro.site).href },
+    { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: [brand.name, c.name].map((n, i) => ({ '@type': 'ListItem', position: i + 1, name: n })) }]}>
+  <section class="wrap pb-8 pt-14 sm:pt-20">
+    <span class="eyebrow">Honest comparison</span>
+    <h1 class="display mt-5 !text-[clamp(2.2rem,5.5vw,4rem)]">{brand.name} {m?.h1 ?? `vs ${c.name}`}</h1>
+    <p class="lead mt-5 max-w-2xl">Different tools for different jobs. Here is what each one does, what it costs, where the data lives and when to pick the other one.</p>
+  </section>
+  <section class="wrap pb-10">
+    <div class="card overflow-x-auto">
+      <table class="table min-w-[40rem]">
+        <thead><tr><th scope="col"></th><th scope="col">{c.name}</th><th scope="col">{brand.name}</th></tr></thead>
+        <tbody>{rows.map(([k, a, b]) => <tr><th scope="row" class="whitespace-nowrap text-left">{k}</th><td class="muted">{a}</td><td>{b}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <p class="mt-3 font-mono text-[.72rem] text-faint">Source: {c.source}</p>
+    {table.copy && <UpsellBand copy={table.copy} href={table.cta_url} cta={`Bundle, $${bundlePrice()}`} />}
+  </section>
+  <section class="wrap grid gap-4 py-10 md:grid-cols-2">
+    <div class="card p-6"><h2 class="text-xl font-semibold">Pick {c.name} when</h2><ul class="muted mt-4 grid gap-2.5">{c.pickThem.map((x) => <li class="flex gap-2.5"><span>-</span>{x}</li>)}</ul></div>
+    <div class="card p-6" style="border-color: color-mix(in oklab, var(--accent) 50%, var(--border))"><h2 class="text-xl font-semibold">Pick {brand.name} when</h2><ul class="mt-4 grid gap-2.5">{c.pickUs.map((x) => <li class="flex gap-2.5"><span class="text-ok">+</span>{x}</li>)}</ul></div>
+  </section>
+  <section class="wrap py-6"><UpsellBand copy={foot.copy} href={foot.cta_url.replace(/\?src=.*$/, '')} cta="See pricing" /></section>
+  <StickyCta label={`Try free. All ${st.paid} paid servers: $${bundlePrice()} once.`} href={buyUrl(bundleUrl(), 'compare', `${c.slug}.sticky`)} cta="Get bundle" secondary={{ label: 'Connect free', href: '/connect/' }} />
+</Layout>

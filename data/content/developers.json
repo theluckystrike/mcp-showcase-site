@@ -1,0 +1,389 @@
+{
+  "quickstart": [
+    {
+      "client": "Claude.ai (custom connector)",
+      "method": "hosted",
+      "steps": [
+        "Open https://mcp.zovo.one/mcp/connect and copy the ready URL for your server. It already contains a free token.",
+        "In Claude.ai, open Settings, then Connectors, then Add custom connector.",
+        "Paste the URL. Leave the OAuth fields empty. Save.",
+        "Start a new chat and ask: Convert 100 EUR to USD."
+      ],
+      "snippet": "https://mcp.zovo.one/mcp/currency/t/<token>",
+      "lang": "text",
+      "tested": false,
+      "note": "The URL was tested with curl (initialize, tools/list, tools/call: HTTP 200). The Claude.ai dialog was not tested (no browser in this run)."
+    },
+    {
+      "client": "Claude Desktop (.mcpb bundle)",
+      "method": "local",
+      "steps": [
+        "Open https://mcp.zovo.one/downloads#currency and download currency.mcpb.",
+        "Double-click the file. Claude Desktop opens the install dialog.",
+        "Click Install. No Node.js, no JSON, no terminal.",
+        "Restart Claude Desktop if the tools do not appear."
+      ],
+      "snippet": "https://github.com/theluckystrike/mcp-servers/releases/download/v0.22.0/currency.mcpb",
+      "lang": "text",
+      "tested": false,
+      "note": "The download URL answers (HTTP 206 on a range request, 2026-10-30). The install was not run. Bundles are v0.22.0; npm is 0.22.6. Do not use releases/latest: it holds only hourly-rate.mcpb."
+    },
+    {
+      "client": "Claude Desktop (JSON config)",
+      "method": "local",
+      "steps": [
+        "Install Node.js 18 or newer.",
+        "Open claude_desktop_config.json. macOS: ~/Library/Application Support/Claude/claude_desktop_config.json. Windows: %APPDATA%\\Claude\\claude_desktop_config.json.",
+        "Merge the entry below into the mcpServers object. Do not overwrite other entries.",
+        "Quit and restart Claude Desktop.",
+        "For the hosted server, do not use this file: use Settings, then Connectors, and paste the URL as for Claude.ai."
+      ],
+      "snippet": "{\n  \"mcpServers\": {\n    \"currency\": {\n      \"command\": \"npx\",\n      \"args\": [\n        \"-y\",\n        \"@theluckystrike/mcp-currency\"\n      ]\n    }\n  }\n}",
+      "lang": "json",
+      "tested": false,
+      "note": "Package is published (npm view @theluckystrike/mcp-currency: 0.22.6, bin mcp-currency). The same dist/index.js passed initialize, tools/list and tools/call over stdio. npx was not run."
+    },
+    {
+      "client": "Claude Code (claude mcp add, hosted)",
+      "method": "hosted",
+      "steps": [
+        "Get a token: curl -s -X POST https://mcp.zovo.one/mcp/token",
+        "Run the command below. Replace <token>.",
+        "Run claude mcp list to confirm the server is connected."
+      ],
+      "snippet": "claude mcp add --transport http currency https://mcp.zovo.one/mcp/currency --header \"Authorization: Bearer <token>\"",
+      "lang": "sh",
+      "tested": false,
+      "note": "The Bearer header form was tested with curl (tools/call HTTP 200). Flags checked against claude mcp add --help. The add command was not run, to keep the owner's config unchanged."
+    },
+    {
+      "client": "Claude Code (claude mcp add, local)",
+      "method": "local",
+      "steps": [
+        "Install Node.js 18 or newer.",
+        "Run the command below.",
+        "Run claude mcp list to confirm."
+      ],
+      "snippet": "claude mcp add currency -- npx -y @theluckystrike/mcp-currency",
+      "lang": "sh",
+      "tested": false,
+      "note": "Package published at 0.22.6. Local stdio run of the same build passed. npx was not run."
+    },
+    {
+      "client": "Cursor",
+      "method": "hosted",
+      "steps": [
+        "Open ~/.cursor/mcp.json (all projects) or .cursor/mcp.json (one project).",
+        "Merge the entry below. Replace <token>.",
+        "Open Cursor Settings, then MCP, and check that the server shows its tools."
+      ],
+      "snippet": "{\n  \"mcpServers\": {\n    \"currency\": {\n      \"url\": \"https://mcp.zovo.one/mcp/currency/t/<token>\"\n    }\n  }\n}",
+      "lang": "json",
+      "tested": false,
+      "note": "URL tested with curl. Cursor itself was not tested."
+    },
+    {
+      "client": "VS Code",
+      "method": "hosted",
+      "steps": [
+        "Create .vscode/mcp.json in your workspace. The top key is servers, not mcpServers.",
+        "Paste the entry below. Replace <token>.",
+        "Open the Chat view in Agent mode and start the server from the tools list."
+      ],
+      "snippet": "{\n  \"servers\": {\n    \"currency\": {\n      \"type\": \"http\",\n      \"url\": \"https://mcp.zovo.one/mcp/currency/t/<token>\"\n    }\n  }\n}",
+      "lang": "json",
+      "tested": false,
+      "note": "URL tested with curl. VS Code itself was not tested. The live setup page omits \"type\": \"http\"; this snippet sets it."
+    },
+    {
+      "client": "Windsurf",
+      "method": "hosted",
+      "steps": [
+        "Open ~/.codeium/windsurf/mcp_config.json.",
+        "Merge the entry below. Replace <token>.",
+        "Refresh the MCP servers list in Cascade."
+      ],
+      "snippet": "{\n  \"mcpServers\": {\n    \"currency\": {\n      \"serverUrl\": \"https://mcp.zovo.one/mcp/currency/t/<token>\"\n    }\n  }\n}",
+      "lang": "json",
+      "tested": false,
+      "note": "URL tested with curl. Windsurf itself was not tested. Windsurf documents serverUrl for remote servers; the live setup page uses url. Unknown which one this Windsurf version accepts."
+    },
+    {
+      "client": "ChatGPT",
+      "method": "hosted",
+      "steps": [
+        "Status: unknown. Not tested.",
+        "ChatGPT accepts remote MCP servers only in developer mode on some plans.",
+        "The server publishes OAuth discovery documents (/.well-known/oauth-protected-resource returns 200), so the URL form may work. This is not verified."
+      ],
+      "snippet": "https://mcp.zovo.one/mcp/currency/t/<token>",
+      "lang": "text",
+      "tested": false,
+      "note": "unknown"
+    }
+  ],
+  "hosted": {
+    "token_request": {
+      "command": "curl -s -X POST https://mcp.zovo.one/mcp/token",
+      "also": "GET works too. Or open https://mcp.zovo.one/mcp/connect in a browser for ready URLs.",
+      "response_shape": {
+        "token": "anon_<32 hex>",
+        "tier": "free",
+        "expires_in_days": 30,
+        "note": "Refreshed for another 30 days on every write. Send it as: Authorization: Bearer <token>",
+        "endpoints": [
+          "https://mcp.zovo.one/mcp/<server>",
+          "..."
+        ],
+        "pro": "https://mcp.zovo.one/buy/bundle",
+        "guide": "https://mcp.zovo.one/guides/mcp-server-free-vs-pro"
+      }
+    },
+    "url_forms": [
+      {
+        "form": "path",
+        "url": "https://mcp.zovo.one/mcp/<server>/t/<token>",
+        "use": "Clients that accept only a URL (Claude.ai, Cursor, VS Code, Windsurf).",
+        "tested": true
+      },
+      {
+        "form": "header",
+        "url": "https://mcp.zovo.one/mcp/<server>",
+        "header": "Authorization: Bearer <token>",
+        "use": "Clients that can set headers (Claude Code, SDKs, curl). The header wins over a token in the URL.",
+        "tested": true
+      },
+      {
+        "form": "query",
+        "url": "https://mcp.zovo.one/mcp/<server>?token=<token>",
+        "use": "Clients that take a query string but no header.",
+        "tested": true
+      },
+      {
+        "form": "bare",
+        "url": "https://mcp.zovo.one/mcp/<server>",
+        "use": "Answers initialize and tools/list. Refuses every tools/call with 401. Not a working install.",
+        "tested": true
+      }
+    ],
+    "example_session": {
+      "transport": "MCP streamable HTTP, protocol 2025-06-18, stateless (no Mcp-Session-Id header returned). One JSON-RPC object per POST; batching is refused.",
+      "requests": [
+        {
+          "step": "initialize",
+          "curl": "curl -s -X POST https://mcp.zovo.one/mcp/currency/t/<token> -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{},\"clientInfo\":{\"name\":\"probe\",\"version\":\"0.0.1\"}}}'",
+          "response": {
+            "result": {
+              "protocolVersion": "2025-06-18",
+              "capabilities": {
+                "tools": {
+                  "listChanged": true
+                },
+                "resources": {
+                  "listChanged": true
+                },
+                "prompts": {
+                  "listChanged": true
+                }
+              },
+              "serverInfo": {
+                "name": "mcp-currency",
+                "version": "0.22.6"
+              }
+            },
+            "jsonrpc": "2.0",
+            "id": 1
+          }
+        },
+        {
+          "step": "tools/list",
+          "curl": "curl -s -X POST https://mcp.zovo.one/mcp/currency/t/<token> -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d '{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\"}'",
+          "response_summary": "result.tools has 10 tools: rates_latest, convert, convert_many, fx_rates_for, rate_history, rate_on, currencies_list, cache_status, license_status, license_activate. Each has name, title, description, inputSchema."
+        },
+        {
+          "step": "tools/call",
+          "curl": "curl -s -X POST https://mcp.zovo.one/mcp/currency/t/<token> -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' -d '{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"convert\",\"arguments\":{\"amount\":100,\"from\":\"EUR\",\"to\":\"USD\"}}}'",
+          "response_summary": "result.content[0].text is a JSON string: amount, from, to, rate 1.113, rate_date 2026-10-29, result \"USD 111.30\", source European Central Bank. result.content[1].text is a free-tier line: 600 calls/hour, 30-day retention, Pro link."
+        }
+      ],
+      "measured": "2026-10-30, all HTTP 200"
+    },
+    "limits": {
+      "calls_free": "600 per hour per token (counter resets at the top of the UTC hour)",
+      "calls_pro": "6000 per hour",
+      "token_mints": "10 per hour per IP. Reuse your token.",
+      "token_life": "30 days, refreshed on every write",
+      "data_retention": "30 days on free; idle data swept after 35 days",
+      "request_body": "256 KB per request (base64 files: about 190 KB)",
+      "stored_per_token_per_server": "512 KB default; 2 MB for spreadsheet, docx, resume, pdf, calendar, image, bank-statement, zip, cash-book",
+      "server_free_limits": "Each server keeps its own free-tier limits (example: invoice_create 3 per month).",
+      "source": "~/mcp-servers/remote/src/index.ts lines 83-105; GET https://mcp.zovo.one/mcp (limits)"
+    },
+    "errors": [
+      {
+        "code": "HTTP 401 unauthorized",
+        "meaning": "tools/call on the bare URL with no token.",
+        "fix": "Use /mcp/<server>/t/<token> or send Authorization: Bearer <token>."
+      },
+      {
+        "code": "HTTP 401 unknown_token",
+        "meaning": "Token has the right form but the server does not know it (expired, mistyped, or never minted).",
+        "fix": "Mint a new token: curl -s -X POST https://mcp.zovo.one/mcp/token"
+      },
+      {
+        "code": "HTTP 401 invalid_token",
+        "meaning": "Token is neither anon_<32 hex> nor an MCPL1 Pro key.",
+        "fix": "Copy the whole token. Check for spaces or a missing prefix."
+      },
+      {
+        "code": "HTTP 429 rate_limited (calls)",
+        "meaning": "The token made 600 calls this hour. Body has resets_at and retry_after_seconds.",
+        "fix": "Wait for resets_at, or buy Pro (6000 per hour). Clients that re-handshake every turn spend calls before any tool runs."
+      },
+      {
+        "code": "HTTP 429 rate_limited (mint)",
+        "meaning": "Your IP minted 10 tokens this hour.",
+        "fix": "Reuse the token you have. One token is one data space."
+      },
+      {
+        "code": "HTTP 404 not_found",
+        "meaning": "Unknown server id in the URL.",
+        "fix": "Check the id against GET https://mcp.zovo.one/mcp (endpoints list)."
+      },
+      {
+        "code": "HTTP 406 Not Acceptable",
+        "meaning": "A GET without Accept: text/event-stream (for example, opening the URL in a browser).",
+        "fix": "Send POST with a JSON-RPC body. A browser cannot test the URL."
+      },
+      {
+        "code": "HTTP 405 method_not_allowed",
+        "meaning": "/mcp/token called with a method other than GET or POST.",
+        "fix": "Use POST or GET."
+      },
+      {
+        "code": "isError: MCP error -32602",
+        "meaning": "HTTP 200, but the tool name or arguments are wrong. Example: Tool nope not found.",
+        "fix": "Call tools/list and use an exact tool name and the inputSchema."
+      }
+    ]
+  },
+  "architecture": {
+    "summary": "Each server is a small TypeScript program that speaks MCP. It runs on your machine over stdio, or on a hosted endpoint over streamable HTTP. The tool contract is the same on both paths.",
+    "points": [
+      "Local (stdio): your MCP client starts node dist/index.js. Nothing leaves your machine except calls the tool itself needs (example: currency fetches ECB rates).",
+      "Local data: JSON files under ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/. Writes are atomic (temp file + rename). Delete the folder to reset a server.",
+      "Shared business profile: business_set writes ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/profile/business.json. Invoice, quotes, credit notes and the other document servers read it, so you set your name, address, VAT id and defaults once.",
+      "Pro key: MCP_LICENSE_KEY env var, then ${XDG_CONFIG_HOME:-~/.config}/mcp-servers/license.json, then free tier. Keys (MCPL1.<payload>.<signature>) are checked offline with Ed25519. No phone-home.",
+      "Hosted (streamable HTTP): 46 of 58 servers run on a Cloudflare Worker at https://mcp.zovo.one/mcp/<server>. Data is stored per token, kept 30 days, and file tools take inline uploads and return download URLs that expire.",
+      "Local-only: office-suite, three-way-match, duplicate-invoice-check and supplier-statement-check have no hosted URL. Use the .mcpb bundle, npm or a source build.",
+      "Every server registers license_status and license_activate. Call license_status first to prove the transport works."
+    ]
+  },
+  "conventions": [
+    {
+      "title": "Tool results",
+      "text": "Success: {content:[{type:\"text\",text}]}. Failure: the same shape with isError: true and text that starts with Error:. Servers do not throw across the transport."
+    },
+    {
+      "title": "Money in minor units",
+      "text": "Many servers store and return amounts as integer minor units (cents). Some inputs, such as invoice unit_price, take major units. Each tool description says which."
+    },
+    {
+      "title": "Free tier inside the tool",
+      "text": "A free-tier limit is a normal tool result that names the limit and the upgrade URL. It is not a protocol error."
+    },
+    {
+      "title": "Logging",
+      "text": "Servers log to stderr only. stdout carries only protocol messages. One readiness line goes to stderr at start."
+    },
+    {
+      "title": "Contracts are generated",
+      "text": "Each server has SPEC.md, generated from the built server by scripts/gen-spec.mjs: every tool, every argument, type and required flag."
+    },
+    {
+      "title": "Tests",
+      "text": "Each server has test/smoke.test.mjs. It spawns dist/index.js and runs initialize, tools/list and one tools/call over stdio."
+    },
+    {
+      "title": "Stack",
+      "text": "TypeScript, ESM, Node 18 or newer, @modelcontextprotocol/sdk and zod. No native dependencies, so npx works on every platform. MIT license."
+    }
+  ],
+  "faq": [
+    {
+      "q": "Is the npm package published?",
+      "a": "Yes. npm view @theluckystrike/mcp-currency returns 0.22.6 (checked 2026-10-30). Some older pages and llms-install.md files still say it is not published. They are out of date."
+    },
+    {
+      "q": "Why does my hosted URL list tools but every call fails?",
+      "a": "You used the bare URL. It answers initialize and tools/list, and returns 401 on tools/call. Add the token: /mcp/<server>/t/<token>, or send Authorization: Bearer <token>."
+    },
+    {
+      "q": "Is the URL with the token a secret?",
+      "a": "Yes. The token in the URL is the credential and your data space. Do not share it or commit it."
+    },
+    {
+      "q": "Can I test the hosted URL in a browser?",
+      "a": "No. A browser GET returns 406. Use curl with POST and a JSON-RPC body, as in the example session."
+    },
+    {
+      "q": "Does the hosted endpoint support OAuth?",
+      "a": "The server publishes OAuth discovery documents and an authorize endpoint. The /mcp index says it has no OAuth flow. Use the token forms; they are tested."
+    },
+    {
+      "q": "Where is my data?",
+      "a": "Local: ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/. Hosted: stored per token for 30 days, refreshed on every write."
+    },
+    {
+      "q": "How do I move from free to Pro?",
+      "a": "Buy at https://mcp.zovo.one/buy/<server> ($19) or /buy/bundle ($39). Then set MCP_LICENSE_KEY or call license_activate once. On hosted, the Pro key can be sent as the token."
+    }
+  ],
+  "links": [
+    {
+      "label": "Connect page (free token and ready URLs)",
+      "url": "https://mcp.zovo.one/mcp/connect"
+    },
+    {
+      "label": "Hosted endpoint index (JSON)",
+      "url": "https://mcp.zovo.one/mcp"
+    },
+    {
+      "label": "Token mint",
+      "url": "https://mcp.zovo.one/mcp/token"
+    },
+    {
+      "label": "Downloads (.mcpb bundles)",
+      "url": "https://mcp.zovo.one/downloads"
+    },
+    {
+      "label": "Client setup pages",
+      "url": "https://mcp.zovo.one/setup"
+    },
+    {
+      "label": "Source code (MIT)",
+      "url": "https://github.com/theluckystrike/mcp-servers"
+    },
+    {
+      "label": "npm packages",
+      "url": "https://www.npmjs.com/~theluckystrike"
+    },
+    {
+      "label": "Free vs Pro guide",
+      "url": "https://mcp.zovo.one/guides/mcp-server-free-vs-pro"
+    },
+    {
+      "label": "MCP specification",
+      "url": "https://modelcontextprotocol.io/specification/2025-06-18"
+    }
+  ],
+  "meta": {
+    "verified": "2026-10-30",
+    "example_server": "currency",
+    "source_files": [
+      "~/mcp-servers/CONVENTIONS.md",
+      "~/mcp-servers/remote/src/index.ts",
+      "~/mcp-servers/packages/mcp-license/src/profile.ts"
+    ]
+  }
+}

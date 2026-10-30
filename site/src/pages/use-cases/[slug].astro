@@ -1,0 +1,13 @@
+---
+// use-cases job pages from the t-angle sitemap (page_type "use-case"). Template: components/JobPage.astro.
+import JobPage from '../../components/JobPage.astro';
+import { pagesOfType, slugOf, type PageMeta } from '../../data/pages';
+
+export function getStaticPaths() {
+  return pagesOfType('use-case')
+    .filter((p) => p.path.startsWith('/use-cases/'))
+    .map((p) => ({ params: { slug: slugOf(p.path) }, props: { page: p } }));
+}
+const { page } = Astro.props as { page: PageMeta };
+---
+<JobPage page={page} kind="usecase" />

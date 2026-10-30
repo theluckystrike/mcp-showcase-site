@@ -1,0 +1,97 @@
+---
+// Client setup guides (t-angle SECONDARY 2): /connect/<client>/ and /connect/paste-a-url/.
+// Steps and snippets: data/content/developers.json (t-dev). Untested steps are labeled as such.
+import Layout from '../../layouts/Layout.astro';
+import CopyCode from '../../components/CopyCode.astro';
+import JobCard from '../../components/JobCard.astro';
+import StickyCta from '../../components/StickyCta.astro';
+import { brand } from '../../config/brand';
+import { bundleUrl, bundlePrice, buyUrl, stats } from '../../data/servers';
+import { CLIENTS, quickstartsFor, getDevelopers } from '../../data/content';
+import { pagesOfType, pageMeta, slugOf, type PageMeta } from '../../data/pages';
+
+export function getStaticPaths() {
+  return pagesOfType('client-guide').map((p) => ({ params: { client: slugOf(p.path) }, props: { page: p } }));
+}
+const { page: p } = Astro.props as { page: PageMeta };
+const slug = slugOf(p.path);
+const client = CLIENTS.find((c) => c.slug === slug);
+const qs = quickstartsFor(slug);
+const dev = getDevelopers();
+const st = stats();
+const name = client?.name ?? 'your chat app';
+// The 6 highest-volume use-case pages, with the client in the anchor (seo.json internal_links).
+const jobs = pagesOfType('use-case').slice().sort((a, b) => (b.us_volume ?? 0) - (a.us_volume ?? 0)).slice(0, 6);
+const others = pagesOfType('client-guide').filter((x) => x.path !== p.path);
+const howto = qs[0]
+  ? { '@context': 'https://schema.org', '@type': 'HowTo', name: p.h1, step: qs[0].steps.map((t, i) => ({ '@type': 'HowToStep', position: i + 1, text: t })) }
+  : null;
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'TechArticle', headline: p.h1, description: p.meta_description, url: new URL(p.path, Astro.site).href },
+  ...(howto ? [howto] : []),
+];
+---
+<Layout title={p.title} description={p.meta_description} jsonLd={jsonLd} ogType="article" crumbs={[{ name: 'Connect', path: '/connect/' }, { name: p.h1, path: p.path }]}>
+  <section class="relative isolate overflow-hidden">
+    <div class="glow-bg opacity-60"></div>
+    <div class="wrap pb-10 pt-14 sm:pt-20">
+      <nav class="muted flex gap-2 text-[.88rem]" aria-label="Breadcrumb"><a href="/connect/" class="hover:text-fg">Connect</a><span class="text-faint">/</span><span class="text-fg">{name}</span></nav>
+      <h1 class="display mt-6 max-w-4xl !text-[clamp(2.2rem,5.5vw,4rem)]">{p.h1}</h1>
+      <p class="lead mt-5 max-w-2xl">{p.meta_description}</p>
+    </div>
+  </section>
+
+  {slug === 'paste-a-url' && dev.hosted && (
+    <section class="wrap grid gap-8 py-8 lg:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-semibold sm:text-3xl">1. Get a free token</h2>
+        <p class="muted mt-3">No account and no key. The token lasts 30 days and allows 600 calls an hour. {dev.hosted.token_note}</p>
+        <div class="mt-5"><CopyCode code={dev.hosted.token_request} /></div>
+        <p class="mt-4"><a class="link" href={`${brand.backend.origin}/mcp/connect`} rel="nofollow">Or open the connect page for ready URLs</a></p>
+      </div>
+      <div>
+        <h2 class="text-2xl font-semibold sm:text-3xl">2. Paste one URL</h2>
+        <p class="muted mt-3">Replace &lt;server&gt; with a server id (for example invoice or pdf) and &lt;token&gt; with your token. {st.hosted} servers answer at a URL.</p>
+        <div class="mt-5 grid gap-4">
+          {dev.hosted.url_forms.filter((u) => u.form !== 'bare').map((u) => (
+            <div>
+              <CopyCode code={u.header ? `${u.url}\n${u.header}` : u.url} label={u.form ? `${u.form} form` : undefined} />
+              {u.use && <p class="muted mt-1.5 text-[.88rem]">{u.use}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {qs.map((q) => (
+    <section class="wrap grid gap-8 border-t border-line py-10 lg:grid-cols-[1fr_1.2fr]">
+      <div>
+        <h2 class="text-2xl font-semibold">{q.client}</h2>
+        <span class="chip mt-3">{q.method === 'hosted' ? 'Hosted URL, no install' : 'Runs on your computer'}</span>
+        <ol class="mt-5 grid list-decimal gap-2.5 pl-5 text-[1rem]">{q.steps.map((t) => <li>{t}</li>)}</ol>
+        {q.note && <p class="mt-4 text-[.82rem] text-faint">Test status: {q.note}</p>}
+      </div>
+      <div class="self-start">
+        {q.snippet && <CopyCode code={q.snippet} label={`Example with the currency server${q.snippet.includes('<token>') ? ' (replace <token>)' : ''}`} />}
+        <p class="muted mt-3 text-[.88rem]">Swap <code class="font-mono">currency</code> for any server id from <a class="link" href="/servers/">the server list</a>.</p>
+      </div>
+    </section>
+  ))}
+
+  {slug !== 'paste-a-url' && qs.length === 0 && (
+    <section class="wrap py-8"><p class="muted">No tested steps for {name} yet. Use <a class="link" href="/connect/paste-a-url/">the paste-a-URL guide</a>: most clients accept a custom connector URL.</p></section>
+  )}
+
+  <section class="wrap py-12">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Then ask for a real file</h2>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{jobs.map((j) => <JobCard page={j} anchor={slug === 'paste-a-url' ? j.h1 : `${j.h1.replace(/ in (chat|Claude)$/i, '')} in ${name}`} />)}</div>
+  </section>
+
+  <section class="wrap py-8">
+    <h2 class="text-sm font-semibold uppercase tracking-[.08em] text-faint">Other clients</h2>
+    <div class="mt-4 flex flex-wrap gap-2">{others.map((o) => <a class="chip hover:text-fg" href={o.path}>{o.h1}</a>)}</div>
+  </section>
+
+  <StickyCta label={`Free to connect. Pro on all ${st.paid} paid servers: $${bundlePrice()} once.`} sub="One key works on every hosted URL and locally." href={buyUrl(bundleUrl(), 'connect', `${slug}.sticky`)} cta="Get bundle" />
+</Layout>

@@ -1,0 +1,112 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Faq from '../../components/Faq.astro';
+import { brand } from '../../config/brand';
+import { getDevelopers } from '../../data/content';
+import { stats, bundleUrl, buyUrl } from '../../data/servers';
+import { upsell, CLIENTS } from '../../data/content';
+import CopyCode from '../../components/CopyCode.astro';
+import { seo } from '../../data/pages';
+import UpsellBand from '../../components/UpsellBand.astro';
+
+const d = getDevelopers();
+const st = stats();
+const devMeta = seo('/developers/', { title: 'Developers: tested MCP servers with clear tool contracts', description: `${st.servers} open-source MCP servers. stdio and hosted HTTP.` });
+const foot = upsell('developers', 'footer', { copy: 'Open source. Pro keys verify offline. Buying Pro funds the maintenance.', cta_url: buyUrl(bundleUrl(), 'developers', 'footer') });
+const quickstart = d.quickstart.length ? d.quickstart : [
+  { client: 'Claude Code', steps: ['Get a free token.', 'Add the hosted server.'], lang: 'bash', tested: false,
+    snippet: `curl -s -X POST ${brand.backend.tokenEndpoint}\nclaude mcp add --transport http invoice ${brand.backend.origin}/mcp/invoice/t/<token>` },
+  { client: 'Claude Desktop (JSON config)', steps: ['Open claude_desktop_config.json.', 'Add the server.', 'Restart Claude Desktop.'], lang: 'json', tested: false,
+    snippet: JSON.stringify({ mcpServers: { invoice: { command: 'npx', args: ['-y', '@theluckystrike/mcp-invoice'] } } }, null, 2) },
+];
+---
+<Layout title={devMeta.title} description={devMeta.description} crumbs={[{ name: 'Developers', path: '/developers/' }]}>
+  <section class="relative isolate overflow-hidden">
+    <div class="glow-bg opacity-60"></div>
+    <div class="grid-lines"></div>
+    <div class="wrap pb-10 pt-14 sm:pt-20">
+      <span class="eyebrow">Developers</span>
+      <h1 class="display mt-5 max-w-4xl">Tested servers. <span class="text-gradient">Clear contracts.</span></h1>
+      <p class="lead mt-5 max-w-2xl">{d.architecture?.summary || `${st.servers} open-source MCP servers. Run them over stdio on your machine, or call ${st.hosted} of them over hosted HTTP.`}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#quickstart" class="btn btn-primary">Quickstart</a>
+        <a href="/developers/hosted-endpoints/" class="btn">Hosted endpoints</a>
+        <a href="/developers/tool-contracts/" class="btn">Tool contracts</a>
+        <a href={brand.links.github} class="btn" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="quickstart" class="wrap py-12">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Quickstart</h2>
+    <div class="mt-6 grid gap-4 lg:grid-cols-2">
+      {quickstart.map((q) => (
+        <div class="card flex flex-col p-6">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="text-lg font-semibold">{q.client}</h3>
+            {q.tested && <span class="chip"><span class="dot" style="--cat: var(--ok)"></span>Tested</span>}
+          </div>
+          {q.steps.length > 0 && <ol class="muted mt-3 list-decimal space-y-1 pl-5 text-[.95rem]">{q.steps.map((s) => <li>{s}</li>)}</ol>}
+          {q.snippet && <div class="mt-4"><CopyCode code={q.snippet} /></div>}
+          {CLIENTS.find((c) => q.client.startsWith(c.match[0])) && <a class="link mt-4 text-[.9rem]" href={`/connect/${CLIENTS.find((c) => q.client.startsWith(c.match[0]))!.slug}/`}>Full {q.client.split(' (')[0]} guide</a>}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {d.hosted && (
+    <section class="wrap py-12">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Hosted endpoint</h2>
+      <div class="mt-6 grid gap-4 lg:grid-cols-2">
+        <div class="card p-6">
+          {d.hosted.token_request && <><h3 class="font-semibold">Free token</h3><div class="mt-3"><CopyCode code={d.hosted.token_request} /></div>{d.hosted.token_note && <p class="muted mt-2 text-[.9rem]">{d.hosted.token_note}</p>}</>}
+          {d.hosted.url_forms.length > 0 && (
+            <><h3 class="mt-6 font-semibold">URL forms</h3>
+            <ul class="mt-3 grid gap-3">{d.hosted.url_forms.map((u) => (
+              <li><code class="block overflow-x-auto font-mono text-[.82rem]">{u.url}</code>{u.header && <code class="block font-mono text-[.78rem] text-faint">{u.header}</code>}{u.use && <p class="muted text-[.88rem]">{u.form && <span class="font-mono text-faint">{u.form}: </span>}{u.use}</p>}</li>
+            ))}</ul></>
+          )}
+          {d.hosted.limits.length > 0 && (
+            <><h3 class="mt-6 font-semibold">Limits</h3>
+            <dl class="mt-3 grid gap-2 text-[.9rem]">{d.hosted.limits.map((l) => <div class="grid gap-1 sm:grid-cols-[11rem_1fr]"><dt class="text-faint capitalize">{l.label}</dt><dd class="muted">{l.value}</dd></div>)}</dl></>
+          )}
+        </div>
+        {d.hosted.errors.length > 0 && (
+          <div class="card overflow-x-auto p-2">
+            <table class="table"><thead><tr><th>Code</th><th>Meaning</th><th>Fix</th></tr></thead>
+              <tbody>{d.hosted.errors.map((e) => <tr><td class="font-mono">{e.code}</td><td class="muted">{e.meaning}</td><td class="muted">{e.fix}</td></tr>)}</tbody></table>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {d.architecture && d.architecture.points.length > 0 && (
+    <section class="wrap py-12">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Architecture</h2>
+      <ul class="mt-6 grid gap-3 md:grid-cols-2">{d.architecture.points.map((p) => <li class="card p-5 text-[.95rem]">{p}</li>)}</ul>
+    </section>
+  )}
+
+  {d.conventions.length > 0 && (
+    <section class="wrap py-12">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Conventions</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{d.conventions.map((c) => <div class="card p-5"><h3 class="font-semibold">{c.title}</h3><p class="muted mt-2 text-[.95rem]">{c.text}</p></div>)}</div>
+    </section>
+  )}
+
+  {d.faq.length > 0 && (
+    <section class="wrap py-12">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Developer FAQ</h2>
+      <div class="mt-6 max-w-3xl"><Faq items={d.faq} /></div>
+    </section>
+  )}
+
+  <section class="wrap py-12">
+    <UpsellBand copy={foot.copy} href={foot.cta_url} cta="Get the bundle" />
+    <h2 class="mt-12 text-2xl font-semibold sm:text-3xl">Links</h2>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {(d.links.length ? d.links : [{ label: 'GitHub', url: brand.links.github }, { label: 'MCP Registry', url: brand.links.registry }]).map((l) => <li><a href={l.url} class="chip hover:text-fg" rel="noopener">{l.label}</a></li>)}
+    </ul>
+  </section>
+</Layout>

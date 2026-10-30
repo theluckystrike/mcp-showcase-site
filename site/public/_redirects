@@ -1,0 +1,12 @@
+# Cloudflare Pages redirects. Client guides live at /connect/<client>/ (t-angle sitemap); /guides/ is an alias.
+/guides/                 /connect/                 301
+/guides/claude-desktop/  /connect/claude-desktop/  301
+/guides/claude-ai/       /connect/claude-ai/       301
+/guides/claude-code/     /connect/claude-code/     301
+/guides/cursor/          /connect/cursor/          301
+/guides/vs-code/         /connect/vs-code/         301
+/guides/vscode/          /connect/vs-code/         301
+/guides/chatgpt/         /connect/chatgpt/         301
+/guides/windsurf/        /connect/windsurf/        301
+/guides/paste-a-url/     /connect/paste-a-url/     301
+/sitemap-index.xml       /sitemap.xml              301

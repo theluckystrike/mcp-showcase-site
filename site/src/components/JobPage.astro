@@ -1,0 +1,221 @@
+---
+// The money page template (t-angle ANGLE.md "Page template for a use-case page"):
+// H1 = the job, 40-word answer, Example (prompt -> tool calls -> result), connect in 1 minute, free vs Pro with source,
+// buy + bundle buttons, related jobs, audience page, FAQ. Used by /use-cases/<job>/, /can-claude/<x>/, /can-chatgpt/<x>/.
+import Layout from '../layouts/Layout.astro';
+import CaseTurn from './CaseTurn.astro';
+import CopyCode from './CopyCode.astro';
+import Faq from './Faq.astro';
+import JobCard from './JobCard.astro';
+import StickyCta from './StickyCta.astro';
+import UpsellBand from './UpsellBand.astro';
+import { brand } from '../config/brand';
+import { getCategory } from '../data/categories';
+import { getServer, bundleUrl, bundlePrice, buyUrl, stats, type Server, type ServerCase } from '../data/servers';
+import { upsell, getJob } from '../data/content';
+import { allPages, audienceFor, slugOf, type PageMeta } from '../data/pages';
+
+interface Props { page: PageMeta; kind: 'usecase' | 'answer' }
+const { page: p, kind } = Astro.props;
+const servers = p.servers.map((id) => getServer(id)).filter((s): s is Server => Boolean(s));
+const main = servers[0];
+const cat = getCategory(main?.category ?? 'invoicing');
+const slug = slugOf(p.path);
+const st = stats();
+const single = Boolean(main?.paid && !main?.bundleOnly);
+const buy = (slot: string) => (main ? buyUrl(main.buyBase, kind, `${slug}.${slot}`) : buyUrl(bundleUrl(), kind, `${slug}.${slot}`));
+const bundle = (slot: string) => buyUrl(bundleUrl(), kind, `${slug}.${slot}`);
+const after = upsell('use-cases', 'after_case', { copy: `Every example here works on the free tier. One $${bundlePrice()} key removes the limits.`, cta_url: bundle('after_case') });
+// Keep the src tag specific to this page (pricing.json gives the hub tag).
+const afterUrl = bundle('after_case');
+
+// Unique copy for this page (data/content/jobs.json, t-polish). null = template fallback below.
+const job = getJob(p.path);
+// The page's own example goes first; it is credited to the server that owns its first tool.
+const own: { server: Server; case: ServerCase }[] = [];
+if (job?.example && main) {
+  const t0 = job.example.steps[0]?.tool;
+  const owner = servers.find((s) => s.tools.some((t) => t.name === t0)) ?? main;
+  own.push({ server: owner, case: { title: p.h1.replace(/\?$/, ''), persona: job.example.persona, prompt: job.example.prompt, steps: job.example.steps, result: job.example.result } });
+}
+// Examples: the page's own example, all cases of the main server, then the first case of each other server. Max 3.
+const cases = [
+  ...own,
+  ...(main?.cases ?? []).map((c) => ({ server: main!, case: c })),
+  ...servers.slice(1).flatMap((s) => s.cases.slice(0, 1).map((c) => ({ server: s, case: c }))),
+].slice(0, 3);
+const ex = cases[0];
+
+// Answer in 40 words or fewer: the job, the chat apps, the server and the result (seo.json h1_rules).
+const answer = job?.answer ? job.answer : main
+  ? `Yes. Connect the ${main.name} server to Claude or Cursor${main.hosted ? ' with one URL' : ''}. Then ask in plain words. ${main.tagline.replace(/\.$/, '')}.${main.paid ? ` Free tier first; Pro is $${single ? main.priceUsd : bundlePrice()} once.` : ' It is free.'}`
+  : p.meta_description;
+
+// Related: same audience first, then same category, max 3.
+const aud = audienceFor(p.servers);
+const related = allPages()
+  .filter((x) => (x.page_type === 'use-case') && x.path !== p.path)
+  .map((x) => ({ x, score: (aud && aud.servers.some((s) => x.servers.includes(s)) ? 2 : 0) + (x.servers.some((s) => getServer(s)?.category === main?.category) ? 1 : 0) + x.priority }))
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map((r) => r.x);
+
+const tokenCmd = `curl -s -X POST ${brand.backend.tokenEndpoint}`;
+const hostedUrl = main ? (main.satellite ? main.hostedUrl : `${brand.backend.origin}/mcp/${main.id}/t/<token>`) : '';
+const npx = main?.npm ? `npx -y ${main.npm}` : '';
+const faq = [
+  { q: p.h1.endsWith('?') ? p.h1 : `Can I do this in Claude?`, a: answer },
+  ...(main?.faq ?? []).slice(0, 3),
+];
+const url = new URL(p.path, Astro.site).href;
+const jsonLd: Record<string, unknown>[] = [
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+if (main && ex) {
+  jsonLd.push({
+    '@context': 'https://schema.org', '@type': 'HowTo', name: p.h1, url,
+    tool: servers.map((s) => ({ '@type': 'HowToTool', name: s.name })),
+    step: [
+      { '@type': 'HowToStep', name: 'Connect', text: main.hosted ? `Paste the ${main.name} URL as a custom connector in your chat app.` : `Install ${main.name} with npx or the .mcpb file.` },
+      { '@type': 'HowToStep', name: 'Ask', text: ex.case.prompt },
+      ...ex.case.steps.map((s) => ({ '@type': 'HowToStep', name: s.tool, text: s.does || s.tool })),
+      ...(ex.case.result ? [{ '@type': 'HowToStep', name: 'Result', text: ex.case.result }] : []),
+    ],
+  });
+  jsonLd.push({ '@context': 'https://schema.org', '@type': 'SoftwareApplication', '@id': new URL(`/servers/${main.id}/#app`, Astro.site).href, name: main.name, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude, ChatGPT, Cursor, VS Code, Windsurf', offers: [{ '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free tier' }, ...(single ? [{ '@type': 'Offer', price: String(main.priceUsd), priceCurrency: 'USD', name: 'Pro, one-time' }] : [])] });
+}
+// Meta description: with jobs.json, whole sentences of the page's own answer up to about 160 characters
+// (the 5 answer pages share one generic sitemap meta). Otherwise the old rule.
+let jobMeta = '';
+for (const x of (job?.answer ?? '').split(/(?<=[.!?])\s+/)) {
+  if (jobMeta && `${jobMeta} ${x}`.length > 160) break;
+  jobMeta = jobMeta ? `${jobMeta} ${x}` : x;
+}
+const description = (kind === 'answer' && jobMeta) || (kind === 'answer' && main ? answer.replace(' Then ask in plain words.', '') : p.meta_description);
+const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { name: 'Answers', path: '/use-cases/#answers' };
+---
+<Layout title={p.title} description={description} jsonLd={jsonLd} ogType="article" crumbs={[hub, { name: p.h1, path: p.path }]}>
+  <div class="cat" style={`--hue:${cat.hue}`}>
+    <section class="relative isolate overflow-hidden">
+      <div class="pointer-events-none absolute inset-x-0 -top-40 -z-10 h-[32rem] opacity-50 blur-3xl" style="background: radial-gradient(40rem 20rem at 30% 40%, color-mix(in oklab, var(--cat) 45%, transparent), transparent 70%)"></div>
+      <div class="grid-lines"></div>
+      <div class="wrap pb-10 pt-10 sm:pt-16">
+        <nav class="muted flex flex-wrap items-center gap-2 text-[.88rem]" aria-label="Breadcrumb">
+          <a href={hub.path} class="hover:text-fg">{hub.name}</a><span class="text-faint">/</span>
+          {aud && <><a href={aud.path} class="hover:text-fg">{aud.h1}</a><span class="text-faint">/</span></>}
+          <span class="text-fg">{p.h1}</span>
+        </nav>
+        <div class="mt-8 grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+          <div>
+            <span class="chip cat-text"><span class="dot"></span>{cat.name}</span>
+            <h1 class="display mt-6 !text-[clamp(2.2rem,5.5vw,4rem)]">{p.h1}</h1>
+            {job?.intro && <p class="lead mt-5 max-w-2xl">{job.intro}</p>}
+            <p class:list={['lead max-w-2xl !text-fg', job?.intro ? 'mt-4' : 'mt-5']}>{answer}</p>
+            <div class="mt-7 flex flex-wrap gap-3">
+              <a href="#connect" class="btn btn-primary">Connect free in 1 minute</a>
+              {main && <a href={`/servers/${main.id}/`} class="btn">{main.name}: all tools</a>}
+            </div>
+          </div>
+          {main && (
+            <div class="card p-5">
+              <p class="text-sm font-semibold">{single ? `Free to start. ${main.name} Pro: $${main.priceUsd} once.` : main.bundleOnly ? `Sold as the $${bundlePrice()} bundle.` : `${main.name} is free.`}</p>
+              <div class="mt-4 grid gap-2.5">
+                {single && <a href={buy('main')} rel="nofollow" class="btn btn-primary w-full">Buy {main.name} Pro, ${main.priceUsd}</a>}
+                <a href={bundle('bundle')} rel="nofollow" class:list={['btn w-full', !single && 'btn-primary']}>All {st.paid} paid servers, ${bundlePrice()} once</a>
+              </div>
+              <p class="muted mt-3 text-[.82rem]">One payment. No subscription. Refund within 14 days.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    {job?.without_tool && job?.with_tool && (
+      <section class="wrap py-10">
+        <h2 class="text-2xl font-semibold sm:text-3xl">Without a tool, and with the tool</h2>
+        <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <div class="card p-5">
+            <h3 class="text-[.72rem] font-semibold uppercase tracking-[.08em] text-faint">Without a tool</h3>
+            <p class="muted mt-2">{job.without_tool}</p>
+          </div>
+          <div class="card p-5">
+            <h3 class="text-[.72rem] font-semibold uppercase tracking-[.08em] cat-text">With {servers.map((s) => s.name).join(' and ')}</h3>
+            <p class="mt-2">{job.with_tool}</p>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {cases.length > 0 && (
+      <section class="wrap py-10">
+        <h2 class="text-2xl font-semibold sm:text-3xl">Example: the prompt, the tool calls, the result</h2>
+        <p class="muted mt-2">Example scenarios built on the real tools of {servers.map((s) => s.name).join(' and ')}. Names and amounts are invented.</p>
+        <div class:list={['mt-8 grid gap-4', cases.length > 1 && 'lg:grid-cols-3']}>{cases.map((x) => <CaseTurn server={x.server} case={x.case} showServer={servers.length > 1} />)}</div>
+        <UpsellBand copy={after.copy} href={afterUrl} cta={`Bundle, $${bundlePrice()}`} />
+      </section>
+    )}
+
+    {job && job.pitfalls.length > 0 && (
+      <section class="wrap py-10">
+        <h2 class="text-2xl font-semibold sm:text-3xl">Common mistakes with this job</h2>
+        <ul class="mt-6 grid max-w-3xl list-disc gap-2.5 pl-5">{job.pitfalls.map((x) => <li>{x}</li>)}</ul>
+      </section>
+    )}
+
+    {main && (
+      <section id="connect" class="wrap grid gap-10 py-12 lg:grid-cols-[1fr_1.3fr]">
+        <div>
+          <h2 class="text-2xl font-semibold sm:text-3xl">Connect in 1 minute</h2>
+          <p class="muted mt-3">{main.hosted ? 'Paste one URL into Claude.ai, Claude Desktop, Cursor, VS Code or Windsurf. No install, no account.' : `${main.name} runs on your machine. One line with Node.js, or the .mcpb file for Claude Desktop.`}</p>
+          <ul class="mt-5 flex flex-wrap gap-2 text-[.9rem]">
+            {[['claude-ai', 'Claude.ai'], ['claude-desktop', 'Claude Desktop'], ['claude-code', 'Claude Code'], ['cursor', 'Cursor'], ['vs-code', 'VS Code'], ['chatgpt', 'ChatGPT']].map(([c, n]) => <li><a class="chip hover:text-fg" href={`/connect/${c}/`}>{n} guide</a></li>)}
+          </ul>
+        </div>
+        <div class="grid gap-4">
+          {main.hosted && !main.satellite && <CopyCode code={tokenCmd} label="1. Get a free token (30 days, 600 calls an hour)" />}
+          {main.hosted && <CopyCode code={hostedUrl} label={main.satellite ? 'Connector URL (no token needed)' : '2. Paste this URL as a custom connector'} />}
+          {npx && <CopyCode code={npx} label={main.hosted ? 'Or run it locally (Node.js 18+)' : 'Run it locally (Node.js 18+)'} />}
+        </div>
+      </section>
+    )}
+
+    {main && main.paid && (
+      <section class="wrap py-12">
+        <h2 class="text-2xl font-semibold sm:text-3xl">Free vs Pro for {main.name}</h2>
+        <div class="mt-6 card overflow-x-auto">
+          <table class="table">
+            <thead><tr><th scope="col">Free ($0, no key)</th><th scope="col">Pro (${single ? main.priceUsd : bundlePrice()} once)</th></tr></thead>
+            <tbody>
+              {Array.from({ length: Math.max(main.freeVsPro?.free.length ?? 0, main.freeVsPro?.pro.length ?? 0, 1) }).map((_, i) => (
+                <tr><td class="muted">{main.freeVsPro?.free[i] ?? ''}</td><td>{main.freeVsPro?.pro[i] ?? (i === 0 ? 'unknown' : '')}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 break-words font-mono text-[.72rem] text-faint">Source: {main.freeVsPro?.source || 'unknown'}</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          {single && <a href={buy('free_vs_pro')} rel="nofollow" class="btn btn-primary">Buy {main.name} Pro, ${main.priceUsd}</a>}
+          <a href={bundle('free_vs_pro')} rel="nofollow" class:list={['btn', !single && 'btn-primary']}>All {st.paid} paid servers, ${bundlePrice()}</a>
+          <a href="/pricing/" class="btn">Pricing</a>
+        </div>
+      </section>
+    )}
+
+    <section class="wrap py-12">
+      <h2 class="text-2xl font-semibold sm:text-3xl">FAQ</h2>
+      <div class="mt-6 max-w-3xl"><Faq items={faq} /></div>
+    </section>
+
+    {related.length > 0 && (
+      <section class="wrap py-12">
+        <h2 class="text-2xl font-semibold sm:text-3xl">Related jobs</h2>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{related.map((r) => <JobCard page={r} />)}</div>
+        {aud && <p class="mt-6"><a class="link" href={aud.path}>{aud.h1}: all jobs</a></p>}
+      </section>
+    )}
+
+    {single
+      ? <StickyCta label={`${main!.name} Pro: $${main!.priceUsd} once`} sub={`Or all ${st.paid} paid servers for $${bundlePrice()}. No subscription.`} href={buy('sticky')} cta="Buy Pro" secondary={{ label: `All ${st.paid} for $${bundlePrice()}`, href: bundle('sticky') }} />
+      : <StickyCta label={`All ${st.paid} paid servers: $${bundlePrice()} once`} sub="Free tier stays free. No subscription." href={bundle('sticky')} cta="Get bundle" />}
+  </div>
+</Layout>

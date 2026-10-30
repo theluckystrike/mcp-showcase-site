@@ -1,0 +1,19 @@
+---
+import type { Server } from '../data/servers';
+import { getCategory } from '../data/categories';
+interface Props { server: Server }
+const { server: s } = Astro.props;
+const cat = getCategory(s.category);
+const chips = s.outcomeChips.length ? s.outcomeChips.slice(0, 3) : s.topTools.slice(0, 3).map((t) => t.name);
+---
+<a href={`/servers/${s.id}/`} class="card card-hover cat group flex h-full flex-col p-5" style={`--hue:${cat.hue}`}>
+  <div class="flex items-center justify-between gap-3">
+    <span class="flex items-center gap-2 text-[.78rem] font-medium cat-text"><span class="dot"></span>{cat.short}</span>
+    <span class="flex gap-1.5">{!s.paid && <span class="chip !py-0.5 !text-[.7rem]">Free</span>}{s.hosted && <span class="chip !py-0.5 !text-[.7rem]">Hosted</span>}</span>
+  </div>
+  <h3 class="mt-4 text-[1.2rem] font-semibold tracking-tight">{s.name}</h3>
+  <p class="muted mt-1.5 line-clamp-3 text-[.94rem] leading-relaxed">{s.tagline}</p>
+  <div class="mt-auto flex flex-wrap gap-1.5 pt-5">
+    {chips.map((c) => <span class={s.outcomeChips.length ? 'chip' : 'chip chip-tool'}>{c}</span>)}
+  </div>
+</a>

@@ -1,0 +1,54 @@
+---
+// /developers/hosted-endpoints/: URL forms, a full JSON-RPC session with curl, and every hosted endpoint. Data: developers.json + catalog.
+import Layout from '../../layouts/Layout.astro';
+import CopyCode from '../../components/CopyCode.astro';
+import { brand } from '../../config/brand';
+import { getDevelopers } from '../../data/content';
+import { getServers, stats } from '../../data/servers';
+import { seo } from '../../data/pages';
+const d = getDevelopers();
+const st = stats();
+const hosted = getServers().filter((s) => s.hosted && !s.satellite);
+const sats = getServers().filter((s) => s.satellite && s.hosted);
+const meta = seo('/developers/hosted-endpoints/', { title: `Hosted MCP endpoints: URL forms and a full session | ${brand.name}`, description: `${st.hosted} MCP servers over streamable HTTP. Free token, URL forms, curl session.` });
+---
+<Layout title={meta.title} description={meta.description} ogType="article" crumbs={[{ name: 'Developers', path: '/developers/' }, { name: 'Hosted endpoints', path: '/developers/hosted-endpoints/' }]}>
+  <section class="wrap pb-8 pt-14 sm:pt-20">
+    <span class="eyebrow">Developers</span>
+    <h1 class="display mt-5 !text-[clamp(2.2rem,5.5vw,4rem)]">{meta.h1 || 'Hosted endpoints'}</h1>
+    <p class="lead mt-5 max-w-2xl">{st.hosted} servers answer over MCP streamable HTTP. {d.hosted?.session.transport}</p>
+  </section>
+  {d.hosted && (
+    <section class="wrap grid gap-6 py-6 lg:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-semibold">Free token</h2>
+        <div class="mt-4"><CopyCode code={d.hosted.token_request} /></div>
+        <h2 class="mt-10 text-2xl font-semibold">URL forms</h2>
+        <ul class="mt-4 grid gap-4">{d.hosted.url_forms.map((u) => (
+          <li><CopyCode code={u.header ? `${u.url}\n${u.header}` : u.url} label={u.form} />{u.use && <p class="muted mt-1.5 text-[.88rem]">{u.use}</p>}</li>
+        ))}</ul>
+      </div>
+      <div>
+        <h2 class="text-2xl font-semibold">A full session with curl</h2>
+        <ol class="mt-4 grid gap-5">{d.hosted.session.requests.map((r, i) => (
+          <li><CopyCode code={r.curl} label={`${i + 1}. ${r.step}`} />{r.summary && <p class="muted mt-1.5 text-[.88rem]">{r.summary}</p>}</li>
+        ))}</ol>
+      </div>
+    </section>
+  )}
+  <section class="wrap py-10">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Every hosted endpoint ({hosted.length})</h2>
+    <div class="card mt-6 overflow-x-auto">
+      <table class="table min-w-[36rem]">
+        <thead><tr><th scope="col">Server</th><th scope="col">Endpoint (add /t/&lt;token&gt;)</th><th scope="col">Tools</th></tr></thead>
+        <tbody>{hosted.map((s) => <tr><td><a class="hover:underline" href={`/servers/${s.id}/`}>{s.name}</a></td><td class="font-mono text-[.82rem]">{`${brand.backend.origin}/mcp/${s.id}`}</td><td class="font-mono">{s.tools.length}</td></tr>)}</tbody>
+      </table>
+    </div>
+    {sats.length > 0 && (
+      <>
+        <h2 class="mt-12 text-2xl font-semibold">Free calculator endpoints ({sats.length}, no token)</h2>
+        <ul class="mt-4 grid gap-2">{sats.map((s) => <li class="flex flex-wrap gap-3"><a class="link" href={`/servers/${s.id}/`}>{s.name}</a><code class="font-mono text-[.82rem] text-faint">{s.hostedUrl}</code></li>)}</ul>
+      </>
+    )}
+  </section>
+</Layout>

@@ -1,0 +1,11 @@
+---
+// Code block with a copy button. The click handler is the delegated inline script in Layout.astro.
+interface Props { code: string; label?: string }
+const { code, label } = Astro.props;
+const id = 'c' + Math.abs([...code].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) | 0, 7)).toString(36);
+---
+<div class="relative">
+  {label && <p class="mb-1.5 text-[.75rem] font-semibold uppercase tracking-[.08em] text-faint">{label}</p>}
+  <pre class="code pr-20" id={id}>{code}</pre>
+  <button type="button" class="btn btn-sm absolute right-2 top-2 !py-1 text-[.8rem]" data-copy-target={`#${id}`} style={label ? 'top: 1.9rem' : undefined}>Copy</button>
+</div>

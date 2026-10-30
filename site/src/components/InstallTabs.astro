@@ -1,0 +1,65 @@
+---
+// Install tabs: Hosted URL / Claude Desktop .mcpb / npx / Claude Code. CSS-only tabs.
+import type { Server } from '../data/servers';
+import { brand } from '../config/brand';
+import CopyCode from './CopyCode.astro';
+interface Props { server: Server }
+const { server: s } = Astro.props;
+const key = s.id.replace(/[^a-z0-9]/g, '');
+const tokenCmd = `curl -s -X POST ${brand.backend.tokenEndpoint}`;
+// Satellites answer at their own URL with no token (README). Catalog servers use the free-token URL form.
+const hostedForm = s.satellite ? s.hostedUrl : `${brand.backend.origin}/mcp/${s.id}/t/<token>`;
+const npxJson = JSON.stringify({ mcpServers: { [s.id]: { command: 'npx', args: ['-y', s.npm] } } }, null, 2);
+const claudeCode = s.hosted
+  ? `claude mcp add --transport http ${s.id} ${hostedForm}\n\n# or run it locally\nclaude mcp add ${s.id} -- npx -y ${s.npm}`
+  : `claude mcp add ${s.id} -- npx -y ${s.npm}`;
+const tabs = [
+  s.hosted ? 'Hosted URL' : null,
+  s.mcpb ? 'Claude Desktop' : null,
+  s.npm ? 'npx' : null,
+  s.npm ? 'Claude Code' : null,
+].filter(Boolean) as string[];
+---
+<div class="tabs">
+  {tabs.map((t, i) => <input type="radio" name={`install-${key}`} id={`tab-${key}-${i}`} checked={i === 0} />)}
+  <div class="tablist" role="presentation">
+    {tabs.map((t, i) => <label for={`tab-${key}-${i}`}>{t}</label>)}
+  </div>
+  <div class="panels">
+    {s.hosted && (
+      <div class="panel">
+        {s.satellite ? (
+          <p class="muted mb-3 text-[.95rem]">Paste this URL as a custom connector in your MCP client. No token, no sign-in.</p>
+        ) : (
+          <ol class="muted mb-3 list-decimal space-y-1 pl-5 text-[.95rem]">
+            <li>Get a free token. It lasts 30 days and allows 600 calls per hour. Or open <a class="link" href={`${brand.backend.origin}/mcp/connect`} rel="nofollow">the connect page</a> for a ready URL.</li>
+            <li>Paste the URL with your token as a custom connector in your MCP client.</li>
+          </ol>
+        )}
+        {!s.satellite && <CopyCode code={tokenCmd} label="1. Free token" />}
+        <div class="mt-3"><CopyCode code={hostedForm} label={s.satellite ? 'Connector URL' : '2. Connector URL (replace <token>)'} /></div>
+      </div>
+    )}
+    {s.mcpb && (
+      <div class="panel">
+        <p class="muted mb-3 text-[.95rem]">Download the .mcpb bundle and open it. Claude Desktop installs it in one click.</p>
+        <a href={s.mcpb} class="btn btn-sm" rel="nofollow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg>
+          Download {s.id}.mcpb
+        </a>
+      </div>
+    )}
+    {s.npm && (
+      <div class="panel">
+        <p class="muted mb-3 text-[.95rem]">Add this to your MCP client config (Claude Desktop, Cursor, VS Code). Needs Node.js.</p>
+        <CopyCode code={npxJson} />
+      </div>
+    )}
+    {s.npm && (
+      <div class="panel">
+        <p class="muted mb-3 text-[.95rem]">One command in your terminal.</p>
+        <CopyCode code={claudeCode} />
+      </div>
+    )}
+  </div>
+</div>

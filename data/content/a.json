@@ -1,0 +1,3551 @@
+{
+ "servers": [
+  {
+   "id": "amortization",
+   "name": "Amortization",
+   "category": "bookkeeping",
+   "tagline": "Loan and lease schedules from the agreement, exact to the cent.",
+   "plain": "Give it the terms of a loan or lease and it returns the payment, the interest and every period of the schedule. It keeps a register of your agreements, prices an early repayment and writes the monthly journal your bookkeeper needs.",
+   "for_who": [
+    "Small business owners",
+    "Bookkeepers",
+    "Finance leads"
+   ],
+   "outcome_chips": [
+    "Repayment schedule",
+    "Interest split",
+    "Early settlement quote",
+    "Monthly journal"
+   ],
+   "cases": [
+    {
+     "title": "Check a bank's loan quote",
+     "persona": "Owner of a bakery in Krakow",
+     "prompt": "The bank offers EUR 25,000 over 60 months at 6% a year. What is the monthly payment and how much interest do I pay in total?",
+     "steps": [
+      {
+       "tool": "loan_schedule",
+       "does": "Builds the 60-period schedule without storing anything"
+      }
+     ],
+     "result": "A payment of EUR 483.32 a month and about EUR 3,999 of interest over five years, with the balance for every month.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: building an amortization table in a spreadsheet takes 20-30 min"
+    },
+    {
+     "title": "Price an early payoff",
+     "persona": "Van owner, plumbing business in Leeds",
+     "prompt": "I want to pay GBP 5,000 extra off my van loan next month and keep the same payment. How much interest do I save?",
+     "steps": [
+      {
+       "tool": "loan_list",
+       "does": "Finds the stored van loan"
+      },
+      {
+       "tool": "loan_repay_early",
+       "does": "Recomputes the schedule with the extra GBP 5,000"
+      }
+     ],
+     "result": "The new end date, the periods saved and the interest saved, next to the old schedule. Pro feature.",
+     "minutes_saved": 30,
+     "minutes_basis": "INFERRED: re-running a schedule by hand with an extra payment takes 30+ min"
+    },
+    {
+     "title": "Book the month's loan entries",
+     "persona": "Freelance bookkeeper in Dublin with 4 client loans",
+     "prompt": "Give me the October journal for every loan: interest expense, principal and the cash out.",
+     "steps": [
+      {
+       "tool": "loan_journal",
+       "does": "Splits each October payment into interest and principal"
+      },
+      {
+       "tool": "loans_report",
+       "does": "Totals the balance outstanding per currency"
+      }
+     ],
+     "result": "Ready-to-post debit and credit lines per loan, plus the total debt still owed. Pro feature.",
+     "minutes_saved": 25,
+     "minutes_basis": "INFERRED: splitting 4 loan payments from bank statements takes 20-30 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "loan_schedule",
+     "plain": "Payment, interest and balance for every period. Free and unlimited"
+    },
+    {
+     "name": "loan_create",
+     "plain": "Stores a loan or lease in your register"
+    },
+    {
+     "name": "loan_repay_early",
+     "plain": "Prices an extra payment or full settlement"
+    },
+    {
+     "name": "loan_journal",
+     "plain": "Writes one month's interest and principal entries"
+    },
+    {
+     "name": "loans_report",
+     "plain": "Debt outstanding across all agreements"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "Unlimited schedules with loan_schedule",
+     "Up to 3 loans in the register",
+     "loan_delete gives a slot back"
+    ],
+    "pro": [
+     "Unlimited loans",
+     "Early repayment (loan_repay_early)",
+     "Monthly journal (loan_journal)",
+     "Debt report (loans_report)"
+    ],
+    "source": "servers/amortization/src/index.ts:25 (FREE_LOANS = 3), :280, :326, :495 (requirePro); https://mcp.zovo.one/s/amortization"
+   },
+   "keywords": [
+    "loan amortization schedule in claude",
+    "calculate loan payment with ai",
+    "early loan repayment calculator",
+    "lease schedule mcp server"
+   ],
+   "faq": [
+    {
+     "q": "Is the schedule itself free?",
+     "a": "Yes. loan_schedule is free and unlimited on every tier. The free tier caps the stored register at 3 loans."
+    },
+    {
+     "q": "Does it round like my bank?",
+     "a": "It works in integer minor units, so every amount is exact to the cent. Your bank may round the last payment differently; the schedule shows each period so you can compare."
+    }
+   ]
+  },
+  {
+   "id": "asset-register",
+   "name": "Asset Register",
+   "category": "bookkeeping",
+   "tagline": "Fixed assets and depreciation on Polish, UK and US tax tables.",
+   "plain": "Keep a list of the equipment your business owns and see what each item is worth on paper today. It uses the bundled Polish KST rates, HMRC capital allowance pools or IRS MACRS, writes the monthly depreciation journal and records a sale or write-off with the gain or loss.",
+   "for_who": [
+    "Small business owners",
+    "Bookkeepers",
+    "Accountants"
+   ],
+   "outcome_chips": [
+    "Depreciation schedule",
+    "Net book value",
+    "Monthly journal",
+    "Disposal gain or loss"
+   ],
+   "cases": [
+    {
+     "title": "Depreciate a new laptop the Polish way",
+     "persona": "Sole trader (JDG) in Warsaw",
+     "prompt": "I bought a laptop for PLN 8,000 in March. Add it on the Polish table, computers group, and show me the monthly write-off.",
+     "steps": [
+      {
+       "tool": "asset_add",
+       "does": "Stores the laptop on the pl scheme, KST computers category"
+      },
+      {
+       "tool": "asset_schedule",
+       "does": "Lists the write-off month by month"
+      }
+     ],
+     "result": "A straight-line schedule at the KST rate for computers, month by month down to zero.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: looking up the KST rate and building the plan by hand takes 15-25 min"
+    },
+    {
+     "title": "Sell a used camera",
+     "persona": "Wedding photographer in Manchester",
+     "prompt": "I sold the old camera body for GBP 900 today. Record it and tell me the gain or loss.",
+     "steps": [
+      {
+       "tool": "asset_list",
+       "does": "Finds the camera and its net book value"
+      },
+      {
+       "tool": "asset_dispose",
+       "does": "Records the sale and computes the result"
+      }
+     ],
+     "result": "The camera leaves the register with its gain or loss against net book value stated in GBP.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: finding the book value and computing the result takes 10-20 min"
+    },
+    {
+     "title": "Close the month for 30 assets",
+     "persona": "Bookkeeper for a design studio in Austin",
+     "prompt": "Post October depreciation for every asset and give me the year-end register report.",
+     "steps": [
+      {
+       "tool": "asset_journal",
+       "does": "Writes the October depreciation debit and credit per asset"
+      },
+      {
+       "tool": "asset_report",
+       "does": "Net book value by category with the year's charge"
+      }
+     ],
+     "result": "One journal for the month and a register report by category and currency. Pro feature, and more than 10 assets needs Pro.",
+     "minutes_saved": 45,
+     "minutes_basis": "INFERRED: a 30-line depreciation run in a spreadsheet takes 40-60 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "asset_add",
+     "plain": "Adds an asset with cost, date and tax category"
+    },
+    {
+     "name": "asset_schedule",
+     "plain": "Full depreciation schedule, yearly or monthly"
+    },
+    {
+     "name": "asset_dispose",
+     "plain": "Records a sale or scrapping with the gain or loss"
+    },
+    {
+     "name": "asset_journal",
+     "plain": "One month's depreciation journal"
+    },
+    {
+     "name": "asset_report",
+     "plain": "Year view by category, scheme and currency"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "Up to 10 assets in the register",
+     "asset_schedule, asset_list, asset_dispose, asset_delete unlimited"
+    ],
+    "pro": [
+     "Unlimited assets",
+     "Depreciation journal (asset_journal)",
+     "Register report (asset_report)"
+    ],
+    "source": "servers/asset-register/src/index.ts:21 (FREE_ASSETS = 10), :378, :579; https://mcp.zovo.one/s/asset-register"
+   },
+   "keywords": [
+    "fixed asset register in claude",
+    "depreciation calculator kst",
+    "macrs depreciation ai",
+    "hmrc capital allowances calculator"
+   ],
+   "faq": [
+    {
+     "q": "Which tax tables are included?",
+     "a": "Polish KST annex rates, HMRC capital allowance pools and IRS MACRS GDS. You pick one per asset with the scheme field."
+    },
+    {
+     "q": "Does it file anything with the tax office?",
+     "a": "No. It computes schedules and journals. Filing stays with you or your accountant."
+    }
+   ]
+  },
+  {
+   "id": "backlink-checker",
+   "name": "Backlink Checker",
+   "category": "web-dev",
+   "tagline": "See if a page really links to you, dofollow or nofollow.",
+   "plain": "Paste a page URL and your domain. It fetches the page and tells you if your link is there, the anchor text, the rel value and whether robots rules hide the page. Nothing is stored; every check is a fresh fetch.",
+   "for_who": [
+    "SEO freelancers",
+    "Content marketers",
+    "Founders doing outreach"
+   ],
+   "outcome_chips": [
+    "Link found or not",
+    "Dofollow or nofollow",
+    "Anchor text",
+    "Robots check"
+   ],
+   "cases": [
+    {
+     "title": "Verify a guest post link",
+     "persona": "SEO freelancer in Berlin",
+     "prompt": "Does https://blog.example.de/tools-2026 link to mystudio.com, and is it dofollow?",
+     "steps": [
+      {
+       "tool": "link_check",
+       "does": "Fetches the page and finds links to mystudio.com"
+      },
+      {
+       "tool": "robots_guard_check",
+       "does": "Checks noindex and robots rules on the page"
+      }
+     ],
+     "result": "Linked, dofollow, anchor text 'design studio Berlin', HTTP 200, page indexable.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: view source and search for the link takes about 5 min per page"
+    },
+    {
+     "title": "Monday outreach follow-up",
+     "persona": "Content marketer at a SaaS in Boston",
+     "prompt": "Here are 10 sites that promised us a link last month. Which ones shipped it?",
+     "steps": [
+      {
+       "tool": "outreach_queue",
+       "does": "Checks all 10 pages in one call"
+      }
+     ],
+     "result": "One line per site: status, linked or not, dofollow or not. 6 linked, 3 not yet, 1 returns 404.",
+     "minutes_saved": 40,
+     "minutes_basis": "INFERRED: 10 manual page checks at 4 min each"
+    },
+    {
+     "title": "Find unlinked brand mentions",
+     "persona": "Founder of a Polish invoicing startup",
+     "prompt": "This review mentions us. Do they link or only name us?",
+     "steps": [
+      {
+       "tool": "referring_domain_summary",
+       "does": "Checks status, indexability and brand mention"
+      },
+      {
+       "tool": "anchor_profile",
+       "does": "Lists every outbound link on the page"
+      }
+     ],
+     "result": "Brand mentioned in the text with no link: a clear outreach request to send.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: reading the page and its outbound links takes about 10 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "link_check",
+     "plain": "Does one page link to your domain, with rel and anchor"
+    },
+    {
+     "name": "outreach_queue",
+     "plain": "Checks up to 10 promised links at once"
+    },
+    {
+     "name": "link_audit",
+     "plain": "Audits a list of pages for your link"
+    },
+    {
+     "name": "robots_guard_check",
+     "plain": "Finds noindex or robots rules that hide a page"
+    },
+    {
+     "name": "anchor_profile",
+     "plain": "Every outbound link on a page with its anchor text"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "link_check and robots_guard_check unlimited",
+     "link_audit up to 3 URLs per call"
+    ],
+    "pro": [
+     "link_audit with more than 3 URLs per call"
+    ],
+    "source": "servers/backlink-checker/src/index.ts:8 (FREE_URL_LIMIT = 3), :154"
+   },
+   "keywords": [
+    "check backlink dofollow",
+    "backlink checker claude",
+    "verify guest post link",
+    "nofollow checker mcp"
+   ],
+   "faq": [
+    {
+     "q": "Is this a backlink database like the big SEO suites?",
+     "a": "No. It checks pages you name. It does not discover links you do not know about."
+    },
+    {
+     "q": "Does it store my results?",
+     "a": "No. No store is opened and no file is written. Every check fetches the page again."
+    }
+   ]
+  },
+  {
+   "id": "bank-statement",
+   "name": "Bank Statement",
+   "category": "bookkeeping",
+   "tagline": "Import a bank CSV, categorise it and find the subscriptions.",
+   "plain": "Drop in the CSV export from your bank. It reads Revolut, Wise, mBank, PKO, ING, N26 and generic formats, sorts transactions into categories, summarises spend per currency, finds recurring charges and matches the statement against your expense log. The data stays on your machine.",
+   "for_who": [
+    "Freelancers",
+    "Small business owners",
+    "Bookkeepers"
+   ],
+   "outcome_chips": [
+    "Categorised transactions",
+    "Monthly summary",
+    "Recurring charges",
+    "Reconciliation"
+   ],
+   "cases": [
+    {
+     "title": "Find forgotten subscriptions",
+     "persona": "Freelance developer in Gdansk with an mBank account",
+     "prompt": "Import my mBank CSV for the last 3 months and list every recurring charge.",
+     "steps": [
+      {
+       "tool": "statement_import",
+       "does": "Reads the mBank export"
+      },
+      {
+       "tool": "recurring_detect",
+       "does": "Groups charges that repeat each month"
+      }
+     ],
+     "result": "A list of recurring charges with amount and cadence, for example 3 software plans at PLN 49, PLN 89 and PLN 120 a month.",
+     "minutes_saved": 30,
+     "minutes_basis": "INFERRED: scanning 3 months of statements by eye takes 30+ min"
+    },
+    {
+     "title": "Month-end summary for two currencies",
+     "persona": "UK consultant with a Wise account in GBP and EUR",
+     "prompt": "Import my Wise statement, put Tesco and Sainsbury's under groceries, and summarise October by category.",
+     "steps": [
+      {
+       "tool": "statement_import",
+       "does": "Reads the Wise CSV"
+      },
+      {
+       "tool": "category_rules",
+       "does": "Adds rules for the two merchants"
+      },
+      {
+       "tool": "statement_summary",
+       "does": "Totals October by category per currency"
+      }
+     ],
+     "result": "October spend by category, with GBP and EUR kept apart, never mixed into one total.",
+     "minutes_saved": 25,
+     "minutes_basis": "INFERRED: tagging and pivoting a month of rows takes 20-30 min"
+    },
+    {
+     "title": "Tie the bank to the expense log",
+     "persona": "Bookkeeper for a Lisbon café",
+     "prompt": "Reconcile October's bank lines against the expense ledger. What is missing?",
+     "steps": [
+      {
+       "tool": "reconcile_expenses",
+       "does": "Matches bank lines to logged expenses"
+      },
+      {
+       "tool": "transactions_list",
+       "does": "Lists the unmatched lines"
+      }
+     ],
+     "result": "Matched pairs, plus bank lines with no expense and expenses with no bank line.",
+     "minutes_saved": 40,
+     "minutes_basis": "INFERRED: tick-and-bash reconciliation of a month takes 30-60 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "statement_import",
+     "plain": "Reads a bank CSV export"
+    },
+    {
+     "name": "statement_summary",
+     "plain": "Totals by category or month, per currency"
+    },
+    {
+     "name": "recurring_detect",
+     "plain": "Finds charges that repeat"
+    },
+    {
+     "name": "reconcile_expenses",
+     "plain": "Matches the bank to your expense log"
+    },
+    {
+     "name": "category_rules",
+     "plain": "Rules that categorise merchants automatically"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "2 accounts",
+     "Last 12 months of history",
+     "5 category rules",
+     "Reconcile 31 days at a time",
+     "Recurring charges: last 3 months, 5 charges"
+    ],
+    "pro": [
+     "Unlimited accounts and rules",
+     "Full history",
+     "Reconcile any date range",
+     "Every recurring charge over full history",
+     "statement_export"
+    ],
+    "source": "servers/bank-statement/src/index.ts:25-35 (FREE_ACCOUNTS, FREE_WINDOW_MONTHS, FREE_RULES, FREE_RECONCILE_DAYS, FREE_RECURRING_*), :730 (statement_export)"
+   },
+   "keywords": [
+    "categorize bank statement csv ai",
+    "find recurring subscriptions bank csv",
+    "bank reconciliation in claude",
+    "revolut wise csv import"
+   ],
+   "faq": [
+    {
+     "q": "Does it connect to my bank?",
+     "a": "No. You export a CSV from your bank and import the file. There is no bank login."
+    },
+    {
+     "q": "Which banks are supported?",
+     "a": "Profiles for Revolut, Wise, mBank, PKO, ING and N26, plus a generic mode that reads the column headers."
+    }
+   ]
+  },
+  {
+   "id": "barcode",
+   "name": "Barcode",
+   "category": "operations",
+   "tagline": "QR codes, barcodes and bank payment QR from one chat line.",
+   "plain": "Ask for a QR code or barcode and get a file you can print. It makes URL and WiFi QR codes, vCards, SEPA payment QR codes that banking apps scan, Code 128 and EAN-13. No network and no account.",
+   "for_who": [
+    "Small shops",
+    "Freelancers",
+    "Event and office managers"
+   ],
+   "outcome_chips": [
+    "QR code",
+    "SEPA payment QR",
+    "EAN-13 label",
+    "WiFi QR"
+   ],
+   "cases": [
+    {
+     "title": "Get paid faster with a payment QR",
+     "persona": "Freelance translator in Vienna",
+     "prompt": "Make a payment QR for invoice INV-2026-0012, EUR 1,240.00, so the client can scan and pay.",
+     "steps": [
+      {
+       "tool": "invoice_payment_qr",
+       "does": "Builds the EPC QR from your IBAN, the amount and the reference"
+      }
+     ],
+     "result": "An SVG QR that an EU banking app scans into a filled-in transfer of EUR 1,240.00.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: finding and using a separate QR generator takes about 5 min"
+    },
+    {
+     "title": "WiFi card for the office",
+     "persona": "Office manager at a coworking space in Lodz",
+     "prompt": "Make a WiFi QR for network Guest-5G, WPA2, password on the sticky note.",
+     "steps": [
+      {
+       "tool": "qr_wifi",
+       "does": "Encodes the network name, type and password"
+      }
+     ],
+     "result": "A QR code guests scan to join the network, ready to print on a table card.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: online generator plus download takes about 5 min"
+    },
+    {
+     "title": "Label 120 products",
+     "persona": "Owner of a candle shop in Bristol",
+     "prompt": "Make EAN-13 barcodes as PNG for these 120 product codes.",
+     "steps": [
+      {
+       "tool": "barcode_batch",
+       "does": "Draws all 120 codes in one call"
+      },
+      {
+       "tool": "code_list",
+       "does": "Lists what was generated"
+      }
+     ],
+     "result": "120 PNG barcode files ready for the label printer. Pro feature: batch and PNG.",
+     "minutes_saved": 60,
+     "minutes_basis": "INFERRED: 120 codes one by one at 30 sec each"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "qr_create",
+     "plain": "A QR code for any text or URL"
+    },
+    {
+     "name": "barcode_create",
+     "plain": "Code 128, EAN-13 and other linear barcodes"
+    },
+    {
+     "name": "qr_payment_sepa",
+     "plain": "SEPA payment QR a banking app can scan"
+    },
+    {
+     "name": "invoice_payment_qr",
+     "plain": "Payment QR built from an invoice"
+    },
+    {
+     "name": "qr_wifi",
+     "plain": "QR that joins a WiFi network"
+    },
+    {
+     "name": "barcode_batch",
+     "plain": "Up to 500 codes in one call"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "20 codes per calendar month",
+     "SVG output",
+     "All symbologies, EPC payment codes, WiFi, vCard"
+    ],
+    "pro": [
+     "Unlimited codes",
+     "PNG output, 32 to 4000 px",
+     "barcode_batch, up to 500 rows per call"
+    ],
+    "source": "servers/barcode/src/index.ts:37 (FREE_PER_MONTH = 20), :116 (PNG is Pro), :477 (barcode_batch is Pro)"
+   },
+   "keywords": [
+    "sepa payment qr code generator",
+    "make qr code in claude",
+    "ean-13 barcode generator",
+    "wifi qr code"
+   ],
+   "faq": [
+    {
+     "q": "Will a banking app read the payment QR?",
+     "a": "The SEPA QR follows the EPC format that many EU banking apps scan. Test one with your own bank app before you print a batch."
+    },
+    {
+     "q": "Is SVG good enough to print?",
+     "a": "Yes. SVG has no fixed resolution, so it prints sharp at any size. PNG is the Pro option."
+    }
+   ]
+  },
+  {
+   "id": "bill-of-sale",
+   "name": "Bill of Sale",
+   "category": "contracts-hr",
+   "tagline": "A bill of sale for a car, laptop or machine, with signature lines.",
+   "plain": "Selling a used car, a laptop or a piece of equipment? Describe the deal and it drafts a bill of sale with buyer, seller, item, VIN or serial number, price and condition. Finalize it to lock the record, then print it with signature lines.",
+   "for_who": [
+    "People selling a car",
+    "Small businesses selling equipment",
+    "Resellers"
+   ],
+   "outcome_chips": [
+    "Bill of sale",
+    "Signature lines",
+    "VIN and serial record",
+    "As-is clause"
+   ],
+   "cases": [
+    {
+     "title": "Sell a used car privately",
+     "persona": "Private seller in Ohio",
+     "prompt": "Draft a bill of sale: I sell my 2017 Honda Civic, VIN 2HGFC2F59HH000000, to Dana Ruiz for USD 11,500, as is, today.",
+     "steps": [
+      {
+       "tool": "sale_create",
+       "does": "Drafts the sale with VIN, price and as-is terms"
+      },
+      {
+       "tool": "sale_finalize",
+       "does": "Locks the document"
+      },
+      {
+       "tool": "sale_render",
+       "does": "Writes the printable HTML"
+      }
+     ],
+     "result": "A printable bill of sale with both parties, the VIN, USD 11,500.00, the as-is clause and two signature lines.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: finding and filling a template takes 15-25 min"
+    },
+    {
+     "title": "Sell old studio equipment",
+     "persona": "Owner of a recording studio in Liverpool",
+     "prompt": "Bill of sale for a mixing desk, serial MX-44821, to Sound Hire Ltd for GBP 2,400, good condition, 30-day warranty.",
+     "steps": [
+      {
+       "tool": "sale_create",
+       "does": "Drafts the sale with serial and warranty"
+      },
+      {
+       "tool": "sale_render",
+       "does": "Renders it to Markdown for review"
+      }
+     ],
+     "result": "A draft to read over before signing, with the serial number and warranty terms stated.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: drafting from scratch in a word processor takes 15 min"
+    },
+    {
+     "title": "Year-end list of asset sales",
+     "persona": "Reseller of refurbished phones in Poznan",
+     "prompt": "List every finalized sale this year and total them.",
+     "steps": [
+      {
+       "tool": "sale_list",
+       "does": "Lists finalized sales"
+      },
+      {
+       "tool": "sale_summary",
+       "does": "Totals them per currency"
+      }
+     ],
+     "result": "Every sale with its IMEI and price, totalled in PLN.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: collecting paper or PDF bills of sale takes 20+ min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "sale_create",
+     "plain": "Drafts a bill of sale"
+    },
+    {
+     "name": "sale_update",
+     "plain": "Edits a draft"
+    },
+    {
+     "name": "sale_finalize",
+     "plain": "Locks the document"
+    },
+    {
+     "name": "sale_render",
+     "plain": "Prints to Markdown or HTML with signature lines"
+    },
+    {
+     "name": "sale_summary",
+     "plain": "Totals of your sales"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "10 open drafts",
+     "5 finalized documents",
+     "Unlimited render, read, list and summary"
+    ],
+    "pro": [
+     "Unlimited drafts",
+     "Unlimited finalized documents"
+    ],
+    "source": "servers/bill-of-sale/src/index.ts:24-25 (FREE_DRAFTS = 10, FREE_FINALIZED = 5), :180, :354"
+   },
+   "keywords": [
+    "bill of sale generator",
+    "car bill of sale template",
+    "equipment bill of sale",
+    "bill of sale in claude"
+   ],
+   "faq": [
+    {
+     "q": "Is this legal advice?",
+     "a": "No. It produces a clear record of the sale. Check local rules, for example vehicle title transfer, with your registry."
+    },
+    {
+     "q": "Can I change a finalized bill of sale?",
+     "a": "No. Finalizing locks it. Edit while it is a draft."
+    }
+   ]
+  },
+  {
+   "id": "billing-docs",
+   "name": "Billing Docs",
+   "category": "invoicing",
+   "tagline": "Credit notes to clients and purchase orders to suppliers.",
+   "plain": "Two documents every invoicing business needs sooner or later. Issue a full, partial or per-line credit note against an invoice, or send a purchase order to a supplier and mark it received. It uses the same business profile as the Invoice server.",
+   "for_who": [
+    "Freelancers",
+    "Small businesses",
+    "Office managers"
+   ],
+   "outcome_chips": [
+    "Credit note",
+    "Purchase order",
+    "Receiving record",
+    "Credited report"
+   ],
+   "cases": [
+    {
+     "title": "Refund part of an invoice",
+     "persona": "Web agency owner in Wroclaw",
+     "prompt": "Credit 2 of the 10 hours on INV-2026-0031, at PLN 180 plus 23% VAT. Reason: hosting setup not needed.",
+     "steps": [
+      {
+       "tool": "credit_note_create",
+       "does": "Creates the credit note against INV-2026-0031"
+      },
+      {
+       "tool": "credit_note_text",
+       "does": "Writes the note as text to send"
+      }
+     ],
+     "result": "A numbered credit note for PLN 360.00 net, PLN 82.80 VAT, PLN 442.80 total, linked to the invoice.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: a credit note in a template with VAT checks takes 15 min"
+    },
+    {
+     "title": "Order stock from a supplier",
+     "persona": "Owner of a bike repair shop in Utrecht",
+     "prompt": "Purchase order to Fietsdelen BV: 40 inner tubes at EUR 3.20 and 10 chains at EUR 14.50, 21% VAT, delivery by 15 November.",
+     "steps": [
+      {
+       "tool": "purchase_order_create",
+       "does": "Creates the numbered PO"
+      },
+      {
+       "tool": "purchase_order_pdf",
+       "does": "Renders the PDF"
+      }
+     ],
+     "result": "A PO PDF for EUR 273.00 net plus EUR 57.33 VAT, EUR 330.33 total. PDF is a Pro feature.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: a PO in a spreadsheet template takes 10-20 min"
+    },
+    {
+     "title": "What is still on order",
+     "persona": "Office manager at a Chicago architecture firm",
+     "prompt": "Mark the paper delivery as partly received, then show me open orders and what we credited this quarter.",
+     "steps": [
+      {
+       "tool": "purchase_order_receive",
+       "does": "Records the partial delivery"
+      },
+      {
+       "tool": "billing_docs_report",
+       "does": "Lists credits and open orders"
+      }
+     ],
+     "result": "One report with every open PO and every credit note issued this quarter. Report is Pro.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: pulling this from email and folders takes 20 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "credit_note_create",
+     "plain": "Full, partial or per-line credit against an invoice"
+    },
+    {
+     "name": "purchase_order_create",
+     "plain": "Numbered PO to a supplier"
+    },
+    {
+     "name": "purchase_order_receive",
+     "plain": "Marks an order fully or partly received"
+    },
+    {
+     "name": "credit_note_text",
+     "plain": "The credit note as plain text"
+    },
+    {
+     "name": "billing_docs_report",
+     "plain": "Credited totals and open orders"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "5 documents per month, credit notes and POs together",
+     "Text versions unlimited",
+     "Delete returns the slot"
+    ],
+    "pro": [
+     "Unlimited documents",
+     "credit_note_pdf and purchase_order_pdf with your logo and no footer",
+     "billing_docs_report"
+    ],
+    "source": "servers/billing-docs/src/index.ts:31 (FREE_DOCS_PER_MONTH = 5), :716, :979, :1135"
+   },
+   "keywords": [
+    "create credit note",
+    "purchase order generator",
+    "credit note against invoice vat",
+    "purchase order in claude"
+   ],
+   "faq": [
+    {
+     "q": "Does it need the Invoice server?",
+     "a": "It runs on the same invoice engine and business profile, so credit notes can reference your invoice numbers."
+    },
+    {
+     "q": "Can I get a PDF on the free tier?",
+     "a": "The free tier gives the text version. The PDF is Pro."
+    }
+   ]
+  },
+  {
+   "id": "budget",
+   "name": "Budget",
+   "category": "calculators",
+   "tagline": "Set monthly caps and check what is left, right in the chat.",
+   "plain": "A simple envelope budget. Set a monthly cap per category, log what you spend, and ask what is left. No bank login and no finance app. The ledger lives in memory for the session, so it is for quick checks, not long-term records.",
+   "for_who": [
+    "Individuals",
+    "Freelancers",
+    "Students"
+   ],
+   "outcome_chips": [
+    "Category caps",
+    "Spend log",
+    "Remaining per category"
+   ],
+   "cases": [
+    {
+     "title": "Set up a grocery budget",
+     "persona": "Student in Edinburgh",
+     "prompt": "Set a GBP 250 monthly grocery budget and log GBP 38 spent today.",
+     "steps": [
+      {
+       "tool": "budget_set",
+       "does": "Sets the GBP 250 cap"
+      },
+      {
+       "tool": "budget_spend",
+       "does": "Logs GBP 38"
+      }
+     ],
+     "result": "Groceries: cap 250, spent 38, remaining 212.",
+     "minutes_saved": 2,
+     "minutes_basis": "INFERRED: opening a budget app and logging takes 2 min"
+    },
+    {
+     "title": "Can I afford dinner out?",
+     "persona": "Freelance illustrator in Lyon",
+     "prompt": "I spent 30 on transport and 18 on coffee. Show my budget report. Can I spend 60 on eating out?",
+     "steps": [
+      {
+       "tool": "budget_spend",
+       "does": "Logs the two amounts"
+      },
+      {
+       "tool": "budget_report",
+       "does": "Shows cap, spent and remaining"
+      }
+     ],
+     "result": "A table of every category; eating out shows how much is left against the 60.",
+     "minutes_saved": 3,
+     "minutes_basis": "INFERRED: mental arithmetic across categories"
+    },
+    {
+     "title": "Which categories are over?",
+     "persona": "Couple planning a month in Krakow",
+     "prompt": "Which categories am I over on this month?",
+     "steps": [
+      {
+       "tool": "budget_report",
+       "does": "Lists every category with remaining amount"
+      }
+     ],
+     "result": "Over-budget categories stand out with a negative remaining amount.",
+     "minutes_saved": 2,
+     "minutes_basis": "INFERRED: quick check"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "budget_set",
+     "plain": "Sets a monthly cap for a category"
+    },
+    {
+     "name": "budget_spend",
+     "plain": "Logs spending against a category"
+    },
+    {
+     "name": "budget_report",
+     "plain": "Cap, spent and remaining per category"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All three tools"
+    ],
+    "pro": [
+     "unknown"
+    ],
+    "source": "unknown: servers/budget/src/index.js has no license gate; servers/budget/README.md has no Free vs Pro section"
+   },
+   "keywords": [
+    "budget in claude",
+    "envelope budget chat",
+    "monthly budget tracker ai",
+    "budget mcp server"
+   ],
+   "faq": [
+    {
+     "q": "Is my budget saved?",
+     "a": "The README describes an in-memory ledger for the session. Do not rely on it for long-term records."
+    },
+    {
+     "q": "Does it connect to my bank?",
+     "a": "No. You type the amounts."
+    }
+   ]
+  },
+  {
+   "id": "calendar",
+   "name": "Calendar",
+   "category": "time-expenses",
+   "tagline": "Ask your .ics calendar when you are free and what clashes.",
+   "plain": "Point it at the .ics file your calendar already exports. Ask what is on this week, when you are free, what is double-booked, or turn a client meeting into a billable time entry. It reads locally and never writes to your calendar.",
+   "for_who": [
+    "Freelancers",
+    "Consultants",
+    "Assistants"
+   ],
+   "outcome_chips": [
+    "Free slots",
+    "Double bookings",
+    "Week agenda",
+    "Billable time entry"
+   ],
+   "cases": [
+    {
+     "title": "Find a free hour across two calendars",
+     "persona": "Consultant in Amsterdam with a work and a personal calendar",
+     "prompt": "When am I free for 90 minutes next week between 9:00 and 17:00 Amsterdam time?",
+     "steps": [
+      {
+       "tool": "ics_import",
+       "does": "Loads the work and personal .ics files"
+      },
+      {
+       "tool": "free_busy",
+       "does": "Finds open slots in working hours"
+      }
+     ],
+     "result": "A list of open slots of 90 minutes or more across both calendars.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: flipping between two calendar apps takes about 10 min"
+    },
+    {
+     "title": "Catch double bookings",
+     "persona": "Executive assistant in New York",
+     "prompt": "Anything double-booked in the next 30 days?",
+     "steps": [
+      {
+       "tool": "conflicts",
+       "does": "Finds overlapping events in the window"
+      }
+     ],
+     "result": "Each clash with both event names and times. Free tier answers windows up to 31 days.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: scanning a month view by eye takes 15 min"
+    },
+    {
+     "title": "Bill the client call",
+     "persona": "Freelance UX researcher in Warsaw",
+     "prompt": "Turn Tuesday's interview with Acme into a billable entry at PLN 250 an hour.",
+     "steps": [
+      {
+       "tool": "events_search",
+       "does": "Finds the Acme interview"
+      },
+      {
+       "tool": "event_to_time_entry",
+       "does": "Converts its duration into a time entry"
+      }
+     ],
+     "result": "A time entry with the exact duration and PLN 250 rate, ready to invoice.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: copying times into a timesheet takes 5 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "ics_import",
+     "plain": "Loads an .ics file"
+    },
+    {
+     "name": "free_busy",
+     "plain": "Open slots within working hours"
+    },
+    {
+     "name": "conflicts",
+     "plain": "Double-booked events"
+    },
+    {
+     "name": "events_list",
+     "plain": "What is on in a date range"
+    },
+    {
+     "name": "event_to_time_entry",
+     "plain": "Turns a meeting into billable time"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "2 calendars",
+     "Questions over up to 31 days",
+     "50 events per export",
+     "Import from a file"
+    ],
+    "pro": [
+     "Unlimited calendars",
+     "Any window",
+     "Unlimited events per export",
+     "Import from a URL or webcal feed"
+    ],
+    "source": "servers/calendar/src/index.ts:37-39 (FREE_MAX_CALENDARS = 2, FREE_MAX_WINDOW_DAYS = 31, FREE_MAX_EXPORT_EVENTS = 50), :360 (URL import)"
+   },
+   "keywords": [
+    "ics calendar free time finder",
+    "find double bookings calendar",
+    "calendar in claude",
+    "ics to timesheet"
+   ],
+   "faq": [
+    {
+     "q": "Does it change my calendar?",
+     "a": "No. It reads the .ics you give it. event_export writes a new file only when you ask."
+    },
+    {
+     "q": "Does it connect to Google Calendar directly?",
+     "a": "No. Export .ics from your calendar, or on Pro import a URL or webcal feed."
+    }
+   ]
+  },
+  {
+   "id": "cash-book",
+   "name": "Cash Book",
+   "category": "bookkeeping",
+   "tagline": "One double-entry ledger built from your invoices, bank and expenses.",
+   "plain": "It reads the records your other back-office servers already keep, invoices, bank lines, expenses, deposits and assets, and turns them into one double-entry ledger. Ask for a trial balance, the lines behind an account, or close the month.",
+   "for_who": [
+    "Bookkeepers",
+    "Freelancers who do their own books",
+    "Small business owners"
+   ],
+   "outcome_chips": [
+    "Trial balance",
+    "General ledger",
+    "Month close",
+    "CSV for accountant"
+   ],
+   "cases": [
+    {
+     "title": "First trial balance of the month",
+     "persona": "Freelance consultant in Gdynia",
+     "prompt": "Build the October ledger from my invoices, bank and expenses and show the trial balance.",
+     "steps": [
+      {
+       "tool": "ledger_build",
+       "does": "Derives October entries from the source records"
+      },
+      {
+       "tool": "trial_balance",
+       "does": "Lists debits and credits per account"
+      }
+     ],
+     "result": "A trial balance in PLN where debits equal credits, built from records you already keep.",
+     "minutes_saved": 60,
+     "minutes_basis": "INFERRED: manual posting of a month of records takes 1-2 hours"
+    },
+    {
+     "title": "Explain one account",
+     "persona": "Bookkeeper in Cork",
+     "prompt": "Why is office costs EUR 1,940 in October? Show me the lines.",
+     "steps": [
+      {
+       "tool": "ledger_lines",
+       "does": "Lists every entry in the account with its source record"
+      }
+     ],
+     "result": "Each line with date, amount and the expense or bank record it came from.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: tracing entries back to sources takes 15 min"
+    },
+    {
+     "title": "Close the month and send the export",
+     "persona": "Owner of a small agency in Denver",
+     "prompt": "Close October and give me a CSV for my accountant.",
+     "steps": [
+      {
+       "tool": "month_close",
+       "does": "Closes the period"
+      },
+      {
+       "tool": "ledger_export_csv",
+       "does": "Exports the ledger"
+      }
+     ],
+     "result": "A closed October and a CSV of every entry. Both are Pro features.",
+     "minutes_saved": 30,
+     "minutes_basis": "INFERRED: assembling a month export for an accountant takes 30 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "ledger_build",
+     "plain": "Builds a period's entries from your records"
+    },
+    {
+     "name": "trial_balance",
+     "plain": "Debits and credits per account"
+    },
+    {
+     "name": "ledger_lines",
+     "plain": "The entries behind an account"
+    },
+    {
+     "name": "month_close",
+     "plain": "Closes a month"
+    },
+    {
+     "name": "ledger_export_csv",
+     "plain": "Exports the ledger for an accountant"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "ledger_build 3 periods per calendar month",
+     "trial_balance and ledger_lines unlimited",
+     "Rebuilds and period_delete free"
+    ],
+    "pro": [
+     "Unlimited ledger builds",
+     "month_close",
+     "ledger_export_csv",
+     "ledger_report"
+    ],
+    "source": "servers/cash-book/src/index.ts:28 (FREE_PERIODS_PER_MONTH = 3), :415, :476, :489 (requirePro)"
+   },
+   "keywords": [
+    "double entry ledger in claude",
+    "trial balance from invoices",
+    "month end close small business",
+    "general ledger ai"
+   ],
+   "faq": [
+    {
+     "q": "Do I need the other servers?",
+     "a": "Yes, to have data. It builds the ledger from records kept by the invoice, bank statement, expense, deposits and asset servers."
+    },
+    {
+     "q": "Does it replace my accountant?",
+     "a": "No. It gives your accountant a clean ledger and trial balance to review."
+    }
+   ]
+  },
+  {
+   "id": "catalogue",
+   "name": "Catalogue",
+   "category": "invoicing",
+   "tagline": "One price list and rate card that your quotes and invoices read.",
+   "plain": "Keep your products and labour rates in one place, with prices that change on a date you set. Ask for line items by SKU or role and get them priced and ready for a quote or an invoice. Print the price list when a client asks for it.",
+   "for_who": [
+    "Trades and contractors",
+    "Agencies",
+    "Small shops"
+   ],
+   "outcome_chips": [
+    "Price list",
+    "Labour rate card",
+    "Priced line items",
+    "Dated price changes"
+   ],
+   "cases": [
+    {
+     "title": "Raise prices from 1 January",
+     "persona": "Electrician in Birmingham",
+     "prompt": "From 1 January 2027, socket install goes from GBP 65 to GBP 72 and my hourly rate from GBP 55 to GBP 60.",
+     "steps": [
+      {
+       "tool": "sku_set",
+       "does": "Books the new socket price valid from 2027-01-01"
+      },
+      {
+       "tool": "rate_set",
+       "does": "Books the new hourly rate from the same date"
+      }
+     ],
+     "result": "Old prices stay in force until 31 December. New jobs dated in January price at the new rates.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: updating prices in several templates takes 15 min"
+    },
+    {
+     "title": "Price a job from codes",
+     "persona": "Kitchen fitter in Katowice",
+     "prompt": "Price 6 x CAB-60, 2 x WORKTOP-3M and 14 hours of fitter time for client Nowak.",
+     "steps": [
+      {
+       "tool": "lines_resolve",
+       "does": "Turns codes and hours into priced lines"
+      }
+     ],
+     "result": "Invoice-ready and quote-ready lines with unit prices and VAT in PLN. An unknown code is refused by name, never guessed.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: looking up 3+ prices and typing lines takes 10-20 min"
+    },
+    {
+     "title": "Send a printed price list",
+     "persona": "Owner of a print shop in Antwerp",
+     "prompt": "Send me the price list for the trade tier as a PDF.",
+     "steps": [
+      {
+       "tool": "price_list_pdf",
+       "does": "Writes the A4 price list for the trade tier"
+      }
+     ],
+     "result": "An A4 PDF price list under your business name. Price tiers and PDF are Pro.",
+     "minutes_saved": 30,
+     "minutes_basis": "INFERRED: formatting a price list document takes 30 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "sku_set",
+     "plain": "Adds a product or a dated price change"
+    },
+    {
+     "name": "rate_set",
+     "plain": "Sets an hourly rate per role"
+    },
+    {
+     "name": "lines_resolve",
+     "plain": "Prices a list of codes for a quote or invoice"
+    },
+    {
+     "name": "price_list_text",
+     "plain": "The price list as text"
+    },
+    {
+     "name": "price_list_pdf",
+     "plain": "The price list as an A4 PDF"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "25 SKUs",
+     "Unlimited rate cards",
+     "lines_resolve and text price list"
+    ],
+    "pro": [
+     "Unlimited SKUs",
+     "Price tiers beyond the default",
+     "price_list_pdf",
+     "catalogue_report"
+    ],
+    "source": "servers/catalogue/src/index.ts:34 (FREE_SKUS = 25), :65 (tiers), :748, :828 (requirePro)"
+   },
+   "keywords": [
+    "price list generator",
+    "rate card for contractors",
+    "product catalogue in claude",
+    "sku price list pdf"
+   ],
+   "faq": [
+    {
+     "q": "Can prices change over time?",
+     "a": "Yes. Each price row has a valid-from date. A line is priced as of its own date."
+    },
+    {
+     "q": "Does it work with the Invoice server?",
+     "a": "lines_resolve returns items in the shape invoice_create and quote_create expect."
+    }
+   ]
+  },
+  {
+   "id": "change-order",
+   "name": "Change Order",
+   "category": "operations",
+   "tagline": "Track scope changes and the running contract value.",
+   "plain": "When a client adds or removes work after the quote is signed, record it as a change order. It keeps the delta lines, tracks approval and always knows the current contract value. On Pro it writes the change order document and the invoice lines.",
+   "for_who": [
+    "Builders and contractors",
+    "Agencies",
+    "Consultants"
+   ],
+   "outcome_chips": [
+    "Change order",
+    "Approval status",
+    "Contract value",
+    "Invoice delta"
+   ],
+   "cases": [
+    {
+     "title": "Client adds a bathroom window",
+     "persona": "Renovation contractor in Gdansk",
+     "prompt": "Change order on quote Q-2026-014: add one bathroom window, PLN 2,300 plus 8% VAT. Original contract PLN 58,000.",
+     "steps": [
+      {
+       "tool": "change_order_create",
+       "does": "Opens a change order against Q-2026-014"
+      },
+      {
+       "tool": "change_order_add_line",
+       "does": "Adds the window line"
+      },
+      {
+       "tool": "contract_value",
+       "does": "Shows the new total"
+      }
+     ],
+     "result": "Contract value goes from PLN 58,000 to PLN 60,300 net once approved, with the change on record.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: writing a change note and updating the contract sheet takes 20 min"
+    },
+    {
+     "title": "Get sign-off before the work",
+     "persona": "Web agency project lead in London",
+     "prompt": "Mark CO-3 as sent today, then approved when the client replies.",
+     "steps": [
+      {
+       "tool": "change_order_status",
+       "does": "Moves CO-3 to sent, then approved"
+      },
+      {
+       "tool": "change_order_list",
+       "does": "Lists what is still waiting"
+      }
+     ],
+     "result": "A dated approval trail and a list of change orders still waiting for the client.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: tracking approvals in email threads takes 10 min a week"
+    },
+    {
+     "title": "Invoice the approved extras",
+     "persona": "Landscaper in Phoenix",
+     "prompt": "Write the document for CO-2 and give me the invoice lines for it.",
+     "steps": [
+      {
+       "tool": "change_order_document",
+       "does": "Writes the change order document"
+      },
+      {
+       "tool": "change_order_invoice_payload",
+       "does": "Returns invoice-ready delta lines"
+      }
+     ],
+     "result": "A document to sign and lines to paste into the invoice. Both are Pro.",
+     "minutes_saved": 25,
+     "minutes_basis": "INFERRED: drafting the document and retyping lines takes 20-30 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "change_order_create",
+     "plain": "Opens a change order against a quote or work order"
+    },
+    {
+     "name": "change_order_add_line",
+     "plain": "Adds, removes or reprices work"
+    },
+    {
+     "name": "change_order_status",
+     "plain": "Moves it through sent, approved or rejected"
+    },
+    {
+     "name": "contract_value",
+     "plain": "The running contract value"
+    },
+    {
+     "name": "change_order_document",
+     "plain": "The document for the client to sign"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "5 open change orders",
+     "Lines, status, list, delete",
+     "Running contract value"
+    ],
+    "pro": [
+     "Unlimited change orders",
+     "change_order_document",
+     "change_order_invoice_payload"
+    ],
+    "source": "servers/change-order/src/index.ts:29 (FREE_OPEN_ORDERS = 5), :615, :639 (requirePro)"
+   },
+   "keywords": [
+    "change order template construction",
+    "scope change tracking",
+    "change order in claude",
+    "contract variation log"
+   ],
+   "faq": [
+    {
+     "q": "Does a rejected change order count against the limit?",
+     "a": "The free limit counts open orders, draft and sent."
+    },
+    {
+     "q": "Can it remove work as well as add it?",
+     "a": "Yes. A line can add, remove or change quantity or price, so the delta can be negative."
+    }
+   ]
+  },
+  {
+   "id": "checklist",
+   "name": "Checklist",
+   "category": "operations",
+   "tagline": "Reusable checklists with dated runs, failures and a sign-off.",
+   "plain": "Write a checklist once, for an opening routine, a site inspection or a client handover, and run it as often as you need. Each run records pass, fail or not applicable per step, notes and who signed it off.",
+   "for_who": [
+    "Shop and restaurant managers",
+    "Field technicians",
+    "Agencies"
+   ],
+   "outcome_chips": [
+    "Checklist template",
+    "Dated run",
+    "Failure list",
+    "Sign-off record"
+   ],
+   "cases": [
+    {
+     "title": "Daily opening check",
+     "persona": "Café manager in Porto",
+     "prompt": "Start today's opening checklist. Fridge 4 C pass, coffee machine pass, card terminal failed, note: reboot did not help.",
+     "steps": [
+      {
+       "tool": "run_start",
+       "does": "Starts today's run of the opening checklist"
+      },
+      {
+       "tool": "run_check",
+       "does": "Records each step result and the note"
+      }
+     ],
+     "result": "A dated run with one failure and its note, ready for the owner to see.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: paper checklist plus a message to the owner takes 5 min"
+    },
+    {
+     "title": "Site inspection sign-off",
+     "persona": "HVAC technician in Texas",
+     "prompt": "Sign off the run for 118 Oak St, by Jordan Lee, and show any failed steps.",
+     "steps": [
+      {
+       "tool": "run_show",
+       "does": "Shows the run with each step"
+      },
+      {
+       "tool": "run_sign_off",
+       "does": "Signs off with name and date"
+      }
+     ],
+     "result": "A signed run with the failed steps listed for follow-up.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: typing up an inspection sheet takes 10 min"
+    },
+    {
+     "title": "Website launch checklist",
+     "persona": "Web agency in Krakow",
+     "prompt": "Make a launch checklist: SSL, redirects, analytics, cookie banner, sitemap. Then give me the report for the Kowalski launch.",
+     "steps": [
+      {
+       "tool": "checklist_create",
+       "does": "Creates the launch checklist"
+      },
+      {
+       "tool": "checklist_item_add",
+       "does": "Adds the five steps"
+      },
+      {
+       "tool": "run_report",
+       "does": "Writes the run report as text"
+      }
+     ],
+     "result": "A reusable launch checklist and a text report for this launch.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: rebuilding a launch list each time takes 15 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "checklist_create",
+     "plain": "Creates a reusable checklist"
+    },
+    {
+     "name": "run_start",
+     "plain": "Starts a dated run"
+    },
+    {
+     "name": "run_check",
+     "plain": "Records pass, fail or not applicable"
+    },
+    {
+     "name": "run_sign_off",
+     "plain": "Signs off a run"
+    },
+    {
+     "name": "run_report",
+     "plain": "The run report as text"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "3 checklists",
+     "Unlimited runs",
+     "Run report as text"
+    ],
+    "pro": [
+     "Unlimited checklists",
+     "Write the run report to a file"
+    ],
+    "source": "servers/checklist/src/index.ts:42 (FREE_TEMPLATES = 3), :587 (requirePro run_report to file)"
+   },
+   "keywords": [
+    "inspection checklist app",
+    "opening closing checklist",
+    "checklist with sign off",
+    "checklist in claude"
+   ],
+   "faq": [
+    {
+     "q": "How many times can I run a checklist?",
+     "a": "Unlimited on both tiers. The free tier limits how many checklists you keep, not how often you run them."
+    },
+    {
+     "q": "Can I mark a step not applicable?",
+     "a": "Yes. Each step can be pass, fail or not applicable, with a note."
+    }
+   ]
+  },
+  {
+   "id": "clauses",
+   "name": "Clauses",
+   "category": "contracts-hr",
+   "tagline": "Your own clause library, assembled into a Word contract in one call.",
+   "plain": "Start with 25 generic freelance clauses and add your own. Search them, then assemble a contract as a Word .docx. Any fact you did not give, like a client name or a fee, stays as a bracketed prompt so nothing is invented.",
+   "for_who": [
+    "Freelancers",
+    "Agencies",
+    "Consultants"
+   ],
+   "outcome_chips": [
+    "Word contract",
+    "Clause library",
+    "Fill-in prompts",
+    "Ranked search"
+   ],
+   "cases": [
+    {
+     "title": "Contract for a new client",
+     "persona": "Freelance developer in Lisbon",
+     "prompt": "Build a contract for Blue Harbour Lda: scope, payment in 14 days, IP transfer on payment, 30-day termination.",
+     "steps": [
+      {
+       "tool": "clause_search",
+       "does": "Finds the matching clauses"
+      },
+      {
+       "tool": "variables_list",
+       "does": "Lists the facts the clauses need"
+      },
+      {
+       "tool": "contract_assemble",
+       "does": "Builds the .docx"
+      }
+     ],
+     "result": "A Word contract with the chosen clauses in order and brackets left where a fact was missing.",
+     "minutes_saved": 45,
+     "minutes_basis": "INFERRED: assembling a contract from old files takes 45-60 min"
+    },
+    {
+     "title": "Save a clause your lawyer wrote",
+     "persona": "Design agency owner in Manchester",
+     "prompt": "Save this limitation of liability clause under 'liability', jurisdiction England and Wales.",
+     "steps": [
+      {
+       "tool": "clause_add",
+       "does": "Adds the clause with category and jurisdiction"
+      }
+     ],
+     "result": "The clause is in your library and shows up in future searches.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: finding the right old email next time takes 5+ min"
+    },
+    {
+     "title": "Long master agreement",
+     "persona": "IT consultancy in Warsaw",
+     "prompt": "Assemble our master services agreement from 14 clauses.",
+     "steps": [
+      {
+       "tool": "clause_list",
+       "does": "Lists the library in contract order"
+      },
+      {
+       "tool": "contract_assemble",
+       "does": "Builds the 14-clause document"
+      }
+     ],
+     "result": "A full agreement in .docx. More than 8 clauses per document is Pro.",
+     "minutes_saved": 60,
+     "minutes_basis": "INFERRED: assembling a long agreement by copy-paste takes an hour"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "clause_search",
+     "plain": "Ranked search across your clauses"
+    },
+    {
+     "name": "clause_add",
+     "plain": "Saves a clause of your own"
+    },
+    {
+     "name": "contract_assemble",
+     "plain": "Builds a .docx or Markdown contract"
+    },
+    {
+     "name": "variables_list",
+     "plain": "Facts the chosen clauses need"
+    },
+    {
+     "name": "clause_update",
+     "plain": "Edits a clause"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "25 starter clauses",
+     "10 clauses of your own",
+     "8 clauses per assembled document",
+     "Ranked search with category filter",
+     "Markdown import and export"
+    ],
+    "pro": [
+     "Unlimited own clauses",
+     "Unlimited clauses per document",
+     "Filter by jurisdiction or tag",
+     "Clause version history",
+     "JSON import and export"
+    ],
+    "source": "servers/clauses/src/index.ts:27-28 (FREE_OWN_CLAUSES = 10, FREE_ASSEMBLE_CLAUSES = 8), :300, :362, :384"
+   },
+   "keywords": [
+    "contract clause library",
+    "freelance contract generator docx",
+    "assemble contract from clauses",
+    "contract in claude"
+   ],
+   "faq": [
+    {
+     "q": "Are the starter clauses legal advice?",
+     "a": "No. They are generic freelance starters. Have a lawyer review contracts that matter."
+    },
+    {
+     "q": "What happens if I leave out a detail?",
+     "a": "It stays as a bracketed prompt in the document. The server never invents a value."
+    }
+   ]
+  },
+  {
+   "id": "credit-note",
+   "name": "Credit Note",
+   "category": "invoicing",
+   "tagline": "Credit notes against an invoice or standalone, with a clear reason.",
+   "plain": "Issue a credit note when goods come back, you overcharged or you give a late discount. Draft it, check it, finalize it with a number and render it. Totals per period are one question away.",
+   "for_who": [
+    "Small businesses",
+    "Online sellers",
+    "Bookkeepers"
+   ],
+   "outcome_chips": [
+    "Credit note",
+    "Reason code",
+    "Rendered document",
+    "Period totals"
+   ],
+   "cases": [
+    {
+     "title": "Goods returned",
+     "persona": "Online seller of ceramics in Bologna",
+     "prompt": "Credit note against invoice 2026/118: 2 mugs returned at EUR 24 each, 22% VAT.",
+     "steps": [
+      {
+       "tool": "credit_note_create",
+       "does": "Drafts the credit with reason returned_goods"
+      },
+      {
+       "tool": "credit_note_finalize",
+       "does": "Numbers and locks it"
+      },
+      {
+       "tool": "credit_note_render",
+       "does": "Renders the document"
+      }
+     ],
+     "result": "A finalized credit note for EUR 48.00 net, EUR 10.56 VAT, EUR 58.56 total, referencing 2026/118.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: a credit note in a template with VAT math takes 15 min"
+    },
+    {
+     "title": "Fix an overcharge",
+     "persona": "IT support contractor in Leeds",
+     "prompt": "I billed 10 hours instead of 8 on INV-0412 at GBP 70. Draft a credit, reason overcharge, and let me check it first.",
+     "steps": [
+      {
+       "tool": "credit_note_create",
+       "does": "Drafts a GBP 140 credit"
+      },
+      {
+       "tool": "credit_note_get",
+       "does": "Shows the draft for review"
+      }
+     ],
+     "result": "A draft for GBP 140.00 plus VAT that you can edit before you finalize.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: 10 min for a corrective document"
+    },
+    {
+     "title": "Quarter credit totals",
+     "persona": "Bookkeeper in Poznan",
+     "prompt": "How much did we credit in Q3, by reason?",
+     "steps": [
+      {
+       "tool": "credit_note_summary",
+       "does": "Totals credits in the date range"
+      }
+     ],
+     "result": "Q3 credits totalled per currency, so VAT corrections are easy to report.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: collecting credits from folders takes 20 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "credit_note_create",
+     "plain": "Drafts a credit note with a reason"
+    },
+    {
+     "name": "credit_note_update",
+     "plain": "Edits a draft"
+    },
+    {
+     "name": "credit_note_finalize",
+     "plain": "Numbers and locks it"
+    },
+    {
+     "name": "credit_note_render",
+     "plain": "Renders the document"
+    },
+    {
+     "name": "credit_note_summary",
+     "plain": "Totals for a period"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "10 finalized credit notes, lifetime",
+     "Unlimited drafts, lists and totals",
+     "Rendering with a one-line footer"
+    ],
+    "pro": [
+     "Unlimited finalized credit notes",
+     "Rendering with no footer"
+    ],
+    "source": "servers/credit-note/src/index.ts:25 (FREE_FINALS = 10), :255, :367 (footer)"
+   },
+   "keywords": [
+    "credit note template",
+    "issue credit note vat",
+    "credit note generator",
+    "credit note in claude"
+   ],
+   "faq": [
+    {
+     "q": "How is this different from Billing Docs?",
+     "a": "Credit Note has a draft-then-finalize flow and reason codes. Billing Docs pairs credit notes with purchase orders on the invoice engine."
+    },
+    {
+     "q": "Is the free limit per month?",
+     "a": "No. The free tier allows 10 finalized credit notes in total. Drafts are unlimited."
+    }
+   ]
+  },
+  {
+   "id": "currency",
+   "name": "Currency",
+   "category": "calculators",
+   "tagline": "Convert money at official ECB rates, in chat, with no API key.",
+   "plain": "Ask for an exchange rate or a conversion and get the European Central Bank reference rate with its date. It caches rates on your machine and works offline. It also hands invoice and expense tools the rates they need.",
+   "for_who": [
+    "Freelancers with foreign clients",
+    "Bookkeepers",
+    "Online sellers"
+   ],
+   "outcome_chips": [
+    "ECB rate with date",
+    "Conversion",
+    "Rate history",
+    "FX rates for invoices"
+   ],
+   "cases": [
+    {
+     "title": "Convert an invoice for the books",
+     "persona": "Polish freelancer billing a German client",
+     "prompt": "Convert EUR 4,200 to PLN at the ECB rate on the invoice date, 2026-10-14.",
+     "steps": [
+      {
+       "tool": "rate_on",
+       "does": "Reads the ECB EUR/PLN rate for 2026-10-14"
+      },
+      {
+       "tool": "convert",
+       "does": "Converts EUR 4,200 at that rate"
+      }
+     ],
+     "result": "The PLN amount with the rate and its date stated, so the bookkeeper can check it.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: finding a dated rate on a bank site takes about 5 min"
+    },
+    {
+     "title": "Quote one price in four currencies",
+     "persona": "Online course seller in Dublin",
+     "prompt": "What is EUR 149 in GBP, USD, PLN and SEK today?",
+     "steps": [
+      {
+       "tool": "convert_many",
+       "does": "Converts EUR 149 into four currencies off one rate date"
+      }
+     ],
+     "result": "Four amounts, each rounded to its own minor units, all from the same ECB date.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: four separate lookups take about 5 min"
+    },
+    {
+     "title": "How did the pound move this year?",
+     "persona": "UK importer buying from the EU",
+     "prompt": "Show EUR/GBP for the last 12 months.",
+     "steps": [
+      {
+       "tool": "rate_history",
+       "does": "Reads the series for the window"
+      }
+     ],
+     "result": "The daily series for the year. Windows past 90 days are Pro; free answers the last 90 days and names the cap.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: downloading and filtering an ECB file takes 10 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "convert",
+     "plain": "Converts an amount at the ECB rate"
+    },
+    {
+     "name": "convert_many",
+     "plain": "One amount into many currencies"
+    },
+    {
+     "name": "rate_on",
+     "plain": "The rate on a given date"
+    },
+    {
+     "name": "rate_history",
+     "plain": "A rate series over time"
+    },
+    {
+     "name": "fx_rates_for",
+     "plain": "Rates in the shape invoice and expense tools take"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "Latest rates and conversions, unlimited",
+     "All currencies the ECB quotes",
+     "History and rate_on for the last 90 days",
+     "Offline cache"
+    ],
+    "pro": [
+     "History back to 1999-01-04",
+     "Unlimited history windows"
+    ],
+    "source": "servers/currency/src/index.ts:17 (FREE_HISTORY_DAYS = 90), :135, :322"
+   },
+   "keywords": [
+    "ecb exchange rate on date",
+    "currency converter claude",
+    "historical exchange rates ecb",
+    "convert invoice currency"
+   ],
+   "faq": [
+    {
+     "q": "Where do the rates come from?",
+     "a": "The European Central Bank reference rates. They publish once per working day, so weekend dates use the last published rate."
+    },
+    {
+     "q": "Do I need an API key?",
+     "a": "No. Rates are fetched from the ECB and cached on your machine."
+    }
+   ]
+  },
+  {
+   "id": "delivery-schedule",
+   "name": "Delivery Schedule",
+   "category": "operations",
+   "tagline": "Dated deliverables, sign-off and a clear list of what is late.",
+   "plain": "List what you owe a client and when, against a quote or work order. Mark items delivered and accepted, and ask what has slipped as at any date. On Pro it writes the schedule document and the milestone invoice lines.",
+   "for_who": [
+    "Agencies",
+    "Contractors",
+    "Consultants"
+   ],
+   "outcome_chips": [
+    "Deliverable dates",
+    "Late report",
+    "Acceptance record",
+    "Milestone invoice lines"
+   ],
+   "cases": [
+    {
+     "title": "Plan a website project",
+     "persona": "Web agency in Lublin",
+     "prompt": "Schedule for quote Q-2026-022: wireframes 10 Nov PLN 4,000, design 1 Dec PLN 9,000, build 20 Dec PLN 14,000.",
+     "steps": [
+      {
+       "tool": "delivery_schedule_create",
+       "does": "Opens the schedule against the quote"
+      },
+      {
+       "tool": "deliverable_add",
+       "does": "Adds three dated deliverables with value"
+      }
+     ],
+     "result": "A schedule with three milestones worth PLN 27,000 in total.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: a milestone table in a doc takes 15 min"
+    },
+    {
+     "title": "Monday: what slipped?",
+     "persona": "Video production lead in Bristol",
+     "prompt": "What is late across all clients as of today?",
+     "steps": [
+      {
+       "tool": "late_report",
+       "does": "Lists overdue deliverables, worst first, with value at risk"
+      }
+     ],
+     "result": "Every overdue item with days late and GBP value at risk, delivered-late items kept apart.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: checking several project boards takes 20 min"
+    },
+    {
+     "title": "Invoice accepted milestones",
+     "persona": "Engineering consultant in Munich",
+     "prompt": "Wireframes and design are accepted. Give me the invoice lines.",
+     "steps": [
+      {
+       "tool": "deliverable_status",
+       "does": "Marks both as accepted"
+      },
+      {
+       "tool": "milestone_payload",
+       "does": "Returns invoice-ready lines with VAT"
+      }
+     ],
+     "result": "Invoice lines for the two accepted milestones. milestone_payload is Pro.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: retyping milestone lines takes 10 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "delivery_schedule_create",
+     "plain": "Opens a schedule for a job"
+    },
+    {
+     "name": "deliverable_add",
+     "plain": "Adds a dated deliverable"
+    },
+    {
+     "name": "deliverable_status",
+     "plain": "Marks delivered or accepted"
+    },
+    {
+     "name": "late_report",
+     "plain": "What has slipped, with value at risk"
+    },
+    {
+     "name": "milestone_payload",
+     "plain": "Invoice lines for accepted work"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "3 open schedules",
+     "Add, move, get, list, delete",
+     "late_report at any date"
+    ],
+    "pro": [
+     "Unlimited schedules",
+     "delivery_schedule_document",
+     "milestone_payload"
+    ],
+    "source": "servers/delivery-schedule/src/index.ts:33 (FREE_OPEN_SCHEDULES = 3), :661, :689 (requirePro)"
+   },
+   "keywords": [
+    "project milestone tracker",
+    "deliverables schedule template",
+    "late deliverables report",
+    "milestone invoicing"
+   ],
+   "faq": [
+    {
+     "q": "When does a schedule stop counting as open?",
+     "a": "When every deliverable on it is accepted."
+    },
+    {
+     "q": "Does it send reminders?",
+     "a": "No. You ask; it answers what is late as at the date you give."
+    }
+   ]
+  },
+  {
+   "id": "deposits",
+   "name": "Deposits",
+   "category": "invoicing",
+   "tagline": "Hold client deposits, apply them to invoices, refund the rest.",
+   "plain": "Record a security deposit or a retainer when it arrives. Apply part of it to an invoice as a payment, refund what is left, and always know how much you hold for each client.",
+   "for_who": [
+    "Landlords and rental businesses",
+    "Agencies on retainer",
+    "Event and equipment hire"
+   ],
+   "outcome_chips": [
+    "Deposit balance",
+    "Applied to invoice",
+    "Refund record",
+    "Client statement"
+   ],
+   "cases": [
+    {
+     "title": "Retainer against an invoice",
+     "persona": "Marketing agency in Rotterdam",
+     "prompt": "Klein BV paid a EUR 3,000 retainer. Apply EUR 1,850 to INV-2026-0044.",
+     "steps": [
+      {
+       "tool": "deposit_record",
+       "does": "Records the EUR 3,000 retainer"
+      },
+      {
+       "tool": "deposit_apply",
+       "does": "Pays EUR 1,850 of INV-2026-0044"
+      },
+      {
+       "tool": "deposit_balance",
+       "does": "Shows EUR 1,150 still held"
+      }
+     ],
+     "result": "The invoice shows a EUR 1,850 payment and Klein BV has EUR 1,150 left on deposit.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: updating an invoice and a deposit sheet takes 10 min"
+    },
+    {
+     "title": "Return a security deposit",
+     "persona": "Equipment hire shop in Glasgow",
+     "prompt": "Refund GBP 400 of the GBP 500 deposit to Mr Grant; GBP 100 kept for a damaged lens cap.",
+     "steps": [
+      {
+       "tool": "deposit_refund",
+       "does": "Records the GBP 400 refund with the note"
+      },
+      {
+       "tool": "deposit_statement_text",
+       "does": "Writes the statement for the client"
+      }
+     ],
+     "result": "A statement showing received, refunded and kept amounts with the reason.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: writing the explanation email takes 10 min"
+    },
+    {
+     "title": "Deposits held too long",
+     "persona": "Short-let manager in Krakow",
+     "prompt": "Which deposits have I held for more than 60 days?",
+     "steps": [
+      {
+       "tool": "deposits_report",
+       "does": "Lists deposits older than 60 days"
+      }
+     ],
+     "result": "Each old deposit with client, amount in PLN and age. deposits_report is Pro.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: checking a deposit sheet against bank lines takes 15 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "deposit_record",
+     "plain": "Records a deposit or retainer"
+    },
+    {
+     "name": "deposit_apply",
+     "plain": "Applies it to an invoice as a payment"
+    },
+    {
+     "name": "deposit_refund",
+     "plain": "Records a refund"
+    },
+    {
+     "name": "deposit_balance",
+     "plain": "What you hold per client"
+    },
+    {
+     "name": "deposit_statement_text",
+     "plain": "A statement for the client"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "5 deposits recorded per month",
+     "Apply, refund, balance and lists unlimited",
+     "Text statement"
+    ],
+    "pro": [
+     "Unlimited deposits",
+     "deposit_statement_pdf with your logo and no footer",
+     "deposits_report"
+    ],
+    "source": "servers/deposits/src/index.ts:27 (FREE_DEPOSITS_PER_MONTH = 5), :705, :768"
+   },
+   "keywords": [
+    "track client deposits",
+    "retainer tracking freelancer",
+    "security deposit refund record",
+    "apply deposit to invoice"
+   ],
+   "faq": [
+    {
+     "q": "Does it work with the Invoice server?",
+     "a": "Yes. deposit_apply records the amount as a payment through the invoice server."
+    },
+    {
+     "q": "Can I apply more than the invoice owes?",
+     "a": "No. The amount defaults to the lesser of what is held and what is owed, and more is refused."
+    }
+   ]
+  },
+  {
+   "id": "docx",
+   "name": "Docx",
+   "category": "documents",
+   "tagline": "Proposals, contracts and letters as real Word files, from chat.",
+   "plain": "Describe the document and get a .docx you can open in Word or Google Docs. It writes proposals, contracts, statements of work and letters, reads existing .docx files, and fills your own templates. Files stay on your machine.",
+   "for_who": [
+    "Freelancers",
+    "Consultants",
+    "Small agencies"
+   ],
+   "outcome_chips": [
+    "Word proposal",
+    "Contract .docx",
+    "Filled template",
+    "Letter"
+   ],
+   "cases": [
+    {
+     "title": "Proposal after a discovery call",
+     "persona": "Freelance data analyst in Chicago",
+     "prompt": "Proposal for Riverbend Clinics: dashboard rebuild, 3 deliverables, 6 weeks, USD 9,600, valid until 30 November.",
+     "steps": [
+      {
+       "tool": "proposal_create",
+       "does": "Writes the proposal .docx"
+      }
+     ],
+     "result": "A formatted Word proposal with scope, deliverables, timeline and price.",
+     "minutes_saved": 45,
+     "minutes_basis": "INFERRED: a proposal from an old file takes 45-60 min"
+    },
+    {
+     "title": "Fill the company template",
+     "persona": "Office manager at a Warsaw accounting firm",
+     "prompt": "Fill engagement-letter.docx for Zielinski Sp. z o.o., fee PLN 1,800 a month, start 1 December.",
+     "steps": [
+      {
+       "tool": "doc_fill_template",
+       "does": "Replaces the placeholders in your template"
+      }
+     ],
+     "result": "A filled copy of your own template. Free covers templates up to 10 placeholders.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: manual find-and-replace takes 10 min"
+    },
+    {
+     "title": "Read a contract the client sent",
+     "persona": "Freelance copywriter in Brighton",
+     "prompt": "Read client-terms.docx and tell me the payment terms and notice period.",
+     "steps": [
+      {
+       "tool": "doc_read",
+       "does": "Extracts the text of the .docx"
+      }
+     ],
+     "result": "The payment and notice clauses quoted back so you can check them.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: skimming a long contract takes 10-15 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "proposal_create",
+     "plain": "A proposal .docx"
+    },
+    {
+     "name": "contract_create",
+     "plain": "A services contract .docx"
+    },
+    {
+     "name": "doc_create",
+     "plain": "Any document from sections"
+    },
+    {
+     "name": "doc_fill_template",
+     "plain": "Fills placeholders in your .docx"
+    },
+    {
+     "name": "doc_read",
+     "plain": "Reads text from a .docx"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "doc_create, doc_from_markdown, doc_read, doc_to_html unlimited",
+     "3 proposals or contracts per month",
+     "Templates up to 10 placeholders",
+     "Footer credit, default colour"
+    ],
+    "pro": [
+     "Unlimited proposals and contracts",
+     "Templates of any size",
+     "No footer branding",
+     "Your logo and brand colour"
+    ],
+    "source": "servers/docx/src/index.ts:20-21 (FREE_AGREEMENTS_PER_MONTH = 3, FREE_TEMPLATE_PLACEHOLDERS = 10), :234, :484"
+   },
+   "keywords": [
+    "create word document from chat",
+    "proposal generator docx",
+    "fill docx template ai",
+    "contract docx in claude"
+   ],
+   "faq": [
+    {
+     "q": "Will it open in Word and Google Docs?",
+     "a": "Yes. It writes a standard .docx file."
+    },
+    {
+     "q": "Can it edit any Word file?",
+     "a": "It reads text from .docx files and fills placeholders in templates you prepare. For other edits, open the file in Word."
+    }
+   ]
+  },
+  {
+   "id": "dunning-letters",
+   "name": "Dunning Letters",
+   "category": "invoicing",
+   "tagline": "Chase late invoices with three letters, on a schedule.",
+   "plain": "Register an unpaid invoice and it tells you who to chase today. It writes reminder 1 at 7 days past due, reminder 2 at 14 and a final notice at 21, with the gaps adjustable per invoice. It can add a late fee and gives you an aging summary of what is owed.",
+   "for_who": [
+    "Freelancers",
+    "Small businesses",
+    "Bookkeepers"
+   ],
+   "outcome_chips": [
+    "Reminder letters",
+    "Chase list",
+    "Aging summary",
+    "Late fee"
+   ],
+   "cases": [
+    {
+     "title": "Monday chase list",
+     "persona": "Freelance photographer in Warsaw",
+     "prompt": "Who do I need to chase today?",
+     "steps": [
+      {
+       "tool": "chase_today",
+       "does": "Lists invoices due for a letter today"
+      },
+      {
+       "tool": "letter_render",
+       "does": "Writes each letter"
+      }
+     ],
+     "result": "Two letters: a first reminder to one client and a final notice to another, ready to send.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: checking dates and writing two reminders takes 20 min"
+    },
+    {
+     "title": "Second reminder with a late fee",
+     "persona": "IT contractor in Manchester",
+     "prompt": "INV-0388 for GBP 2,400 is 35 days overdue. Write the second reminder with 2% a month late fee.",
+     "steps": [
+      {
+       "tool": "invoice_register",
+       "does": "Registers the invoice with the late fee rate"
+      },
+      {
+       "tool": "letter_render",
+       "does": "Writes reminder 2 with the accrued fee"
+      },
+      {
+       "tool": "letter_sent",
+       "does": "Records that it went out"
+      }
+     ],
+     "result": "A firm but polite second reminder with the fee stated, and the send date on record.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: drafting a fee calculation and letter takes 15 min"
+    },
+    {
+     "title": "What is owed and how old",
+     "persona": "Bookkeeper for a Dublin print shop",
+     "prompt": "Give me the aging summary as of today.",
+     "steps": [
+      {
+       "tool": "aging_summary",
+       "does": "Buckets unpaid invoices by days overdue"
+      }
+     ],
+     "result": "Unpaid totals by age bucket and currency.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: an aging pivot from a spreadsheet takes 15 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "invoice_register",
+     "plain": "Adds an unpaid invoice to chase"
+    },
+    {
+     "name": "chase_today",
+     "plain": "Who needs a letter today"
+    },
+    {
+     "name": "letter_render",
+     "plain": "Writes reminder 1, reminder 2 or final notice"
+    },
+    {
+     "name": "aging_summary",
+     "plain": "What is owed, by age"
+    },
+    {
+     "name": "payment_record",
+     "plain": "Records a payment and stops the chase"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "3 unpaid invoices chased at once",
+     "All three letters in both formats",
+     "Aging and chase list",
+     "Late fee accrual"
+    ],
+    "pro": [
+     "Unlimited unpaid invoices"
+    ],
+    "source": "servers/dunning-letters/src/index.ts:23 (FREE_ACTIVE_UNPAID = 3), :137"
+   },
+   "keywords": [
+    "payment reminder letter template",
+    "overdue invoice reminder",
+    "dunning letter generator",
+    "chase unpaid invoices"
+   ],
+   "faq": [
+    {
+     "q": "Does it send the emails?",
+     "a": "No. It writes the letters and records when you sent them. Sending stays with you."
+    },
+    {
+     "q": "What happens when the client pays?",
+     "a": "Record the payment with payment_record and the invoice leaves the chase list."
+    }
+   ]
+  },
+  {
+   "id": "duplicate-invoice-check",
+   "name": "Duplicate Invoice Check",
+   "category": "payables",
+   "tagline": "Catch duplicate supplier invoices before you pay twice.",
+   "plain": "Give it a batch of supplier invoices, up to 1,000 rows, and it groups the likely duplicates: the same reference, the same reference written differently, or the same amount on the same date. Every group says why it was flagged. It does not approve payments.",
+   "for_who": [
+    "Accounts payable clerks",
+    "Bookkeepers",
+    "Finance managers"
+   ],
+   "outcome_chips": [
+    "Duplicate groups",
+    "Reason per match",
+    "CSV evidence",
+    "Saved reports"
+   ],
+   "cases": [
+    {
+     "title": "Check the payment run",
+     "persona": "AP clerk at a logistics firm in Lodz",
+     "prompt": "Here are the 240 supplier invoices in Friday's payment run. Any duplicates?",
+     "steps": [
+      {
+       "tool": "duplicate_invoice_check",
+       "does": "Groups candidate duplicates with reason codes"
+      },
+      {
+       "tool": "report_page",
+       "does": "Pages through each group's members"
+      }
+     ],
+     "result": "3 candidate groups, for example FV/2026/104 and FV-2026-104 from the same supplier flagged as normalized_reference.",
+     "minutes_saved": 60,
+     "minutes_basis": "INFERRED: sorting and eyeballing 240 rows in a spreadsheet takes about an hour"
+    },
+    {
+     "title": "Send the evidence to the controller",
+     "persona": "Bookkeeper for a Manchester wholesaler",
+     "prompt": "Export the duplicate report as CSV so I can attach it to the approval email.",
+     "steps": [
+      {
+       "tool": "report_export_csv",
+       "does": "Exports one row per record with reason codes and group ids"
+      }
+     ],
+     "result": "A CSV with the original fields, the candidate flag and why each one was grouped.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: building an evidence sheet by hand takes 15 min"
+    },
+    {
+     "title": "Keep a monthly record",
+     "persona": "Finance manager at a Rotterdam importer",
+     "prompt": "Save this month's duplicate check and list the reports we saved before.",
+     "steps": [
+      {
+       "tool": "duplicate_invoice_check",
+       "does": "Runs the check with save on"
+      },
+      {
+       "tool": "report_list",
+       "does": "Lists saved reports"
+      }
+     ],
+     "result": "The report is kept on disk. The free tier keeps 3 saved reports; Pro removes the cap.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: filing the result by hand takes 5 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "duplicate_invoice_check",
+     "plain": "Groups likely duplicates with reasons"
+    },
+    {
+     "name": "report_page",
+     "plain": "Pages through records and groups"
+    },
+    {
+     "name": "report_export_csv",
+     "plain": "CSV evidence for the batch"
+    },
+    {
+     "name": "report_list",
+     "plain": "Saved reports"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "Full duplicate check, all reasons",
+     "Paging and CSV export",
+     "3 saved reports"
+    ],
+    "pro": [
+     "Unlimited saved reports"
+    ],
+    "source": "servers/duplicate-invoice-check/src/store.ts:9 (FREE_REPORT_CAP = 3), :63; servers/duplicate-invoice-check/README.md:16"
+   },
+   "keywords": [
+    "duplicate invoice check",
+    "find duplicate supplier invoices",
+    "accounts payable duplicate payment",
+    "duplicate invoice detection ai"
+   ],
+   "faq": [
+    {
+     "q": "Does it decide which invoice to pay?",
+     "a": "No. It lists candidates and the reason for each. A person decides."
+    },
+    {
+     "q": "How does it match references written differently?",
+     "a": "It uppercases letters and removes spaces, hyphens, slashes and dots, so FV/2026/104 and FV-2026-104 match."
+    }
+   ]
+  },
+  {
+   "id": "expense-tracker",
+   "name": "Expense Tracker",
+   "category": "time-expenses",
+   "tagline": "Log expenses and mileage, split VAT, rebill clients from chat.",
+   "plain": "Tell it what you spent and it logs the expense with category, VAT and receipt. Log business miles at a regional rate, see a monthly summary, export for your accountant, and turn billable costs into invoice lines.",
+   "for_who": [
+    "Freelancers",
+    "Consultants",
+    "Sole traders"
+   ],
+   "outcome_chips": [
+    "Expense log",
+    "VAT split",
+    "Mileage claim",
+    "Rebill to invoice"
+   ],
+   "cases": [
+    {
+     "title": "Log a receipt in one line",
+     "persona": "Freelance photographer in Bristol",
+     "prompt": "Spent GBP 84 at Jessops on a memory card, 20% VAT, project Harper wedding, billable.",
+     "steps": [
+      {
+       "tool": "expense_add",
+       "does": "Logs GBP 84 with VAT split and project"
+      },
+      {
+       "tool": "receipt_attach",
+       "does": "Attaches the receipt photo"
+      }
+     ],
+     "result": "GBP 70.00 net plus GBP 14.00 VAT, marked billable to the Harper project.",
+     "minutes_saved": 3,
+     "minutes_basis": "INFERRED: a spreadsheet row with VAT math takes 2-4 min"
+    },
+    {
+     "title": "Claim a client trip",
+     "persona": "IT consultant in Krakow",
+     "prompt": "Drove 260 km to the client in Katowice and back for project Orlen-migration. Use the Polish rate.",
+     "steps": [
+      {
+       "tool": "mileage_add",
+       "does": "Logs 260 km at PLN 1.15 per km"
+      }
+     ],
+     "result": "A mileage entry of PLN 299.00 on the project.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: looking up the rate and computing takes 5 min"
+    },
+    {
+     "title": "Rebill costs to the client",
+     "persona": "Event planner in Boston",
+     "prompt": "Turn all billable expenses on project Lakeside Gala into invoice lines with 10% markup.",
+     "steps": [
+      {
+       "tool": "expense_to_invoice",
+       "does": "Builds invoice lines with the markup"
+      },
+      {
+       "tool": "expense_mark_rebilled",
+       "does": "Marks them as rebilled"
+      }
+     ],
+     "result": "Invoice-ready lines for every billable cost, and nothing gets billed twice.",
+     "minutes_saved": 30,
+     "minutes_basis": "INFERRED: matching receipts to an invoice takes 30 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "expense_add",
+     "plain": "Logs an expense with VAT and category"
+    },
+    {
+     "name": "mileage_add",
+     "plain": "Logs business miles or km at a regional rate"
+    },
+    {
+     "name": "expense_summary",
+     "plain": "Totals by category, project or month"
+    },
+    {
+     "name": "expense_export",
+     "plain": "CSV, JSON or xlsx for your accountant"
+    },
+    {
+     "name": "expense_to_invoice",
+     "plain": "Turns billable costs into invoice lines"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "Unlimited logging of expenses, mileage and receipts",
+     "List and summary for the last 30 days",
+     "3 projects, 5 category rules",
+     "CSV and JSON export up to 200 rows",
+     "Rebill up to 20 items"
+    ],
+    "pro": [
+     "Full history",
+     "Unlimited projects and rules",
+     "Unlimited export rows",
+     "xlsx export",
+     "Unlimited rebill items"
+    ],
+    "source": "servers/expense-tracker/src/index.ts:23-27 (FREE_WINDOW_DAYS = 30, FREE_PROJECTS = 3, FREE_RULES = 5, FREE_EXPORT_ROWS = 200, FREE_REBILL_ITEMS = 20), :685"
+   },
+   "keywords": [
+    "expense tracker for freelancers",
+    "mileage log hmrc 45p",
+    "split vat on receipts",
+    "rebill expenses to client"
+   ],
+   "faq": [
+    {
+     "q": "Which mileage rates are built in?",
+     "a": "One flat rate per region: PL 1.15 PLN/km, UK 0.45 GBP/mile, US 0.70 USD/mile, EU 0.30 EUR/km. You can pass your own rate."
+    },
+    {
+     "q": "Can it read the receipt photo?",
+     "a": "It attaches the file to the expense. You give the amount and merchant."
+    }
+   ]
+  },
+  {
+   "id": "goods-receipt",
+   "name": "Goods Receipt",
+   "category": "purchasing",
+   "tagline": "Check deliveries against the purchase order, line by line.",
+   "plain": "Enter a purchase order, then record what actually arrived: units received, short and damaged. It checks each line against the order and its over and under tolerance, and lists every discrepancy to raise with the supplier.",
+   "for_who": [
+    "Warehouse staff",
+    "Shop owners",
+    "Purchasing managers"
+   ],
+   "outcome_chips": [
+    "Goods receipt note",
+    "Short and damaged units",
+    "Discrepancy list",
+    "PO status"
+   ],
+   "cases": [
+    {
+     "title": "A short delivery",
+     "persona": "Warehouse lead at a Poznan furniture maker",
+     "prompt": "PO-7781 from Drewbud: 200 legs ordered. 186 arrived, 4 cracked. Record it.",
+     "steps": [
+      {
+       "tool": "grn_add",
+       "does": "Opens a GRN with 186 received and 4 damaged"
+      },
+      {
+       "tool": "grn_discrepancy",
+       "does": "Lists the gap against the order"
+      }
+     ],
+     "result": "A GRN showing 14 short and 4 damaged, outside tolerance, to send to the supplier.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: a paper delivery check plus email takes 15 min"
+    },
+    {
+     "title": "Which orders are still open",
+     "persona": "Purchasing manager at a café chain in London",
+     "prompt": "Status of every open PO this month.",
+     "steps": [
+      {
+       "tool": "grn_status_report",
+       "does": "Shows received, short and open per PO"
+      }
+     ],
+     "result": "One view of what has arrived and what is still owed by each supplier.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: checking delivery notes against orders takes 20 min"
+    },
+    {
+     "title": "Send receipts to accounts",
+     "persona": "Ops manager at a Texas hardware store",
+     "prompt": "Export all goods receipts for October as CSV.",
+     "steps": [
+      {
+       "tool": "grn_export_csv",
+       "does": "Exports the receipts"
+      }
+     ],
+     "result": "A CSV for accounts to match against supplier invoices. CSV export is Pro.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: retyping receipts into a sheet takes 15 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "po_add",
+     "plain": "Adds a purchase order with tolerances"
+    },
+    {
+     "name": "grn_add",
+     "plain": "Records what arrived against a PO"
+    },
+    {
+     "name": "grn_discrepancy",
+     "plain": "Short, over and damaged units"
+    },
+    {
+     "name": "grn_status_report",
+     "plain": "What is received and what is open"
+    },
+    {
+     "name": "grn_export_csv",
+     "plain": "Exports receipts as CSV"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "Up to 2,000 POs and 5,000 GRNs",
+     "Discrepancies, lists and status report"
+    ],
+    "pro": [
+     "grn_export_csv"
+    ],
+    "source": "servers/goods-receipt/src/index.ts:294 (requirePro CSV export)"
+   },
+   "keywords": [
+    "goods received note template",
+    "check delivery against purchase order",
+    "grn software small business",
+    "short delivery record"
+   ],
+   "faq": [
+    {
+     "q": "What is the tolerance for?",
+     "a": "Each PO can allow a small over or under delivery. Receipts outside it are flagged."
+    },
+    {
+     "q": "Is the free tier limited?",
+     "a": "Only CSV export is Pro. Store sizes are the same on both tiers."
+    }
+   ]
+  },
+  {
+   "id": "hourly-rate",
+   "name": "Hourly Rate",
+   "category": "calculators",
+   "tagline": "The hourly rate you need to hit your take-home income.",
+   "plain": "Tell it what you want to keep after tax, what the business costs a year, and how many hours you can bill. It returns the minimum hourly rate, the break-even rate and side-by-side what-if scenarios. Pure arithmetic: nothing is stored or sent.",
+   "for_who": [
+    "New freelancers",
+    "Consultants",
+    "Agency owners setting rates"
+   ],
+   "outcome_chips": [
+    "Minimum hourly rate",
+    "Break-even rate",
+    "What-if scenarios"
+   ],
+   "cases": [
+    {
+     "title": "Set a rate before going freelance",
+     "persona": "Developer leaving a job in Austin",
+     "prompt": "I want to keep USD 60,000 after tax. Costs are USD 12,000 a year, 25% tax on profit, 25 billable hours a week, 46 weeks.",
+     "steps": [
+      {
+       "tool": "calculate_rate",
+       "does": "Computes gross revenue and the minimum rate"
+      }
+     ],
+     "result": "USD 92,000 gross over 1,150 billable hours: a minimum of USD 80.00 an hour.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: building a rate sheet takes 15 min"
+    },
+    {
+     "title": "Cover costs first",
+     "persona": "Part-time illustrator in Lodz",
+     "prompt": "My costs are PLN 18,000 a year and I bill 15 hours a week for 44 weeks. What covers the costs alone?",
+     "steps": [
+      {
+       "tool": "break_even",
+       "does": "Computes the cost-only rate"
+      }
+     ],
+     "result": "PLN 27.27 an hour just to cover costs, before any income.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: quick calculator work"
+    },
+    {
+     "title": "Compare three options",
+     "persona": "UK copywriter",
+     "prompt": "Compare: 30 hours a week, a cheaper GBP 1,200 coworking desk, or a 20% tax rate.",
+     "steps": [
+      {
+       "tool": "what_if",
+       "does": "Prices each scenario side by side"
+      }
+     ],
+     "result": "Three rates sorted highest first, each naming the input it changed.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: three spreadsheet variants take 15 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "calculate_rate",
+     "plain": "Minimum rate for a take-home target"
+    },
+    {
+     "name": "break_even",
+     "plain": "Rate that covers costs only"
+    },
+    {
+     "name": "what_if",
+     "plain": "2 to 12 scenarios side by side"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "All three tools, unlimited"
+    ],
+    "pro": [
+     "No extra features. None of the three tools is gated"
+    ],
+    "source": "servers/hourly-rate/SPEC.md (Enforced limits: 'Free on every tier: none of the three tools is gated'); servers/hourly-rate/src/index.ts has no gate"
+   },
+   "keywords": [
+    "freelance hourly rate calculator",
+    "how much should i charge per hour",
+    "break even hourly rate",
+    "contractor rate calculator"
+   ],
+   "faq": [
+    {
+     "q": "Why is tax applied after expenses?",
+     "a": "Tax falls on profit. Expenses are billed at cost, so the formula adds them after grossing up your income for tax."
+    },
+    {
+     "q": "Does it know my country's tax rates?",
+     "a": "No. You enter your own tax rate. No rate table ships with the server."
+    }
+   ]
+  },
+  {
+   "id": "image",
+   "name": "Image",
+   "category": "documents",
+   "tagline": "Resize, compress, crop and watermark images from a chat message.",
+   "plain": "Point it at an image on your machine and say what you need: smaller, a different format, cropped, thumbnails, a watermark or the metadata removed. No upload, no account and no extra software to install.",
+   "for_who": [
+    "Online sellers",
+    "Bloggers",
+    "Web designers"
+   ],
+   "outcome_chips": [
+    "Resized image",
+    "Compressed file",
+    "Watermark",
+    "Metadata removed"
+   ],
+   "cases": [
+    {
+     "title": "Product photos for the shop",
+     "persona": "Etsy seller of jewellery in Gdansk",
+     "prompt": "Resize these 5 photos to 1200 px wide and add my shop name as a watermark.",
+     "steps": [
+      {
+       "tool": "image_batch_resize",
+       "does": "Resizes the 5 photos"
+      },
+      {
+       "tool": "image_watermark",
+       "does": "Adds the business name"
+      }
+     ],
+     "result": "5 web-ready photos with your shop name in the corner.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: 5 photos in an editor at 3 min each"
+    },
+    {
+     "title": "Make a hero image load fast",
+     "persona": "Web designer in Seville",
+     "prompt": "Compress hero.png under 300 KB and convert it to JPEG.",
+     "steps": [
+      {
+       "tool": "image_convert",
+       "does": "Converts PNG to JPEG"
+      },
+      {
+       "tool": "image_compress",
+       "does": "Re-encodes to fit the size"
+      }
+     ],
+     "result": "A JPEG under 300 KB with the before and after byte counts.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: an online compressor round trip takes 5 min"
+    },
+    {
+     "title": "Remove location data before posting",
+     "persona": "Estate agent in Leeds",
+     "prompt": "Strip the metadata from these house photos before I post them.",
+     "steps": [
+      {
+       "tool": "image_info",
+       "does": "Shows what metadata is there"
+      },
+      {
+       "tool": "image_strip_metadata",
+       "does": "Removes it"
+      }
+     ],
+     "result": "Clean copies with GPS and camera data removed.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: finding a tool and processing each file takes 10 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "image_resize",
+     "plain": "Resizes one image"
+    },
+    {
+     "name": "image_compress",
+     "plain": "Makes a file smaller"
+    },
+    {
+     "name": "image_convert",
+     "plain": "PNG, JPEG, BMP, GIF or TIFF"
+    },
+    {
+     "name": "image_watermark",
+     "plain": "Adds a text watermark"
+    },
+    {
+     "name": "image_strip_metadata",
+     "plain": "Removes EXIF and GPS data"
+    },
+    {
+     "name": "image_batch_resize",
+     "plain": "Resizes many files at once"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "Outputs up to 4 MP",
+     "Batch and thumbnails up to 5 files per call",
+     "Watermark with your business name",
+     "Top 3 dominant colours",
+     "image_info and strip metadata at any size"
+    ],
+    "pro": [
+     "Any output size",
+     "Any number of files per call",
+     "Any watermark text",
+     "Up to 16 dominant colours"
+    ],
+    "source": "servers/image/src/index.ts:24-28 (FREE_MAX_PIXELS = 4_000_000, FREE_MAX_BATCH = 5, FREE_MAX_COLORS = 3), :509 (custom watermark)"
+   },
+   "keywords": [
+    "resize image in claude",
+    "compress image without upload",
+    "remove exif data from photo",
+    "watermark photos batch"
+   ],
+   "faq": [
+    {
+     "q": "Are my images uploaded?",
+     "a": "No, when you run it locally. Every file stays on your machine."
+    },
+    {
+     "q": "Does it convert to WebP?",
+     "a": "The listed formats are PNG, JPEG, BMP, GIF and TIFF."
+    }
+   ]
+  },
+  {
+   "id": "invoice",
+   "name": "Invoice",
+   "category": "invoicing",
+   "tagline": "Turn one sentence into a real, sendable PDF invoice.",
+   "plain": "Say who to bill, for what and at what rate, and get a numbered A4 PDF invoice with VAT lines and your bank details. It keeps your clients, never reuses an invoice number, records payments and tells you what is overdue. Everything is stored in plain files on your machine.",
+   "for_who": [
+    "Freelancers",
+    "Consultants",
+    "Small agencies"
+   ],
+   "outcome_chips": [
+    "PDF invoice",
+    "VAT lines",
+    "Payment record",
+    "Overdue report"
+   ],
+   "cases": [
+    {
+     "title": "Bill a client in one message",
+     "persona": "Freelance API developer in Lisbon",
+     "prompt": "Invoice Acme for 12 hours of API work at 90 EUR plus a 300 EUR setup fee, 23% VAT, due in 14 days, and give me the PDF.",
+     "steps": [
+      {
+       "tool": "invoice_create",
+       "does": "Creates INV-2026-0001 with two lines"
+      },
+      {
+       "tool": "invoice_pdf",
+       "does": "Renders the A4 PDF"
+      }
+     ],
+     "result": "EUR 1,380.00 subtotal, EUR 317.40 VAT, EUR 1,697.40 total, as a PDF ready to email.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: a manual invoice in a template takes 15-20 min; example from https://mcp.zovo.one/s/invoice"
+    },
+    {
+     "title": "Bill tracked hours",
+     "persona": "UX consultant in Warsaw billing a UK client",
+     "prompt": "Bill Beta Ltd for 18.5 hours at PLN 220 an hour, invoice in GBP at the rate I give you.",
+     "steps": [
+      {
+       "tool": "invoice_from_hours",
+       "does": "Bills hours at the rate in the target currency"
+      },
+      {
+       "tool": "invoice_pdf",
+       "does": "Renders the PDF"
+      }
+     ],
+     "result": "An invoice in GBP with the rate you supplied stated, and a PDF to send.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: currency conversion plus template work takes 15 min"
+    },
+    {
+     "title": "Who owes me money",
+     "persona": "Design studio owner in Brooklyn",
+     "prompt": "Mark INV-2026-0007 paid, then show me everything overdue.",
+     "steps": [
+      {
+       "tool": "invoice_mark_paid",
+       "does": "Records the payment and the balance"
+      },
+      {
+       "tool": "overdue_report",
+       "does": "Lists unpaid invoices past due"
+      }
+     ],
+     "result": "A list of overdue invoices with days late and totals per currency.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: checking a spreadsheet against the bank takes 15 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "invoice_create",
+     "plain": "Makes a numbered invoice from line items"
+    },
+    {
+     "name": "invoice_pdf",
+     "plain": "Renders the A4 PDF"
+    },
+    {
+     "name": "invoice_from_hours",
+     "plain": "Bills hours at a rate in one step"
+    },
+    {
+     "name": "invoice_mark_paid",
+     "plain": "Records full or part payment"
+    },
+    {
+     "name": "overdue_report",
+     "plain": "Unpaid invoices past due"
+    },
+    {
+     "name": "business_set",
+     "plain": "Your name, VAT id, IBAN and terms"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "3 invoices per calendar month",
+     "Unlimited clients, overdue report, tax lines, discounts, payments, multi-currency",
+     "PDF carries a 'Generated with mcp-invoice' line",
+     "Fixed INV prefix"
+    ],
+    "pro": [
+     "Unlimited invoices",
+     "No branding line on the PDF",
+     "Your logo on the PDF",
+     "Custom invoice prefix"
+    ],
+    "source": "servers/invoice/src/index.ts:23 (FREE_INVOICES_PER_MONTH = 3), :202 (prefix), :859 (logo, unbranded PDF); https://mcp.zovo.one/s/invoice"
+   },
+   "keywords": [
+    "create invoice in claude",
+    "pdf invoice generator chat",
+    "vat invoice generator freelancer",
+    "mcp invoice server"
+   ],
+   "faq": [
+    {
+     "q": "Does it email the invoice?",
+     "a": "No. It makes the PDF and the record. Sending it is up to you."
+    },
+    {
+     "q": "Does it convert currencies?",
+     "a": "Not on its own. An invoice has one currency. invoice_from_hours can bill in another currency at a rate you supply."
+    },
+    {
+     "q": "Can a number be reused?",
+     "a": "No. The counter is written before the invoice is stored, so a crash skips a number instead of reusing one."
+    }
+   ]
+  },
+  {
+   "id": "job-card",
+   "name": "Job Card",
+   "category": "operations",
+   "tagline": "Job cards for trades: hours and parts per job, open to invoiced.",
+   "plain": "Open a card for each job, log labour and materials as you go, and see the running total. Move the job from open to in progress, done and invoiced, and print the card for the customer or the office.",
+   "for_who": [
+    "Plumbers and electricians",
+    "Field service teams",
+    "Repair shops"
+   ],
+   "outcome_chips": [
+    "Job card",
+    "Labour and parts log",
+    "Running total",
+    "Printable card"
+   ],
+   "cases": [
+    {
+     "title": "Log a boiler repair",
+     "persona": "Heating engineer in Sheffield",
+     "prompt": "Job card for Mrs Patel, 14 Elm Road, boiler fault. Log 2.5 hours at GBP 60 and a diverter valve at GBP 48.",
+     "steps": [
+      {
+       "tool": "job_card_create",
+       "does": "Opens the card with client and site"
+      },
+      {
+       "tool": "job_card_log_labor",
+       "does": "Logs 2.5 hours at GBP 60"
+      },
+      {
+       "tool": "job_card_log_material",
+       "does": "Logs the valve"
+      }
+     ],
+     "result": "A card with GBP 150.00 labour and GBP 48.00 parts: GBP 198.00 so far.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: a paper job sheet typed up later takes 10 min"
+    },
+    {
+     "title": "Close the job",
+     "persona": "Electrician in Wroclaw",
+     "prompt": "Mark the Kowalska rewiring job done and print the card.",
+     "steps": [
+      {
+       "tool": "job_card_update_status",
+       "does": "Moves the card to done"
+      },
+      {
+       "tool": "job_card_print",
+       "does": "Prints it as HTML"
+      }
+     ],
+     "result": "A printable card with every hour and part, ready to turn into an invoice.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: compiling hours and parts for billing takes 10 min"
+    },
+    {
+     "title": "Weekly team summary",
+     "persona": "Owner of a 3-person repair business in Ohio",
+     "prompt": "Summarise this week's jobs.",
+     "steps": [
+      {
+       "tool": "job_card_summary",
+       "does": "Totals hours and materials for the week"
+      }
+     ],
+     "result": "Hours, parts and value per job for the week.",
+     "minutes_saved": 20,
+     "minutes_basis": "INFERRED: collecting sheets from 3 people takes 20 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "job_card_create",
+     "plain": "Opens a card for a job"
+    },
+    {
+     "name": "job_card_log_labor",
+     "plain": "Logs hours, worker and rate"
+    },
+    {
+     "name": "job_card_log_material",
+     "plain": "Logs parts and their cost"
+    },
+    {
+     "name": "job_card_update_status",
+     "plain": "Open, in progress, done, invoiced"
+    },
+    {
+     "name": "job_card_print",
+     "plain": "A printable card"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "10 active job cards",
+     "Unlimited labour and material entries",
+     "Print, list and daily or weekly summary"
+    ],
+    "pro": [
+     "Unlimited active job cards"
+    ],
+    "source": "servers/job-card/src/index.ts:23 (FREE_ACTIVE_CARDS = 10), :168"
+   },
+   "keywords": [
+    "job card template trades",
+    "job sheet app plumber",
+    "field service job tracking",
+    "labour and materials log"
+   ],
+   "faq": [
+    {
+     "q": "Do finished jobs count against the limit?",
+     "a": "The free tier holds 10 active cards. Archiving a finished job frees its slot."
+    },
+    {
+     "q": "Can a job go back a step?",
+     "a": "No. Status moves one step forward at a time; a backwards step is refused."
+    }
+   ]
+  },
+  {
+   "id": "kanban",
+   "name": "Kanban",
+   "category": "operations",
+   "tagline": "A local task board per project, with estimates and a weekly review.",
+   "plain": "Keep a simple board for each project: backlog, to do, doing, review and done. Add tasks with due dates, priorities and estimates, log real time against them, and ask for the weekly review. Data stays on your machine.",
+   "for_who": [
+    "Freelancers",
+    "Small teams",
+    "Solo founders"
+   ],
+   "outcome_chips": [
+    "Task board",
+    "Overdue list",
+    "Estimate vs actual",
+    "Weekly review"
+   ],
+   "cases": [
+    {
+     "title": "Plan the week",
+     "persona": "Freelance developer in Gdansk",
+     "prompt": "Add to project Atlas: fix login bug (high, 90 min, due Wednesday), write API docs (3 hours, due Friday).",
+     "steps": [
+      {
+       "tool": "task_add",
+       "does": "Adds both tasks with estimates and due dates"
+      },
+      {
+       "tool": "board",
+       "does": "Shows the board"
+      }
+     ],
+     "result": "The Atlas board with both tasks, their estimates and due dates.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: opening a project tool and adding tasks takes 5 min"
+    },
+    {
+     "title": "What is overdue",
+     "persona": "Marketing consultant in Leeds",
+     "prompt": "What is overdue across all my projects?",
+     "steps": [
+      {
+       "tool": "overdue",
+       "does": "Lists overdue tasks across boards"
+      }
+     ],
+     "result": "Each late task with project, due date and priority.",
+     "minutes_saved": 5,
+     "minutes_basis": "INFERRED: checking three boards takes 5 min"
+    },
+    {
+     "title": "Friday review",
+     "persona": "Two-person studio in Barcelona",
+     "prompt": "Log 2 hours on the API docs, mark it done, and give me the weekly review.",
+     "steps": [
+      {
+       "tool": "task_log_time",
+       "does": "Adds 120 minutes"
+      },
+      {
+       "tool": "task_done",
+       "does": "Moves it to done"
+      },
+      {
+       "tool": "weekly_review",
+       "does": "Done, slipped and estimate vs actual"
+      }
+     ],
+     "result": "A review of the week with estimate against actual time per task.",
+     "minutes_saved": 15,
+     "minutes_basis": "INFERRED: writing a weekly status note takes 15 min"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "task_add",
+     "plain": "Adds a task with due date and estimate"
+    },
+    {
+     "name": "task_move",
+     "plain": "Moves a task between columns"
+    },
+    {
+     "name": "board",
+     "plain": "Shows a project board"
+    },
+    {
+     "name": "overdue",
+     "plain": "Late tasks across projects"
+    },
+    {
+     "name": "weekly_review",
+     "plain": "Done, slipped and estimate vs actual"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "3 project boards",
+     "200 open tasks",
+     "Default five columns",
+     "Weekly review for the current week"
+    ],
+    "pro": [
+     "Unlimited boards and tasks",
+     "Custom columns (columns_set)",
+     "Weekly review for any past week"
+    ],
+    "source": "servers/kanban/src/index.ts:21-22 (FREE_PROJECTS = 3, FREE_OPEN_TASKS = 200), :694 (review history), :726 (columns_set)"
+   },
+   "keywords": [
+    "kanban board in claude",
+    "local task board",
+    "weekly review template freelancer",
+    "task estimate vs actual"
+   ],
+   "faq": [
+    {
+     "q": "Does it sync with Trello or Jira?",
+     "a": "No. It is a local board stored on your machine."
+    },
+    {
+     "q": "Can it start a timer?",
+     "a": "task_start_timer returns the arguments for the time tracker's timer and records the link. It does not start a timer on its own."
+    }
+   ]
+  },
+  {
+   "id": "leave",
+   "name": "Leave",
+   "category": "contracts-hr",
+   "tagline": "Leave requests, approvals and balances for a small team.",
+   "plain": "Add your staff with their annual allowance. Log requests for vacation, sick, unpaid or parental leave, approve or reject them, and see each balance. Ask who is out in any date range before you agree to a deadline.",
+   "for_who": [
+    "Small business owners",
+    "Office managers",
+    "Team leads"
+   ],
+   "outcome_chips": [
+    "Leave balance",
+    "Approval record",
+    "Who is out",
+    "Calendar file"
+   ],
+   "cases": [
+    {
+     "title": "Approve a holiday",
+     "persona": "Owner of a 6-person agency in Krakow",
+     "prompt": "Ania asks for 5 days of vacation from 22 to 26 December. Approve it and show her balance.",
+     "steps": [
+      {
+       "tool": "leave_request",
+       "does": "Logs the vacation request"
+      },
+      {
+       "tool": "leave_approve",
+       "does": "Approves it"
+      },
+      {
+       "tool": "leave_balance",
+       "does": "Shows days remaining"
+      }
+     ],
+     "result": "Approved, and her balance shows the 5 days taken from her 26-day allowance.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: updating a leave spreadsheet and replying takes 10 min"
+    },
+    {
+     "title": "Who is out for the launch",
+     "persona": "Office manager at a Dublin software firm",
+     "prompt": "Who is out between 1 and 14 December?",
+     "steps": [
+      {
+       "tool": "leave_out_range",
+       "does": "Lists everyone out, day by day"
+      }
+     ],
+     "result": "Each person out in the range, pending requests shown as planned.",
+     "minutes_saved": 10,
+     "minutes_basis": "INFERRED: cross-checking a shared calendar takes 10 min"
+    },
+    {
+     "title": "Move from a spreadsheet",
+     "persona": "HR lead at a 25-person shop in Ohio",
+     "prompt": "Import this CSV of this year's requests and export an .ics so the team calendar shows them.",
+     "steps": [
+      {
+       "tool": "leave_import",
+       "does": "Imports the requests in bulk"
+      },
+      {
+       "tool": "leave_export_ics",
+       "does": "Writes a calendar file"
+      }
+     ],
+     "result": "All requests loaded and one .ics file for the team calendar. Both are Pro.",
+     "minutes_saved": 60,
+     "minutes_basis": "INFERRED: entering 25 people's requests by hand takes an hour or more"
+    }
+   ],
+   "top_tools": [
+    {
+     "name": "leave_employee_add",
+     "plain": "Adds an employee with allowance"
+    },
+    {
+     "name": "leave_request",
+     "plain": "Logs a leave request"
+    },
+    {
+     "name": "leave_approve",
+     "plain": "Approves a request"
+    },
+    {
+     "name": "leave_balance",
+     "plain": "Allowance, taken and remaining"
+    },
+    {
+     "name": "leave_out_range",
+     "plain": "Who is out in a date range"
+    }
+   ],
+   "free_vs_pro": {
+    "free": [
+     "Employees, requests, approvals and balances",
+     "Every read, including who is out, unmetered"
+    ],
+    "pro": [
+     "Bulk import (leave_import)",
+     "Calendar export (leave_export_ics)"
+    ],
+    "source": "servers/leave/src/index.ts:352, :400 (requirePro); servers/leave/SPEC.md (Enforced limits)"
+   },
+   "keywords": [
+    "employee leave tracker small business",
+    "pto tracker",
+    "holiday request approval",
+    "who is out calendar"
+   ],
+   "faq": [
+    {
+     "q": "Which leave types are supported?",
+     "a": "Vacation, sick, unpaid and parental."
+    },
+    {
+     "q": "Does it know my country's legal allowance?",
+     "a": "No. You set each employee's annual allowance and carried-over days."
+    }
+   ]
+  }
+ ]
+}

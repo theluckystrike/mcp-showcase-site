@@ -1,0 +1,35 @@
+---
+// /connect/ hub: pick a client. The primary homepage CTA lands here (ANGLE.md).
+import Layout from '../../layouts/Layout.astro';
+import CopyCode from '../../components/CopyCode.astro';
+import { brand } from '../../config/brand';
+import { stats, bundleUrl, bundlePrice, buyUrl } from '../../data/servers';
+import { pagesOfType, seo } from '../../data/pages';
+const guides = pagesOfType('client-guide');
+const st = stats();
+const meta = seo('/connect/', { title: `Connect a tool to Claude, ChatGPT, Cursor in 1 minute | ${brand.name}`, description: 'Setup for Claude Desktop, Claude.ai, Claude Code, Cursor, VS Code, ChatGPT and Windsurf.' });
+---
+<Layout title={meta.title} description={meta.description} crumbs={[{ name: 'Connect', path: '/connect/' }]}>
+  <section class="relative isolate overflow-hidden">
+    <div class="glow-bg"></div>
+    <div class="grid-lines"></div>
+    <div class="wrap pb-12 pt-14 sm:pt-20">
+      <span class="eyebrow">{st.hosted} servers at one URL</span>
+      <h1 class="display mt-5 max-w-4xl">{meta.h1 || 'Connect in one minute'}</h1>
+      <p class="lead mt-5 max-w-2xl">Pick your chat app. Paste one URL, or install one file. Free token, no account, 600 calls an hour.</p>
+      <div class="mt-8 max-w-2xl"><CopyCode code={`curl -s -X POST ${brand.backend.tokenEndpoint}`} label="Free token (30 days)" /></div>
+    </div>
+  </section>
+  <section class="wrap pb-12">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {guides.map((g) => (
+        <a href={g.path} id={g.path.split('/').filter(Boolean).pop()} class="card card-hover flex flex-col p-5">
+          <h2 class="text-lg font-semibold tracking-tight">{g.h1}</h2>
+          <p class="muted mt-2 text-[.92rem]">{g.meta_description}</p>
+        </a>
+      ))}
+    </div>
+    <p class="muted mt-8 text-[.92rem]">Steps come from our developer notes. The hosted URLs were tested with curl. Each client dialog is marked as tested or not on its page.</p>
+    <p class="mt-6"><a class="link" href={buyUrl(bundleUrl(), 'connect', 'hub')} rel="nofollow">Pro on all {st.paid} paid servers: ${bundlePrice()} once</a></p>
+  </section>
+</Layout>

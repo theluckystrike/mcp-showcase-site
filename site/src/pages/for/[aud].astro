@@ -1,0 +1,76 @@
+---
+// Audience pages (t-angle PRIMARY angle): /for/<audience>/. Lists the jobs (use-case pages) and the servers for one audience.
+import Layout from '../../layouts/Layout.astro';
+import JobCard from '../../components/JobCard.astro';
+import ServerCard from '../../components/ServerCard.astro';
+import Faq from '../../components/Faq.astro';
+import StickyCta from '../../components/StickyCta.astro';
+import UpsellBand from '../../components/UpsellBand.astro';
+import { getServer, bundleUrl, bundlePrice, buyUrl, stats, type Server } from '../../data/servers';
+import { pagesOfType, pageMeta, slugOf, AUDIENCE_JOBS, type PageMeta } from '../../data/pages';
+
+export function getStaticPaths() {
+  return pagesOfType('audience').map((p) => ({ params: { aud: slugOf(p.path) }, props: { page: p } }));
+}
+const { page: p } = Astro.props as { page: PageMeta };
+const slug = slugOf(p.path);
+const st = stats();
+const chat = /chatgpt/i.test(p.h1) ? 'ChatGPT' : 'Claude';
+const jobs = (AUDIENCE_JOBS[p.path] ?? []).map((x) => pageMeta(x)).filter((x): x is PageMeta => Boolean(x));
+const servers = p.servers.map((id) => getServer(id)).filter((s): s is Server => Boolean(s));
+const bundle = (slot: string) => buyUrl(bundleUrl(), 'audience', `${slug}.${slot}`);
+const others = pagesOfType('audience').filter((x) => x.path !== p.path);
+const faq = [
+  { q: `Can ${chat} do this out of the box?`, a: `${chat} can write the text. To make a real file (a numbered PDF invoice, a .docx, an .xlsx) or to keep records between chats, it needs a tool. These servers are those tools. You connect them once.` },
+  { q: 'Do I need to install anything?', a: `No, for ${st.hosted} of ${st.servers} servers. You paste one URL with a free token (30 days, 600 calls an hour). The other servers run on your computer with Node.js or a .mcpb file.` },
+  { q: 'What does it cost?', a: `Every server has a free tier with no key. Pro is $19 once for one server, or $${bundlePrice()} once for all ${st.paid} paid servers. No subscription.` },
+];
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'CollectionPage', name: p.h1, description: p.meta_description, url: new URL(p.path, Astro.site).href },
+  { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: jobs.map((j, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(j.path, Astro.site).href, name: j.h1 })) },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+<Layout title={p.title} description={p.meta_description} jsonLd={jsonLd} crumbs={[{ name: p.h1, path: p.path }]}>
+  <section class="relative isolate overflow-hidden">
+    <div class="glow-bg opacity-70"></div>
+    <div class="grid-lines"></div>
+    <div class="wrap pb-12 pt-14 sm:pt-20">
+      <span class="eyebrow">For you</span>
+      <h1 class="display mt-5 max-w-4xl">{p.h1}</h1>
+      <p class="lead mt-5 max-w-2xl">{p.meta_description}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/connect/" class="btn btn-primary">Connect free in 1 minute</a>
+        <a href={bundle('hero')} rel="nofollow" class="btn">All {st.paid} paid servers, ${bundlePrice()} once</a>
+      </div>
+    </div>
+  </section>
+
+  {jobs.length > 0 && (
+    <section class="wrap py-10">
+      <h2 class="text-2xl font-semibold sm:text-3xl">Jobs you can hand to {chat}</h2>
+      <p class="muted mt-2">Each page shows the prompt, the tools it calls and the file you get.</p>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{jobs.map((j) => <JobCard page={j} anchor={`${j.h1}${/claude|chat/i.test(j.h1) ? '' : ` in ${chat}`}`} />)}</div>
+    </section>
+  )}
+
+  {servers.length > 0 && (
+    <section class="wrap py-10">
+      <h2 class="text-2xl font-semibold sm:text-3xl">The servers behind these jobs</h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{servers.map((s) => <ServerCard server={s} />)}</div>
+      <UpsellBand copy={`Start free. When one job outgrows the free tier, one $${bundlePrice()} key turns on Pro on all ${st.paid} paid servers, for life.`} href={bundle('after_servers')} cta={`Bundle, $${bundlePrice()}`} />
+    </section>
+  )}
+
+  <section class="wrap py-10">
+    <h2 class="text-2xl font-semibold sm:text-3xl">FAQ</h2>
+    <div class="mt-6 max-w-3xl"><Faq items={faq} /></div>
+  </section>
+
+  <section class="wrap py-8">
+    <h2 class="text-sm font-semibold uppercase tracking-[.08em] text-faint">Other audiences</h2>
+    <div class="mt-4 flex flex-wrap gap-2">{others.map((o) => <a class="chip hover:text-fg" href={o.path}>{o.h1}</a>)}</div>
+  </section>
+
+  <StickyCta label={`All ${st.paid} paid servers: $${bundlePrice()} once`} sub="Free tier stays free. No subscription." href={bundle('sticky')} cta="Get bundle" secondary={{ label: 'Connect free', href: '/connect/' }} />
+</Layout>

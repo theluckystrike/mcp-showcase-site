@@ -1,0 +1,1921 @@
+[
+ {
+  "path": "/",
+  "title": "Do your back office in Claude and Cursor | {brand}",
+  "h1": "Do your back office in chat",
+  "meta_description": "Make real invoices, quotes, PDFs and spreadsheets from Claude, Cursor or any MCP app. Paste one URL. Free tier, no key. $19 once per server.",
+  "primary_keyword": "claude for small business",
+  "intent": "commercial",
+  "priority": 1.0,
+  "servers": [],
+  "us_volume": 4400,
+  "page_type": "home"
+ },
+ {
+  "path": "/use-cases/",
+  "title": "Back-office jobs you can do in Claude: 30 examples | {brand}",
+  "h1": "What you can do in chat",
+  "meta_description": "30 real back-office jobs, each with the prompt, the tools it calls and the file you get. Invoices, bank CSVs, PDFs, mileage, work orders.",
+  "primary_keyword": "what can claude do for my business",
+  "intent": "informational",
+  "priority": 0.9,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "hub"
+ },
+ {
+  "path": "/servers/",
+  "title": "All 58 MCP servers for small business work | {brand}",
+  "h1": "All servers",
+  "meta_description": "Search 58 tested MCP servers for invoicing, bookkeeping, documents and operations. 46 run at a URL. Free tier on every server.",
+  "primary_keyword": "mcp servers for small business",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "hub"
+ },
+ {
+  "path": "/pricing/",
+  "title": "Pricing: free tier, $19 per server, $39 for all | {brand}",
+  "h1": "Simple pricing. Pay once.",
+  "meta_description": "Free tier with no key. Pro is $19 once per server, or $39 once for all paid servers. No subscription, no seats.",
+  "primary_keyword": "mcp server pricing",
+  "intent": "transactional",
+  "priority": 0.9,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "money"
+ },
+ {
+  "path": "/connect/",
+  "title": "Connect a tool to Claude, ChatGPT, Cursor in 1 minute | {brand}",
+  "h1": "Connect in one minute",
+  "meta_description": "Step-by-step setup for Claude Desktop, Claude.ai, Claude Code, Cursor, VS Code, ChatGPT and Windsurf. Paste one URL or install one file.",
+  "primary_keyword": "how to add mcp server",
+  "intent": "informational",
+  "priority": 0.9,
+  "servers": [],
+  "us_volume": 30,
+  "page_type": "hub"
+ },
+ {
+  "path": "/tools/",
+  "title": "Free back-office calculators and generators | {brand}",
+  "h1": "Free tools",
+  "meta_description": "Free browser tools: freelance rate, lease amortization, MACRS depreciation, per diem, mileage log, dunning letters. Then do it from chat.",
+  "primary_keyword": "free small business calculators",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "hub"
+ },
+ {
+  "path": "/developers/",
+  "title": "MCP servers for developers: tool contracts, stdio, hosted | {brand}",
+  "h1": "For developers",
+  "meta_description": "458 documented tools across 58 open-source MCP servers. Tool contracts, stdio and hosted endpoints, .mcpb bundles and npm packages.",
+  "primary_keyword": "mcp server examples",
+  "intent": "informational",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "dev"
+ },
+ {
+  "path": "/developers/hosted-endpoints/",
+  "title": "Hosted MCP endpoints: URL, token, limits | {brand}",
+  "h1": "Hosted endpoints",
+  "meta_description": "How the hosted URL works: free token, path form for clients that cannot set a header, 600 calls an hour, 30-day lifetime.",
+  "primary_keyword": "remote mcp server url",
+  "intent": "informational",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": 320,
+  "page_type": "dev"
+ },
+ {
+  "path": "/developers/tool-contracts/",
+  "title": "Tool contracts for 58 MCP servers | {brand}",
+  "h1": "Tool contracts",
+  "meta_description": "Every tool name, input and output for each server, from the SPEC files. Use them to build, test or audit an agent.",
+  "primary_keyword": "mcp tool schema examples",
+  "intent": "informational",
+  "priority": 0.4,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "dev"
+ },
+ {
+  "path": "/compare/",
+  "title": "Compare MCP options for back-office work | {brand}",
+  "h1": "Compare your options",
+  "meta_description": "How dedicated back-office MCP servers compare with Zapier MCP, Composio and accounting-app connectors. Honest trade-offs.",
+  "primary_keyword": "mcp alternatives",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "hub"
+ },
+ {
+  "path": "/about/",
+  "title": "About {brand}",
+  "h1": "About",
+  "meta_description": "Who builds these servers, how they are tested and how we make money.",
+  "primary_keyword": "{brand}",
+  "intent": "navigational",
+  "priority": 0.3,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "about"
+ },
+ {
+  "path": "/connect/claude-desktop/",
+  "title": "Add an MCP server to Claude Desktop: 1-minute guide | {brand}",
+  "h1": "Connect to Claude Desktop",
+  "meta_description": "Install one .mcpb file or paste a URL as a custom connector. Works on Mac and Windows.",
+  "primary_keyword": "how to add mcp server to claude desktop",
+  "intent": "informational",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": 390,
+  "page_type": "client-guide"
+ },
+ {
+  "path": "/connect/claude-ai/",
+  "title": "Add an MCP server to Claude.ai (web): 1-minute guide | {brand}",
+  "h1": "Connect to Claude.ai (web)",
+  "meta_description": "Add a custom connector in Settings with one URL. No install. Works in the browser and on mobile.",
+  "primary_keyword": "claude custom connector",
+  "intent": "informational",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": 260,
+  "page_type": "client-guide"
+ },
+ {
+  "path": "/connect/claude-code/",
+  "title": "Add an MCP server to Claude Code: 1-minute guide | {brand}",
+  "h1": "Connect to Claude Code",
+  "meta_description": "One claude mcp add command for the hosted URL or the local stdio server. Copy, paste, done.",
+  "primary_keyword": "how to add mcp server to claude code",
+  "intent": "informational",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": 1900,
+  "page_type": "client-guide"
+ },
+ {
+  "path": "/connect/cursor/",
+  "title": "Add an MCP server to Cursor: 1-minute guide | {brand}",
+  "h1": "Connect to Cursor",
+  "meta_description": "Add the server to mcp.json with one URL or one npx line. Then ask Cursor to make the file.",
+  "primary_keyword": "cursor mcp",
+  "intent": "informational",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": 1600,
+  "page_type": "client-guide"
+ },
+ {
+  "path": "/connect/vs-code/",
+  "title": "Add an MCP server to VS Code: 1-minute guide | {brand}",
+  "h1": "Connect to VS Code",
+  "meta_description": "Add the server to .vscode/mcp.json and use it in Copilot agent mode. Hosted URL or local.",
+  "primary_keyword": "how to add mcp server to vscode",
+  "intent": "informational",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": 110,
+  "page_type": "client-guide"
+ },
+ {
+  "path": "/connect/chatgpt/",
+  "title": "Add an MCP server to ChatGPT: 1-minute guide | {brand}",
+  "h1": "Connect to ChatGPT",
+  "meta_description": "Turn on developer mode, create a connector with one URL, then call the tools in chat.",
+  "primary_keyword": "how to add mcp server to chatgpt",
+  "intent": "informational",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": 720,
+  "page_type": "client-guide"
+ },
+ {
+  "path": "/connect/windsurf/",
+  "title": "Add an MCP server to Windsurf: 1-minute guide | {brand}",
+  "h1": "Connect to Windsurf",
+  "meta_description": "Add the server to mcp_config.json and let Cascade create invoices, PDFs and reports.",
+  "primary_keyword": "windsurf mcp",
+  "intent": "informational",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": 140,
+  "page_type": "client-guide"
+ },
+ {
+  "path": "/connect/paste-a-url/",
+  "title": "Remote MCP server URL: paste one link, no install | {brand}",
+  "h1": "Paste one URL. No install.",
+  "meta_description": "Get a free token, paste one URL into Claude, Cursor or VS Code, and call real tools. 46 servers work this way.",
+  "primary_keyword": "remote mcp server",
+  "intent": "informational",
+  "priority": 0.8,
+  "servers": [],
+  "us_volume": 320,
+  "page_type": "client-guide"
+ },
+ {
+  "path": "/for/small-business/",
+  "title": "Claude for small business: 12 back-office jobs, done in chat | {brand}",
+  "h1": "Claude for small business",
+  "meta_description": "What Claude can do for a small business out of the box, and the 12 jobs that need a tool: invoices, bank CSVs, PDFs, mileage, payroll checks.",
+  "primary_keyword": "claude for small business",
+  "intent": "commercial",
+  "priority": 0.95,
+  "servers": [
+   "invoice",
+   "bank-statement",
+   "expense-tracker",
+   "pdf",
+   "spreadsheet",
+   "quotes"
+  ],
+  "us_volume": 4400,
+  "page_type": "audience"
+ },
+ {
+  "path": "/for/chatgpt-small-business/",
+  "title": "ChatGPT for small business: invoices, PDFs, books in chat | {brand}",
+  "h1": "ChatGPT for small business",
+  "meta_description": "Connect ChatGPT to real tools for invoices, quotes, bank CSVs and PDFs. Developer mode, one URL, free tier.",
+  "primary_keyword": "chatgpt for small business",
+  "intent": "commercial",
+  "priority": 0.95,
+  "servers": [
+   "invoice",
+   "quotes",
+   "bank-statement",
+   "pdf"
+  ],
+  "us_volume": 2400,
+  "page_type": "audience"
+ },
+ {
+  "path": "/for/bookkeeping/",
+  "title": "AI bookkeeping in Claude: bank CSVs and reconciliations | {brand}",
+  "h1": "AI bookkeeping in Claude",
+  "meta_description": "Import a bank CSV, categorise it, keep a double-entry cash book and reconcile petty cash, all from chat. Free tier, no key.",
+  "primary_keyword": "ai bookkeeping",
+  "intent": "commercial",
+  "priority": 0.95,
+  "servers": [
+   "bank-statement",
+   "cash-book",
+   "petty-cash",
+   "statement-of-account"
+  ],
+  "us_volume": 1600,
+  "page_type": "audience"
+ },
+ {
+  "path": "/for/accountants/",
+  "title": "Claude for accountants: AP checks, depreciation, statements | {brand}",
+  "h1": "Claude for accountants",
+  "meta_description": "Three-way match, duplicate invoice checks, supplier statement reconciliation and MACRS or HMRC depreciation, from chat.",
+  "primary_keyword": "claude for accountants",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "three-way-match",
+   "duplicate-invoice-check",
+   "supplier-statement-check",
+   "asset-register",
+   "amortization"
+  ],
+  "us_volume": 70,
+  "page_type": "audience"
+ },
+ {
+  "path": "/for/freelancers/",
+  "title": "Claude for freelancers: quote, track time, invoice, chase | {brand}",
+  "h1": "Claude for freelancers",
+  "meta_description": "The full freelance loop in chat: rate, quote, contract, time, invoice, reminder. Real PDFs and Word files.",
+  "primary_keyword": "claude for freelancers",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "quotes",
+   "service-agreement",
+   "time-tracker",
+   "invoice",
+   "dunning-letters",
+   "hourly-rate"
+  ],
+  "us_volume": 10,
+  "page_type": "audience"
+ },
+ {
+  "path": "/for/trades-field-service/",
+  "title": "Work orders and job cards in Claude for trades | {brand}",
+  "h1": "Work orders for trades and field service",
+  "meta_description": "Work orders, job cards, change orders and maintenance logs from chat. Parts, labour, sign-off, and a PDF for the client.",
+  "primary_keyword": "work order template",
+  "intent": "commercial",
+  "priority": 0.95,
+  "servers": [
+   "work-order",
+   "job-card",
+   "change-order",
+   "maintenance-log"
+  ],
+  "us_volume": 2900,
+  "page_type": "audience"
+ },
+ {
+  "path": "/for/ops-hr/",
+  "title": "Claude for operations and HR: leave, onboarding, checklists | {brand}",
+  "h1": "Operations and HR in chat",
+  "meta_description": "Leave balances, who is out, day-one to day-ninety onboarding plans and checklist runs with sign-off, from chat.",
+  "primary_keyword": "leave tracker",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "leave",
+   "onboarding",
+   "checklist",
+   "kanban"
+  ],
+  "us_volume": 590,
+  "page_type": "audience"
+ },
+ {
+  "path": "/use-cases/create-invoice-in-claude/",
+  "title": "Create an invoice in Claude (real PDF, numbered) | {brand}",
+  "h1": "Create a real invoice in Claude",
+  "meta_description": "Type one sentence. Get a numbered PDF invoice with VAT and due date. Works in Claude and Cursor. Free tier, no key.",
+  "primary_keyword": "create invoice with chatgpt",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "invoice"
+  ],
+  "us_volume": 10,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/send-a-quote-from-chat/",
+  "title": "Send a client quote from chat: line items, VAT, PDF | {brand}",
+  "h1": "Send a quote from chat",
+  "meta_description": "Line items with VAT, a validity date and a PDF, made from one prompt. Turn the accepted quote into an invoice.",
+  "primary_keyword": "quote template",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "quotes",
+   "catalogue"
+  ],
+  "us_volume": 3600,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/chase-overdue-invoices/",
+  "title": "Chase overdue invoices with AI: reminders and statements | {brand}",
+  "h1": "Chase overdue invoices from chat",
+  "meta_description": "Reminder 1, reminder 2 and final notice, with aging buckets and a statement of account. Ask Claude who owes you.",
+  "primary_keyword": "payment reminder email template",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "dunning-letters",
+   "statement-of-account"
+  ],
+  "us_volume": 140,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/categorize-bank-statement/",
+  "title": "Categorize a bank statement with AI (CSV to report) | {brand}",
+  "h1": "Categorize a bank statement with AI",
+  "meta_description": "Import a bank CSV, categorise every line, find recurring payments and summarise per currency. Data stays local.",
+  "primary_keyword": "bank statement to excel",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "bank-statement"
+  ],
+  "us_volume": 260,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/track-billable-time-in-claude/",
+  "title": "Track billable time in Claude: timers and reports | {brand}",
+  "h1": "Track billable time in chat",
+  "meta_description": "Start and stop timers in chat, then export a report or turn hours into an invoice. No new app to learn.",
+  "primary_keyword": "time tracker for freelancers",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "time-tracker"
+  ],
+  "us_volume": 320,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/log-expenses-and-receipts/",
+  "title": "Log expenses and receipts in chat, split VAT | {brand}",
+  "h1": "Log expenses and receipts in chat",
+  "meta_description": "Record expenses, receipts and mileage from chat. Categorise, split VAT and export for your accountant.",
+  "primary_keyword": "claude expense tracker",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "expense-tracker"
+  ],
+  "us_volume": 10,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/mileage-log-for-taxes/",
+  "title": "Mileage log for taxes, kept in chat | {brand}",
+  "h1": "Keep a mileage log in chat",
+  "meta_description": "Log trips in one line each. Effective-dated rates, summaries and an export your tax return can use.",
+  "primary_keyword": "mileage log",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "mileage-log"
+  ],
+  "us_volume": 1600,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/merge-pdf-in-claude/",
+  "title": "Merge, split and stamp PDFs in Claude | {brand}",
+  "h1": "Merge and split PDFs in Claude",
+  "meta_description": "Merge, split, rotate, reorder and stamp PDF files from chat. Mark an invoice PAID. Files stay on your machine.",
+  "primary_keyword": "can claude merge pdfs",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "pdf"
+  ],
+  "us_volume": 10,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/create-word-document-in-claude/",
+  "title": "Create a real Word document in Claude (.docx) | {brand}",
+  "h1": "Create a Word document in Claude",
+  "meta_description": "Turn a chat into a real .docx file: proposals, contracts, statements. Headings, tables and styles that open in Word.",
+  "primary_keyword": "claude create word document",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "docx"
+  ],
+  "us_volume": 50,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/edit-excel-files-in-claude/",
+  "title": "Edit Excel files in Claude: query, change, convert | {brand}",
+  "h1": "Work with Excel files in Claude",
+  "meta_description": "Open, query, edit and convert xlsx and csv files from Claude or Cursor. Formulas and sheets are kept.",
+  "primary_keyword": "claude excel",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "spreadsheet"
+  ],
+  "us_volume": 4400,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/three-way-match-invoices/",
+  "title": "Three-way match invoices to POs and receipts with AI | {brand}",
+  "h1": "Three-way match with AI",
+  "meta_description": "Match supplier invoice lines to purchase orders and receipts by SKU with tolerances. Explainable exceptions.",
+  "primary_keyword": "three way match",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "three-way-match",
+   "goods-receipt"
+  ],
+  "us_volume": 1300,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/find-duplicate-invoices/",
+  "title": "Find duplicate supplier invoices before you pay | {brand}",
+  "h1": "Find duplicate invoices before you pay",
+  "meta_description": "Review explainable duplicate invoice candidates in a local batch. See why each pair matched.",
+  "primary_keyword": "duplicate invoice detection",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "duplicate-invoice-check"
+  ],
+  "us_volume": 10,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/reconcile-supplier-statement/",
+  "title": "Reconcile a supplier statement against your AP ledger | {brand}",
+  "h1": "Reconcile a supplier statement",
+  "meta_description": "Compare a supplier statement with your AP open items by exact reference. Get the differences in one list.",
+  "primary_keyword": "supplier statement reconciliation",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "supplier-statement-check"
+  ],
+  "us_volume": null,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/depreciation-schedule/",
+  "title": "Depreciation schedule from chat: MACRS, HMRC, KST | {brand}",
+  "h1": "Build a depreciation schedule in chat",
+  "meta_description": "Fixed asset register with bundled MACRS, HMRC and Polish KST tables. Schedules and journals from one prompt.",
+  "primary_keyword": "macrs depreciation calculator",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "asset-register"
+  ],
+  "us_volume": 880,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/loan-and-lease-amortization/",
+  "title": "Loan and lease amortization schedule with journals | {brand}",
+  "h1": "Loan and lease amortization in chat",
+  "meta_description": "Payment, interest, early settlement and the journal entries for a loan or lease, from one prompt.",
+  "primary_keyword": "lease amortization schedule",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "amortization"
+  ],
+  "us_volume": 260,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/per-diem-travel-allowance/",
+  "title": "Per diem travel allowance on GSA, HMRC and Polish rates | {brand}",
+  "h1": "Per diem from chat",
+  "meta_description": "Daily travel allowances on bundled public rate tables for the US (GSA), UK (HMRC) and Poland.",
+  "primary_keyword": "per diem rates 2026",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "per-diem"
+  ],
+  "us_volume": 14800,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/work-orders-and-job-cards/",
+  "title": "Work orders and job cards from chat | {brand}",
+  "h1": "Work orders and job cards in chat",
+  "meta_description": "Parts, labour, status and a completion report for each job. Turn finished jobs into invoices.",
+  "primary_keyword": "work order template",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "work-order",
+   "job-card"
+  ],
+  "us_volume": 2900,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/change-orders/",
+  "title": "Change orders with running contract value | {brand}",
+  "h1": "Change orders from chat",
+  "meta_description": "Change orders against a quote or work order: deltas, approval and the running contract value.",
+  "primary_keyword": "change order template",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "change-order"
+  ],
+  "us_volume": 1000,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/purchase-orders-and-credit-notes/",
+  "title": "Purchase orders and credit notes from chat | {brand}",
+  "h1": "Purchase orders and credit notes in chat",
+  "meta_description": "Credit notes against your invoices and purchase orders to your suppliers, numbered and rendered as files.",
+  "primary_keyword": "purchase order template",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "billing-docs",
+   "credit-note"
+  ],
+  "us_volume": 6600,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/bill-of-sale/",
+  "title": "Bill of sale for equipment or a vehicle, from chat | {brand}",
+  "h1": "Make a bill of sale in chat",
+  "meta_description": "Draft and finalize a bill of sale for equipment, vehicles or stock, printed with signature lines.",
+  "primary_keyword": "bill of sale template",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "bill-of-sale"
+  ],
+  "us_volume": 33100,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/tailored-resume-and-cover-letter/",
+  "title": "Tailored resume and cover letter in Word, from Claude | {brand}",
+  "h1": "Tailor a resume in Claude",
+  "meta_description": "Turn your CV facts into a tailored Word resume and cover letter that invents nothing.",
+  "primary_keyword": "claude resume builder",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "resume"
+  ],
+  "us_volume": 320,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/freelance-service-agreement/",
+  "title": "Freelance service agreement from chat | {brand}",
+  "h1": "Write a service agreement in chat",
+  "meta_description": "Scope, deliverables, rate and termination from a clause library. Output a real Word file.",
+  "primary_keyword": "service agreement template",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "service-agreement",
+   "clauses"
+  ],
+  "us_volume": 1900,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/recurring-monthly-invoices/",
+  "title": "Recurring monthly invoices without remembering | {brand}",
+  "h1": "Recurring invoices, on time",
+  "meta_description": "Define a recurring invoice once. Bill the same clients every month from chat.",
+  "primary_keyword": "recurring invoice",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "recurring",
+   "invoice"
+  ],
+  "us_volume": 170,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/sepa-payment-qr-code/",
+  "title": "SEPA payment QR code for invoices, from chat | {brand}",
+  "h1": "Add a payment QR code to an invoice",
+  "meta_description": "QR codes and barcodes from chat: SEPA payment QR, WiFi joins, vCards and URLs.",
+  "primary_keyword": "sepa qr code generator",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "barcode"
+  ],
+  "us_volume": 10,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/schedule-across-time-zones/",
+  "title": "Find a meeting time across time zones in chat | {brand}",
+  "h1": "Find a meeting time across time zones",
+  "meta_description": "Meeting slots across time zones and calendar invites, read from the .ics your calendar already exports.",
+  "primary_keyword": "meeting time planner",
+  "intent": "commercial",
+  "priority": 0.9,
+  "servers": [
+   "timezone",
+   "calendar"
+  ],
+  "us_volume": 2900,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/petty-cash-reconciliation/",
+  "title": "Petty cash reconciliation on the imprest system | {brand}",
+  "h1": "Reconcile petty cash in chat",
+  "meta_description": "Vouchers, reconciliation and the replenishment amount for a petty cash float, from chat.",
+  "primary_keyword": "petty cash reconciliation",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "petty-cash"
+  ],
+  "us_volume": 90,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/employee-leave-tracker/",
+  "title": "Employee leave tracker in chat: balances and approvals | {brand}",
+  "h1": "Track employee leave in chat",
+  "meta_description": "Leave and PTO requests, balances, approvals and who is out, kept in chat.",
+  "primary_keyword": "leave tracker",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "leave"
+  ],
+  "us_volume": 590,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/new-hire-onboarding-plan/",
+  "title": "New-hire onboarding plan, day one to day ninety | {brand}",
+  "h1": "Plan onboarding in chat",
+  "meta_description": "Task templates per role and day-one to day-ninety plans for each new hire.",
+  "primary_keyword": "employee onboarding checklist",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "onboarding",
+   "checklist"
+  ],
+  "us_volume": 480,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/resize-and-compress-images/",
+  "title": "Resize and compress images in Claude, free tier | {brand}",
+  "h1": "Resize and compress images in chat",
+  "meta_description": "Resize, convert, compress, crop and watermark images from chat. Files stay on your machine.",
+  "primary_keyword": "can claude edit images",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "image"
+  ],
+  "us_volume": 480,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/use-cases/convert-currency-ecb-rates/",
+  "title": "Convert currency on ECB rates in chat | {brand}",
+  "h1": "Convert currency on ECB rates",
+  "meta_description": "Live and historical exchange rates from the European Central Bank, inside your AI chat.",
+  "primary_keyword": "ecb exchange rates",
+  "intent": "commercial",
+  "priority": 0.8,
+  "servers": [
+   "currency"
+  ],
+  "us_volume": 590,
+  "page_type": "use-case"
+ },
+ {
+  "path": "/can-claude/create-excel-files/",
+  "title": "Can Claude create Excel files? Yes, here is how | {brand}",
+  "h1": "Can Claude create Excel files?",
+  "meta_description": "Short answer, what works out of the box, what needs a tool, and a 1-minute setup for Claude and ChatGPT.",
+  "primary_keyword": "can claude create excel files",
+  "intent": "informational",
+  "priority": 0.75,
+  "servers": [
+   "spreadsheet"
+  ],
+  "us_volume": 70,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-claude/create-word-documents/",
+  "title": "Can Claude create Word documents? Yes, real .docx | {brand}",
+  "h1": "Can Claude create Word documents?",
+  "meta_description": "Short answer, what works out of the box, what needs a tool, and a 1-minute setup for Claude and ChatGPT.",
+  "primary_keyword": "can claude create word documents",
+  "intent": "informational",
+  "priority": 0.75,
+  "servers": [
+   "docx"
+  ],
+  "us_volume": 50,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-claude/make-a-pdf/",
+  "title": "Can Claude make a PDF? Yes, with one connector | {brand}",
+  "h1": "Can Claude make a PDF?",
+  "meta_description": "Short answer, what works out of the box, what needs a tool, and a 1-minute setup for Claude and ChatGPT.",
+  "primary_keyword": "can claude make a pdf",
+  "intent": "informational",
+  "priority": 0.75,
+  "servers": [
+   "invoice",
+   "billing-docs",
+   "pdf"
+  ],
+  "us_volume": 10,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-claude/read-zip-files/",
+  "title": "Can Claude read zip files? Inspect and extract | {brand}",
+  "h1": "Can Claude read zip files?",
+  "meta_description": "Short answer, what works out of the box, what needs a tool, and a 1-minute setup for Claude and ChatGPT.",
+  "primary_keyword": "can claude read zip files",
+  "intent": "informational",
+  "priority": 0.75,
+  "servers": [
+   "zip"
+  ],
+  "us_volume": 170,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/create-an-invoice/",
+  "title": "Can ChatGPT create an invoice? A real PDF, yes | {brand}",
+  "h1": "Can ChatGPT create an invoice?",
+  "meta_description": "Short answer, what works out of the box, what needs a tool, and a 1-minute setup for Claude and ChatGPT.",
+  "primary_keyword": "chatgpt create invoice",
+  "intent": "informational",
+  "priority": 0.75,
+  "servers": [
+   "invoice"
+  ],
+  "us_volume": 10,
+  "page_type": "answer"
+ },
+ {
+  "path": "/tools/freelance-rate-calculator/",
+  "title": "Freelance hourly rate calculator with break-even | {brand}",
+  "h1": "Freelance rate calculator",
+  "meta_description": "Free, in your browser, no sign-up. Then do the same job from Claude or ChatGPT with one URL.",
+  "primary_keyword": "hourly rate calculator",
+  "intent": "transactional",
+  "priority": 0.85,
+  "servers": [
+   "hourly-rate"
+  ],
+  "us_volume": 18100,
+  "page_type": "free-tool"
+ },
+ {
+  "path": "/tools/lease-amortization-schedule/",
+  "title": "Lease and loan amortization schedule with journal | {brand}",
+  "h1": "Amortization schedule",
+  "meta_description": "Free, in your browser, no sign-up. Then do the same job from Claude or ChatGPT with one URL.",
+  "primary_keyword": "lease amortization schedule",
+  "intent": "transactional",
+  "priority": 0.7,
+  "servers": [
+   "amortization"
+  ],
+  "us_volume": 260,
+  "page_type": "free-tool"
+ },
+ {
+  "path": "/tools/macrs-depreciation-calculator/",
+  "title": "MACRS depreciation calculator (IRS tables) | {brand}",
+  "h1": "MACRS depreciation calculator",
+  "meta_description": "Free, in your browser, no sign-up. Then do the same job from Claude or ChatGPT with one URL.",
+  "primary_keyword": "macrs depreciation calculator",
+  "intent": "transactional",
+  "priority": 0.7,
+  "servers": [
+   "asset-register"
+  ],
+  "us_volume": 880,
+  "page_type": "free-tool"
+ },
+ {
+  "path": "/tools/per-diem-rates/",
+  "title": "Per diem rates lookup: GSA, HMRC, Poland | {brand}",
+  "h1": "Per diem rates",
+  "meta_description": "Free, in your browser, no sign-up. Then do the same job from Claude or ChatGPT with one URL.",
+  "primary_keyword": "per diem rates 2026",
+  "intent": "transactional",
+  "priority": 0.85,
+  "servers": [
+   "per-diem"
+  ],
+  "us_volume": 14800,
+  "page_type": "free-tool"
+ },
+ {
+  "path": "/tools/mileage-log-template/",
+  "title": "Free mileage log template and calculator | {brand}",
+  "h1": "Mileage log template",
+  "meta_description": "Free, in your browser, no sign-up. Then do the same job from Claude or ChatGPT with one URL.",
+  "primary_keyword": "mileage log template",
+  "intent": "transactional",
+  "priority": 0.7,
+  "servers": [
+   "mileage-log"
+  ],
+  "us_volume": 880,
+  "page_type": "free-tool"
+ },
+ {
+  "path": "/tools/dunning-letter-generator/",
+  "title": "Dunning letter generator: reminder 1, 2, final | {brand}",
+  "h1": "Dunning letter generator",
+  "meta_description": "Free, in your browser, no sign-up. Then do the same job from Claude or ChatGPT with one URL.",
+  "primary_keyword": "dunning letter template",
+  "intent": "transactional",
+  "priority": 0.7,
+  "servers": [
+   "dunning-letters"
+  ],
+  "us_volume": 260,
+  "page_type": "free-tool"
+ },
+ {
+  "path": "/tools/meeting-time-planner/",
+  "title": "Meeting time planner across time zones | {brand}",
+  "h1": "Meeting time planner",
+  "meta_description": "Free, in your browser, no sign-up. Then do the same job from Claude or ChatGPT with one URL.",
+  "primary_keyword": "meeting time planner",
+  "intent": "transactional",
+  "priority": 0.85,
+  "servers": [
+   "timezone"
+  ],
+  "us_volume": 2900,
+  "page_type": "free-tool"
+ },
+ {
+  "path": "/compare/zapier-mcp/",
+  "title": "{brand} vs Zapier MCP for back-office work",
+  "h1": "vs Zapier MCP",
+  "meta_description": "Honest comparison: what each one does, what it costs, where data lives, and when to pick the other one.",
+  "primary_keyword": "zapier mcp alternative",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "compare"
+ },
+ {
+  "path": "/compare/composio/",
+  "title": "{brand} vs Composio: files you own vs app actions",
+  "h1": "vs Composio",
+  "meta_description": "Honest comparison: what each one does, what it costs, where data lives, and when to pick the other one.",
+  "primary_keyword": "composio alternative",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "compare"
+ },
+ {
+  "path": "/compare/quickbooks-and-xero-mcp/",
+  "title": "Local back-office tools vs QuickBooks and Xero MCP",
+  "h1": "vs QuickBooks and Xero MCP",
+  "meta_description": "Honest comparison: what each one does, what it costs, where data lives, and when to pick the other one.",
+  "primary_keyword": "quickbooks mcp server",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": 210,
+  "page_type": "compare"
+ },
+ {
+  "path": "/categories/invoicing/",
+  "title": "Invoicing and billing tools for Claude and Cursor | {brand}",
+  "h1": "Invoicing and billing",
+  "meta_description": "MCP servers for invoicing and billing: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "invoicing and billing mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/payables/",
+  "title": "Payables checks and matching tools for Claude and Cursor | {brand}",
+  "h1": "Payables checks and matching",
+  "meta_description": "MCP servers for payables checks and matching: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "payables checks and matching mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/bookkeeping/",
+  "title": "Bookkeeping and cash tools for Claude and Cursor | {brand}",
+  "h1": "Bookkeeping and cash",
+  "meta_description": "MCP servers for bookkeeping and cash: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "bookkeeping and cash mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/time-expenses/",
+  "title": "Time, expenses and travel tools for Claude and Cursor | {brand}",
+  "h1": "Time, expenses and travel",
+  "meta_description": "MCP servers for time, expenses and travel: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "time, expenses and travel mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/documents/",
+  "title": "Documents and files tools for Claude and Cursor | {brand}",
+  "h1": "Documents and files",
+  "meta_description": "MCP servers for documents and files: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "documents and files mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/contracts-hr/",
+  "title": "Contracts, HR and careers tools for Claude and Cursor | {brand}",
+  "h1": "Contracts, HR and careers",
+  "meta_description": "MCP servers for contracts, hr and careers: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "contracts, hr and careers mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/operations/",
+  "title": "Operations and field work tools for Claude and Cursor | {brand}",
+  "h1": "Operations and field work",
+  "meta_description": "MCP servers for operations and field work: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "operations and field work mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/purchasing/",
+  "title": "Purchasing, stock and logistics tools for Claude and Cursor | {brand}",
+  "h1": "Purchasing, stock and logistics",
+  "meta_description": "MCP servers for purchasing, stock and logistics: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "purchasing, stock and logistics mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/web-dev/",
+  "title": "Web and developer utilities tools for Claude and Cursor | {brand}",
+  "h1": "Web and developer utilities",
+  "meta_description": "MCP servers for web and developer utilities: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "web and developer utilities mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/categories/calculators/",
+  "title": "Calculators and data tools for Claude and Cursor | {brand}",
+  "h1": "Calculators and data",
+  "meta_description": "MCP servers for calculators and data: what each does, example prompts, free tier and one-time Pro price.",
+  "primary_keyword": "calculators and data mcp",
+  "intent": "commercial",
+  "priority": 0.6,
+  "servers": [],
+  "us_volume": null,
+  "page_type": "category"
+ },
+ {
+  "path": "/servers/amortization/",
+  "title": "Amortization for Claude and Cursor | {brand}",
+  "h1": "Amortization",
+  "meta_description": "Loan and lease schedules: payment, interest, early settlement and the journal, to the minor. Free tier, $19 Pro once.",
+  "primary_keyword": "amortization mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "amortization"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/asset-register/",
+  "title": "Asset Register for Claude and Cursor | {brand}",
+  "h1": "Asset Register",
+  "meta_description": "Fixed assets and depreciation on bundled Polish KST, HMRC and IRS MACRS. Free tier, $19 Pro once.",
+  "primary_keyword": "asset register mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "asset-register"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/backlink-checker/",
+  "title": "Backlink Checker for Claude and Cursor | {brand}",
+  "h1": "Backlink Checker",
+  "meta_description": "Check backlinks from Claude or Cursor: does a page link to your domain, dofollow or nofollow, with anchor text, HTTP. Free tier, $19 Pro once.",
+  "primary_keyword": "backlink checker mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "backlink-checker"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/bank-statement/",
+  "title": "Bank Statement for Claude and Cursor | {brand}",
+  "h1": "Bank Statement",
+  "meta_description": "Import a bank CSV export, categorise it, summarise it per currency, find recurring charges and reconcile it against. Free tier, $19 Pro once.",
+  "primary_keyword": "bank statement mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "bank-statement"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/barcode/",
+  "title": "Barcode for Claude and Cursor | {brand}",
+  "h1": "Barcode",
+  "meta_description": "QR codes and barcodes from chat: URLs, WiFi joins, vCards, SEPA payment QR that a banking app can scan, Code 128 and. Free tier, $19 Pro once.",
+  "primary_keyword": "barcode mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "barcode"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/bill-of-sale/",
+  "title": "Bill Of Sale for Claude and Cursor | {brand}",
+  "h1": "Bill Of Sale",
+  "meta_description": "Bills of sale for equipment, vehicles and stock: draft, finalize, print with signature. Free tier, $19 Pro once.",
+  "primary_keyword": "bill of sale mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "bill-of-sale"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/billing-docs/",
+  "title": "Billing Docs for Claude and Cursor | {brand}",
+  "h1": "Billing Docs",
+  "meta_description": "Credit notes against your invoices and purchase orders to your suppliers, on the invoice. Free tier, $19 Pro once.",
+  "primary_keyword": "billing docs mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "billing-docs"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/budget/",
+  "title": "Budget for Claude and Cursor | {brand}",
+  "h1": "Budget",
+  "meta_description": "Budget for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
+  "primary_keyword": "budget mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "budget"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/calendar/",
+  "title": "Calendar for Claude and Cursor | {brand}",
+  "h1": "Calendar",
+  "meta_description": "Read the .ics your calendar already exports: what is on this week, when you are actually free, what is double-booked,. Free tier, $19 Pro once.",
+  "primary_keyword": "calendar mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "calendar"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/cash-book/",
+  "title": "Cash Book for Claude and Cursor | {brand}",
+  "h1": "Cash Book",
+  "meta_description": "One double-entry ledger derived from your invoices, bank, expenses, deposits and. Free tier, $19 Pro once.",
+  "primary_keyword": "cash book mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "cash-book"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/catalogue/",
+  "title": "Catalogue for Claude and Cursor | {brand}",
+  "h1": "Catalogue",
+  "meta_description": "A price list and rate card the quotes and invoice servers read by. Free tier, $19 Pro once.",
+  "primary_keyword": "catalogue mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "catalogue"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/change-order/",
+  "title": "Change Order for Claude and Cursor | {brand}",
+  "h1": "Change Order",
+  "meta_description": "Change orders against a quote or work order: deltas, approval, running contract. Free tier, $19 Pro once.",
+  "primary_keyword": "change order mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "change-order"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/checklist/",
+  "title": "Checklist for Claude and Cursor | {brand}",
+  "h1": "Checklist",
+  "meta_description": "Reusable checklists and the dated runs of them: pass, fail, not applicable, and a. Free tier, $19 Pro once.",
+  "primary_keyword": "checklist mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "checklist"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/clauses/",
+  "title": "Clauses for Claude and Cursor | {brand}",
+  "h1": "Clauses",
+  "meta_description": "A personal library of reusable contract and proposal clauses: 25 generic freelance starters with {variables}, ranked. Free tier, $19 Pro once.",
+  "primary_keyword": "clauses mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "clauses"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/credit-note/",
+  "title": "Credit Note for Claude and Cursor | {brand}",
+  "h1": "Credit Note",
+  "meta_description": "Credit notes against an invoice or standalone: drafts, finalization, rendering,. Free tier, $19 Pro once.",
+  "primary_keyword": "credit note mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "credit-note"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/currency/",
+  "title": "Currency for Claude and Cursor | {brand}",
+  "h1": "Currency",
+  "meta_description": "Live and historical exchange rates from the European Central Bank, in your AI chat. Convert amounts, read rate history,. Free tier, $19 Pro once.",
+  "primary_keyword": "currency mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "currency"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/delivery-schedule/",
+  "title": "Delivery Schedule for Claude and Cursor | {brand}",
+  "h1": "Delivery Schedule",
+  "meta_description": "Dated deliverables against a quote or work order: due dates, sign-off, what is late,. Free tier, $19 Pro once.",
+  "primary_keyword": "delivery schedule mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "delivery-schedule"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/deposits/",
+  "title": "Deposits for Claude and Cursor | {brand}",
+  "h1": "Deposits",
+  "meta_description": "Security and retainer deposits per client: hold them, apply them to invoices, refund. Free tier, $19 Pro once.",
+  "primary_keyword": "deposits mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "deposits"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/docx/",
+  "title": "Docx for Claude and Cursor | {brand}",
+  "h1": "Docx",
+  "meta_description": "Turn a chat into a real Word document: proposals, quotes, contracts, statements of work and letters as .docx files,. Free tier, $19 Pro once.",
+  "primary_keyword": "docx mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "docx"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/dunning-letters/",
+  "title": "Dunning Letters for Claude and Cursor | {brand}",
+  "h1": "Dunning Letters",
+  "meta_description": "Chase overdue invoices: reminder 1, reminder 2, final notice, escalation dates,. Free tier, $19 Pro once.",
+  "primary_keyword": "dunning letters mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "dunning-letters"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/duplicate-invoice-check/",
+  "title": "Duplicate Invoice Check for Claude and Cursor | {brand}",
+  "h1": "Duplicate Invoice Check",
+  "meta_description": "Review explainable duplicate supplier invoice candidates in a supplied local. Free tier, $19 Pro once.",
+  "primary_keyword": "duplicate invoice check mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "duplicate-invoice-check"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/expense-tracker/",
+  "title": "Expense Tracker for Claude and Cursor | {brand}",
+  "h1": "Expense Tracker",
+  "meta_description": "Local expenses, receipts and mileage ledger for freelancers: categorise, split VAT, summarise, export to CSV or xlsx. Free tier, $19 Pro once.",
+  "primary_keyword": "expense tracker mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "expense-tracker"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/goods-receipt/",
+  "title": "Goods Receipt for Claude and Cursor | {brand}",
+  "h1": "Goods Receipt",
+  "meta_description": "Goods receipt notes against purchase orders: over/under tolerances, damaged and short units, discrepancies, and CSV. Free tier, $19 Pro once.",
+  "primary_keyword": "goods receipt mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "goods-receipt"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/hourly-rate/",
+  "title": "Hourly Rate for Claude and Cursor | {brand}",
+  "h1": "Hourly Rate",
+  "meta_description": "Freelance hourly-rate calculator with break-even and what-if. Free tier, $19 Pro once.",
+  "primary_keyword": "hourly rate mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "hourly-rate"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/image/",
+  "title": "Image tools for Claude and Cursor | {brand}",
+  "h1": "Image",
+  "meta_description": "Resize, convert, compress, crop, thumbnail and watermark images from chat: no account, no native dependency. Free tier, $19 Pro once.",
+  "primary_keyword": "image mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "image"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/invoice/",
+  "title": "Invoice for Claude and Cursor | {brand}",
+  "h1": "Invoice",
+  "meta_description": "Make real, sendable PDF invoices from a sentence. Clients, numbering that never repeats, VAT lines, discounts and. Free tier, $19 Pro once.",
+  "primary_keyword": "invoice mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "invoice"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/job-card/",
+  "title": "Job Card for Claude and Cursor | {brand}",
+  "h1": "Job Card",
+  "meta_description": "Job cards for trades and field service: hours and materials per job, open to. Free tier, $19 Pro once.",
+  "primary_keyword": "job card mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "job-card"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/kanban/",
+  "title": "Kanban for Claude and Cursor | {brand}",
+  "h1": "Kanban",
+  "meta_description": "A local task board per project: columns, due dates, estimates, priorities and a link into your time tracker. All data. Free tier, $19 Pro once.",
+  "primary_keyword": "kanban mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "kanban"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/leave/",
+  "title": "Leave for Claude and Cursor | {brand}",
+  "h1": "Leave",
+  "meta_description": "Employee leave and PTO requests: balances, approvals, calendars, and who-is-out. Free tier, $19 Pro once.",
+  "primary_keyword": "leave mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "leave"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/loan-calculator/",
+  "title": "Loan Calculator for Claude and Cursor | {brand}",
+  "h1": "Loan Calculator",
+  "meta_description": "Loan Calculator for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
+  "primary_keyword": "loan calculator mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "loan-calculator"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/maintenance-log/",
+  "title": "Maintenance Log for Claude and Cursor | {brand}",
+  "h1": "Maintenance Log",
+  "meta_description": "Equipment maintenance log: assets, service entries with costs, and a due report from stored. Free tier, $19 Pro once.",
+  "primary_keyword": "maintenance log mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "maintenance-log"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/mileage-log/",
+  "title": "Mileage Log for Claude and Cursor | {brand}",
+  "h1": "Mileage Log",
+  "meta_description": "Mileage log for deductible driving: trips, effective-dated rates, summaries and CSV. Free tier, $19 Pro once.",
+  "primary_keyword": "mileage log mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "mileage-log"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/office-suite/",
+  "title": "Office Suite for Claude and Cursor | {brand}",
+  "h1": "Office Suite",
+  "meta_description": "One install for the whole freelancer office suite: time tracking, price watching, spreadsheets and PDF invoicing,. Free tier, $19 Pro once.",
+  "primary_keyword": "office suite mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "office-suite"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/onboarding/",
+  "title": "Onboarding for Claude and Cursor | {brand}",
+  "h1": "Onboarding",
+  "meta_description": "New-hire onboarding: task templates per role, day-one to day-ninety. Free tier, $19 Pro once.",
+  "primary_keyword": "onboarding mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "onboarding"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/packing-list/",
+  "title": "Packing List for Claude and Cursor | {brand}",
+  "h1": "Packing List",
+  "meta_description": "Packing slips: cartons, contents, weights, chargeable weight and what is still to. Free tier, $19 Pro once.",
+  "primary_keyword": "packing list mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "packing-list"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/payroll/",
+  "title": "Payroll for Claude and Cursor | {brand}",
+  "h1": "Payroll",
+  "meta_description": "Payroll for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
+  "primary_keyword": "payroll mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "payroll"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/pdf/",
+  "title": "Pdf for Claude and Cursor | {brand}",
+  "h1": "Pdf",
+  "meta_description": "Merge, split, extract, rotate, reorder and stamp PDF files from chat: mark an invoice PAID, pull pages out of a scan,. Free tier, $19 Pro once.",
+  "primary_keyword": "pdf mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "pdf"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/per-diem/",
+  "title": "Per Diem for Claude and Cursor | {brand}",
+  "h1": "Per Diem",
+  "meta_description": "Daily travel allowances on bundled public rate tables: Poland, HMRC and. Free tier, $19 Pro once.",
+  "primary_keyword": "per diem mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "per-diem"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/petty-cash/",
+  "title": "Petty Cash for Claude and Cursor | {brand}",
+  "h1": "Petty Cash",
+  "meta_description": "A petty cash float on the imprest system: vouchers, reconciliation and the. Free tier, $19 Pro once.",
+  "primary_keyword": "petty cash mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "petty-cash"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/pomodoro/",
+  "title": "Pomodoro for Claude and Cursor | {brand}",
+  "h1": "Pomodoro",
+  "meta_description": "Pomodoro for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
+  "primary_keyword": "pomodoro mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "pomodoro"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/price-tracker/",
+  "title": "Price Tracker for Claude and Cursor | {brand}",
+  "h1": "Price Tracker",
+  "meta_description": "Ask your AI what something costs right now, track price drops and get told when a target price is hit. All data stays. Free tier, $19 Pro once.",
+  "primary_keyword": "price tracker mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "price-tracker"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/purchase-requisition/",
+  "title": "Purchase Requisition for Claude and Cursor | {brand}",
+  "h1": "Purchase Requisition",
+  "meta_description": "Reusable purchase-requisitions and dated runs: pass, fail, n/a, and a. Free tier, $19 Pro once.",
+  "primary_keyword": "purchase requisition mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "purchase-requisition"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/quotes/",
+  "title": "Quotes for Claude and Cursor | {brand}",
+  "h1": "Quotes",
+  "meta_description": "Send a client a real quote in seconds: line items with VAT, a validity date, a plain-text version to paste into email. Free tier, $19 Pro once.",
+  "primary_keyword": "quotes mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "quotes"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/receipts/",
+  "title": "Receipts for Claude and Cursor | {brand}",
+  "h1": "Receipts",
+  "meta_description": "Receipts for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
+  "primary_keyword": "receipts mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "receipts"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/recurring/",
+  "title": "Recurring for Claude and Cursor | {brand}",
+  "h1": "Recurring",
+  "meta_description": "Bill the same clients every month without remembering to. Define a recurring invoice once, then generate the real PDFs. Free tier, $19 Pro once.",
+  "primary_keyword": "recurring mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "recurring"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/resume/",
+  "title": "Resume for Claude and Cursor | {brand}",
+  "h1": "Resume",
+  "meta_description": "Turn your CV facts into a tailored Word resume and a cover letter that invents nothing: keyword matching against the. Free tier, $19 Pro once.",
+  "primary_keyword": "resume mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "resume"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/service-agreement/",
+  "title": "Service Agreement for Claude and Cursor | {brand}",
+  "h1": "Service Agreement",
+  "meta_description": "Service agreements for freelancers: scope, deliverables, rate, termination and liability. Free tier, $19 Pro once.",
+  "primary_keyword": "service agreement mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "service-agreement"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/spreadsheet/",
+  "title": "Spreadsheet for Claude and Cursor | {brand}",
+  "h1": "Spreadsheet",
+  "meta_description": "Open, inspect, query, edit and convert xlsx and csv files locally from your AI. Free tier, $19 Pro once.",
+  "primary_keyword": "spreadsheet mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "spreadsheet"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/statement-of-account/",
+  "title": "Statement Of Account for Claude and Cursor | {brand}",
+  "h1": "Statement Of Account",
+  "meta_description": "Per-client statements of account, aging buckets and dunning letters from your own. Free tier, $19 Pro once.",
+  "primary_keyword": "statement of account mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "statement-of-account"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/stripe-billing/",
+  "title": "Stripe Billing for Claude and Cursor | {brand}",
+  "h1": "Stripe Billing",
+  "meta_description": "Stripe Billing for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
+  "primary_keyword": "stripe billing mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "stripe-billing"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/supplier-list/",
+  "title": "Supplier List for Claude and Cursor | {brand}",
+  "h1": "Supplier List",
+  "meta_description": "A supplier directory that does not rot: contacts, terms, lead times, review. Free tier, $19 Pro once.",
+  "primary_keyword": "supplier list mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "supplier-list"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/supplier-statement-check/",
+  "title": "Supplier Statement Check for Claude and Cursor | {brand}",
+  "h1": "Supplier Statement Check",
+  "meta_description": "Compare supplied supplier statement and AP ledger open items by exact reference with complete discrepancy. Free tier, $19 Pro once.",
+  "primary_keyword": "supplier statement check mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "supplier-statement-check"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/tax-calc/",
+  "title": "Tax Calc for Claude and Cursor | {brand}",
+  "h1": "Tax Calc",
+  "meta_description": "Tax Calc for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
+  "primary_keyword": "tax calc mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "tax-calc"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/three-way-match/",
+  "title": "Three Way Match for Claude and Cursor | {brand}",
+  "h1": "Three Way Match",
+  "meta_description": "Match supplier invoice lines to purchase orders and accepted receipts by SKU with local. Free tier, $19 Pro once.",
+  "primary_keyword": "three way match mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "three-way-match"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/time-tracker/",
+  "title": "Time Tracker for Claude and Cursor | {brand}",
+  "h1": "Time Tracker",
+  "meta_description": "Track billable time without leaving your AI chat. Timers, entries, reports, CSV export and invoice line items, all. Free tier, $19 Pro once.",
+  "primary_keyword": "time tracker mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "time-tracker"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/timezone/",
+  "title": "Timezone for Claude and Cursor | {brand}",
+  "h1": "Timezone",
+  "meta_description": "Time zones, meeting slots and calendar invites for people who work with clients abroad. Convert times, find hours that. Free tier, $19 Pro once.",
+  "primary_keyword": "timezone mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "timezone"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/work-order/",
+  "title": "Work Order for Claude and Cursor | {brand}",
+  "h1": "Work Order",
+  "meta_description": "Job orders for trades and field work: parts, labour, status, completion report, invoice. Free tier, $19 Pro once.",
+  "primary_keyword": "work order mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "work-order"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ },
+ {
+  "path": "/servers/zip/",
+  "title": "Zip for Claude and Cursor | {brand}",
+  "h1": "Zip",
+  "meta_description": "Create, inspect and extract zip archives from chat: glob a directory into a zip, list what is inside with a bomb and. Free tier, $19 Pro once.",
+  "primary_keyword": "zip mcp",
+  "intent": "commercial",
+  "priority": 0.5,
+  "servers": [
+   "zip"
+  ],
+  "us_volume": null,
+  "page_type": "server"
+ }
+]

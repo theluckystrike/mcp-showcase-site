@@ -1,0 +1,50 @@
+---
+import { brand } from '../config/brand';
+import { CATEGORIES } from '../data/categories';
+import { pagesOfType } from '../data/pages';
+import { upsell } from '../data/content';
+import { bundleUrl, buyUrl } from '../data/servers';
+const audiences = pagesOfType('audience');
+const foot = upsell('all', 'footer', { copy: `All paid servers, one key, $${brand.pricing.bundleUsd} once.`, cta_url: buyUrl(bundleUrl(), 'footer', 'bundle') });
+const year = new Date().getFullYear();
+---
+<footer class="relative mt-24 border-t border-line">
+  <div class="wrap grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+    <div>
+      <a href="/" class="flex items-center gap-2.5 font-semibold"><img src="/favicon.svg" alt="" width="26" height="26" class="rounded-lg" />{brand.name}</a>
+      <p class="muted mt-4 max-w-xs text-[.95rem]">{brand.tagline} Open-source MCP servers for Claude, Cursor and any MCP client.</p>
+      <a href={foot.cta_url} rel="nofollow" class="btn btn-primary btn-sm mt-5">{foot.copy}</a>
+    </div>
+    <div>
+      <h2 class="mb-3 text-sm font-semibold">For you</h2>
+      <ul class="grid gap-2 text-[.93rem]">
+        {audiences.map((a) => <li><a class="muted hover:text-fg" href={a.path}>{a.h1}</a></li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 class="mb-3 text-sm font-semibold">Product</h2>
+      <ul class="grid gap-2 text-[.93rem]">
+        <li><a class="muted hover:text-fg" href="/servers/">All servers</a></li>
+        <li><a class="muted hover:text-fg" href="/use-cases/">Use cases</a></li>
+        <li><a class="muted hover:text-fg" href="/connect/">Connect</a></li>
+        <li><a class="muted hover:text-fg" href="/categories/invoicing/">Categories</a></li>
+        <li><a class="muted hover:text-fg" href="/compare/">Compare</a></li>
+        <li><a class="muted hover:text-fg" href="/pricing/">Pricing</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="mb-3 text-sm font-semibold">Build</h2>
+      <ul class="grid gap-2 text-[.93rem]">
+        <li><a class="muted hover:text-fg" href="/developers/">Developers</a></li>
+        <li><a class="muted hover:text-fg" href={brand.links.github} rel="noopener">GitHub</a></li>
+        <li><a class="muted hover:text-fg" href={brand.links.registry} rel="noopener">MCP Registry</a></li>
+        <li><a class="muted hover:text-fg" href="/llms.txt">llms.txt</a></li>
+        <li><a class="muted hover:text-fg" href="/about/">About</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap flex flex-wrap justify-between gap-3 border-t border-line py-6 text-sm text-faint">
+    <span>&copy; {year} {brand.name}</span>
+    <span>Case examples are scenarios, labeled "Example".</span>
+  </div>
+</footer>
