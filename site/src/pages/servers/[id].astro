@@ -201,7 +201,7 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
         <div class="mt-6 overflow-x-auto border-t-2 border-fg">
           <table class="table">
             <thead><tr><th scope="col">Tool</th><th scope="col">What it does</th></tr></thead>
-            <tbody>{visibleTools.map((t) => <tr><td class="whitespace-nowrap"><code class="font-mono text-[.84rem]">{t.name}</code></td><td class="muted">{t.plain || s.topTools.find((x) => x.name === t.name)?.plain || 'See SPEC.md of this server.'}</td></tr>)}</tbody>
+            <tbody>{visibleTools.map((t) => <tr><td class="whitespace-nowrap"><code class="font-mono text-[.84rem]">{t.name}</code></td><td class="muted">{(t.plain || s.topTools.find((x) => x.name === t.name)?.plain || 'See SPEC.md of this server.').replace(/\s+(--|—)\s+/g, ', ')}</td></tr>)}</tbody>
           </table>
         </div>
       </section>

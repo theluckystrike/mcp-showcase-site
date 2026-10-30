@@ -45,6 +45,7 @@ const due = '13 Nov 2026';
   </div>
 
   <!-- The document the tools produce -->
+  <div class="doc-col">
   <div class="doc-wrap">
     <div class="carbon" aria-hidden="true"><span>Copy</span></div>
     <article class="doc">
@@ -57,6 +58,7 @@ const due = '13 Nov 2026';
           <dt>Bill to</dt><dd>Acme</dd>
           <dt>Issued</dt><dd>{issued}</dd>
           <dt>Due</dt><dd>{due}</dd>
+          <dt>Status</dt><dd>PAID</dd>
         </dl>
       </header>
       <table class="doc-lines">
@@ -65,15 +67,18 @@ const due = '13 Nov 2026';
           {lines.map((l) => (<tr><td>{l.d}</td><td>{l.q}</td><td>{fmt(l.u)}</td><td>{fmt(l.u * l.n)}</td></tr>))}
         </tbody>
       </table>
-      <dl class="doc-sum">
-        <dt>Subtotal</dt><dd>{fmt(subtotal)}</dd>
-        <dt>VAT 23%</dt><dd>{fmt(vat)}</dd>
-        <dt class="tot">Total EUR</dt><dd class="tot">{fmt(total)}</dd>
-      </dl>
-      <p class="doc-foot">invoice_pdf, A4. Free tier adds a "Generated with mcp-invoice" line.</p>
-      <div class="stamp-pos"><Stamp state="PAID" sub="30 OCT 2026" size={74} rotate={-9} /></div>
-      <p class="doc-status"><span>Status</span> paid in full, by <code>invoice_mark_paid</code></p>
+      <div class="doc-bottom">
+        <div class="stamp-pos"><Stamp state="PAID" sub="30 OCT 2026" size={74} rotate={-7} /></div>
+        <dl class="doc-sum">
+          <dt>Subtotal</dt><dd>{fmt(subtotal)}</dd>
+          <dt>VAT 23%</dt><dd>{fmt(vat)}</dd>
+          <dt class="tot">Total EUR</dt><dd class="tot">{fmt(total)}</dd>
+        </dl>
+      </div>
+      <p class="doc-foot">Generated with mcp-invoice by theluckystrike</p>
     </article>
+  </div>
+    <p class="cap">Example. <code>invoice_pdf</code> writes an A4 PDF. After <code>invoice_mark_paid</code> its status line reads PAID. The stamp shows that state.</p>
   </div>
 </div>
 
@@ -82,11 +87,11 @@ const due = '13 Nov 2026';
     position: relative; display: grid; gap: 1rem; align-items: start;
     font-variant-numeric: tabular-nums;
   }
-  @media (min-width: 900px) { .desk { grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: 0; } }
+  @media (min-width: 900px) { .desk { grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr); gap: 1.25rem; } }
 
   /* Chat column: a narrow transcript, not a window chrome */
   .chat { display: grid; gap: .45rem; font-size: .84rem; line-height: 1.45; position: relative; z-index: 2; }
-  @media (min-width: 900px) { .chat { margin-top: 2.2rem; margin-right: -1.5rem; } }
+  @media (min-width: 900px) { .chat { margin-top: 1.6rem; } }
   .chat-label { display: flex; justify-content: space-between; gap: .5rem; font-size: .72rem; color: var(--muted); font-weight: 560; }
   .ex { border: 1px solid var(--border-strong); border-radius: 99px; padding: 0 .45rem; font-size: .66rem; line-height: 1.45; }
   .you {
@@ -112,7 +117,7 @@ const due = '13 Nov 2026';
   /* Document: a sheet torn from a pad, with a carbon copy offset behind it */
   .doc-wrap { position: relative; padding: .5rem .25rem .75rem 0; filter: drop-shadow(0 14px 22px color-mix(in oklab, var(--text) 16%, transparent)) drop-shadow(0 1px 1px color-mix(in oklab, var(--text) 10%, transparent)); }
   .carbon {
-    position: absolute; inset: 1.1rem -.2rem -.1rem 1.2rem; border-radius: 2px;
+    position: absolute; inset: 1.1rem -.35rem -.6rem 1.2rem; border-radius: 2px;
     background: var(--surface-2); border: 1px solid var(--border); transform: rotate(1.6deg);
   }
   .carbon span {
@@ -142,7 +147,9 @@ const due = '13 Nov 2026';
   .doc-lines th { font-size: .64rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; text-align: right; padding: .3rem 0; border-bottom: 1px solid var(--border-strong); }
   .doc-lines td { text-align: right; padding: .38rem 0; border-bottom: 1px solid var(--border); }
   .doc-lines th:first-child, .doc-lines td:first-child { text-align: left; }
-  .doc-sum { display: grid; grid-template-columns: 1fr auto; gap: .1rem 1.2rem; margin: .6rem 0 0 auto; max-width: 13rem; text-align: right; }
+  .doc-bottom { display: flex; justify-content: space-between; align-items: center; gap: .75rem; margin-top: .6rem; }
+  .doc-sum { display: grid; grid-template-columns: 1fr auto; gap: .1rem 1rem; margin: 0; flex: 0 1 11.5rem; text-align: right; }
+  @media (min-width: 640px) { .doc-sum { flex-basis: 14rem; } }
   .doc-sum dt { color: var(--muted); }
   .doc-sum dd { margin: 0; }
   .doc-sum .tot { font-weight: 750; font-size: 1rem; color: var(--text); border-top: 2px solid var(--text); padding-top: .25rem; margin-top: .2rem; }
@@ -150,12 +157,11 @@ const due = '13 Nov 2026';
   .doc-foot { margin: .8rem 0 0; font-size: .66rem; color: var(--muted); font-family: var(--font-mono); }
 
   /* The stamp (d-identity Stamp.astro): sits over the line items, like a real PAID mark */
-  .stamp-pos { position: absolute; left: 6%; top: 42%; pointer-events: none; transform-origin: 50% 50%; }
-  .stamp-pos :global(svg) { height: 4rem; width: auto; opacity: .92; }
-  @media (min-width: 640px) { .stamp-pos { left: 10%; top: 40%; } .stamp-pos :global(svg) { height: 5.4rem; } }
-  .doc-status { margin: .55rem 0 0; font-size: .72rem; color: var(--stamp); font-weight: 600; }
-  .doc-status span { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-right: .35rem; }
-  .doc-status code { font-family: var(--font-mono); font-weight: 600; }
+  .stamp-pos { flex: none; pointer-events: none; transform-origin: 50% 50%; padding-left: .25rem; }
+  .stamp-pos :global(svg) { display: block; height: 4.1rem; width: auto; opacity: .92; }
+  @media (min-width: 640px) { .stamp-pos { padding-left: .75rem; } .stamp-pos :global(svg) { height: 5.6rem; } }
+  .cap { margin: 1.1rem 0 0; font-size: .74rem; color: var(--muted); line-height: 1.45; max-width: 36em; }
+  .cap code { font-family: var(--font-mono); color: var(--text); }
 
   /* Motion. Rest state = final state. Plays once. */
   @media (prefers-reduced-motion: no-preference) {

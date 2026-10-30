@@ -176,6 +176,61 @@ export const PREVIEWS: Record<string, Preview> = {
     rows: [['Coffee and milk', '-42.50'], ['Printer toner', '-89.99'], ['Courier to the lab', '-25.00']],
     foot: ['Balance', '842.51'],
   },
+  // 31.5 x 95 = 2,992.50; VAT 19% = 568.58; total 3,561.08
+  'office-suite': {
+    kind: 'doc', case: 0, file: 'PDF', doc: 'Invoice', number: 'From October hours', to: ['Bill to', 'Nordwind GmbH'],
+    meta: [['Currency', 'EUR']],
+    cols: ['Item', 'Qty', 'Price', 'EUR'],
+    rows: [['Unbilled hours, October', '31.5 h', '95.00', '2,992.50']],
+    totals: [['Net', '2,992.50'], ['VAT 19%', '568.58'], ['Total EUR', '3,561.08']],
+    stamp: { text: 'READY' },
+  },
+  // 4 x 86.00 = 344.00
+  'three-way-match': {
+    kind: 'table', case: 0, file: 'Report', title: 'Invoice 55120, Mill & Co', sub: 'Against PO-3381 and GRN-904. Status: exceptions',
+    cols: ['SKU BEAN-ETH-5KG', 'Units', 'USD'],
+    rows: [['Billed', '20', ''], ['Accepted on receipt', '16', ''], ['Not supported, 4 x 86.00', '4', '344.00']],
+    foot: ['Hold', '344.00'],
+  },
+  'supplier-statement-check': {
+    kind: 'table', case: 0, file: 'Report', title: 'Fresh Fields Ltd, October', sub: 'Statement 42 items, ledger 40 items, as at 31 Oct',
+    cols: ['Finding', 'GBP'],
+    rows: [['38 items match', ''], ['Only on statement', '1,240.00'], ['Only on statement', '318.50'], ['INV-7731 statement vs ledger', '960.00 / 690.00']],
+  },
+  // 38.50 x 1.2 = 46.20; 2.5 x 65 = 162.50; net 208.70; VAT 20% 41.74; 250.44
+  'work-order': {
+    kind: 'doc', case: 0, file: 'Text', doc: 'Completion report', number: 'WO-2026-0041', to: ['Customer', 'Mrs Patel, 14 Elm Road'],
+    meta: [['Job', 'Boiler pressure valve']],
+    cols: ['Line', 'Qty', 'Price', 'GBP'],
+    rows: [['Valve, cost 38.50 + 20%', '1', '46.20', '46.20'], ['Labour', '2.5 h', '65.00', '162.50']],
+    totals: [['Net', '208.70'], ['VAT 20%', '41.74'], ['Total GBP', '250.44']],
+  },
+  'packing-list': {
+    kind: 'table', case: 0, file: 'Table', title: 'Order ZAM-2211, Haus & Tisch', sub: 'Munich. Not ready to ship',
+    cols: ['SKU', 'Expected', 'Packed'],
+    rows: [['MUG-12', '48', '48'], ['PLT-27', '24', '20']],
+    foot: ['Short', 'PLT-27, 4'],
+  },
+  // 3 x 55.00 = 165.00 - 2 x 8.25 = 148.50
+  'per-diem': {
+    kind: 'table', case: 0, file: 'Table', title: 'Delegacja, Piotr', sub: 'Warsaw to Berlin, Monday 06:00 to Wednesday 20:00',
+    cols: ['Line', 'EUR'],
+    rows: [['3 days x 55.00', '165.00'], ['2 hotel breakfasts x 8.25', '-16.50']],
+    foot: ['Dieta', '148.50'],
+  },
+  // 60,000 / 0.75 = 80,000 + 12,000 = 92,000; 25 x 46 = 1,150 h; 92,000 / 1,150 = 80.00
+  'hourly-rate': {
+    kind: 'table', case: 0, file: 'Figures', title: 'Rate to keep USD 60,000', sub: '25% tax on profit, 25 h a week, 46 weeks',
+    cols: ['Line', 'USD'],
+    rows: [['Gross needed', '92,000'], ['Billable hours', '1,150']],
+    foot: ['Minimum rate', '80.00 an hour'],
+  },
+  'tax-calc': {
+    kind: 'table', case: 0, file: 'Figures', title: 'Two offers, federal tax', sub: 'Before state tax and FICA',
+    cols: ['Offer', 'After federal tax'],
+    rows: [['95,000', '82,651.00'], ['140,000', '117,333.00']],
+    foot: ['Difference a year', '34,682'],
+  },
 };
 
 const LABELS: Record<string, string> = {
@@ -184,6 +239,8 @@ const LABELS: Record<string, string> = {
   'bank-statement': 'Spend report', receipts: 'Receipt total', 'expense-tracker': 'Expense ledger', 'mileage-log': 'Mileage log',
   'loan-calculator': 'Payment table', 'dunning-letters': 'Reminder letter', docx: 'Word document',
   recurring: 'Billing schedule', 'billing-docs': 'Credit note', deposits: 'Deposit ledger', 'petty-cash': 'Cash vouchers',
+  'office-suite': 'Invoices, PDFs and more', 'three-way-match': 'Exception report', 'supplier-statement-check': 'Mismatch report',
+  'work-order': 'Completion report', 'packing-list': 'Shortfall list', 'per-diem': 'Per diem sheet', 'hourly-rate': 'Your rate', 'tax-calc': 'Take-home figures',
 };
 
 const BUYER_ORDER = [
