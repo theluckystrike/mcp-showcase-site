@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { brand } from './src/config/brand.ts';
 
 export default defineConfig({
-  site: `https://${brand.domain}`,
+  site: brand.siteUrl,
   output: 'static',
   trailingSlash: 'always',
   build: { format: 'directory', inlineStylesheets: 'auto' },

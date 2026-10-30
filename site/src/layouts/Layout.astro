@@ -22,7 +22,7 @@ interface Props {
   crumbs?: { name: string; path: string }[];
 }
 const { title, description = brand.description, jsonLd = [], ogType = 'website', noindex = false, crumbs = [] } = Astro.props;
-const site = Astro.site ?? new URL(`https://${brand.domain}`);
+const site = Astro.site ?? new URL(brand.siteUrl);
 const canonical = new URL(Astro.url.pathname, site).href;
 // QA (t-qa): titles <= 60 chars. Add the brand suffix only when it fits. Drop a sitemap suffix that makes the title too long.
 const suffix = ` | ${brand.name}`;
