@@ -35,7 +35,10 @@ if (cases.length < 3) {
 }
 const meta = seo('/', { title: `${brand.name}: ${brand.tagline}`, description: brand.description });
 // "Pick your job": the 12 top use-case pages by priority, then volume (ANGLE.md "Below the fold").
-const jobs = pagesOfType('use-case').slice(0, 12);
+// Home order: money keywords first (t-review2 defect 5), then the rest by priority and volume.
+const HOME_FIRST = ['create-invoice-in-claude', 'send-a-quote-from-chat', 'edit-excel-files-in-claude', 'merge-pdf-in-claude', 'categorize-bank-statement', 'track-billable-time-in-claude', 'chase-overdue-invoices', 'recurring-monthly-invoices'];
+const rank = (p: { path: string }) => { const i = HOME_FIRST.indexOf(p.path.split('/')[2]); return i < 0 ? 99 : i; };
+const jobs = [...pagesOfType('use-case')].sort((a, b) => rank(a) - rank(b)).slice(0, 12);
 const audiences = pagesOfType('audience');
 const strip = upsell('home', 'pricing_strip', { copy: `Free on every server. $${brand.pricing.serverUsd} once for one server. $${bundlePrice()} once for all ${st.paid}. No subscription.`, cta_url: '/pricing/' });
 const hero = upsell('home', 'hero', { copy: `Start free with no account. One $${bundlePrice()} key turns on Pro on all ${st.paid} paid servers, for life.`, cta_url: buyUrl(bundleUrl(), 'home', 'hero') });

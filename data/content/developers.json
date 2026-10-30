@@ -268,7 +268,7 @@
     ]
   },
   "architecture": {
-    "summary": "Each server is a small TypeScript program that speaks MCP. It runs on your machine over stdio, or on a hosted endpoint over streamable HTTP. The tool contract is the same on both paths.",
+    "summary": "Each server is a small TypeScript or JavaScript program that speaks MCP. It runs on your machine over stdio, or on a hosted endpoint over streamable HTTP. The tool contract is the same on both paths.",
     "points": [
       "On the local stdio path, your MCP client starts node dist/index.js. Nothing leaves your machine except calls the tool itself needs (example: currency fetches ECB rates).",
       "The local install keeps JSON files under ${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/. Writes are atomic (temp file + rename). Delete the folder to reset a server.",
