@@ -7,7 +7,11 @@ import { upsell } from '../../data/content';
 import UpsellBand from '../../components/UpsellBand.astro';
 import JobCard from '../../components/JobCard.astro';
 import { pagesOfType, seo } from '../../data/pages';
-const jobs = pagesOfType('use-case');
+import { buyerRank } from '../servers/_outputs';
+import { getServer } from '../../data/servers';
+// Buyer order (same rank as /servers/): invoice, quotes, spreadsheet, pdf first. Stable for ties.
+const rankOf = (p: { servers: string[] }) => { const s = p.servers.map((id) => getServer(id)).find((x) => x); return s ? buyerRank(s) : 999; };
+const jobs = pagesOfType('use-case').map((p, i) => ({ p, i })).sort((a, b) => rankOf(a.p) - rankOf(b.p) || a.i - b.i).map((x) => x.p);
 const answers = pagesOfType('answer');
 const meta = seo('/use-cases/', { title: 'Back-office jobs done in chat, with examples', description: 'Example scenarios for invoices, expenses, PDFs, checks and reports, done from Claude, ChatGPT or Cursor.' });
 const after = upsell('use-cases', 'after_case', { copy: 'Every example here works on the free tier. Pro removes the limits.', cta_url: buyUrl(bundleUrl(), 'use-cases', 'after_case') });
@@ -25,8 +29,8 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
       <h1 class="display mt-5 max-w-4xl">{meta.h1 || 'What you can do in chat'}</h1>
       <p class="lead mt-5 max-w-2xl">One sentence in. Real tool calls. A finished file out. {jobs.length} jobs below, then {cases.length} example scenarios across {groups.length} categories. Each one uses the real tools of a server.</p>
       {groups.length > 1 && (
-        <nav class="mt-8 flex flex-wrap gap-2" aria-label="Jump to category">
-          {groups.map((g) => <a href={`#${g.cat.id}`} class="chip cat hover:text-fg" style={`--hue:${g.cat.hue}`}><span class="dot"></span>{g.cat.short}</a>)}
+        <nav class="cat-jump mt-8" aria-label="Jump to category">
+          {groups.map((g) => <a href={`#${g.cat.id}`}>{g.cat.short}</a>)}
         </nav>
       )}
     </div>
@@ -63,3 +67,14 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
     </section>
   )}
 </Layout>
+
+<style>
+  /* Category jump row: a drawer-label strip in mono, one ink, ruled. Not 10 colored chips. */
+  .cat-jump { display: flex; flex-wrap: wrap; max-width: 52rem; border-top: 2px solid var(--text); border-bottom: 1px solid var(--border-strong); }
+  .cat-jump a {
+    font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted);
+    padding: .6rem .85rem .55rem 0; margin-right: .85rem; border-right: 1px solid var(--border); text-decoration: none; line-height: 1.2;
+  }
+  .cat-jump a:last-child { border-right: 0; }
+  .cat-jump a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+</style>

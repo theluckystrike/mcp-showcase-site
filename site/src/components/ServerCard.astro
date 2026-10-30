@@ -10,7 +10,7 @@ const price = s.satellite ? 'Free calculator' : !s.paid ? 'Free' : s.bundleOnly 
 ---
 <a href={`/servers/${s.id}/`} class="sc cat group flex h-full flex-col" style={`--hue:${cat.hue}`}>
   <span class="sc-out">{outputType(s)}</span>
-  <h3 class="mt-3 text-[1.18rem] font-semibold tracking-tight group-hover:text-accent">{s.name}</h3>
+  <h3 class="mt-3 text-[1.18rem] font-semibold group-hover:text-accent">{s.name}</h3>
   <p class="muted mt-1.5 line-clamp-3 text-[.94rem] leading-relaxed">{s.tagline}</p>
   <p class="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-4 text-[.78rem] font-medium text-faint">
     <span class="cat-text">{cat.short}</span><span>{price}</span>{s.hosted && <span>Hosted</span>}

@@ -296,7 +296,7 @@
        "does": "Prices each trip at the rate in force on its day and totals per category"
       }
      ],
-     "result": "Each trip is priced by its own date. Total: 11,240 business miles, 7,689.40 USD deductible. A second dated rate in one series is a Pro feature.",
+     "result": "Each trip is priced by its own date, for a total of 11,240 business miles and 7,689.40 USD deductible. A second dated rate in one series is Pro.",
      "minutes_saved": 45,
      "minutes_basis": "INFERRED: splitting a year of trips by rate period in a spreadsheet takes 45-60 min"
     },
@@ -833,7 +833,7 @@
        "does": "Sums hours times rate across the three entries"
       }
      ],
-     "result": "Contractor total 5,596.00 across 3 entries. The figure prints with a $ sign. The sum is the same in pounds.",
+     "result": "Contractor total 5,596.00 across 3 entries. It prints with a $ sign, but the sum is the same in pounds.",
      "minutes_saved": 5,
      "minutes_basis": "INFERRED: adding three lines in a spreadsheet takes about 5 min"
     }
@@ -1652,7 +1652,7 @@
     },
     {
      "q": "Are runs limited on the free tier?",
-     "a": "No. Runs are never capped. Free keeps 3 checklists."
+     "a": "No. Runs are never capped, and the free tier keeps 3 checklists."
     }
    ]
   },
@@ -1787,7 +1787,7 @@
     },
     {
      "q": "Can I get a PDF on the free tier?",
-     "a": "No. Free gives the email-ready text version. The A4 PDF is Pro."
+     "a": "No. Free gives you the email-ready text version, and the A4 PDF is Pro."
     }
    ]
   },
@@ -2656,7 +2656,7 @@
     },
     {
      "q": "Does it work with GBP or EUR accounts?",
-     "a": "It adds all balance amounts and shows them with a $ sign. If your account holds more than one currency, the total mixes them. Read it as a quick check, not a statement."
+     "a": "It adds all balance amounts and shows them with a $ sign. So if your account holds more than one currency, the total mixes them. Treat it as a quick check."
     }
    ]
   },
@@ -2919,7 +2919,7 @@
     },
     {
      "q": "What does Pro add?",
-     "a": "Only more saved reports. Free keeps 3. Delete one to reuse its slot."
+     "a": "Only more saved reports. Free keeps 3, and deleting one frees its slot."
     }
    ]
   },
@@ -3151,7 +3151,7 @@
     },
     {
      "q": "What does Pro change?",
-     "a": "Only the number of saved reports. Free keeps 3 at a time. Every check and export is free."
+     "a": "Only the number of saved reports. Free keeps 3 at a time, and every check and export stays free."
     }
    ]
   },
@@ -3589,7 +3589,7 @@
    "faq": [
     {
      "q": "What counts as an open work order?",
-     "a": "Any job not yet set to invoiced. On the free tier you can hold 5 open at once. Closing one gives the slot back."
+     "a": "Any job not yet set to invoiced. The free tier holds 5 open at once, and closing one gives the slot back."
     },
     {
      "q": "Does it send the invoice?",
@@ -3597,7 +3597,7 @@
     },
     {
      "q": "Can the customer sign the report?",
-     "a": "The report has a sign-off block. The PDF is Pro. The plain-text report is free."
+     "a": "The report has a sign-off block. The plain-text report is free, and the PDF is Pro."
     }
    ]
   },
@@ -3652,7 +3652,7 @@
        "does": "Reads cover_letter.txt inline without unpacking anything"
       }
      ],
-     "result": "4 entries, no flags, 2.3 MB uncompressed. The cover letter text is shown in chat. Mark then unpacks it with a dry run first.",
+     "result": "4 entries, no flags, 2.3 MB uncompressed. The cover letter text shows in chat, and then Mark unpacks it, with a dry run first.",
      "minutes_saved": 5,
      "minutes_basis": "INFERRED: unpacking into a scratch folder and checking files by hand takes about 5 min"
     },

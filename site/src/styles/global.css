@@ -338,7 +338,7 @@ html[data-mode='dark'] {
     content: counter(idx, decimal-leading-zero); grid-row: span 2; font-family: var(--font-mono); font-size: .74rem;
     font-weight: 600; letter-spacing: .06em; color: var(--stamp); font-variant-numeric: tabular-nums;
   }
-  .index-title { font-family: var(--font-display); font-stretch: 104%; font-weight: 700; font-size: 1.06rem; line-height: 1.3; letter-spacing: -.01em; color: var(--text); }
+  .index-title { font-family: var(--font-display); font-stretch: 100%; font-weight: 700; font-size: 1.06rem; line-height: 1.3; letter-spacing: 0; color: var(--text); }
   .index-text { margin: 0; color: var(--muted); font-size: .93rem; line-height: 1.5; max-width: 62ch; }
   .index-go { display: none; font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
   a.index-row:hover { background: var(--surface); }

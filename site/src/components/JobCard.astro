@@ -3,6 +3,7 @@
 import type { PageMeta } from '../data/pages';
 import { getServer } from '../data/servers';
 import { getCategory } from '../data/categories';
+import { outputType } from '../pages/servers/_outputs';
 interface Props { page: PageMeta; anchor?: string }
 const { page: p, anchor } = Astro.props;
 const first = p.servers.map((id) => getServer(id)).find((s) => s);
@@ -10,7 +11,7 @@ const cat = getCategory(first?.category ?? 'invoicing');
 ---
 <a href={p.path} class="cat group flex flex-col border-t border-line pb-5 pt-4" style={`--hue:${cat.hue}`}>
   <span class="flex items-center gap-2 text-[.72rem] font-semibold uppercase tracking-[.08em] cat-text"><span class="dot"></span>{first?.name ?? cat.short}</span>
-  <h3 class="mt-2 text-[1.08rem] font-semibold tracking-tight group-hover:text-accent">{anchor ?? p.h1}</h3>
+  <h3 class="mt-2 text-[1.08rem] font-semibold group-hover:text-accent">{anchor ?? p.h1}</h3>
   <p class="muted mt-2 line-clamp-3 text-[.92rem]">{p.meta_description}</p>
-  <span class="mt-auto pt-4 text-[.85rem] text-faint transition-colors group-hover:text-fg">Prompt, tools, result</span>
+  {first && <span class="mt-auto pt-4 font-mono text-[.72rem] font-semibold uppercase tracking-[.07em] text-muted transition-colors group-hover:text-fg">You get: {outputType(first)}</span>}
 </a>
