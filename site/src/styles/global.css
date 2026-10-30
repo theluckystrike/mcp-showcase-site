@@ -136,8 +136,10 @@ html[data-mode='dark'] {
   ::selection { background: color-mix(in oklab, var(--accent) 22%, transparent); }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
   /* Headings: Archivo, slightly wide, like the printed head of a form. */
-  h1, h2, h3 { font-family: var(--font-display); font-stretch: 108%; letter-spacing: -0.015em; line-height: 1.1; font-weight: 720; text-wrap: balance; }
-  h3 { font-stretch: 100%; font-weight: 680; letter-spacing: -0.005em; word-spacing: .06em; }
+  /* Tracking: 0 by default. Negative tracking only on large type (h1, .display, .h2), never under ~32px (d-gate round 4). */
+  h1, h2, h3 { font-family: var(--font-display); font-stretch: 108%; letter-spacing: 0; line-height: 1.1; font-weight: 720; text-wrap: balance; }
+  h1 { letter-spacing: -0.015em; }
+  h3 { font-stretch: 100%; font-weight: 680; letter-spacing: 0; word-spacing: .06em; }
   p { text-wrap: pretty; }
   code, kbd, pre { font-family: var(--font-mono); }
   a { color: inherit; text-decoration: none; }
@@ -319,7 +321,7 @@ html[data-mode='dark'] {
   html[data-mode='dark'] .stamp { mix-blend-mode: normal; }
   .stamp-blue { --ink: var(--ink-blue); }
   .stamp-violet { --ink: var(--ink-violet); }
-  .stamp-black { --ink: var(--ink-black); }
+  .stamp-black { --ink: var(--ink-black); opacity: 1; }
   /* Aliases used by d-servers: ok = PAID/SENT/READY, warn = OVERDUE. Both red by default; set the ink class for the exact state. */
   .stamp-ok, .stamp-warn { --ink: var(--stamp); }
 

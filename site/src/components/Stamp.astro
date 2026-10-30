@@ -28,7 +28,7 @@ const width = Math.round((size * W) / H);
 <svg
   class:list={['stamp-svg', land && 'stamp-land', cls]}
   width={width} height={size} viewBox={`0 0 ${W} ${H}`}
-  style={`transform: rotate(${rotate}deg); color: ${ink}`}
+  style={`transform: rotate(${rotate}deg); color: ${ink}${state === "READY" ? "; opacity: 1" : ""}`}
   role="img" aria-label={sub ? `${state}, ${sub}` : state}
 >
   <defs>
