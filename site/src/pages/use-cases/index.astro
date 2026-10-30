@@ -17,6 +17,8 @@ const meta = seo('/use-cases/', { title: 'Back-office jobs done in chat, with ex
 const after = upsell('use-cases', 'after_case', { copy: 'Every example here works on the free tier. Pro removes the limits.', cta_url: buyUrl(bundleUrl(), 'use-cases', 'after_case') });
 
 const cases = allCases();
+// One sample slip for the hero: the first invoice case (top buyer job).
+const lead = cases.find((x) => x.server.id === 'invoice');
 const groups = CATEGORIES.map((c) => ({ cat: c, items: cases.filter((x) => x.server.category === c.id) })).filter((g) => g.items.length);
 // Fallback when no content cases exist yet: README prompts per server.
 const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.length).map((s) => ({ s, p: s.tryPrompts[0] }));
@@ -24,7 +26,8 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
 <Layout title={meta.title} description={meta.description} crumbs={[{ name: 'Use cases', path: '/use-cases/' }]}>
   <section class="relative isolate overflow-hidden">
     <div class="grid-lines"></div>
-    <div class="wrap pb-10 pt-14 sm:pt-20">
+    <div class="wrap grid gap-10 pb-10 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,25rem)] lg:gap-14">
+      <div>
       <span class="eyebrow">Use cases</span>
       <h1 class="display mt-5 max-w-4xl">{meta.h1 || 'What you can do in chat'}</h1>
       <p class="lead mt-5 max-w-2xl">One sentence in. Real tool calls. A finished file out. {jobs.length} jobs below, then {cases.length} example scenarios across {groups.length} categories. Each one uses the real tools of a server.</p>
@@ -33,6 +36,8 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
           {groups.map((g) => <a href={`#${g.cat.id}`}>{g.cat.short}</a>)}
         </nav>
       )}
+      </div>
+      {lead && <aside class="hidden self-start lg:block lg:pt-10" aria-label="Example job"><CaseTurn server={lead.server} case={lead.case} showServer compact /></aside>}
     </div>
   </section>
   <section class="wrap py-10">

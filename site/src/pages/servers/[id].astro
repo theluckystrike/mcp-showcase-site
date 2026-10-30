@@ -97,7 +97,7 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
               )}
             </div>
             <p class="mt-3 text-[.86rem] text-faint">
-              {single ? <>Free tier needs no key. <a href="#pricing" class="link">See the exact limits</a>.</> : s.bundleOnly ? <>One key unlocks {paidCount} paid servers. <a href="#pricing" class="link">What's included</a>.</> : <>Free. No paid tier, no key. {s.satellite && s.repo && <a href={s.repo} rel="noopener" class="link">Source on GitHub</a>}</>}
+              {single ? <>Free tier needs no key. <a href="#pricing" class="link">See the exact limits</a>.</> : s.bundleOnly ? <>One key turns on Pro for all {paidCount} paid servers. <a href="#pricing" class="link">What's included</a>.</> : <>Free. No paid tier, no key. {s.satellite && s.repo && <a href={s.repo} rel="noopener" class="link">Source on GitHub</a>}</>}
             </p>
           </div>
           <div class="lg:col-start-2 lg:row-start-1 lg:row-span-2">

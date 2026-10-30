@@ -66,7 +66,7 @@
   },
   "/use-cases/chase-overdue-invoices/": {
    "intro": "Late payers are the most common cash problem in a small business. So you need three things: who to chase today, the right letter for how late they are, and a statement showing every open invoice.",
-   "without_tool": "Claude writes a polite or firm reminder well if you give it the facts. It doesn't know which invoices are late today, what you already sent, or how much was part-paid. You have to keep that list yourself and paste it in each time.",
+   "without_tool": "Claude writes a polite or firm reminder well if you give it the facts. But it doesn't know which invoices are late today, what you already sent, or how much was part-paid. So you keep that list yourself and paste it in every time.",
    "with_tool": "Dunning Letters keeps each unpaid invoice, records part payments and letters sent, and tells you which invoices cross a stage today. Statement of Account builds a per-client statement with aging buckets and writes it as an A4 PDF or email text.",
    "example": {
     "persona": "Office manager at an IT support firm",
@@ -95,7 +95,7 @@
    "answer": "Claude can write good reminder letters, but it can't see who is late today. Connect Dunning Letters to keep the chase list and letter stages, and Statement of Account to send a per-client statement PDF with aging. Both have a free tier with no key."
   },
   "/use-cases/categorize-bank-statement/": {
-   "intro": "A month of bank lines needs categories before the accountant asks. Claude can sort a pasted statement once. Store the lines with rules and next month sorts itself.",
+   "intro": "A month of bank lines needs categories before the accountant asks. Claude sorts a pasted statement once. Store the lines with your category rules, and next month's lines sort themselves.",
    "without_tool": "Paste a CSV into Claude and it will suggest a category for each line in that chat. Long statements can hit the context limit, the categories aren't saved, and next month you start again with no rules and no history to compare.",
    "with_tool": "Bank Statement imports the bank CSV into a stored ledger, applies your category rules to every line, and lets you set one-off categories by id. It finds recurring charges, summarizes spend by category and month, and exports a CSV or JSON file for your accountant.",
    "example": {
@@ -160,7 +160,7 @@
   },
   "/use-cases/log-expenses-and-receipts/": {
    "intro": "Receipts get lost, and you can't reclaim VAT you can't prove. Sole traders and small teams do better logging each expense the moment it happens, with the receipt attached and the VAT already split.",
-   "without_tool": "Claude can read a receipt photo and tell you the merchant, amount and VAT. It doesn't keep a ledger, so each expense lives only in that chat. There's no running total, no project tag that lasts, and no export at month end.",
+   "without_tool": "Claude can read a receipt photo and tell you the merchant, amount and VAT. It doesn't keep a ledger, though. Each expense lives only in that chat, with no running total, no project tag that lasts and no export at month end.",
    "with_tool": "Expense Tracker stores each expense with its net and VAT split, category, merchant and project, attaches the receipt file, and totals by category, project or month. It exports to CSV, XLSX or JSON, and turns billable expenses into invoice lines.",
    "example": {
     "persona": "Event planner",
@@ -242,7 +242,7 @@
     "Merging in the wrong order and sending a pack that starts with page 3.",
     "Rotating a scan in a viewer, which doesn't save the rotation in the file."
    ],
-   "answer": "Claude can read PDFs, but in most chat apps it can't write a new one. Connect the PDF server and Claude merges, splits, reorders, rotates and stamps PDFs and returns the new file. Run it locally with npx if the files must stay on your machine."
+   "answer": "Claude can read PDFs, but in most chat apps it can't write a new one. Connect the PDF server and Claude merges, splits, reorders, rotates and stamps PDFs, then hands back the new file. Need the files to stay on your machine? Run it locally with npx."
   },
   "/use-cases/create-word-document-in-claude/": {
    "intro": "Clients still want a .docx they can edit and track changes in. If you draft in Claude and then spend 20 minutes pasting into Word and fixing headings, read on.",
@@ -930,8 +930,8 @@
   },
   "/can-claude/make-a-pdf/": {
    "intro": "Claude.ai can make a PDF with file creation on. Other chat apps need a tool. These are the three PDF jobs people search for most: an invoice PDF, a business document PDF, and editing an existing PDF.",
-   "without_tool": "In Claude.ai with code execution and file creation turned on, Claude can generate a PDF in its sandbox. In Claude Desktop, Cursor or VS Code without a tool, it gives you text only. In no case does it remember invoice numbers or your business details between chats.",
-   "with_tool": "Invoice writes numbered A4 invoice PDFs. Billing Docs writes purchase order and credit note PDFs in the same layout. The PDF server merges, splits, stamps and watermarks existing PDFs. Each tool returns the path of the new PDF.",
+   "without_tool": "In Claude.ai with code execution and file creation turned on, Claude can generate a PDF in its sandbox. In Claude Desktop, Cursor or VS Code without a tool, you get text only. And it never remembers invoice numbers or your business details between chats.",
+   "with_tool": "Invoice writes numbered A4 invoice PDFs. Billing Docs writes purchase order and credit note PDFs in the same layout, and the PDF server merges, splits, stamps and watermarks the PDFs you already have. Each tool returns the path of the new file.",
    "example": {
     "persona": "Freelance bookkeeper",
     "prompt": "Stamp PAID in green across invoices/INV-0091.pdf, then add my business name and VAT id to the footer of every page.",
