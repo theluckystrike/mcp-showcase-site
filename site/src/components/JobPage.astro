@@ -1,5 +1,5 @@
 ---
-import OutputPreview from './OutputPreview.astro';
+import ServerOutput from './ServerOutput.astro';
 // The money page template (t-angle ANGLE.md "Page template for a use-case page"):
 // H1 = the job, 40-word answer, Example (prompt -> tool calls -> result), connect in 1 minute, free vs Pro with source,
 // buy + bundle buttons, related jobs, audience page, FAQ. Used by /use-cases/<job>/, /can-claude/<x>/, /can-chatgpt/<x>/.
@@ -83,7 +83,7 @@ if (main && ex) {
       ...(ex.case.result ? [{ '@type': 'HowToStep', name: 'Result', text: ex.case.result }] : []),
     ],
   });
-  jsonLd.push({ '@context': 'https://schema.org', '@type': 'SoftwareApplication', '@id': new URL(`/servers/${main.id}/#app`, Astro.site).href, name: main.name, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude, Cursor, VS Code, Windsurf', offers: [{ '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free tier' }, ...(single ? [{ '@type': 'Offer', price: String(main.priceUsd), priceCurrency: 'USD', name: 'Pro, one-time' }] : [])] });
+  jsonLd.push({ '@context': 'https://schema.org', '@type': 'SoftwareApplication', '@id': new URL(`/servers/${main.id}/#app`, Astro.site).href, name: main.name, applicationCategory: 'BusinessApplication', operatingSystem: 'Claude Desktop, Claude Code, Cursor (MCP clients)', offers: [{ '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free tier' }, ...(single ? [{ '@type': 'Offer', price: String(main.priceUsd), priceCurrency: 'USD', name: 'Pro, one-time' }] : [])] });
 }
 // Meta description: with jobs.json, whole sentences of the page's own answer up to about 160 characters
 // (the 5 answer pages share one generic sitemap meta). Otherwise the old rule.
@@ -94,7 +94,7 @@ for (const x of (job?.answer ?? '').split(/(?<=[.!?])\s+/)) {
 }
 const description = (kind === 'answer' && jobMeta) || (kind === 'answer' && main ? answer.replace(' Then ask in plain words.', '') : p.meta_description);
 const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { name: 'Answers', path: '/use-cases/#answers' };
-const mainHasOutput = !!main && (main.id === 'invoice' || main.cases.some((c) => /\b(PDF|DOCX|Word|Excel|XLSX|CSV)\b/i.test(c.result ?? '')));
+const mainHasOutput = !!main && main.cases.length > 0;
 ---
 <Layout title={p.title} description={description} jsonLd={jsonLd} ogType="article" crumbs={[hub, { name: p.h1, path: p.path }]}>
   <div class="cat" style={`--hue:${cat.hue}`}>
@@ -120,7 +120,8 @@ const mainHasOutput = !!main && (main.id === 'invoice' || main.cases.some((c) =>
           </div>
           {main && mainHasOutput ? (
             <div class="lg:pt-4">
-              <div class="rounded-2xl p-4 sm:p-6" style="background: var(--bg-2)"><OutputPreview server={main} /></div>
+              <p class="mb-3 text-[.72rem] font-bold uppercase tracking-[.12em] text-faint">What you get</p>
+              <ServerOutput server={main} />
               <p class="muted mt-4 text-[.9rem]">{single ? `Free to start. ${main.name} Pro is $${main.priceUsd} once.` : main.bundleOnly ? `Sold as the $${bundlePrice()} bundle.` : `${main.name} is free.`} <a href="#pricing" class="link">Free vs Pro</a></p>
             </div>
           ) : main && (
@@ -142,11 +143,11 @@ const mainHasOutput = !!main && (main.id === 'invoice' || main.cases.some((c) =>
       <section class="wrap py-10">
         <h2 class="text-2xl font-semibold sm:text-3xl">Without a tool, and with the tool</h2>
         <div class="mt-6 grid gap-4 md:grid-cols-2">
-          <div class="card p-5">
+          <div class="border-t-2 border-line-strong pt-4">
             <h3 class="text-[.72rem] font-semibold uppercase tracking-[.08em] text-faint">Without a tool</h3>
             <p class="muted mt-2">{job.without_tool}</p>
           </div>
-          <div class="card p-5">
+          <div class="border-t-2 border-fg pt-4">
             <h3 class="text-[.72rem] font-semibold uppercase tracking-[.08em] cat-text">With {servers.map((s) => s.name).join(' and ')}</h3>
             <p class="mt-2">{job.with_tool}</p>
           </div>
@@ -190,7 +191,7 @@ const mainHasOutput = !!main && (main.id === 'invoice' || main.cases.some((c) =>
     {main && main.paid && (
       <section id="pricing" class="wrap py-12">
         <h2 class="text-2xl font-semibold sm:text-3xl">Free vs Pro for {main.name}</h2>
-        <div class="mt-6 card overflow-x-auto">
+        <div class="mt-6 overflow-x-auto border-y-2 border-fg">
           <table class="table">
             <thead><tr><th scope="col">Free ($0, no key)</th><th scope="col">Pro (${single ? main.priceUsd : bundlePrice()} once)</th></tr></thead>
             <tbody>
@@ -211,7 +212,7 @@ const mainHasOutput = !!main && (main.id === 'invoice' || main.cases.some((c) =>
     )}
 
     <section class="wrap py-12">
-      <h2 class="text-2xl font-semibold sm:text-3xl">FAQ</h2>
+      <h2 class="text-2xl font-semibold sm:text-3xl">Questions</h2>
       <div class="mt-6 max-w-3xl"><Faq items={faq} /></div>
     </section>
 

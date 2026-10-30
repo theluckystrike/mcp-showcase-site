@@ -11,12 +11,17 @@ export const brand = {
   tagline: 'Do your back office in chat.',
   description:
     'MCP servers that turn Claude, Cursor and other MCP clients into a back office: real PDFs, invoices, checks and reports. Run locally or paste one URL.',
-  // Accent colors. Category colors live in src/data/categories.ts.
+  // Identity colors (d-identity, agents/d-identity/BRANDKIT.md). Pages use the CSS tokens, not these values.
+  // These are for places without CSS: og image, manifest, theme-color. Category colors live in src/data/categories.ts.
   colors: {
-    accent: '#8b5cf6',
-    accent2: '#22d3ee',
-    accent3: '#f472b6',
+    paper: '#eef0ea', // ledger stock, light bg
+    carbon: '#10141f', // carbon paper, dark bg
+    graphite: '#1a1d22', // text
+    accent: '#2b3c9e', // carbon blue: actions, links
+    stamp: '#b42318', // stamp-pad red: state stamps, the mark
+    manila: '#ebddb4', // folder card
   },
+  fonts: { display: 'Archivo', text: 'Public Sans', mono: 'IBM Plex Mono' },
   // Existing backend. Do not build new checkout (BRIEF section 2).
   backend: {
     origin: 'https://mcp.zovo.one',
@@ -31,6 +36,8 @@ export const brand = {
     registry: 'https://registry.modelcontextprotocol.io/v0.1/servers?search=theluckystrike',
   },
   pricing: { serverUsd: 19, bundleUsd: 39 },
+  // GA4 property 561638567 (account Portfolio sites), web stream www.mcpstamp.com. Created 2026-10-30 by the orchestrator.
+  analytics: { ga4: 'G-KDB103CDCZ' },
 } as const;
 
 export type Brand = typeof brand;

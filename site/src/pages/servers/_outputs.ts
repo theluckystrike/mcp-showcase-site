@@ -146,6 +146,35 @@ export const PREVIEWS: Record<string, Preview> = {
     rows: [['Scope', 'Dashboard rebuild'], ['Deliverables', '3'], ['Timeline', '6 weeks']],
     totals: [['Price USD', '9,600']],
   },
+  // 950 + 20% VAT = 1,140.00
+  recurring: {
+    kind: 'table', case: 0, file: 'Schedule', title: 'Retainer, Harbour Dental', sub: 'Bills on the 1st of every month from November, due in 14 days',
+    cols: ['Line', 'GBP'],
+    rows: [['Retainer', '950.00'], ['VAT 20%', '190.00']],
+    foot: ['Each month', '1,140.00'],
+  },
+  // 2 x 180 = 360.00; 23% = 82.80; 442.80
+  'billing-docs': {
+    kind: 'doc', case: 0, file: 'Text', doc: 'Credit note', number: 'Against INV-2026-0031', to: ['Reason', 'Hosting setup not needed'],
+    meta: [['Currency', 'PLN']],
+    cols: ['Item', 'Qty', 'Price', 'PLN'],
+    rows: [['Hours credited', '2', '180.00', '360.00']],
+    totals: [['Net', '360.00'], ['VAT 23%', '82.80'], ['Credit PLN', '442.80']],
+  },
+  // 3,000 - 1,850 = 1,150
+  deposits: {
+    kind: 'table', case: 0, file: 'Table', title: 'Deposit, Klein BV', sub: 'Retainer applied to INV-2026-0044',
+    cols: ['Movement', 'EUR'],
+    rows: [['Retainer received', '3,000.00'], ['Applied to INV-2026-0044', '-1,850.00']],
+    foot: ['Left on deposit', '1,150.00'],
+  },
+  // 1,000 - 42.50 - 89.99 - 25.00 = 842.51
+  'petty-cash': {
+    kind: 'table', case: 0, file: 'Table', title: 'Petty cash float', sub: 'Custodian Beata, imprest 1,000 PLN',
+    cols: ['Voucher', 'PLN'],
+    rows: [['Coffee and milk', '-42.50'], ['Printer toner', '-89.99'], ['Courier to the lab', '-25.00']],
+    foot: ['Balance', '842.51'],
+  },
 };
 
 const LABELS: Record<string, string> = {
@@ -153,6 +182,7 @@ const LABELS: Record<string, string> = {
   'time-tracker': 'Timesheet CSV', payroll: 'Pay estimate', spreadsheet: 'Table from your file', pdf: 'Stamped PDF',
   'bank-statement': 'Spend report', receipts: 'Receipt total', 'expense-tracker': 'Expense ledger', 'mileage-log': 'Mileage log',
   'loan-calculator': 'Payment table', 'dunning-letters': 'Reminder letter', docx: 'Word document',
+  recurring: 'Billing schedule', 'billing-docs': 'Credit note', deposits: 'Deposit ledger', 'petty-cash': 'Cash vouchers',
 };
 
 const BUYER_ORDER = [

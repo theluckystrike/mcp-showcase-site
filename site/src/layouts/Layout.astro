@@ -114,6 +114,28 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
       try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; if (localStorage.getItem('mode') === 'dark') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#151412'); } catch (e) {}
     </script>
     <script type="application/ld+json" set:html={graphJson} />
+    {brand.analytics?.ga4 && (
+      <script is:inline define:vars={{ ga4: brand.analytics.ga4 }}>
+        // GA4, loaded after window load so it never delays first paint. Buy and support clicks become events.
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', ga4);
+        addEventListener('load', function () {
+          var s = document.createElement('script'); s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4; document.head.appendChild(s);
+        });
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
+          var h = a.href;
+          if (h.indexOf('mcp.zovo.one/buy/') > -1) {
+            var u = new URL(h); gtag('event', 'begin_checkout', { item_id: u.pathname.split('/').pop(), slot: u.searchParams.get('src') || '' });
+          } else if (/buymeacoffee\.com|paypal\.me|t\.me\/|github\.com\/theluckystrike/.test(h)) {
+            gtag('event', 'support_click', { link_url: h });
+          }
+        });
+      </script>
+    )}
   </head>
   <body>
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 btn btn-sm">Skip to content</a>

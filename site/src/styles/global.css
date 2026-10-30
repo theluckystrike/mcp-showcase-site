@@ -318,6 +318,8 @@ html[data-mode='dark'] {
   .stamp-blue { --ink: var(--ink-blue); }
   .stamp-violet { --ink: var(--ink-violet); }
   .stamp-black { --ink: var(--ink-black); }
+  /* Aliases used by d-servers: ok = PAID/SENT/READY, warn = OVERDUE. Both red by default; set the ink class for the exact state. */
+  .stamp-ok, .stamp-warn { --ink: var(--stamp); }
 
   /* Wordmark: "Mcp" quiet, "Stamp" in heavy wide Archivo. */
   .wordmark { font-family: var(--font-display); font-weight: 800; font-stretch: 112%; letter-spacing: -0.02em; font-size: 1.12rem; line-height: 1; }

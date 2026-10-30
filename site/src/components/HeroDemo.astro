@@ -5,6 +5,7 @@
 // Numbers: data/content/a.json, invoice case 1 "Bill a client in one message" (12 h x 90 + 300 setup, 23% VAT, 14 days).
 // Turn 2 uses invoice_mark_paid (invoice case 3, servers/invoice/src/index.ts:769, sets status "paid"). Labeled Example.
 import { getServer } from '../data/servers';
+import Stamp from './Stamp.astro';
 
 const s = getServer('invoice');
 const c = s?.cases[0];
@@ -70,10 +71,8 @@ const due = '13 Nov 2026';
         <dt class="tot">Total EUR</dt><dd class="tot">{fmt(total)}</dd>
       </dl>
       <p class="doc-foot">invoice_pdf, A4. Free tier adds a "Generated with mcp-invoice" line.</p>
-      <div class="stamp-big" aria-label="Stamped paid">
-        <span class="s-word">Paid</span>
-        <span class="s-small">{issued} &middot; invoice_mark_paid</span>
-      </div>
+      <div class="stamp-pos"><Stamp state="PAID" sub="30 OCT 2026" size={74} rotate={-9} /></div>
+      <p class="doc-status"><span>Status</span> paid in full, by <code>invoice_mark_paid</code></p>
     </article>
   </div>
 </div>
@@ -150,36 +149,29 @@ const due = '13 Nov 2026';
   @media (min-width: 640px) { .doc-sum .tot { font-size: 1.15rem; } }
   .doc-foot { margin: .8rem 0 0; font-size: .66rem; color: var(--muted); font-family: var(--font-mono); }
 
-  /* The stamp: rubber-ink impression with uneven ink (SVG noise mask), the date and the tool that closed the work */
-  .stamp-big {
-    position: absolute; left: 7%; bottom: 3.1rem; display: grid; justify-items: center; gap: .05rem;
-    padding: .3rem .8rem .35rem; border: 3px solid var(--stamp); border-radius: .4rem;
-    outline: 1.5px solid var(--stamp); outline-offset: 2px;
-    color: var(--stamp); transform: rotate(-11deg); transform-origin: 50% 50%;
-    mix-blend-mode: multiply; opacity: .92; pointer-events: none;
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 1.75'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 1.75'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  :global(html[data-mode='dark']) .stamp-big { mix-blend-mode: normal; }
-  .s-word { font-weight: 850; font-size: 2.1rem; line-height: 1; letter-spacing: .16em; text-transform: uppercase; margin-right: -.16em; }
-  @media (min-width: 640px) { .s-word { font-size: 2.9rem; } .stamp-big { left: 9%; bottom: 3.4rem; } }
-  .s-small { font-family: var(--font-mono); font-size: .56rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
+  /* The stamp (d-identity Stamp.astro): sits over the line items, like a real PAID mark */
+  .stamp-pos { position: absolute; left: 6%; top: 42%; pointer-events: none; transform-origin: 50% 50%; }
+  .stamp-pos :global(svg) { height: 4rem; width: auto; opacity: .92; }
+  @media (min-width: 640px) { .stamp-pos { left: 10%; top: 40%; } .stamp-pos :global(svg) { height: 5.4rem; } }
+  .doc-status { margin: .55rem 0 0; font-size: .72rem; color: var(--stamp); font-weight: 600; }
+  .doc-status span { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-right: .35rem; }
+  .doc-status code { font-family: var(--font-mono); font-weight: 600; }
 
   /* Motion. Rest state = final state. Plays once. */
   @media (prefers-reduced-motion: no-preference) {
     .calls li .tick { animation: d-tick .45s cubic-bezier(.3, 1.6, .5, 1) backwards; animation-delay: var(--d); }
     .calls li code { animation: d-ink .5s ease-out backwards; animation-delay: var(--d); }
     .doc { animation: d-feed .7s cubic-bezier(.2, .8, .2, 1) .55s backwards; }
-    .stamp-big { animation: d-stamp .42s cubic-bezier(.5, 0, .7, 1.4) 1.75s backwards; }
+    .stamp-pos { animation: d-stamp .42s cubic-bezier(.5, 0, .7, 1.4) 1.75s backwards; }
     .doc-wrap { animation: d-thud .25s ease-out 2.15s 1; }
   }
   @keyframes d-tick { from { transform: scale(.3); background: var(--border-strong); } }
   @keyframes d-ink { from { color: var(--muted); } }
   @keyframes d-feed { from { transform: translateY(14px); } }
   @keyframes d-stamp {
-    0% { transform: rotate(-4deg) scale(2.1); opacity: .3; }
-    80% { transform: rotate(-11deg) scale(.97); opacity: .95; }
-    100% { transform: rotate(-11deg) scale(1); opacity: .92; }
+    0% { transform: rotate(5deg) scale(2.1); opacity: .3; }
+    80% { transform: scale(.97); opacity: 1; }
+    100% { transform: none; opacity: 1; }
   }
   @keyframes d-thud { 40% { transform: translateY(2px); } }
 </style>

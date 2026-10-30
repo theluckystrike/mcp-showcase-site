@@ -1,234 +1,134 @@
 ---
+// Home (d-home, wave 5). One signature moment: a chat prompt becomes a numbered invoice, and the PAID stamp lands
+// when invoice_mark_paid finishes (HeroDemo). Below it: the six jobs buyers search for as a file index, free vs paid
+// as a receipt, a short developer strip, the Telegram invite and one closing action.
+// Buy CTAs on this page: 2 (hero2, pricing) plus the sticky bar. Every other button is free.
 import Layout from '../layouts/Layout.astro';
 import HeroDemo from '../components/HeroDemo.astro';
-import OutputPreview from '../components/OutputPreview.astro';
-import InvoicePreview from '../components/InvoicePreview.astro';
-import ServerCard from '../components/ServerCard.astro';
-import CaseTurn from '../components/CaseTurn.astro';
-import SectionHead from '../components/SectionHead.astro';
+import HomeJobs from '../components/HomeJobs.astro';
+import HomePricing from '../components/HomePricing.astro';
 import StickyCta from '../components/StickyCta.astro';
+import TelegramCta from '../components/TelegramCta.astro';
 import { brand } from '../config/brand';
-import { CATEGORIES } from '../data/categories';
-import { getServers, getServer, getServersByCategory, allCases, stats, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
-import { upsell } from '../data/content';
-import UpsellBand from '../components/UpsellBand.astro';
-import JobCard from '../components/JobCard.astro';
-import { pagesOfType, seo } from '../data/pages';
+import { stats, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
+import { seo } from '../data/pages';
 import { CLIENTS } from '../data/content';
 
 const st = stats();
-const servers = getServers();
-const featuredIds = ['invoice', 'time-tracker', 'pdf', 'expense-tracker', 'quotes', 'bank-statement'];
-const pdfServer = getServer('pdf');
-const featured = featuredIds.map((id) => getServer(id)).filter((s) => s !== undefined);
-
-// Case examples: content cases first; fallback to README "Try it" prompts (prompt only, no invented results).
-let cases = allCases().filter((x) => x.case.steps.length > 0 && x.case.result);
-const seen = new Set<string>();
-cases = cases.filter((x) => (seen.has(x.server.id) ? false : (seen.add(x.server.id), true))).slice(0, 3);
-if (cases.length < 3) {
-  for (const s of featured) {
-    if (cases.length >= 3) break;
-    if (cases.some((x) => x.server.id === s.id) || !s.tryPrompts[0]) continue;
-    cases.push({ server: s, case: { title: `Ask ${s.name}`, prompt: s.tryPrompts[0], steps: s.topTools.slice(0, 2).map((t) => ({ tool: t.name, does: t.plain })) } });
-  }
-}
 const meta = seo('/', { title: `${brand.name}: ${brand.tagline}`, description: brand.description });
-// "Pick your job": the 12 top use-case pages by priority, then volume (ANGLE.md "Below the fold").
-// Home order: money keywords first (t-review2 defect 5), then the rest by priority and volume.
-const HOME_FIRST = ['create-invoice-in-claude', 'send-a-quote-from-chat', 'edit-excel-files-in-claude', 'merge-pdf-in-claude', 'categorize-bank-statement', 'track-billable-time-in-claude', 'chase-overdue-invoices', 'recurring-monthly-invoices'];
-const rank = (p: { path: string }) => { const i = HOME_FIRST.indexOf(p.path.split('/')[2]); return i < 0 ? 99 : i; };
-const jobs = [...pagesOfType('use-case')].sort((a, b) => rank(a) - rank(b)).slice(0, 12);
-const audiences = pagesOfType('audience');
-const strip = upsell('home', 'pricing_strip', { copy: `Free on every server. $${brand.pricing.serverUsd} once for one server. $${bundlePrice()} once for all ${st.paid}. No subscription.`, cta_url: '/pricing/' });
-const hero = upsell('home', 'hero', { copy: `Start free with no account. One $${bundlePrice()} key turns on Pro on all ${st.paid} paid servers, for life.`, cta_url: buyUrl(bundleUrl(), 'home', 'hero') });
-const afterCases = upsell('home', 'after_cases', { copy: 'These examples run on the free tier. Pro removes the free-tier limits.', cta_url: buyUrl(bundleUrl(), 'home', 'after_cases') });
-const bento = CATEGORIES.map((c) => ({ ...c, count: getServersByCategory(c.id).length, names: getServersByCategory(c.id).slice(0, 4).map((s) => s.name) }));
-const marquee = [...servers, ...servers];
+const h1 = meta.h1 ? `${meta.h1}.` : brand.tagline;
+const JOB_PATHS = [
+  ['Create an invoice', '/use-cases/create-invoice-in-claude/'],
+  ['Send a quote', '/use-cases/send-a-quote-from-chat/'],
+  ['Work in an Excel file', '/use-cases/edit-excel-files-in-claude/'],
+  ['Merge PDFs', '/use-cases/merge-pdf-in-claude/'],
+  ['Sort a bank CSV', '/use-cases/categorize-bank-statement/'],
+  ['Turn hours into an invoice', '/use-cases/track-billable-time-in-claude/'],
+];
+const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
 ---
 <Layout
   title={meta.title}
   description={meta.description}
-  jsonLd={[{ '@context': 'https://schema.org', '@type': 'ItemList', name: 'Back-office jobs you can do in chat', numberOfItems: jobs.length,
-    itemListElement: jobs.map((j, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(j.path, Astro.site).href, name: j.h1 })) }]}
+  jsonLd={[{ '@context': 'https://schema.org', '@type': 'ItemList', name: 'Back-office jobs you can do in chat', numberOfItems: JOB_PATHS.length,
+    itemListElement: JOB_PATHS.map(([name, path], i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(path, Astro.site).href, name })) }]}
 >
-  <!-- HERO -->
-  <section class="relative isolate overflow-hidden">
-    <div class="glow-bg"></div>
+  <!-- HERO: the signature moment -->
+  <section class="hero relative isolate overflow-hidden">
     <div class="grid-lines"></div>
-    <div class="wrap grid items-center gap-10 pb-14 pt-10 sm:pt-16 lg:grid-cols-[1fr_1.02fr] lg:gap-14 lg:pb-20 lg:pt-20">
-      <div>
-        <span class="eyebrow">For Claude, Cursor and any MCP client</span>
-        <h1 class="display mt-5">{meta.h1 ? `${meta.h1}.` : brand.tagline}</h1>
-        <p class="lead mt-5 max-w-xl">
-          Ask Claude or Cursor for an invoice, a bank summary or a merged PDF. You get the real file, numbered and ready to send, not a draft to copy. Paste one URL and start free.
+    <div class="wrap grid items-center gap-7 pb-14 pt-7 sm:pt-12 lg:grid-cols-[minmax(0,.86fr)_minmax(0,1.14fr)] lg:gap-12 lg:pb-20 lg:pt-16">
+      <div class="hero-copy">
+        <h1 class="display">{h1}</h1>
+        <p class="lead mt-4 sm:mt-5">Type the job in Claude or Cursor. Get the numbered invoice, quote or PDF back as a real file, then mark it paid when the money lands.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/connect/" class="btn btn-primary">Connect free in 1 minute</a>
+          <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn hidden sm:inline-flex">All {st.paid} paid servers, ${bundlePrice()} once</a>
+        </div>
+        <p class="docket mt-7 hidden sm:block">
+          <span>{st.servers} servers</span><span>{st.tools} tools</span><span>{st.hosted} at one URL</span><span>free tier, no key</span>
         </p>
-        <div class="mt-7 flex flex-wrap gap-3">
-          <a href="/connect/" class="btn btn-primary">Connect free in 1 minute
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14m-6-6l6 6-6 6"/></svg>
-          </a>
-          <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn">All {st.paid} paid servers, ${bundlePrice()} once</a>
-        </div>
-        <p class="mt-4 hidden max-w-xl text-[.9rem] text-faint sm:block">{hero.copy}</p>
-        <ul class="mt-10 hidden max-w-xl gap-4 border-t border-line pt-6 sm:grid sm:grid-cols-3">
-          <li><p class="tnum text-2xl font-semibold tracking-tight sm:text-3xl">{st.servers}</p><p class="muted text-[.85rem]">servers, {st.tools} tools, each listed with its real name and an example</p></li>
-          <li><p class="tnum text-2xl font-semibold tracking-tight sm:text-3xl">{st.hosted}</p><p class="muted text-[.85rem]">run at one URL. Free token, no key, 600 calls an hour</p></li>
-          <li><p class="tnum text-2xl font-semibold tracking-tight sm:text-3xl">${brand.pricing.serverUsd} / ${bundlePrice()}</p><p class="muted text-[.85rem]">pay once per server, or once for all {st.paid} paid. No subscription</p></li>
-        </ul>
+        <p class="works mt-3 hidden sm:block">Works in {clients.map((c, i) => (<><a href={`/connect/${c.slug}/`}>{c.name}</a>{i < clients.length - 1 ? ', ' : ''}</>))} and <a href="/connect/paste-a-url/">any MCP client</a>.</p>
       </div>
-      <HeroDemo serverId="invoice" />
+      <HeroDemo />
     </div>
   </section>
 
-  <!-- PICK YOUR JOB -->
-  <section class="section">
+  <!-- JOBS: file index -->
+  <section id="jobs" class="section pt-6 sm:pt-10">
     <div class="wrap">
-      <SectionHead eyebrow="Pick your job" title="What do you want done today?" lead="Each page shows the prompt, the tools it calls and the file you get." />
-      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{jobs.map((j) => <JobCard page={j} />)}</div>
-      <div class="mt-8 flex flex-wrap items-center gap-2">
-        <span class="mr-2 text-sm font-semibold">For:</span>
-        {audiences.map((a) => <a href={a.path} class="chip hover:text-fg">{a.h1}</a>)}
-        <a href="/use-cases/" class="link ml-2">All use cases</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- WORKS IN -->
-  <section class="border-y border-line py-8">
-    <div class="wrap flex flex-wrap items-center gap-x-8 gap-y-3">
-      <span class="text-sm font-semibold uppercase tracking-[.08em] text-faint">Works in</span>
-      {CLIENTS.filter((c) => c.slug !== 'chatgpt').map((c) => <a href={`/connect/${c.slug}/`} class="text-lg font-semibold tracking-tight text-muted hover:text-fg">{c.name}</a>)}
-      <a href="/connect/paste-a-url/" class="text-lg font-semibold tracking-tight text-muted hover:text-fg">any MCP client</a>
-    </div>
-  </section>
-
-  <!-- WHAT YOU GET -->
-  <section id="what-you-get" class="section pb-0">
-    <div class="wrap grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-      <div class="reveal">
-        <span class="eyebrow">What you get</span>
-        <h2 class="h2 mt-4">A file you can send, not a table to copy.</h2>
-        <p class="lead mt-4">Claude on its own writes text. With a server connected it keeps your data between chats and hands back the finished file.</p>
-        <ul class="mt-6 grid gap-3 text-[.98rem]">
-          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span><span>Numbered invoices as an A4 PDF, VAT worked out. <a href="/servers/invoice/" class="link">Invoice</a></span></li>
-          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span><span>Several PDFs merged into one, in the order you say. <a href="/servers/pdf/" class="link">PDF</a></span></li>
-          <li class="flex gap-3"><span class="text-accent" aria-hidden="true">&#10003;</span><span>A month of hours as a CSV for your accountant. <a href="/servers/time-tracker/" class="link">Time Tracker</a></span></li>
-        </ul>
-      </div>
-      {pdfServer && <div class="reveal rounded-2xl p-4 sm:p-8" style="background: var(--bg-2)"><OutputPreview server={pdfServer} /></div>}
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="section">
-    <div class="wrap">
-      <SectionHead eyebrow="How it works" title="No new app to learn." lead="The servers plug into Claude, Cursor or any MCP client. You keep talking. They do the paperwork." />
-      <ol class="mt-12 grid gap-4 md:grid-cols-3">
-        {[
-          { n: '01', t: 'Connect once', d: 'Paste one hosted URL with a free token, or install locally with npx or a .mcpb file.' },
-          { n: '02', t: 'Ask in plain words', d: '"Invoice Acme for 12 hours." The AI picks the right tool and fills in the fields.' },
-          { n: '03', t: 'Get a real result', d: 'A PDF, a Word file, a CSV or a report, ready to send. A local install saves it on your machine.' },
-        ].map((x) => (
-          <li class="card reveal p-6">
-            <span class="tnum text-sm font-semibold text-accent">{x.n}</span>
-            <h3 class="mt-3 text-xl font-semibold">{x.t}</h3>
-            <p class="muted mt-2">{x.d}</p>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
-
-  <!-- BENTO CATEGORIES -->
-  <section id="categories" class="section pt-0">
-    <div class="wrap">
-      <SectionHead eyebrow="Categories" title="A whole back office, one job at a time." lead={`${st.servers} servers in ${CATEGORIES.length} areas. Pick the job you do every week.`} />
-      <div class="mt-12 grid auto-rows-[minmax(11rem,auto)] gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {bento.map((c, i) => (
-          <a href={`/categories/${c.id}/`} class:list={['card card-hover cat reveal group relative flex flex-col overflow-hidden p-6', i === 0 && 'lg:col-span-2 lg:row-span-2', i === 1 && 'lg:col-span-2']} style={`--hue:${c.hue}`}>
-            <div class="flex items-center justify-between">
-              <span class="cat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={c.icon} /></svg></span>
-              <span class="font-mono text-sm text-faint">{c.count} servers</span>
-            </div>
-            <h3 class:list={['mt-6 font-semibold tracking-tight', i === 0 ? 'text-3xl' : 'text-xl']}>{c.name}</h3>
-            <p class="muted mt-2 text-[.95rem]">{c.blurb}</p>
-            {i === 0 && <div class="pointer-events-none mt-6 hidden max-w-[24rem] rotate-[-1.5deg] lg:block" aria-hidden="true"><InvoicePreview compact caption={false} /></div>}
-            {i < 2 && <div class="mt-auto flex flex-wrap gap-1.5 pt-6">{c.names.map((n) => <span class="chip">{n}</span>)}</div>}
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- CASES -->
-  {cases.length > 0 && (
-    <section id="examples" class="section relative pt-0">
-      <div class="wrap">
-        <SectionHead eyebrow="Examples" title="What a chat turn looks like." lead="One sentence in. Real tool calls. A finished result out. These are example scenarios built on each server's real tools." />
-        <div class="mt-12 grid gap-4 lg:grid-cols-3">
-          {cases.map((x) => <CaseTurn server={x.server} case={x.case} showServer compact />)}
-        </div>
-        <p class="muted mt-6 text-[.95rem]">{afterCases.copy} <a href="/use-cases/" class="link">See all use cases</a></p>
-      </div>
-    </section>
-  )}
-
-  <!-- FEATURED -->
-  <section id="popular" class="section pt-0">
-    <div class="wrap">
-      <div class="flex flex-wrap items-end justify-between gap-6">
-        <SectionHead eyebrow="Popular jobs" title="Start with the paperwork you hate most." />
-        <a href="/servers/" class="btn">All {st.servers} servers</a>
-      </div>
-      <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {featured.map((s) => <ServerCard server={s} />)}
-      </div>
-    </div>
-  </section>
-
-  <!-- DEVELOPERS -->
-  <section class="section pt-0">
-    <div class="wrap">
-      <div class="card relative grid gap-10 overflow-hidden p-6 sm:p-10 lg:grid-cols-2">
+      <div class="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <span class="eyebrow">For developers</span>
-          <h2 class="h2 mt-4">Clear tool contracts. stdio and hosted.</h2>
-          <p class="lead mt-4">Open source servers with documented tools. Run them locally over stdio or call the hosted endpoint over HTTP.</p>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <a href="/developers/" class="btn">Developer docs</a>
-            <a href={brand.links.github} class="btn" rel="noopener">GitHub</a>
-          </div>
+          <span class="eyebrow">Jobs</span>
+          <h2 class="h2 mt-3">Six jobs people ask chat to do</h2>
         </div>
-        <pre class="code self-center">{`# free token: 30 days, 600 calls per hour
-curl -s -X POST ${brand.backend.tokenEndpoint}
+        <a href="/use-cases/" class="link text-[.95rem]">All use cases</a>
+      </div>
+      <p class="lead mt-3">Each one is a real prompt with the tools it calls in order. Names in the examples are made up. The math isn't.</p>
+      <div class="mt-8"><HomeJobs /></div>
+    </div>
+  </section>
 
-# hosted
+  <!-- FREE VS PAID: receipt -->
+  <section id="pricing" class="section pt-0">
+    <div class="wrap">
+      <span class="eyebrow">Free and Pro</span>
+      <div class="mt-3"><HomePricing /></div>
+    </div>
+  </section>
+
+  <!-- DEVELOPERS: one strip -->
+  <section id="developers" class="section pt-0">
+    <div class="wrap grid items-center gap-6 border-y border-line py-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-12">
+      <div>
+        <span class="eyebrow">Developers</span>
+        <h2 class="mt-3 text-2xl font-bold sm:text-3xl">Open source, stdio or hosted</h2>
+        <p class="muted mt-3 max-w-[34em]">Each server lists its tools with real names and inputs. Run it over stdio from npm, or call the hosted endpoint over HTTP with a free token.</p>
+        <p class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[.95rem]"><a href="/developers/" class="link">Developer docs</a><a href={brand.links.github} class="link" rel="noopener">Source on GitHub</a></p>
+      </div>
+      <pre class="code">{`# hosted: free token, 30 days, 600 calls an hour
+curl -s -X POST ${brand.backend.tokenEndpoint}
 claude mcp add --transport http invoice \\
   ${brand.backend.origin}/mcp/invoice/t/<token>
 
-# or local over stdio
+# local over stdio
 npx -y @theluckystrike/mcp-invoice`}</pre>
-      </div>
     </div>
   </section>
 
-  <!-- PRICING TEASER -->
-  <section id="pricing" class="section pt-0">
+  <!-- COMMUNITY -->
+  <section class="pb-4">
+    <div class="wrap"><TelegramCta text="Stuck on setup, or want a server that doesn't exist yet? Ask in Zovo Chat. The maintainer reads every message." /></div>
+  </section>
+
+  <!-- CLOSING: one action -->
+  <section class="section">
     <div class="wrap">
-      <SectionHead center eyebrow="Pricing" title="Free to start. Pay once if it earns its keep." />
-      <div class="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">
-        <div class="card p-6"><p class="muted text-sm">Free</p><p class="tnum mt-2 text-4xl font-semibold">$0</p><p class="muted mt-3 text-[.95rem]">Every server's free tier. No key, no sign-up.</p></div>
-        <div class="card p-6"><p class="muted text-sm">Pro, one server</p><p class="tnum mt-2 text-4xl font-semibold">${brand.pricing.serverUsd}<span class="muted text-base font-normal"> once</span></p><p class="muted mt-3 text-[.95rem]">Lifetime Pro for the one server you use most.</p></div>
-        <div class="card relative p-6" style="border: 2px solid var(--accent)">
-          <span class="chip absolute right-4 top-4 !font-semibold" style="background: var(--accent-subtle); color: var(--accent); border-color: transparent">Best value</span>
-          <p class="muted text-sm">Bundle, all servers</p><p class="tnum mt-2 text-4xl font-semibold">${bundlePrice()}<span class="muted text-base font-normal"> once</span></p>
-          <p class="muted mt-3 text-[.95rem]">Pro on all {st.paid} paid servers. About the price of two.</p>
-          <a href={buyUrl(bundleUrl(), 'home', 'pricing_strip')} rel="nofollow" class="btn btn-primary mt-5 w-full">Get the bundle</a>
+      <div class="closing">
+        <h2 class="h2">Your first three invoices this month are free</h2>
+        <p class="lead mt-3">Paste one URL into Claude or Cursor. No key, no account. It takes about a minute.</p>
+        <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <a href="/connect/" class="btn btn-primary">Connect free in 1 minute</a>
+          <a href="/servers/" class="link text-[.95rem]">Or browse all {st.servers} servers</a>
         </div>
       </div>
-      <p class="muted mx-auto mt-6 max-w-2xl text-center">{strip.copy} <a href="/pricing/" class="link">Compare plans</a></p>
     </div>
   </section>
 
-  <StickyCta label={`Pro on all ${st.paid} paid servers: $${bundlePrice()} once`} sub="Lifetime licence. Free tier stays free." href={buyUrl(bundleUrl(), 'home', 'sticky')} cta="Get bundle" secondary={{ label: 'Pricing', href: '/pricing/' }} />
+  <StickyCta label={`Pro on all ${st.paid} paid servers, $${bundlePrice()} once`} sub="Lifetime licence. The free tier stays free." href={buyUrl(bundleUrl(), 'home', 'sticky')} cta="Get the bundle" secondary={{ label: 'Pricing', href: '/pricing/' }} />
 </Layout>
+
+<style>
+  .hero-copy .lead { max-width: 30em; }
+  .docket {
+    display: flex; flex-wrap: wrap; gap: 0; margin-bottom: 0; max-width: 34rem;
+    font-family: var(--font-mono); font-size: .76rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted);
+    border-top: 2px solid var(--text); border-bottom: 1px solid var(--border-strong); padding: .55rem 0;
+  }
+  .docket span { padding-right: .8rem; margin-right: .8rem; border-right: 1px solid var(--border-strong); font-variant-numeric: tabular-nums; }
+  .docket span:last-child { border-right: 0; }
+  .works { font-size: .9rem; color: var(--muted); }
+  .works a { color: var(--text); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
+  .works a:hover { text-decoration-color: var(--text); }
+  .closing { border-left: 3px solid var(--stamp); padding: .25rem 0 .25rem 1.25rem; max-width: 46rem; }
+  @media (min-width: 768px) { .closing { padding-left: 2rem; } }
+</style>
