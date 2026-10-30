@@ -13,7 +13,7 @@
   --border-strong: #cfc7b9;
   --text: #1c1a17;
   --muted: #5e584f;
-  --faint: #736c61;
+  --faint: #6b6459;
   --accent: #1f6b4f;
   --accent-hover: #18573f;
   --accent-subtle: #e3efe8;
@@ -137,7 +137,7 @@ html[data-mode='dark'] {
 
   /* Was a violet/cyan gradient. Now solid ink; the accent is kept for actions and results. */
   .text-gradient { color: var(--text); background: none; }
-  .mark { background: linear-gradient(transparent 62%, color-mix(in oklab, var(--accent) 22%, transparent) 62%, color-mix(in oklab, var(--accent) 22%, transparent) 92%, transparent 92%); padding-inline: .04em; }
+  .mark { background: linear-gradient(transparent 70%, color-mix(in oklab, var(--accent) 16%, transparent) 70%, color-mix(in oklab, var(--accent) 16%, transparent) 90%, transparent 90%); padding-inline: .04em; }
 
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: .5rem;

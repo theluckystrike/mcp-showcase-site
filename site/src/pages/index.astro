@@ -99,7 +99,7 @@ const marquee = [...servers, ...servers];
   </section>
 
   <!-- WHAT YOU GET -->
-  <section class="section pb-0">
+  <section id="what-you-get" class="section pb-0">
     <div class="wrap grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
       <div class="reveal">
         <span class="eyebrow">What you get</span>
@@ -136,7 +136,7 @@ const marquee = [...servers, ...servers];
   </section>
 
   <!-- BENTO CATEGORIES -->
-  <section class="section pt-0">
+  <section id="categories" class="section pt-0">
     <div class="wrap">
       <SectionHead eyebrow="Categories" title="A whole back office, one job at a time." lead={`${st.servers} servers in ${CATEGORIES.length} areas. Pick the job you do every week.`} />
       <div class="mt-12 grid auto-rows-[minmax(11rem,auto)] gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -157,7 +157,7 @@ const marquee = [...servers, ...servers];
 
   <!-- CASES -->
   {cases.length > 0 && (
-    <section class="section relative pt-0">
+    <section id="examples" class="section relative pt-0">
       <div class="wrap">
         <SectionHead eyebrow="Examples" title="What a chat turn looks like." lead="One sentence in. Real tool calls. A finished result out. These are example scenarios built on each server's real tools." />
         <div class="mt-12 grid gap-4 lg:grid-cols-3">
@@ -169,7 +169,7 @@ const marquee = [...servers, ...servers];
   )}
 
   <!-- FEATURED -->
-  <section class="section pt-0">
+  <section id="popular" class="section pt-0">
     <div class="wrap">
       <div class="flex flex-wrap items-end justify-between gap-6">
         <SectionHead eyebrow="Popular jobs" title="Start with the paperwork you hate most." />
@@ -208,7 +208,7 @@ npx -y @theluckystrike/mcp-invoice`}</pre>
   </section>
 
   <!-- PRICING TEASER -->
-  <section class="section pt-0">
+  <section id="pricing" class="section pt-0">
     <div class="wrap">
       <SectionHead center eyebrow="Pricing" title="Free to start. Pay once if it earns its keep." />
       <div class="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-3">

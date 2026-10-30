@@ -156,7 +156,7 @@ const mainHasOutput = !!main && (main.id === 'invoice' || main.cases.some((c) =>
 
     {cases.length > 0 && (
       <section class="wrap py-10">
-        <h2 class="text-2xl font-semibold sm:text-3xl">Example: the prompt, the tool calls, the result</h2>
+        <h2 class="text-2xl font-semibold sm:text-3xl">An example, from prompt to finished file</h2>
         <p class="muted mt-2">Example scenarios built on the real tools of {servers.map((s) => s.name).join(' and ')}. Names and amounts are invented.</p>
         <div class:list={['mt-8 grid gap-4', cases.length > 1 && 'lg:grid-cols-3']}>{cases.map((x) => <CaseTurn server={x.server} case={x.case} showServer={servers.length > 1} />)}</div>
         <p class="muted mt-6 text-[.95rem]">{after.copy} <a href="/pricing/" class="link">Pricing</a></p>

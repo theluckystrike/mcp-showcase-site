@@ -12,7 +12,7 @@ const nav = [
 ---
 <script is:inline>
   // Light is the default. Dark only when the visitor picked it (t-design). Runs before the page paints below the header.
-  try { if (localStorage.getItem('mode') === 'dark') document.documentElement.dataset.mode = 'dark'; } catch (e) {}
+  try { if (localStorage.getItem('mode') === 'dark' || /[?&]mode=dark\b/.test(location.search)) document.documentElement.dataset.mode = 'dark'; } catch (e) {}
   (function () { var h = document.documentElement; h.classList.add('js');
     var f = function () { h.classList.toggle('scrolled', window.scrollY > window.innerHeight * 0.5); };
     f(); window.addEventListener('scroll', f, { passive: true }); })();
