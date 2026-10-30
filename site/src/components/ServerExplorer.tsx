@@ -68,7 +68,7 @@ export default function ServerExplorer({ items, categories, initialCategory = 'a
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search invoice, PDF, VAT"
             aria-keyshortcuts="/"
-            className="h-12 w-full rounded-xl border border-line bg-surface pl-11 pr-4 text-[1rem] outline-none transition-colors placeholder:text-faint focus:border-line-strong"
+            className="h-12 w-full rounded-[3px] border border-line-strong bg-surface-solid pl-11 pr-4 text-[1rem] outline-none transition-colors placeholder:text-faint focus:border-line-strong"
           />
         </label>
         <label className="flex cursor-pointer select-none items-center gap-3 text-[.93rem]">
@@ -78,10 +78,10 @@ export default function ServerExplorer({ items, categories, initialCategory = 'a
             role="switch"
             aria-checked={hostedOnly}
             onClick={() => setHostedOnly((v) => !v)}
-            className="relative h-6 w-11 rounded-full border border-line-strong transition-colors"
+            className="relative h-6 w-11 rounded-[2px] border border-line-strong transition-colors"
             style={{ background: hostedOnly ? 'var(--accent)' : 'var(--surface-2)' }}
           >
-            <span className="absolute top-0.5 h-4.5 w-4.5 rounded-full bg-white shadow transition-all" style={{ left: hostedOnly ? '1.4rem' : '.15rem' }} />
+            <span className="absolute top-0.5 h-4.5 w-4.5 rounded-[1px] border border-line-strong bg-surface-solid transition-all" style={{ left: hostedOnly ? '1.4rem' : '.15rem' }} />
           </button>
         </label>
       </div>

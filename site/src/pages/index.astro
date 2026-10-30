@@ -36,7 +36,7 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
   <!-- HERO: the signature moment -->
   <section class="hero relative isolate overflow-hidden">
     <div class="grid-lines"></div>
-    <div class="wrap grid items-center gap-7 pb-14 pt-7 sm:pt-12 lg:grid-cols-[minmax(0,.74fr)_minmax(0,1.26fr)] lg:items-start lg:gap-10 lg:pb-8 lg:pt-16">
+    <div class="wrap grid items-center gap-7 pb-14 pt-7 sm:pt-12 lg:grid-cols-[minmax(0,.74fr)_minmax(0,1.26fr)] lg:items-start lg:gap-x-10 lg:gap-y-8 lg:pb-6 lg:pt-14">
       <div class="hero-copy">
         <h1 class="display">{h1}</h1>
         <p class="mt-3 text-[1.02rem] text-muted sm:hidden">Ask for an invoice, a quote or a PDF. Get the real file back.</p>
@@ -45,12 +45,13 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
           <a href="/connect/" class="btn btn-primary">Connect free in 1 minute</a>
           <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn hidden sm:inline-flex">All {st.paid} paid servers, ${bundlePrice()} once</a>
         </div>
-        <p class="docket mt-7">
-          <span>{st.servers} servers</span><span>{st.tools} tools</span><span>{st.hosted} at one URL</span>
-        </p>
-        <p class="works mt-3 hidden sm:block">Works in {clients.map((c, i) => (<><a href={`/connect/${c.slug}/`}>{c.name}</a>{i < clients.length - 1 ? ', ' : ''}</>))} and <a href="/connect/paste-a-url/">any MCP client</a>.</p>
       </div>
       <HeroDemo />
+      <!-- Form foot: one ruled docket line under both columns (counts left, clients right) -->
+      <div class="hero-foot lg:col-span-2">
+        <p class="docket"><span>{st.servers} servers</span><span>{st.tools} tools</span><span>{st.hosted} at one URL</span></p>
+        <p class="works">Works in {clients.map((c, i) => (<><a href={`/connect/${c.slug}/`}>{c.name}</a>{i < clients.length - 1 ? ', ' : ''}</>))} and <a href="/connect/paste-a-url/">any MCP client</a>.</p>
+      </div>
     </div>
   </section>
 
@@ -121,15 +122,18 @@ npx -y @theluckystrike/mcp-invoice`}</pre>
 <style>
   .hero-copy .lead { max-width: 30em; }
   @media (min-width: 1024px) { .hero-copy { padding-top: 1.5rem; } .hero-copy .display { font-size: clamp(2.6rem, 4.6vw, 3.9rem); } }
-  .docket {
-    display: none; flex-wrap: nowrap; gap: 0; margin-bottom: 0; max-width: 34rem; white-space: nowrap;
-    font-family: var(--font-mono); font-size: .76rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted);
-    border-top: 2px solid var(--text); border-bottom: 1px solid var(--border-strong); padding: .55rem 0;
+  .hero-foot {
+    display: none; align-items: baseline; justify-content: space-between; gap: .5rem 2rem; flex-wrap: wrap;
+    border-top: 2px solid var(--text); border-bottom: 1px solid var(--border-strong); padding: .6rem 0;
   }
-  @media (min-width: 640px) { .docket { display: flex; } }
+  @media (min-width: 640px) { .hero-foot { display: flex; } }
+  .docket {
+    display: flex; flex-wrap: nowrap; gap: 0; margin: 0; white-space: nowrap;
+    font-family: var(--font-mono); font-size: .76rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted);
+  }
   .docket span { padding-right: .8rem; margin-right: .8rem; border-right: 1px solid var(--border-strong); font-variant-numeric: tabular-nums; }
-  .docket span:last-child { border-right: 0; }
-  .works { font-size: .9rem; color: var(--muted); }
+  .docket span:last-child { border-right: 0; padding-right: 0; margin-right: 0; }
+  .works { margin: 0; font-size: .9rem; color: var(--muted); }
   .works a { color: var(--text); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
   .works a:hover { text-decoration-color: var(--text); }
   .closing { border-left: 3px solid var(--text); padding: .25rem 0 .25rem 1.25rem; max-width: 46rem; }

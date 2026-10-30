@@ -101,6 +101,7 @@ html[data-mode='dark'] {
   --color-bg-2: var(--bg-2);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-solid: var(--surface-solid);
   --color-line: var(--border);
   --color-line-strong: var(--border-strong);
   --color-fg: var(--text);
@@ -324,6 +325,31 @@ html[data-mode='dark'] {
   /* Wordmark: "Mcp" quiet, "Stamp" in heavy wide Archivo. */
   .wordmark { font-family: var(--font-display); font-weight: 800; font-stretch: 112%; letter-spacing: -0.02em; font-size: 1.12rem; line-height: 1; }
   .wordmark .wm-pre { font-weight: 500; font-stretch: 100%; color: var(--muted); letter-spacing: 0; }
+
+  /* Index list (w6-polish): a ruled file index for 3+ similar links. Replaces card grids.
+     Row = red serial | title | one line | "Open" in mono. 2px graphite head rule, 1px rules between rows. */
+  .index-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--text); counter-reset: idx; }
+  .index-list > li { border-bottom: 1px solid var(--border-strong); counter-increment: idx; }
+  .index-row {
+    display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: .2rem .9rem; align-items: baseline;
+    padding: .95rem .25rem; color: inherit; text-decoration: none; transition: background-color .15s ease;
+  }
+  .index-row::before {
+    content: counter(idx, decimal-leading-zero); grid-row: span 2; font-family: var(--font-mono); font-size: .74rem;
+    font-weight: 600; letter-spacing: .06em; color: var(--stamp); font-variant-numeric: tabular-nums;
+  }
+  .index-title { font-family: var(--font-display); font-stretch: 104%; font-weight: 700; font-size: 1.06rem; line-height: 1.3; letter-spacing: -.01em; color: var(--text); }
+  .index-text { margin: 0; color: var(--muted); font-size: .93rem; line-height: 1.5; max-width: 62ch; }
+  .index-go { display: none; font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+  a.index-row:hover { background: var(--surface); }
+  a.index-row:hover .index-title { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a.index-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  @media (min-width: 768px) {
+    .index-row { grid-template-columns: 3rem minmax(0, 17rem) minmax(0, 1fr) auto; padding: 1.05rem .5rem; gap: .2rem 1.5rem; }
+    .index-row::before { grid-row: auto; }
+    .index-go { display: inline; }
+    .index-plain .index-row { grid-template-columns: 3rem minmax(0, 1fr); }
+  }
 }
 
 /* ---------- Hero demo: chat -> tool calls -> result ----------

@@ -75,7 +75,7 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
         </nav>
         <div class="mt-7 grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:items-start lg:gap-x-14 lg:gap-y-6">
           <div class="lg:col-start-1 lg:row-start-1 lg:pt-4">
-            <p class="srv-kicker"><span class="cat-text">{cat.short}</span><span aria-hidden="true">/</span>{outputType(s)}{s.hosted ? <><span aria-hidden="true">/</span>Hosted URL</> : <><span aria-hidden="true">/</span>Local install</>}</p>
+            <p class="srv-kicker"><span class="srv-tab">{outputType(s)}</span><span class="srv-tab srv-tab-quiet">{s.hosted ? 'Hosted URL' : 'Local install'}</span></p>
             <h1 class="display mt-4 !text-[clamp(2.3rem,5.2vw,3.9rem)]">{s.name}</h1>
             <p class="lead mt-4 max-w-xl !text-fg">{s.tagline}</p>
             <div class="mt-7 flex flex-wrap items-center gap-3">
@@ -228,8 +228,11 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
 </Layout>
 
 <style>
-  .srv-kicker { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .82rem; font-weight: 600; color: var(--muted); }
-  .srv-kicker span[aria-hidden] { color: var(--border-strong); }
+  /* Output-type file tab (not a second breadcrumb): mono caps, square, ruled like a folder label. */
+  .srv-kicker { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; }
+  .srv-tab { font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--text); background: var(--surface-solid); border: 1px solid var(--border-strong); border-bottom-width: 2px; border-radius: 2px; padding: .22rem .5rem .18rem; }
+  .srv-tab-quiet { color: var(--muted); background: transparent; border-color: var(--border); border-bottom-width: 1px; }
   .srv-label { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: .7rem; }
   .srv-band { background: var(--bg-2); border-block: 1px solid var(--border); }
 

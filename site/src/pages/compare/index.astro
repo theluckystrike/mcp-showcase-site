@@ -14,11 +14,11 @@ const st = stats();
     <span class="eyebrow">Compare</span>
     <h1 class="display mt-5 !text-[clamp(2.3rem,6vw,4.4rem)]">Honest comparisons.</h1>
     <p class="lead mt-5 max-w-2xl">What we do, what others do, and when to pick the other one. Then every server side by side.</p>
-    <div class="mt-8 grid gap-4 md:grid-cols-3">
+    <ol class="index-list mt-10">
       {COMPARISONS.map((c) => (
-        <a href={`/compare/${c.slug}/`} class="card card-hover p-5"><h2 class="text-lg font-semibold">{brand.name} vs {c.name}</h2><p class="muted mt-2 text-[.92rem]">{c.what}</p></a>
+        <li><a href={`/compare/${c.slug}/`} class="index-row"><h2 class="index-title">{brand.name} vs {c.name}</h2><p class="index-text">{c.what}</p><span class="index-go" aria-hidden="true">Read</span></a></li>
       ))}
-    </div>
+    </ol>
   </section>
   <section class="wrap pb-4"><h2 class="text-2xl font-semibold sm:text-3xl">All servers, side by side</h2><p class="muted mt-2">Tool counts come from each server's SPEC. Hosted means the server answers at a hosted URL today.</p></section>
   <section class="wrap pb-12">

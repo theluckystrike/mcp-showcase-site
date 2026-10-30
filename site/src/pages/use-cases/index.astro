@@ -38,7 +38,7 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
   {answers.length > 0 && (
     <section id="answers" class="wrap py-10">
       <h2 class="text-2xl font-semibold sm:text-3xl">Short answers</h2>
-      <ul class="mt-6 grid gap-3 sm:grid-cols-2">{answers.map((a) => <li><a href={a.path} class="card card-hover block px-5 py-4 font-medium">{a.h1}</a></li>)}</ul>
+      <ol class="index-list mt-6">{answers.map((a) => <li><a href={a.path} class="index-row"><span class="index-title">{a.h1}</span><span></span><span class="index-go" aria-hidden="true">Read</span></a></li>)}</ol>
     </section>
   )}
   <section class="wrap pt-10"><h2 class="text-2xl font-semibold sm:text-3xl">All examples by category</h2></section>
@@ -51,14 +51,15 @@ const prompts = cases.length ? [] : getServers().filter((s) => s.tryPrompts.leng
   <section class="wrap pb-10"><UpsellBand copy={after.copy} href={after.cta_url} cta={`Bundle, $${bundlePrice()}`} /></section>
   {prompts.length > 0 && (
     <section class="wrap py-10">
-      <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <ol class="index-list">
         {prompts.map(({ s, p }) => (
-          <a href={`/servers/${s.id}/`} class="card card-hover cat flex flex-col gap-3 p-5" style={`--hue:${getCategory(s.category).hue}`}>
-            <span class="chip self-start cat-text"><span class="dot"></span>{s.name}</span>
-            <p class="text-[.98rem]">"{p}"</p>
-          </a>
+          <li><a href={`/servers/${s.id}/`} class="index-row cat" style={`--hue:${getCategory(s.category).hue}`}>
+            <span class="index-title">{s.name}</span>
+            <p class="index-text">&ldquo;{p}&rdquo;</p>
+            <span class="index-go" aria-hidden="true">Open server</span>
+          </a></li>
         ))}
-      </div>
+      </ol>
     </section>
   )}
 </Layout>

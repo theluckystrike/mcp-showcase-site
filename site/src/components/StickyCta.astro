@@ -4,7 +4,7 @@ interface Props { label: string; sub?: string; href: string; cta?: string; secon
 const { label, sub, href, cta = 'Buy now', secondary } = Astro.props;
 ---
 <div class="sticky-cta pointer-events-none sticky bottom-3 z-30 mt-16 px-3 sm:bottom-5">
-  <div class="pointer-events-auto mx-auto flex max-w-3xl items-center gap-3 rounded-2xl border border-line-strong p-2.5 pl-4 backdrop-blur-xl" style="background: color-mix(in oklab, var(--surface-solid) 92%, transparent); box-shadow: var(--shadow-lift)">
+  <div class="pointer-events-auto mx-auto flex max-w-3xl items-center gap-3 rounded-[3px] border border-line-strong p-2.5 pl-4" style="background: var(--surface-solid); border-top: 2px solid var(--text); box-shadow: 3px 3px 0 var(--border-strong)">
     <div class="min-w-0 flex-1">
       <p class="truncate text-[.95rem] font-semibold">{label}</p>
       {sub && <p class="muted hidden truncate text-[.82rem] sm:block">{sub}</p>}

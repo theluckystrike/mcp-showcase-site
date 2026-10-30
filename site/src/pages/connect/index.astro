@@ -21,14 +21,15 @@ const meta = seo('/connect/', { title: `Connect a tool to Claude, ChatGPT, Curso
     </div>
   </section>
   <section class="wrap pb-12">
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <ol class="index-list">
       {guides.map((g) => (
-        <a href={g.path} id={g.path.split('/').filter(Boolean).pop()} class="card card-hover flex flex-col p-5">
-          <h2 class="text-lg font-semibold tracking-tight">{g.h1}</h2>
-          <p class="muted mt-2 text-[.92rem]">{g.meta_description}</p>
-        </a>
+        <li><a href={g.path} id={g.path.split('/').filter(Boolean).pop()} class="index-row">
+          <h2 class="index-title">{g.h1}</h2>
+          <p class="index-text">{g.meta_description}</p>
+          <span class="index-go" aria-hidden="true">Open steps</span>
+        </a></li>
       ))}
-    </div>
+    </ol>
     <p class="muted mt-8 text-[.92rem]">Steps come from our developer notes. The hosted URLs were tested with curl. Each client dialog is marked as tested or not on its page.</p>
     <p class="mt-6"><a class="link" href={buyUrl(bundleUrl(), 'connect', 'hub')} rel="nofollow">Pro on all {st.paid} paid servers: ${bundlePrice()} once</a></p>
   </section>

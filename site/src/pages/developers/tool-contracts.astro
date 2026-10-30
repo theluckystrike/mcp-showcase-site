@@ -20,7 +20,7 @@ const meta = seo('/developers/tool-contracts/', { title: `MCP tool contracts: co
   {d.conventions.length > 0 && (
     <section class="wrap py-6">
       <h2 class="text-2xl font-semibold sm:text-3xl">Conventions</h2>
-      <div class="mt-6 grid gap-4 md:grid-cols-2">{d.conventions.map((c) => <div class="card p-5"><h3 class="font-semibold">{c.title}</h3><p class="muted mt-2 text-[.95rem]">{c.text}</p></div>)}</div>
+      <ol class="index-list mt-6">{d.conventions.map((c) => <li class="index-row"><h3 class="index-title">{c.title}</h3><p class="index-text">{c.text}</p></li>)}</ol>
     </section>
   )}
   <section class="wrap py-10">

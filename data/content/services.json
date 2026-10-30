@@ -1,134 +1,134 @@
 {
-  "meta": {
-    "author": "d-money",
-    "date": "2026-10-30",
-    "price_status": "PROPOSAL, HIDDEN. price_from_usd values are owner proposals (agents/d-money/FINDINGS.md). show_prices=false until the owner approves them (d-gate D4).",
-    "github_source": "gh api users/theluckystrike; gh api --paginate 'users/theluckystrike/repos?per_page=100'; gh api 'search/issues?q=author:theluckystrike+type:pr+is:merged+-user:theluckystrike+-org:zovo-one+-org:BeLikeNative'. Run 2026-10-30 16:05 +07."
+ "meta": {
+  "author": "d-money",
+  "date": "2026-10-30",
+  "price_status": "PROPOSAL, HIDDEN. price_from_usd values are owner proposals (agents/d-money/FINDINGS.md). show_prices=false until the owner approves them (d-gate D4).",
+  "github_source": "gh api users/theluckystrike; gh api --paginate 'users/theluckystrike/repos?per_page=100'; gh api 'search/issues?q=author:theluckystrike+type:pr+is:merged+-user:theluckystrike+-org:zovo-one+-org:BeLikeNative'. Run 2026-10-30 16:05 +07."
+ },
+ "show_prices": false,
+ "eyebrow": "Custom work",
+ "h1": "Get an MCP server built around your own data",
+ "lead": "The person who maintains the servers on this site also builds them to order. You tell us the job your team repeats. You get a server that does it inside Claude, Cursor or any other MCP client, with a test for each tool.",
+ "services": [
+  {
+   "id": "custom-server",
+   "name": "A custom MCP server for your business",
+   "short": "Your API, a spreadsheet or your internal docs, turned into tools your AI can call.",
+   "price_from_usd": 1500,
+   "scope": [
+    "Wrap your API. Claude gets typed tools with clear names, and your keys stay in your config.",
+    "Put a spreadsheet or CSV behind tools that read it, check it and write back the rows you allow.",
+    "Make internal docs searchable from chat, with answers that point to the page they came from."
+   ],
+   "you_get": [
+    "Source code in your repository",
+    "A SPEC.md that lists every tool with its inputs and outputs",
+    "A test for each tool",
+    "Local stdio by default, and a hosted URL if you want one"
+   ],
+   "slot": "custom_server"
   },
-  "show_prices": false,
-  "eyebrow": "Custom work",
-  "h1": "Get an MCP server built around your own data",
-  "lead": "The person who maintains the servers on this site also builds them to order. You tell us the job your team repeats. You get a server that does it inside Claude, Cursor or any other MCP client, with a test for each tool.",
-  "services": [
-    {
-      "id": "custom-server",
-      "name": "A custom MCP server for your business",
-      "short": "Your API, a spreadsheet or your internal docs, turned into tools your AI can call.",
-      "price_from_usd": 1500,
-      "scope": [
-        "Wrap your API. Claude gets typed tools with clear names, and your keys stay in your config.",
-        "Put a spreadsheet or CSV behind tools that read it, check it and write back the rows you allow.",
-        "Make internal docs searchable from chat, with answers that point to the page they came from."
-      ],
-      "you_get": [
-        "Source code in your repository",
-        "A SPEC.md that lists every tool with its inputs and outputs",
-        "A test for each tool",
-        "Local stdio by default, and a hosted URL if you want one"
-      ],
-      "slot": "custom_server"
-    },
-    {
-      "id": "setup",
-      "name": "Setup and integration for your team",
-      "short": "We connect the servers to the clients your people already use.",
-      "price_from_usd": 600,
-      "scope": [
-        "Claude Desktop, Claude Code, Cursor or VS Code, set up for each person who needs it.",
-        "Hosted URLs or local installs. We pick with you, based on where your data may go.",
-        "Pro keys put in place, and a one-page runbook your team can follow without us."
-      ],
-      "you_get": [
-        "Working connections, checked on a real task",
-        "A short runbook for new hires",
-        "A list of what each server can and can't touch"
-      ],
-      "slot": "setup"
-    },
-    {
-      "id": "audit",
-      "name": "Audit of your MCP server",
-      "short": "A second pair of eyes on a server you built or bought.",
-      "price_from_usd": 300,
-      "scope": [
-        "Tool names, descriptions and schemas. Can a model pick the right tool and fill it in?",
-        "Input checks, error messages and what happens on bad or hostile input.",
-        "Secrets, file access and data that leaves the machine."
-      ],
-      "you_get": [
-        "A written report with each problem ranked by risk",
-        "The exact fix for each one, as a patch where it's small"
-      ],
-      "slot": "audit"
-    }
-  ],
-  "steps": [
-    {
-      "title": "Tell us the job",
-      "text": "Write on Telegram or by email. Two or three lines are enough."
-    },
-    {
-      "title": "Get a fixed quote",
-      "text": "We reply with questions, then a price and a date before any work starts."
-    },
-    {
-      "title": "We build in your repo",
-      "text": "You see each commit. Every tool gets a test."
-    },
-    {
-      "title": "Handover",
-      "text": "You own the code. We walk your team through it once."
-    }
-  ],
-  "github": {
-    "as_of": "2026-10-30",
-    "profile_url": "https://github.com/theluckystrike",
-    "public_repos": 1642,
-    "total_stars": 122,
-    "followers": 49,
-    "merged_prs_elsewhere": 367,
-    "merged_prs_repos": 231,
-    "merged_prs_owners": 199,
-    "merged_prs_url": "https://github.com/search?q=author%3Atheluckystrike+is%3Apr+is%3Amerged+-user%3Atheluckystrike+-org%3Azovo-one+-org%3ABeLikeNative&type=pullrequests",
-    "examples": [
-      {
-        "repo": "urllib3/urllib3",
-        "title": "Honor Retry-After on PoolManager redirects",
-        "url": "https://github.com/urllib3/urllib3/pull/5330"
-      },
-      {
-        "repo": "PrefectHQ/prefect",
-        "title": "Validate PEP 508 deps in execute_bundle_in_subprocess",
-        "url": "https://github.com/PrefectHQ/prefect/pull/21916"
-      },
-      {
-        "repo": "OWASP/cve-lite-cli",
-        "title": "Make the ratchet gate work when no baseline exists",
-        "url": "https://github.com/OWASP/cve-lite-cli/pull/1314"
-      },
-      {
-        "repo": "GoogleChrome/chrome-extensions-samples",
-        "title": "Add chrome.commands API sample",
-        "url": "https://github.com/GoogleChrome/chrome-extensions-samples/pull/1629"
-      }
-    ]
+  {
+   "id": "setup",
+   "name": "Setup and integration for your team",
+   "short": "We connect the servers to the clients your people already use.",
+   "price_from_usd": 600,
+   "scope": [
+    "Claude Desktop, Claude Code, Cursor or VS Code, set up for each person who needs it.",
+    "Hosted URLs or local installs. We pick with you, based on where your data may go.",
+    "Pro keys put in place, and a one-page runbook your team can follow without us."
+   ],
+   "you_get": [
+    "Working connections, checked on a real task",
+    "A short runbook for new hires",
+    "A list of what each server can and can't touch"
+   ],
+   "slot": "setup"
   },
-  "faq": [
-    {
-      "q": "Do you have client references?",
-      "a": "Not on this page. We'd rather show code you can read. Every merged pull request above is public, and so is the source of all 58 servers on this site."
-    },
-    {
-      "q": "Who owns the code?",
-      "a": "You do. It goes into your repository under the licence you choose."
-    },
-    {
-      "q": "Is the price fixed?",
-      "a": "Yes, once we agree the scope. Tell us the job and you get a fixed price and a date before any work starts. It depends on how many tools and systems are involved."
-    },
-    {
-      "q": "Can you work with our private data?",
-      "a": "We can build against a sample or a test account, so your real data never has to leave your side."
-    }
+  {
+   "id": "audit",
+   "name": "Audit of your MCP server",
+   "short": "A second pair of eyes on a server you built or bought.",
+   "price_from_usd": 300,
+   "scope": [
+    "Tool names, descriptions and schemas. Can a model pick the right tool and fill it in?",
+    "Input checks, error messages and what happens on bad or hostile input.",
+    "Secrets, file access and data that leaves the machine."
+   ],
+   "you_get": [
+    "A written report with each problem ranked by risk",
+    "The exact fix for each one, as a patch where it's small"
+   ],
+   "slot": "audit"
+  }
+ ],
+ "steps": [
+  {
+   "title": "Tell us the job",
+   "text": "Write on Telegram or by email. Two or three lines are enough."
+  },
+  {
+   "title": "Get a fixed quote",
+   "text": "We reply with questions, then a price and a date before any work starts."
+  },
+  {
+   "title": "We build in your repo",
+   "text": "You see each commit. Every tool gets a test."
+  },
+  {
+   "title": "Handover",
+   "text": "You own the code. We walk your team through it once."
+  }
+ ],
+ "github": {
+  "as_of": "2026-10-30",
+  "profile_url": "https://github.com/theluckystrike",
+  "public_repos": 1642,
+  "total_stars": 122,
+  "followers": 49,
+  "merged_prs_elsewhere": 367,
+  "merged_prs_repos": 231,
+  "merged_prs_owners": 199,
+  "merged_prs_url": "https://github.com/search?q=author%3Atheluckystrike+is%3Apr+is%3Amerged+-user%3Atheluckystrike+-org%3Azovo-one+-org%3ABeLikeNative&type=pullrequests",
+  "examples": [
+   {
+    "repo": "urllib3/urllib3",
+    "title": "Honor Retry-After on PoolManager redirects",
+    "url": "https://github.com/urllib3/urllib3/pull/5330"
+   },
+   {
+    "repo": "PrefectHQ/prefect",
+    "title": "Validate PEP 508 deps in execute_bundle_in_subprocess",
+    "url": "https://github.com/PrefectHQ/prefect/pull/21916"
+   },
+   {
+    "repo": "OWASP/cve-lite-cli",
+    "title": "Make the ratchet gate work when no baseline exists",
+    "url": "https://github.com/OWASP/cve-lite-cli/pull/1314"
+   },
+   {
+    "repo": "GoogleChrome/chrome-extensions-samples",
+    "title": "Add chrome.commands API sample",
+    "url": "https://github.com/GoogleChrome/chrome-extensions-samples/pull/1629"
+   }
   ]
+ },
+ "faq": [
+  {
+   "q": "Do you have client references?",
+   "a": "Not on this page. We'd rather show code you can read. Every merged pull request above is public, and so is the source of all 58 servers on this site."
+  },
+  {
+   "q": "Who owns the code?",
+   "a": "You do. It goes into your repository under the licence you choose."
+  },
+  {
+   "q": "Is the price fixed?",
+   "a": "Yes, once we agree the scope. Tell us the job and you get a fixed price and a date before any work starts. It depends on how many tools and systems are involved."
+  },
+  {
+   "q": "Can you work with our private data?",
+   "a": "We can build against a sample or a test account, so your real data never has to leave your side."
+  }
+ ]
 }
