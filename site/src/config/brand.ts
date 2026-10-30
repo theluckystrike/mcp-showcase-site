@@ -1,10 +1,11 @@
 // The ONE place for brand identity. Pages never hard-code the name or domain.
-// Working brand = t-domain recommendation (agents/t-domain/DOMAINS.md, 2026-10-30): doitinchat.com, score 82.2.
+// Working brand = t-mcpdomain recommendation (agents/t-mcpdomain/DOMAINS-MCP.md, 2026-10-30): mcpstamp.com, score 80.0.
+// Owner direction 2026-10-30: the .com must include "mcp".
 // NOT REGISTERED YET (owner action). If the owner picks another name, change `name` and `domain` here only.
 export const brand = {
-  name: 'DoItInChat',
-  shortName: 'DoItInChat',
-  domain: 'doitinchat.com',
+  name: 'McpStamp',
+  shortName: 'McpStamp',
+  domain: 'mcpstamp.com',
   tagline: 'Do your back office in chat.',
   description:
     'MCP servers that turn Claude, Cursor and other MCP clients into a back office: real PDFs, invoices, checks and reports. Run locally or paste one URL.',
