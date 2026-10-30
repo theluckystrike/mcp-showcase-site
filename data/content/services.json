@@ -2,10 +2,10 @@
   "meta": {
     "author": "d-money",
     "date": "2026-10-30",
-    "price_status": "PROPOSAL. The owner has not approved any service price. Set show_prices to false to hide every price.",
+    "price_status": "PROPOSAL, HIDDEN. price_from_usd values are owner proposals (agents/d-money/FINDINGS.md). show_prices=false until the owner approves them (d-gate D4).",
     "github_source": "gh api users/theluckystrike; gh api --paginate 'users/theluckystrike/repos?per_page=100'; gh api 'search/issues?q=author:theluckystrike+type:pr+is:merged+-user:theluckystrike+-org:zovo-one+-org:BeLikeNative'. Run 2026-10-30 16:05 +07."
   },
-  "show_prices": true,
+  "show_prices": false,
   "eyebrow": "Custom work",
   "h1": "Get an MCP server built around your own data",
   "lead": "The person who maintains the servers on this site also builds them to order. You tell us the job your team repeats. You get a server that does it inside Claude, Cursor or any other MCP client, with a test for each tool.",
@@ -124,7 +124,7 @@
     },
     {
       "q": "Is the price fixed?",
-      "a": "Yes, once we agree the scope. The prices on this page are starting points. Yours depends on how many tools and systems are involved."
+      "a": "Yes, once we agree the scope. Tell us the job and you get a fixed price and a date before any work starts. It depends on how many tools and systems are involved."
     },
     {
       "q": "Can you work with our private data?",
