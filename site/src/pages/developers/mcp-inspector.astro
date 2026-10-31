@@ -1,0 +1,129 @@
+---
+// /developers/mcp-inspector/: what the MCP Inspector is, its three clients, the Node
+// requirement, a recorded CLI session against one hosted endpoint (2026-10-31, no token),
+// the bare URL trap (exit 3), protocol eras, CLI exit codes and where secrets are stored.
+import Layout from '../../layouts/Layout.astro';
+import CopyCode from '../../components/CopyCode.astro';
+import { brand } from '../../config/brand';
+const meta = {
+  title: 'MCP Inspector CLI on a hosted MCP server | {brand}'.replace('{brand}', brand.name),
+  description: 'Test a hosted MCP server with the MCP Inspector 2.13.0 CLI. Recorded runs from 2026-10-31 with exit codes 0, 3 and 5, the header form and the protocol era.',
+};
+const inspectorUrl = 'https://mcp.zovo.one/mcp/currency';
+const cli = `npx -y @modelcontextprotocol/inspector@2.13.0 --cli ${inspectorUrl} --transport http`;
+---
+<Layout title={meta.title} description={meta.description} ogType="article" crumbs={[{ name: 'Developers', path: '/developers/' }, { name: 'MCP Inspector', path: '/developers/mcp-inspector/' }]}>
+  <section class="wrap pb-8 pt-14 sm:pt-20">
+    <span class="eyebrow !text-[.8rem]">Developers</span>
+    <h1 class="display mt-5 !text-[clamp(2.2rem,5.5vw,4rem)]">MCP Inspector, one launcher and three clients</h1>
+    <p class="lead mt-5 max-w-2xl">The MCP Inspector is the reference developer tool for testing and debugging MCP servers. One npm package gives a web client, a CLI client and a terminal UI behind one binary. This page runs the CLI against one hosted endpoint of {brand.name} and shows the exit codes that we recorded on 2026-10-31.</p>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Install and Node requirement</h2>
+    <p class="mt-4 max-w-2xl">No install step is needed, because the Inspector runs through <code class="font-mono">npx</code>. It requires <a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector" rel="noopener">Node 22.19.0 or newer</a>, and the npm package declares the engine range <code class="font-mono">node &gt;=22.19.0</code>. On 2026-10-31 the npm <code class="font-mono">latest</code> tag was 2.13.0 (<a class="link" href="https://registry.npmjs.org/@modelcontextprotocol/inspector/latest" rel="noopener">npm registry</a>). The legacy v1 line gets security fixes only and is published to the <code class="font-mono">v1-latest</code> tag.</p>
+    <div class="mt-4"><CopyCode code="npx @modelcontextprotocol/inspector" label="Start the web client" /></div>
+    <p class="muted mt-3 text-[.88rem]">Run <code class="font-mono">node --version</code> to check your version. The web client prints a URL with a per-launch API token and opens it in your browser. Set <code class="font-mono">MCP_AUTO_OPEN_ENABLED=false</code> to stop it opening.</p>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Three clients, one launcher</h2>
+    <p class="mt-4 max-w-2xl">The <code class="font-mono">mcp-inspector</code> binary is a launcher. It reads two flags of its own and forwards every other argument to one of its three clients (<a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/configuration" rel="noopener">configuration docs</a>). A flag that works in one client can be unknown to another. For example, <code class="font-mono">--method</code> is CLI-only.</p>
+    <div class="card mt-6 overflow-x-auto">
+      <table class="table min-w-[36rem]">
+        <thead><tr><th scope="col" class="!text-[.8rem]">Client</th><th scope="col" class="!text-[.8rem]">Start it with</th><th scope="col" class="!text-[.8rem]">What it is for</th></tr></thead>
+        <tbody>
+          <tr><td>Web</td><td class="font-mono">npx @modelcontextprotocol/inspector</td><td>A full graphical inspector in the browser. This is the default client.</td></tr>
+          <tr><td>CLI</td><td class="font-mono">npx @modelcontextprotocol/inspector --cli</td><td>A scriptable, machine-readable client for CI, shell pipelines and coding agents</td></tr>
+          <tr><td>TUI</td><td class="font-mono">npx @modelcontextprotocol/inspector --tui</td><td>An interactive terminal UI for when a browser is not available or wanted</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">A recorded CLI session on a hosted endpoint</h2>
+    <p class="mt-4 max-w-2xl">On 2026-10-31, from 08:16 to 08:17 UTC, we ran Inspector 2.13.0 on Node 22.23.3 against the hosted currency endpoint {inspectorUrl}. We sent no token. Each command below is the exact command that we ran, and each label gives its exit code.</p>
+    <div class="mt-4"><CopyCode code={`${cli} --method initialize --format json`} label="initialize (exit 0)" /></div>
+    <p class="mt-3 max-w-2xl">The server answered with serverInfo <code class="font-mono">mcp-currency</code> version <code class="font-mono">0.22.6</code> and protocolVersion <code class="font-mono">2025-11-25</code>. This is the full output.</p>
+    <div class="mt-4"><CopyCode code={`{"result":{"serverInfo":{"name":"mcp-currency","version":"0.22.6"},"protocolVersion":"2025-11-25","capabilities":{"prompts":{"listChanged":true},"resources":{"listChanged":true},"tools":{"listChanged":true}}}}`} label="stdout of initialize" /></div>
+    <div class="mt-4"><CopyCode code={`${cli} --method tools/list --format json`} label="tools/list (exit 0)" /></div>
+    <p class="mt-3 max-w-2xl">The list had 10 tools. One of them is <code class="font-mono">convert</code>, with the inputs <code class="font-mono">amount</code>, <code class="font-mono">from</code>, <code class="font-mono">to</code> and <code class="font-mono">date</code>. Its schema marks <code class="font-mono">amount</code> and <code class="font-mono">from</code> as required. The <code class="font-mono">--strict</code> run of the same list also exited 0, so the check found no error-severity tool-schema problem (that would be exit 6).</p>
+    <div class="mt-4"><CopyCode code={`${cli} --method tools/list --strict --format json`} label="tools/list --strict (exit 0)" /></div>
+    <p class="mt-4 max-w-2xl">A tool name that is not on the server exited 5 with <code class="font-mono">tool_not_found</code>, also with no token. The CLI wrote one JSON line to stderr.</p>
+    <div class="mt-4"><CopyCode code={`${cli} --method tools/call --tool-name no_such_tool --format json`} label="wrong tool name (exit 5)" /></div>
+    <div class="mt-4"><CopyCode code={`{"error":{"code":"tool_not_found","message":"Tool 'no_such_tool' not found on server."}}`} label="stderr of the wrong tool name" /></div>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">The bare URL trap and exit code 3</h2>
+    <p class="mt-4 max-w-2xl">A <code class="font-mono">convert</code> call on the bare URL, with no Authorization header, exited 3 with <code class="font-mono">auth_required</code>.</p>
+    <div class="mt-4"><CopyCode code={`${cli} --method tools/call --tool-name convert --tool-arg amount=100 --tool-arg from=EUR --tool-arg to=GBP --format json`} label="tools/call with no header (exit 3)" /></div>
+    <div class="mt-4"><CopyCode code={`{"error":{"code":"auth_required","message":"Interactive OAuth requires a TTY on stdin or stderr (or MCP_AUTO_OPEN_ENABLED=true). For CI/non-interactive runs use --stored-auth-only."}}`} label="stderr of the call with no header" /></div>
+    <p class="mt-4 max-w-2xl">A plain curl POST of the same call, made at 08:17 UTC, got HTTP 401 with this challenge header. The JSON body of that answer says that the token is free and names the header form <code class="font-mono">Authorization: Bearer &lt;token&gt;</code>.</p>
+    <div class="mt-4"><CopyCode code={`HTTP/2 401\nwww-authenticate: Bearer realm="mcp.zovo.one", error="invalid_token", resource_metadata="https://mcp.zovo.one/.well-known/oauth-protected-resource"`} label="HTTP 401 challenge, no header" /></div>
+    <p class="mt-4 max-w-2xl">The CLI docs explain the exit. By default the CLI runs a loopback OAuth flow that opens a browser and waits on a localhost callback. With no TTY on stdin or stderr, it fails fast with <code class="font-mono">auth_required</code> and does not wait (<a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/cli" rel="noopener">CLI docs</a>). Our runs had no TTY. A header with a token that the server does not accept also exited 3. We sent <code class="font-mono">Authorization: Bearer invalid</code>, and both <code class="font-mono">initialize</code> and <code class="font-mono">tools/call</code> exited 3, although <code class="font-mono">initialize</code> with no header exited 0.</p>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Call a tool with your own token</h2>
+    <p class="mt-4 max-w-2xl">We did not run an authorized tool call for this page, because it needs a token, so this page shows no result of it. The configuration docs describe the flag <code class="font-mono">--header "Name: Value"</code> as "HTTP headers for an HTTP/SSE server. Repeatable." The MCP authorization specification of 2025-11-25 says that the client "<strong>MUST</strong> use the Authorization request header field" in the form <code class="font-mono">Authorization: Bearer &lt;access-token&gt;</code>. It also says "Access tokens <strong>MUST NOT</strong> be included in the URI query string" (<a class="link" href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" rel="noopener">authorization spec</a>).</p>
+    <p class="mt-4 max-w-2xl">Get your own free token as the <a class="link" href="/developers/hosted-endpoints/">hosted endpoints</a> guide shows. Then replace <code class="font-mono">&lt;token&gt;</code> in this command with your token, and keep the token out of files that you commit.</p>
+    <div class="mt-4"><CopyCode code={`${cli} --header "Authorization: Bearer <token>" --method tools/call --tool-name convert --tool-arg amount=100 --tool-arg from=EUR --tool-arg to=GBP --format json`} label="convert, needs your own token" /></div>
+    <p class="muted mt-3 text-[.88rem]">The CLI docs say that the error line on stderr redacts query-string secrets in a URL. They also warn that <code class="font-mono">servers/show</code> does not scrub credentials in a server URL.</p>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Protocol era for these servers</h2>
+    <p class="mt-4 max-w-2xl">Inspector v2 treats the protocol era as a setting for each server. The docs say that <code class="font-mono">legacy</code> is "<strong>The default.</strong> Plain <code class="font-mono">initialize</code>, no probing at all." (<a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/protocol-eras" rel="noopener">protocol eras</a>). The currency server negotiated <code class="font-mono">2025-11-25</code> on 2026-10-31. That version is before the 2026-07-28 revision, so the default era fits. The docs say that <code class="font-mono">modern</code> pins exactly <code class="font-mono">2026-07-28</code> with "No fallback, so a non-modern server fails loudly." Do not pick <code class="font-mono">modern</code> for a server that negotiates 2025-11-25.</p>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">CLI exit codes</h2>
+    <p class="mt-4 max-w-2xl">The CLI docs say that every non-zero exit maps to a stable failure class, so a caller can branch on why without scraping prose (<a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/cli" rel="noopener">CLI docs</a>). On 2026-10-31 the docs listed codes 0 to 11. This table shows seven of them.</p>
+    <div class="card mt-6 overflow-x-auto">
+      <table class="table min-w-[36rem]">
+        <thead><tr><th scope="col" class="!text-[.8rem]">Code</th><th scope="col" class="!text-[.8rem]">Meaning</th></tr></thead>
+        <tbody>
+          <tr><td class="font-mono">0</td><td>Success.</td></tr>
+          <tr><td class="font-mono">1</td><td>Usage or unexpected error (the catch-all).</td></tr>
+          <tr><td class="font-mono">3</td><td>Server requires authentication (HTTP 401/403, or an SDK authorization error).</td></tr>
+          <tr><td class="font-mono">4</td><td>Server unreachable (DNS, connection refused, timeout).</td></tr>
+          <tr><td class="font-mono">5</td><td>Tool error. The call returned <code class="font-mono">isError: true</code>, or the tool was not found.</td></tr>
+          <tr><td class="font-mono">6</td><td><code class="font-mono">--strict</code> found an error-severity tool-schema portability problem.</td></tr>
+          <tr><td class="font-mono">11</td><td>The server answered HTTP 429 (envelope code <code class="font-mono">rate_limited</code>).</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted mt-3 text-[.88rem]">On any non-zero exit the CLI also writes a single JSON line to stderr. Its <code class="font-mono">error.code</code> is a stable name, such as <code class="font-mono">auth_required</code> or <code class="font-mono">tool_not_found</code>.</p>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Where secrets are stored</h2>
+    <p class="mt-4 max-w-2xl">The Inspector keeps acquired OAuth tokens, OAuth client secrets and stdio <code class="font-mono">env:</code> values out of <code class="font-mono">mcp.json</code>, <code class="font-mono">client.json</code> and <code class="font-mono">oauth.json</code>. It puts them in a secret store. Each process picks one store, once, the first time it needs it (<a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/configuration" rel="noopener">secret store docs</a>).</p>
+    <ul class="mt-4 grid max-w-2xl gap-2">
+      <li>The OS keychain is the usual store. That is Keychain on macOS, Credential Manager on Windows and the Secret Service on Linux. The docs say that most desktop installs stop here.</li>
+      <li>If the keychain probe fails, for example on Linux with no Secret Service or in an SSH session with no D-Bus session, the Inspector stores secrets in <code class="font-mono">~/.mcp-inspector/secrets.json</code> with mode 0600. The docs warn that this file is unencrypted unless you supply a key. A container with no volume on the secrets directory keeps them in memory instead.</li>
+      <li>Headers are not moved. The docs say that headers "are saved in <code class="font-mono">mcp.json</code> exactly as written, so a header that carries a credential stays in the file." If you save a server with your token header in <code class="font-mono">mcp.json</code>, the token stays in that file as written.</li>
+    </ul>
+  </section>
+
+  <section class="wrap py-6">
+    <h2 class="text-2xl font-semibold sm:text-3xl">Use it on a hosted endpoint</h2>
+    <p class="mt-4 max-w-2xl">The currency endpoint answered the Inspector with <code class="font-mono">--transport http</code>. On the bare URL, <code class="font-mono">initialize</code> and <code class="font-mono">tools/list</code> worked with no token, and the 401 answer to the tool call says that a tool call needs a token. Read the <a class="link" href="/developers/hosted-endpoints/">hosted endpoints</a> guide for the token request and the raw curl session, or pick an endpoint on any <a class="link" href="/servers/">server page</a>.</p>
+  </section>
+
+  <section class="wrap py-10">
+    <h2 class="text-2xl font-semibold sm:text-3xl">How this page was checked</h2>
+    <p class="mt-4 max-w-2xl">We fetched each source below on 2026-10-31 and matched each quote on this page to the fetched text. On the same day, from 08:16 to 08:17 UTC, we ran Inspector 2.13.0 with Node 22.23.3 against {inspectorUrl} with no token, and saved each command, exit code and output. We did not run the header-form tool call, because it needs a token.</p>
+    <ul class="mt-4 grid max-w-2xl gap-2">
+      <li><a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector" rel="noopener">MCP Inspector overview</a>, fetched 2026-10-31</li>
+      <li><a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/cli" rel="noopener">CLI client docs</a>, fetched 2026-10-31</li>
+      <li><a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/configuration" rel="noopener">Configuration and flags docs</a>, fetched 2026-10-31</li>
+      <li><a class="link" href="https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/protocol-eras" rel="noopener">Protocol eras docs</a>, fetched 2026-10-31</li>
+      <li><a class="link" href="https://github.com/modelcontextprotocol/inspector" rel="noopener">Inspector README on GitHub</a>, fetched 2026-10-31</li>
+      <li><a class="link" href="https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization" rel="noopener">MCP authorization specification 2025-11-25</a>, fetched 2026-10-31</li>
+      <li><a class="link" href="https://registry.npmjs.org/@modelcontextprotocol/inspector/latest" rel="noopener">npm registry record</a> (version 2.13.0, engines node &gt;=22.19.0), fetched 2026-10-31</li>
+    </ul>
+  </section>
+</Layout>
