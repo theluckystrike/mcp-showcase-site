@@ -1,0 +1,191 @@
+---
+// Terms of Service (a3-legal, 2026-11-01). Source: the owner's published Zovo Terms of Service at
+// https://zovo.one/legal/terms (last updated 26 January 2026; governing law and contact from its legalDefinitions),
+// adapted in naming to McpStamp. Product facts (free tier, $19/$39 one-time lifetime licence, 14-day refund, key on
+// the confirmation page, MIT) come from ~/mcp-servers/billing/src/index.js purchasePromiseHtml, the mcp.zovo.one home
+// page and ~/mcp-servers/LICENSE. Do not add clauses without a source.
+import LegalPage from '../components/LegalPage.astro';
+import { brand } from '../config/brand';
+import { bundlePrice } from '../data/servers';
+const updated = '1 November 2026';
+const one = brand.pricing.serverUsd;
+const all = bundlePrice();
+const email = 'support@zovo.one';
+const sections = [
+  { id: 'acceptance', title: '1. Acceptance of Terms' },
+  { id: 'definitions', title: '2. Definitions' },
+  { id: 'services', title: '3. Description of Services' },
+  { id: 'licences', title: '4. Free Tier, Pro Licences and Payment' },
+  { id: 'ip', title: '5. Intellectual Property Rights' },
+  { id: 'conduct', title: '6. Acceptable Use' },
+  { id: 'liability', title: '7. Limitation of Liability' },
+  { id: 'warranties', title: '8. Disclaimer of Warranties' },
+  { id: 'indemnification', title: '9. Indemnification' },
+  { id: 'termination', title: '10. Termination' },
+  { id: 'modifications', title: '11. Modifications to Terms' },
+  { id: 'governing', title: '12. Governing Law' },
+  { id: 'disputes', title: '13. Dispute Resolution' },
+  { id: 'severability', title: '14. Severability' },
+  { id: 'entire', title: '15. Entire Agreement' },
+  { id: 'contact', title: '16. Contact Information' },
+];
+---
+<LegalPage
+  title="Terms of Service"
+  description={`The terms for using ${brand.name}: the MCP servers, the hosted endpoints at mcp.zovo.one, the free tier and the one-time Pro licences.`}
+  eyebrow="Terms"
+  lead={`The terms for using ${brand.name}: the MCP servers, the hosted endpoints at mcp.zovo.one, the free tier and the Pro licences.`}
+  updated={updated}
+  sections={sections}
+  other={{ href: '/privacy/', label: 'Privacy Policy' }}
+>
+  <h2 id="acceptance">1. Acceptance of Terms</h2>
+  <p>By installing, accessing, or using any {brand.name} MCP server, hosted endpoint or this website, you agree to be bound by these Terms of Service. If you do not agree to these terms, you must not use our Service.</p>
+  <p>These Terms constitute a legally binding agreement between you and Zovo. Your continued use of the Service after any modifications to these Terms constitutes acceptance of those changes.</p>
+
+  <h2 id="definitions">2. Definitions</h2>
+  <p>For purposes of these Terms:</p>
+  <ul>
+    <li><strong>Service:</strong> The {brand.name} website ({brand.domain}), the hosted endpoints at mcp.zovo.one, and the MCP servers listed on {brand.domain}.</li>
+    <li><strong>MCP Servers:</strong> The Model Context Protocol servers listed on {brand.domain}, run on your own machine or at a hosted endpoint.</li>
+    <li><strong>Hosted Endpoints:</strong> The server URLs at <code>{'mcp.zovo.one/mcp/<server>'}</code>.</li>
+    <li><strong>Pro Licence:</strong> A one-time payment that removes the listed free-tier limits: ${one} for one server, or ${all} for all paid servers.</li>
+    <li><strong>Free Tier:</strong> Basic functionality available to all users at no cost.</li>
+    <li><strong>User:</strong> Any individual accessing or using the Service.</li>
+  </ul>
+
+  <h2 id="services">3. Description of Services</h2>
+  <p>Zovo provides MCP servers designed to enhance productivity and back-office workflows in MCP clients such as Claude and Cursor. Our Services include:</p>
+  <ul>
+    <li><strong>Free Tier:</strong> Every server has a free tier, with no key, no account and no expiry.</li>
+    <li><strong>Pro Licences:</strong> Removal of the listed free-tier limits for paying users.</li>
+    <li><strong>Hosted Endpoints:</strong> Servers you connect by URL, with no install.</li>
+    <li><strong>Open Source:</strong> The server source code is public under the MIT License.</li>
+  </ul>
+  <p>We reserve the right to modify, suspend, or discontinue any part of the Service at any time without notice. We are not liable for any modification, suspension, or discontinuation of the Service.</p>
+
+  <h2 id="licences">4. Free Tier, Pro Licences and Payment</h2>
+  <h3>4.1 Hosted tokens and licence keys</h3>
+  <p>The Service has no user accounts. A hosted endpoint uses an anonymous token, which lasts 30 days and is refreshed on each use. A Pro Licence is a licence key. You agree to:</p>
+  <ul>
+    <li>Keep your hosted token and licence key secret. Anyone holding your token can read your data.</li>
+    <li>Be responsible for all activities under your token and licence key</li>
+    <li>Notify us immediately of any unauthorized access</li>
+  </ul>
+  <h3>4.2 Pro Licences</h3>
+  <p>A Pro Licence is a lifetime licence: one payment of ${one} for one server, or ${all} for all paid servers together. There is no subscription, no renewal and no per-seat charge. Pro removes the listed free-tier limits; hosted rate limits still apply.</p>
+  <h3>4.3 Payment and Billing</h3>
+  <p>Payments are processed through Stripe, a third-party payment processor. You agree to pay all fees associated with the licence you choose. Your key is shown on the confirmation page after payment. If you lose it, contact {email} with your Stripe receipt.</p>
+  <h3>4.4 Refund Policy</h3>
+  <p>You can ask for a refund within 14 days of your first payment. Email {email} with your checkout details. Pro Licences are non-refundable after 14 days from purchase. We reserve the right to issue refunds at our sole discretion.</p>
+
+  <h2 id="ip">5. Intellectual Property Rights</h2>
+  <h3>5.1 Ownership</h3>
+  <p>All intellectual property rights in the Service, including but not limited to software, code, design, trademarks, and content, are owned by Zovo or its licensors. These Terms do not grant you any ownership rights.</p>
+  <h3>5.2 License</h3>
+  <p>Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to:</p>
+  <ul>
+    <li>Install and use the MCP Servers for personal or commercial purposes</li>
+    <li>Use the Hosted Endpoints</li>
+    <li>Use Pro features if you hold a Pro Licence</li>
+  </ul>
+  <h3>5.3 Open Source</h3>
+  <p>The MCP Server source code is released under the MIT License at <a href={brand.links.github} rel="noopener">github.com/theluckystrike/mcp-servers</a>. That code is governed by its license, which takes precedence over these Terms for that code.</p>
+
+  <h2 id="conduct">6. Acceptable Use</h2>
+  <p>You agree not to:</p>
+  <ul>
+    <li>Use the Service for any unlawful purpose or in violation of applicable laws</li>
+    <li>Attempt to gain unauthorized access to our systems or networks</li>
+    <li>Interfere with or disrupt the Service or servers</li>
+    <li>Share Pro licence keys or hosted tokens with others</li>
+    <li>Sell or resell Pro licence keys or access to the Hosted Endpoints</li>
+    <li>Use the Service to transmit malware or malicious code</li>
+    <li>Abuse, harass, or harm others through the Service</li>
+  </ul>
+
+  <h2 id="liability">7. Limitation of Liability</h2>
+  <p><strong>IMPORTANT - PLEASE READ CAREFULLY</strong></p>
+  <p class="caps">TO THE MAXIMUM EXTENT PERMITTED BY LAW, ZOVO SHALL NOT BE LIABLE FOR:</p>
+  <ul>
+    <li><strong>Data Loss or Corruption:</strong> Any loss, corruption, or deletion of data resulting from your use of the MCP Servers or Hosted Endpoints</li>
+    <li><strong>System Crashes:</strong> Crashes, freezes, or system instability caused by conflicts or errors in the MCP Servers</li>
+    <li><strong>Client Conflicts:</strong> Conflicts with MCP clients, other MCP servers, or other software</li>
+    <li><strong>Business Losses:</strong> Loss of profits, revenue, business opportunities, or goodwill</li>
+    <li><strong>Indirect Damages:</strong> Any indirect, incidental, special, consequential, or punitive damages</li>
+    <li><strong>Third-Party Actions:</strong> Actions or omissions of third parties, including payment processors, hosting providers and MCP client apps</li>
+    <li><strong>Service Interruptions:</strong> Any interruption, suspension, or termination of the Service</li>
+  </ul>
+  <p class="caps">IN NO EVENT SHALL ZOVO'S TOTAL LIABILITY TO YOU FOR ALL DAMAGES EXCEED THE AMOUNT YOU PAID TO US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR $100 USD, WHICHEVER IS GREATER.</p>
+  <p>Some jurisdictions do not allow the limitation of liability for incidental or consequential damages. In such jurisdictions, our liability is limited to the maximum extent permitted by law.</p>
+
+  <h2 id="warranties">8. Disclaimer of Warranties</h2>
+  <p><strong>AS IS - NO WARRANTIES</strong></p>
+  <p class="caps">THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO:</p>
+  <ul class="caps">
+    <li>IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT</li>
+    <li>WARRANTIES THAT THE SERVICE WILL BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE</li>
+    <li>WARRANTIES REGARDING THE QUALITY, ACCURACY, OR RELIABILITY OF THE SERVICE</li>
+    <li>WARRANTIES THAT DEFECTS OR ERRORS WILL BE CORRECTED</li>
+  </ul>
+  <p class="caps">YOU ACKNOWLEDGE THAT YOUR USE OF THE SERVICE IS AT YOUR SOLE RISK. YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR LOSS OF DATA RESULTING FROM YOUR USE OF THE SERVICE.</p>
+
+  <h2 id="indemnification">9. Indemnification</h2>
+  <p>You agree to indemnify, defend, and hold harmless Zovo, its owner, and its affiliates from any claims, damages, losses, liabilities, and expenses (including reasonable attorney fees) arising from:</p>
+  <ul>
+    <li>Your use or misuse of the Service</li>
+    <li>Your violation of these Terms</li>
+    <li>Your violation of any rights of another party</li>
+    <li>Your violation of applicable laws or regulations</li>
+  </ul>
+
+  <h2 id="termination">10. Termination</h2>
+  <h3>10.1 Your Right to Terminate</h3>
+  <p>You may terminate your use of the Service at any time by:</p>
+  <ul>
+    <li>Removing the MCP Servers from your MCP client</li>
+    <li>Stopping use of your hosted token. Data under it is deleted 35 days after the last use.</li>
+  </ul>
+  <h3>10.2 Our Right to Terminate</h3>
+  <p>We reserve the right to suspend or terminate your access to the Service at any time, with or without cause, with or without notice, including for:</p>
+  <ul>
+    <li>Violation of these Terms</li>
+    <li>Fraudulent, abusive, or illegal activity</li>
+    <li>Discontinuation of the Service</li>
+  </ul>
+  <h3>10.3 Effect of Termination</h3>
+  <p>Upon termination, your license to use the Service immediately ceases. We are not liable for any termination of your access to the Service. Sections of these Terms that by their nature should survive termination will survive, including ownership provisions, warranty disclaimers, and limitations of liability.</p>
+
+  <h2 id="modifications">11. Modifications to Terms</h2>
+  <p>We reserve the right to modify these Terms at any time. We will notify users of material changes by:</p>
+  <ul>
+    <li>Updating the "Last updated" date at the top of this page</li>
+    <li>Posting a notice on our website</li>
+  </ul>
+  <p>Your continued use of the Service after changes become effective constitutes acceptance of the modified Terms. If you do not agree to the modified Terms, you must stop using the Service.</p>
+
+  <h2 id="governing">12. Governing Law</h2>
+  <p>These Terms are governed by and construed in accordance with the laws of the State of Delaware, United States, without regard to its conflict of law principles. You agree to submit to the personal and exclusive jurisdiction of the courts located in Delaware for resolution of any disputes.</p>
+
+  <h2 id="disputes">13. Dispute Resolution</h2>
+  <h3>13.1 Informal Resolution</h3>
+  <p>Before filing a claim, you agree to contact us at {email} to attempt to resolve the dispute informally. We will attempt to resolve disputes in good faith within 30 days.</p>
+  <h3>13.2 Binding Arbitration</h3>
+  <p>If informal resolution fails, you agree that any dispute arising from these Terms or the Service will be resolved through binding arbitration in accordance with the American Arbitration Association's rules, rather than in court, except that you may assert claims in small claims court if your claims qualify.</p>
+  <h3>13.3 Class Action Waiver</h3>
+  <p>You agree to resolve disputes with us on an individual basis and waive your right to participate in class actions, class arbitrations, or representative actions.</p>
+  <h3>13.4 Small Claims Exception</h3>
+  <p>Either party may bring a claim in small claims court instead of arbitration if the claim qualifies for small claims court jurisdiction.</p>
+
+  <h2 id="severability">14. Severability</h2>
+  <p>If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary so that these Terms will otherwise remain in full force and effect.</p>
+
+  <h2 id="entire">15. Entire Agreement</h2>
+  <p>These Terms, together with our <a href="/privacy/">Privacy Policy</a> and any other legal notices published by us, constitute the entire agreement between you and Zovo regarding the Service and supersede all prior or contemporaneous communications, whether electronic, oral, or written.</p>
+
+  <h2 id="contact">16. Contact Information</h2>
+  <p>For questions about these Terms, please contact us at <span class="select-all">{email}</span>.</p>
+  <p>{brand.name} is a Zovo product. Zovo is a brand operated by autom8 LLC.</p>
+
+  <p class="note">These Terms adapt the Zovo Terms of Service at <a href="https://zovo.one/legal/terms" rel="noopener">zovo.one/legal/terms</a> to {brand.name}.</p>
+</LegalPage>

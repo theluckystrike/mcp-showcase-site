@@ -60,7 +60,7 @@ const year = new Date().getFullYear();
   </div>
   <div class="foot-base">
     <div class="wrap flex flex-wrap justify-between gap-3 py-5">
-      <span>&copy; {year} {brand.name} &middot; {brand.domain}</span>
+      <span>&copy; {year} {brand.name} &middot; {brand.domain} &middot; <a href="/terms/" class="foot-legal">Terms</a> &middot; <a href="/privacy/" class="foot-legal">Privacy</a></span>
       <span>Case examples are scenarios, labeled "Example".</span>
     </div>
   </div>
@@ -71,5 +71,7 @@ const year = new Date().getFullYear();
   .foot-list { display: grid; gap: .5rem; font-size: .93rem; }
   .foot-list a { color: var(--muted); }
   .foot-list a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+  .foot-legal { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  .foot-legal:hover { color: var(--text); }
   .foot-base { border-top: 1px solid var(--border-strong); font-family: var(--font-mono); font-size: .76rem; color: var(--faint); letter-spacing: .02em; }
 </style>

@@ -1,0 +1,78 @@
+---
+// Legal page shell for /terms/ and /privacy/ (a3-legal, 2026-11-01). Text column on the left, a filing card on the
+// right with the date, the contact and the contents. Content comes from the owner's published texts (see each page).
+import Layout from '../layouts/Layout.astro';
+import { brand } from '../config/brand';
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  lead: string;
+  updated: string;
+  sections: { id: string; title: string }[];
+  other: { href: string; label: string };
+}
+const { title, description, eyebrow, lead, updated, sections, other } = Astro.props;
+const contact = 'support@zovo.one';
+---
+<Layout title={title} description={description} crumbs={[{ name: title, path: Astro.url.pathname }]}>
+  <section class="relative isolate overflow-hidden">
+    <div class="grid-lines"></div>
+    <div class="wrap grid gap-12 pb-20 pt-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,19rem)] lg:gap-16">
+      <div class="min-w-0 max-w-[46rem]">
+        <span class="eyebrow">{eyebrow}</span>
+        <h1 class="display mt-5 !text-[clamp(2.3rem,6vw,4rem)]">{title}</h1>
+        <p class="lead mt-6">{lead}</p>
+        <p class="serial mt-5">Last updated {updated}</p>
+        <article class="legal prose-site mt-10">
+          <slot />
+        </article>
+      </div>
+      <aside class="self-start lg:mt-24" aria-label="About this document">
+        <div class="sheet perf-top card">
+          <div class="card-head">
+            <span class="card-kind">{title}</span>
+            <span class="card-no">{brand.domain}</span>
+          </div>
+          <dl class="card-list">
+            <dt>Updated</dt><dd>{updated}</dd>
+            <dt>Contact</dt><dd><span class="select-all">{contact}</span></dd>
+          </dl>
+          <nav aria-label="Contents" class="mt-4">
+            <p class="card-sub sheet-muted">Contents</p>
+            <ol class="card-toc">
+              {sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}
+            </ol>
+          </nav>
+          <p class="card-foot sheet-muted">See also: <a href={other.href}>{other.label}</a></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .legal { font-size: 1.01rem; line-height: 1.65; }
+  .legal :global(h2) { margin-top: 2.6rem; padding-top: .9rem; border-top: 2px solid var(--text); font-family: var(--font-display); font-size: 1.35rem; font-weight: 760; scroll-margin-top: 6rem; }
+  .legal :global(h3) { margin-top: 1.5rem; font-size: 1.05rem; font-weight: 700; }
+  .legal :global(h2 + p), .legal :global(h3 + p), .legal :global(h2 + ul), .legal :global(h3 + ul) { margin-top: .7rem; }
+  .legal :global(p + ul), .legal :global(ul + p), .legal :global(p + .tbl), .legal :global(.tbl + p) { margin-top: .8rem; }
+  .legal :global(ul) { list-style: disc; padding-left: 1.3rem; display: grid; gap: .4rem; }
+  .legal :global(code) { font-family: var(--font-mono); font-size: .86em; overflow-wrap: anywhere; }
+  .legal :global(.caps) { font-size: .93rem; letter-spacing: .01em; }
+  .legal :global(.tbl) { overflow-x: auto; }
+  .legal :global(.note) { margin-top: 2.6rem; padding-top: .9rem; border-top: 1px dashed var(--border-strong); color: var(--muted); font-size: .93rem; }
+  .card { padding: 1.5rem 1.3rem 1.2rem; }
+  .card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: .7rem; border-bottom: 2px solid #1a1d22; }
+  .card-kind { font-family: var(--font-display); font-stretch: 100%; font-weight: 750; font-size: 1.02rem; }
+  .card-no { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .06em; color: var(--stamp); }
+  .card-list { display: grid; grid-template-columns: auto minmax(0, 1fr); margin: 0; font-size: .88rem; }
+  .card-list dt, .card-list dd { margin: 0; padding: .5rem 0; border-bottom: 1px solid #dfe3ec; }
+  .card-list dt { color: #4f5560; padding-right: 1rem; }
+  .card-list dd { font-family: var(--font-mono); font-size: .8rem; font-weight: 600; text-align: right; overflow-wrap: anywhere; }
+  .card-sub { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+  .card-toc { margin-top: .5rem; display: grid; gap: .3rem; font-size: .86rem; list-style: none; padding: 0; }
+  .card-toc a, .card-foot a { color: #2b3c9e; text-decoration: underline; text-underline-offset: 3px; }
+  .card-foot { margin-top: 1rem; font-size: .82rem; }
+</style>

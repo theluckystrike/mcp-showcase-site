@@ -1,0 +1,74 @@
+---
+// Privacy policy (a3-legal, 2026-11-01). Source: the owner's published text at https://mcp.zovo.one/privacy
+// (last updated 16 October 2026), adapted in naming only. Two additions are facts read from code, not new promises:
+// the OAuth paragraph (~/mcp-servers/remote/src/index.ts: OAUTH_ACCESS_TTL, oauth_client TTL 365 days) and the
+// Google Analytics paragraph (src/layouts/Layout.astro, brand.analytics.ga4). Change the text only from those sources.
+import LegalPage from '../components/LegalPage.astro';
+import { brand } from '../config/brand';
+const updated = '1 November 2026';
+const repo = brand.links.github;
+const origin = brand.backend.origin;
+const sections = [
+  { id: 'who', title: 'Who runs this' },
+  { id: 'local', title: 'Servers on your machine' },
+  { id: 'hosted', title: 'Hosted endpoints' },
+  { id: 'licence', title: 'Buying a licence' },
+  { id: 'tips', title: 'Setup tips by email' },
+  { id: 'traffic', title: 'Traffic and analytics' },
+  { id: 'delete', title: 'Deleting your data' },
+  { id: 'not', title: 'What this page is not' },
+];
+const kept: [string, string, string][] = [
+  ['An anonymous token, anon_<32 hex>', "Separates your data from another caller's. No name, no email, no account.", '30 days, refreshed on each use'],
+  ['The documents your calls create, such as invoices or timesheets', 'They are the point of the server', 'Deleted 35 days after the last touch'],
+  ['A download link for a file a tool produced', 'To hand you the PDF or CSV', '1 hour'],
+  ['Rate-limit counters', 'To keep one caller from exhausting the endpoint', '2 hours'],
+];
+---
+<LegalPage
+  title="Privacy Policy"
+  description={`What ${brand.name} keeps about you: local MCP servers, hosted endpoints, licence purchases and site analytics, with how long each is kept.`}
+  eyebrow="Privacy"
+  lead={`What the ${brand.name} servers, the hosted endpoints, the checkout and this website keep about you, and for how long.`}
+  updated={updated}
+  sections={sections}
+  other={{ href: '/terms/', label: 'Terms of Service' }}
+>
+  <p>This describes what the software does. It is adapted from the privacy page at <a href={`${origin}/privacy`} rel="noopener">mcp.zovo.one/privacy</a>, which is checked against the source code. The code is public, so every claim here can be verified in <a href={repo} rel="noopener">github.com/theluckystrike/mcp-servers</a>.</p>
+
+  <h2 id="who">Who runs this</h2>
+  <p>{brand.name} is a Zovo product. The hosted endpoints, the checkout and the licence keys run on <code>mcp.zovo.one</code>. Zovo is a brand operated by autom8 LLC. For any privacy question, email <span class="select-all">support@zovo.one</span>.</p>
+
+  <h2 id="local">If you run a server on your own machine</h2>
+  <p>Nothing leaves it. The stdio servers read and write only under your own data directory, <code>{'${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/'}</code>. They make no network calls in normal use, send no telemetry, and have no account. A Pro licence key is verified offline with an Ed25519 signature, so activating one contacts nothing. The two exceptions are a server whose whole job is to fetch something you asked for, such as exchange rates or a product page, and those fetch only what the call names.</p>
+
+  <h2 id="hosted">If you use a hosted endpoint</h2>
+  <p>The hosted endpoints at <code>{'mcp.zovo.one/mcp/<server>'}</code> hold data, because they have to. What is kept, and for how long:</p>
+  <div class="tbl">
+    <table class="table">
+      <thead><tr><th scope="col">What</th><th scope="col">Why</th><th scope="col">Kept for</th></tr></thead>
+      <tbody>
+        {kept.map(([what, why, how]) => <tr><td>{what}</td><td>{why}</td><td>{how}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p>Anyone holding your token can read your data, so treat the token as the secret it is. A shared cache of European Central Bank reference rates is read-only and common to everyone; nothing about you is written into it.</p>
+  <p>If your MCP client connects through OAuth, the access token it receives is an anonymous token of the same kind, with the same 30-day lifetime. The registration details your client sends (such as its name and redirect URLs) are kept for up to 365 days.</p>
+
+  <h2 id="licence">If you buy a licence</h2>
+  <p>Payment is taken by Stripe. The card never touches {brand.name} or <code>mcp.zovo.one</code>; the checkout page is Stripe's own.</p>
+  <p>After a successful payment, <code>mcp.zovo.one</code> stores one record against the Stripe session id: the licence key it issued, the product, and the email address Stripe collected for the receipt. That email is kept so a buyer who loses the key can recover it at <code>mcp.zovo.one/recover?session_id=...</code>. A paid webhook also attempts to send the key through Resend to the checkout email address. Email delivery is best-effort; the confirmation page remains the direct key delivery path. A purchase does not subscribe the buyer to setup tips. The licence key itself can carry a twelve character hash prefix derived from the email; it does not contain the address.</p>
+
+  <h2 id="tips">If you subscribe to setup tips</h2>
+  <p>The setup-tips signup on <code>mcp.zovo.one</code> stores your email address, signup time, and source label in our licence storage for up to five years. Resend sends the welcome message, an invoice setup tip after about two days, and a bundle offer after about a week. Send markers prevent a completed step from being sent again. Each message has an unsubscribe link; opting out stores a suppression record for five years and stops later setup-tip and bundle-offer messages. Transactional licence delivery is separate. This website has no signup form.</p>
+
+  <h2 id="traffic">Traffic and analytics</h2>
+  <p>The hosted endpoints and the checkout run on Cloudflare, which logs requests as any web host does. <code>mcp.zovo.one</code> additionally counts clicks on upgrade links and records hosted tool-response and checkout-stage counts by fixed source labels. The hosted-response instrument keeps a SHA-256 token source/probe sidecar for 31 days and private daily token/server deduplication hashes; these are pseudonymous internal identifiers. Daily response counters and deduplication records are retained for at most 31 days from the UTC date's start. Aggregate reports expose no hashes, tokens, tool arguments or results, filenames, emails or client IPs. An emitted upgrade trailer is counted as an emission, not proof that a person saw it. Unmarked requests can include automation. Local stdio servers and the editable browser examples send no usage telemetry or field values.</p>
+  <p>This website, <code>www.{brand.domain}</code>, is served by Cloudflare Pages. It loads Google Analytics 4, which uses cookies to count page views. A click on a buy link is sent to Google Analytics as a <code>begin_checkout</code> event with the product and the link's source label. A click on a support link (GitHub, Telegram, Buy Me a Coffee, PayPal) is sent as a <code>support_click</code> event with the link address.</p>
+
+  <h2 id="delete">Deleting your data</h2>
+  <p>For a hosted endpoint, stop using the token and everything under it is deleted after 35 days; there is nothing to ask for. For a purchase record, subscription record, or another data request, contact <span class="select-all">support@zovo.one</span>. Include the Stripe session id for a purchase; do not post licence keys, tokens, or payment details in a public GitHub issue.</p>
+
+  <h2 id="not">What this page is not</h2>
+  <p>It is a description of behaviour written by the person who wrote the code, not legal advice, and not a contract. Where it and the source disagree, the source is right and this page is a bug. The terms for using {brand.name} are in the <a href="/terms/">Terms of Service</a>.</p>
+</LegalPage>

@@ -11,6 +11,7 @@ export function allRoutes(): { path: string; priority: number }[] {
   const fixed = ['/', '/servers/', '/use-cases/', '/pricing/', '/connect/', '/developers/', '/developers/hosted-endpoints/', '/developers/tool-contracts/', '/developers/mcp-inspector/', '/compare/', '/services/', '/about/'];
   const out = [
     ...fixed.map((p) => ({ path: p, priority: prio(p, 0.5) })),
+    ...['/terms/', '/privacy/'].map((p) => ({ path: p, priority: prio(p, 0.2) })),
     ...BUILT_PAGE_TYPES.flatMap((t) => pagesOfType(t).map((p) => ({ path: p.path, priority: p.priority }))),
     ...COMPARISONS.map((c) => ({ path: `/compare/${c.slug}/`, priority: prio(`/compare/${c.slug}/`, 0.6) })),
     ...CATEGORIES.map((c) => ({ path: `/categories/${c.id}/`, priority: prio(`/categories/${c.id}/`, 0.6) })),
