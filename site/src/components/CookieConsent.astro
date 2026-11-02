@@ -1,0 +1,65 @@
+---
+// Cookie consent banner (a7-site, 2026-11-02). No external library. Google Consent Mode v2 defaults are set in
+// src/layouts/Layout.astro before gtag('config'); this banner only records the visitor's choice and sends
+// gtag('consent','update',...). Shown on first visit (no stored choice); the footer "Cookie settings" button
+// ([data-cookie-settings]) reopens it. Choice key: localStorage 'mcpstamp-consent' = 'granted' | 'denied'.
+---
+<div id="cc" class="cc" role="region" aria-labelledby="cc-h" hidden>
+  <div class="cc-box">
+    <p id="cc-h" class="cc-h">Analytics cookies</p>
+    <p class="cc-p">We use Google Analytics to count page views and clicks on buy links. In the EEA, the UK and Switzerland it sets cookies only if you accept. No ads, no sale of data. <a href="/privacy/#cookies">Privacy Policy</a></p>
+    <div class="cc-act">
+      <button type="button" class="btn btn-sm" data-cc="denied">Reject</button>
+      <button type="button" class="btn btn-sm" data-cc="granted">Accept</button>
+    </div>
+  </div>
+</div>
+<script is:inline>
+  (function () {
+    var KEY = 'mcpstamp-consent';
+    var box = document.getElementById('cc');
+    if (!box) return;
+    var stored = null;
+    try { stored = localStorage.getItem(KEY); } catch (e) {}
+    function show(focus) { box.hidden = false; if (focus) { var b = box.querySelector('button'); if (b) b.focus(); } }
+    function dropGaCookies() {
+      // Remove Google Analytics cookies already set (for example under the default outside the EEA/UK/CH).
+      var host = location.hostname, doms = ['', host, '.' + host, '.' + host.replace(/^www\./, '')];
+      document.cookie.split(';').forEach(function (c) {
+        var n = c.split('=')[0].trim();
+        if (n === '_ga' || n.indexOf('_ga_') === 0 || n === '_gid' || n === '_gat') {
+          doms.forEach(function (d) { document.cookie = n + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : ''); });
+        }
+      });
+    }
+    function choose(v) {
+      try { localStorage.setItem(KEY, v); } catch (e) {}
+      if (typeof window.gtag === 'function') window.gtag('consent', 'update', { analytics_storage: v });
+      if (v === 'denied') dropGaCookies();
+      box.hidden = true;
+    }
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-cc]');
+      if (b) choose(b.getAttribute('data-cc'));
+    });
+    document.addEventListener('click', function (e) {
+      var s = e.target.closest && e.target.closest('[data-cookie-settings]');
+      if (s) { e.preventDefault(); show(true); }
+    });
+    if (stored !== 'granted' && stored !== 'denied') show(false);
+  })();
+</script>
+<style>
+  .cc { position: fixed; inset: auto 0 0 0; z-index: 60; padding: 0 .75rem .75rem; pointer-events: none; }
+  .cc[hidden] { display: none; }
+  .cc-box {
+    pointer-events: auto; margin: 0 auto; max-width: 44rem; display: grid; gap: .55rem; padding: 1rem 1.1rem .95rem;
+    background: var(--surface-solid); color: var(--text); border: 1px solid var(--border-strong); border-top: 2px solid var(--text);
+    border-radius: 3px; box-shadow: 3px 3px 0 var(--border-strong);
+  }
+  .cc-h { font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+  .cc-p { font-size: .93rem; line-height: 1.5; color: var(--muted); }
+  .cc-p a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .cc-act { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: flex-end; }
+  .cc-act .btn { min-width: 6.5rem; }
+</style>

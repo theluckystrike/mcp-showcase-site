@@ -1,49 +1,88 @@
 ---
-// Privacy policy (a3-legal, 2026-11-01). Source: the owner's published text at https://mcp.zovo.one/privacy
-// (last updated 16 October 2026), adapted in naming only. Two additions are facts read from code, not new promises:
-// the OAuth paragraph (~/mcp-servers/remote/src/index.ts: OAUTH_ACCESS_TTL, oauth_client TTL 365 days) and the
-// Google Analytics paragraph (src/layouts/Layout.astro, brand.analytics.ga4). Change the text only from those sources.
+// Privacy Policy. a3-legal (2026-11-01) first version, adapted from https://mcp.zovo.one/privacy (16 October 2026).
+// a7-site (2026-11-02): controller autom8 LLC (Armenia), legal bases, recipients, transfers, rights, consent mode.
+// Facts read from code, not new promises: token, document, OAuth and retention lifetimes from
+// ~/mcp-servers/remote/src/index.ts and oauth-refresh.ts; purchase, setup-tips and suppression records from
+// ~/mcp-servers/billing/src (5-year TTLs); analytics from src/layouts/Layout.astro and src/components/CookieConsent.astro.
+// Keep in step with /terms/.
 import LegalPage from '../components/LegalPage.astro';
 import { brand } from '../config/brand';
-const updated = '1 November 2026';
+const updated = '2 November 2026';
 const repo = brand.links.github;
 const origin = brand.backend.origin;
+const email = 'support@zovo.one';
 const sections = [
-  { id: 'who', title: 'Who runs this' },
-  { id: 'local', title: 'Servers on your machine' },
-  { id: 'hosted', title: 'Hosted endpoints' },
-  { id: 'licence', title: 'Buying a licence' },
-  { id: 'tips', title: 'Setup tips by email' },
-  { id: 'traffic', title: 'Traffic and analytics' },
-  { id: 'delete', title: 'Deleting your data' },
-  { id: 'not', title: 'What this page is not' },
+  { id: 'who', title: '1. Who is responsible' },
+  { id: 'summary', title: '2. Summary' },
+  { id: 'local', title: '3. Servers on your machine' },
+  { id: 'hosted', title: '4. Hosted endpoints and OAuth' },
+  { id: 'ai-clients', title: '5. AI clients' },
+  { id: 'licence', title: '6. Buying a licence' },
+  { id: 'tips', title: '7. Setup tips by email' },
+  { id: 'support', title: '8. Contacting support' },
+  { id: 'traffic', title: '9. Logs and usage counts' },
+  { id: 'cookies', title: '10. Website analytics and cookies' },
+  { id: 'bases', title: '11. Purposes and legal bases' },
+  { id: 'recipients', title: '12. Processors and recipients' },
+  { id: 'transfers', title: '13. International transfers' },
+  { id: 'retention', title: '14. How long we keep data' },
+  { id: 'rights', title: '15. Your rights' },
+  { id: 'delete', title: '16. Deleting your data' },
+  { id: 'security', title: '17. Security' },
+  { id: 'children', title: '18. Children' },
+  { id: 'changes', title: '19. Changes and contact' },
 ];
 const kept: [string, string, string][] = [
-  ['An anonymous token, anon_<32 hex>', "Separates your data from another caller's. No name, no email, no account.", '30 days, refreshed on each use'],
-  ['The documents your calls create, such as invoices or timesheets', 'They are the point of the server', 'Deleted 35 days after the last touch'],
+  ['An anonymous token, anon_<32 hex>', "Separates your data from another caller's. No name, no email.", '30 days, refreshed on each use'],
+  ['The documents and records your tool calls create, such as invoices, quotes, receipts or resumes, and files you upload to a tool', 'They are the point of the server', 'Deleted 35 days after the last use of the token'],
   ['A download link for a file a tool produced', 'To hand you the PDF or CSV', '1 hour'],
   ['Rate-limit counters', 'To keep one caller from exhausting the endpoint', '2 hours'],
+  ['OAuth access token', 'Lets your AI client call the endpoint', '30 days'],
+  ['OAuth refresh token (rotating)', 'Lets your AI client renew access without asking again', 'Up to 365 days; replaced on each use'],
+  ['OAuth client registration (client name and redirect URLs your client sends)', 'To complete the OAuth flow', 'Up to 365 days'],
+  ['OAuth authorization code', 'One-time code between Allow and the token', '10 minutes'],
+];
+const retention: [string, string][] = [
+  ['Hosted documents, records and uploads', '35 days after the token was last used, then deleted automatically'],
+  ['Hosted and OAuth tokens', 'As in the table in section 4 (30 days to 365 days)'],
+  ['Purchase record (Stripe session id, licence key, product, receipt email)', 'For the life of the lifetime licence, so the key can be recovered, unless you ask us to delete it; Stripe keeps its own payment records'],
+  ['Setup-tips subscription (email, signup time, source)', 'Up to 5 years, or until you unsubscribe'],
+  ['Unsubscribe (suppression) record', '5 years, so we do not email you again'],
+  ['Pseudonymous usage hashes and daily counters', 'At most 31 days'],
+  ['Support emails', 'As long as needed to handle your request and any follow-up'],
+  ['Google Analytics events (website only, with consent where required)', 'Under the retention setting of our Analytics property, at most 14 months'],
+  ['Consent choice in your browser (localStorage)', 'Until you change it or clear your browser storage'],
 ];
 ---
 <LegalPage
   title="Privacy Policy"
-  description={`What ${brand.name} keeps about you: local MCP servers, hosted endpoints, licence purchases and site analytics, with how long each is kept.`}
+  description={`How autom8 LLC, the operator of ${brand.name}, handles personal data: hosted MCP endpoints, OAuth, licence purchases, AI clients, analytics with consent, and your rights.`}
   eyebrow="Privacy"
-  lead={`What the ${brand.name} servers, the hosted endpoints, the checkout and this website keep about you, and for how long.`}
+  lead={`What the ${brand.name} servers, the hosted endpoints, the checkout and this website keep about you, why, who receives it, for how long, and your rights.`}
   updated={updated}
   sections={sections}
   other={{ href: '/terms/', label: 'Terms of Service' }}
 >
-  <p>This describes what the software does. It is adapted from the privacy page at <a href={`${origin}/privacy`} rel="noopener">mcp.zovo.one/privacy</a>, which is checked against the source code. The code is public, so every claim here can be verified in <a href={repo} rel="noopener">github.com/theluckystrike/mcp-servers</a>.</p>
+  <h2 id="who">1. Who is responsible</h2>
+  <p>The data controller is <strong>autom8 LLC</strong>, a limited liability company registered in the <strong>Republic of Armenia</strong> (Yerevan, registered on 8 October 2024). autom8 LLC operates {brand.name} and the Zovo brand; the hosted endpoints, the checkout and the licence keys run on <code>mcp.zovo.one</code>. For any privacy question or request, email <span class="select-all">{email}</span>.</p>
+  <p>We process personal data under the Law of the Republic of Armenia on Protection of Personal Data and, for people in the European Economic Area, the United Kingdom and Switzerland, under the GDPR, the UK GDPR and the Swiss Federal Act on Data Protection where they apply. The <a href="/terms/">Terms of Service</a> name the same operator.</p>
 
-  <h2 id="who">Who runs this</h2>
-  <p>{brand.name} is a Zovo product. The hosted endpoints, the checkout and the licence keys run on <code>mcp.zovo.one</code>. Zovo is a brand operated by autom8 LLC. For any privacy question, email <span class="select-all">support@zovo.one</span>.</p>
+  <h2 id="summary">2. Summary</h2>
+  <ul>
+    <li>Servers you run on your own machine send us nothing.</li>
+    <li>Hosted endpoints keep the documents you create, under an anonymous token, and delete them 35 days after you stop using it.</li>
+    <li>AI clients such as Gemini, ChatGPT and Claude receive the tool results you ask for.</li>
+    <li>Payments go through Stripe. We keep your receipt email so you can recover a lost key.</li>
+    <li>This website uses Google Analytics. In the EEA, the UK and Switzerland it sets no cookies unless you click Accept.</li>
+    <li>We do not sell your data, do not share it for advertising, and do not use it to train AI models.</li>
+  </ul>
+  <p>The code is public, so the technical claims here can be checked in <a href={repo} rel="noopener">github.com/theluckystrike/mcp-servers</a>. The hosted service also publishes a technical privacy page at <a href={`${origin}/privacy`} rel="noopener">mcp.zovo.one/privacy</a>.</p>
 
-  <h2 id="local">If you run a server on your own machine</h2>
-  <p>Nothing leaves it. The stdio servers read and write only under your own data directory, <code>{'${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/'}</code>. They make no network calls in normal use, send no telemetry, and have no account. A Pro licence key is verified offline with an Ed25519 signature, so activating one contacts nothing. The two exceptions are a server whose whole job is to fetch something you asked for, such as exchange rates or a product page, and those fetch only what the call names.</p>
+  <h2 id="local">3. If you run a server on your own machine</h2>
+  <p>Nothing leaves it. The stdio servers read and write only under your own data directory, <code>{'${XDG_DATA_HOME:-~/.local/share}/mcp-servers/<server>/'}</code>. They make no network calls in normal use, send no telemetry, and have no account. A Pro licence key is verified offline with an Ed25519 signature, so activating one contacts nothing. The exceptions are servers whose job is to fetch something you asked for, such as exchange rates or a product page; those fetch only what the call names.</p>
 
-  <h2 id="hosted">If you use a hosted endpoint</h2>
-  <p>The hosted endpoints at <code>{'mcp.zovo.one/mcp/<server>'}</code> hold data, because they have to. What is kept, and for how long:</p>
+  <h2 id="hosted">4. If you use a hosted endpoint</h2>
+  <p>The hosted endpoints at <code>{'mcp.zovo.one/mcp/<server>'}</code> store data, because they have to. There is no username, password or profile; your token acts as your account. The data your tool calls contain can include personal data, for example names and addresses of your clients on an invoice, or your work history on a resume. What is kept, and for how long:</p>
   <div class="tbl">
     <table class="table">
       <thead><tr><th scope="col">What</th><th scope="col">Why</th><th scope="col">Kept for</th></tr></thead>
@@ -52,23 +91,114 @@ const kept: [string, string, string][] = [
       </tbody>
     </table>
   </div>
-  <p>Anyone holding your token can read your data, so treat the token as the secret it is. A shared cache of European Central Bank reference rates is read-only and common to everyone; nothing about you is written into it.</p>
-  <p>If your MCP client connects through OAuth, the access token it receives is an anonymous token of the same kind, with the same 30-day lifetime. The registration details your client sends (such as its name and redirect URLs) are kept for up to 365 days.</p>
+  <p>This data is stored in Cloudflare Workers KV. Anyone holding your token can read your data, so treat the token as a secret. If your MCP client connects through OAuth, clicking Allow creates an anonymous token of the same kind; we do not ask for your name or email. A shared cache of European Central Bank reference rates is read-only and common to everyone; nothing about you is written into it.</p>
 
-  <h2 id="licence">If you buy a licence</h2>
-  <p>Payment is taken by Stripe. The card never touches {brand.name} or <code>mcp.zovo.one</code>; the checkout page is Stripe's own.</p>
-  <p>After a successful payment, <code>mcp.zovo.one</code> stores one record against the Stripe session id: the licence key it issued, the product, and the email address Stripe collected for the receipt. That email is kept so a buyer who loses the key can recover it at <code>mcp.zovo.one/recover?session_id=...</code>. A paid webhook also attempts to send the key through Resend to the checkout email address. Email delivery is best-effort; the confirmation page remains the direct key delivery path. A purchase does not subscribe the buyer to setup tips. The licence key itself can carry a twelve character hash prefix derived from the email; it does not contain the address.</p>
+  <h2 id="ai-clients">5. AI clients (Gemini, ChatGPT, Claude and others)</h2>
+  <p>When you connect a server to an AI client such as Google Gemini, OpenAI ChatGPT, Anthropic Claude or Cursor, the client sends our tools the arguments you or the AI model supply, and our tools return the results you ask for to that client. We receive only what is in the tool call, not your other conversations. The AI client provider processes the tool results under its own privacy policy, which we do not control. Do not ask a tool to return data you do not want the AI client to receive.</p>
 
-  <h2 id="tips">If you subscribe to setup tips</h2>
-  <p>The setup-tips signup on <code>mcp.zovo.one</code> stores your email address, signup time, and source label in our licence storage for up to five years. Resend sends the welcome message, an invoice setup tip after about two days, and a bundle offer after about a week. Send markers prevent a completed step from being sent again. Each message has an unsubscribe link; opting out stores a suppression record for five years and stops later setup-tip and bundle-offer messages. Transactional licence delivery is separate. This website has no signup form.</p>
+  <h2 id="licence">6. If you buy a licence</h2>
+  <p>Payment is taken by Stripe on Stripe's own checkout page. Your card details never reach {brand.name} or <code>mcp.zovo.one</code>. Stripe processes the payment as an independent controller under its own privacy policy.</p>
+  <p>After a successful payment, <code>mcp.zovo.one</code> stores one record against the Stripe session id: the licence key it issued, the product, and the email address Stripe collected for the receipt. That email is kept so a buyer who loses the key can recover it at <code>mcp.zovo.one/recover?session_id=...</code>. We also try to send the key through Resend to the checkout email address. Email delivery is best-effort; the confirmation page is the direct key delivery path. A purchase does not subscribe you to setup tips. The licence key can carry a twelve-character hash prefix derived from the email; it does not contain the address.</p>
 
-  <h2 id="traffic">Traffic and analytics</h2>
-  <p>The hosted endpoints and the checkout run on Cloudflare, which logs requests as any web host does. <code>mcp.zovo.one</code> additionally counts clicks on upgrade links and records hosted tool-response and checkout-stage counts by fixed source labels. The hosted-response instrument keeps a SHA-256 token source/probe sidecar for 31 days and private daily token/server deduplication hashes; these are pseudonymous internal identifiers. Daily response counters and deduplication records are retained for at most 31 days from the UTC date's start. Aggregate reports expose no hashes, tokens, tool arguments or results, filenames, emails or client IPs. An emitted upgrade trailer is counted as an emission, not proof that a person saw it. Unmarked requests can include automation. Local stdio servers and the editable browser examples send no usage telemetry or field values.</p>
-  <p>This website, <code>www.{brand.domain}</code>, is served by Cloudflare Pages. It loads Google Analytics 4, which uses cookies to count page views. A click on a buy link is sent to Google Analytics as a <code>begin_checkout</code> event with the product and the link's source label. A click on a support link (GitHub, Telegram, Buy Me a Coffee, PayPal) is sent as a <code>support_click</code> event with the link address.</p>
+  <h2 id="tips">7. If you subscribe to setup tips</h2>
+  <p>The setup-tips signup on <code>mcp.zovo.one</code> stores your email address, signup time and source label for up to five years. Resend sends the welcome message, an invoice setup tip after about two days and a bundle offer after about a week. Each message has an unsubscribe link; opting out stores a suppression record for five years and stops later messages. Licence delivery emails are separate. This website has no signup form.</p>
 
-  <h2 id="delete">Deleting your data</h2>
-  <p>For a hosted endpoint, stop using the token and everything under it is deleted after 35 days; there is nothing to ask for. For a purchase record, subscription record, or another data request, contact <span class="select-all">support@zovo.one</span>. Include the Stripe session id for a purchase; do not post licence keys, tokens, or payment details in a public GitHub issue.</p>
+  <h2 id="support">8. If you contact support</h2>
+  <p>If you email {email}, we receive your email address and what you write, and use it to answer you. Include a Stripe session id for a purchase question. Do not post licence keys, tokens or payment details in a public GitHub issue.</p>
 
-  <h2 id="not">What this page is not</h2>
-  <p>It is a description of behaviour written by the person who wrote the code, not legal advice, and not a contract. Where it and the source disagree, the source is right and this page is a bug. The terms for using {brand.name} are in the <a href="/terms/">Terms of Service</a>.</p>
+  <h2 id="traffic">9. Logs and usage counts</h2>
+  <p>The hosted endpoints and the checkout run on Cloudflare, which processes request data such as IP addresses to deliver and protect the service. <code>mcp.zovo.one</code> counts clicks on upgrade links and records hosted tool-response and checkout-stage counts by fixed source labels. The hosted-response counter keeps a SHA-256 hash of the token and private daily deduplication hashes; these are pseudonymous identifiers kept for at most 31 days. Aggregate reports contain no hashes, tokens, tool arguments or results, file names, emails or IP addresses. Local servers send no usage data.</p>
+
+  <h2 id="cookies">10. Website analytics and cookies</h2>
+  <p>This website, <code>www.{brand.domain}</code>, is served by Cloudflare Pages. It uses <strong>Google Analytics 4</strong> to count page views, clicks on buy links (sent as a <code>begin_checkout</code> event with the product and the link's source label) and clicks on support links such as GitHub, Telegram, Buy Me a Coffee and PayPal (sent as a <code>support_click</code> event with the link address). Google Analytics runs on this website only; the hosted endpoints and the servers do not use it.</p>
+  <p>We use Google Consent Mode:</p>
+  <ul>
+    <li><strong>EEA, United Kingdom and Switzerland:</strong> analytics cookies are off until you click Accept in the cookie banner. Until then Google Analytics sets no cookies and receives only cookieless signals without identifiers.</li>
+    <li><strong>Other countries:</strong> analytics is on by default. You can switch it off with Reject in the banner.</li>
+    <li><strong>Everywhere:</strong> advertising storage, ad user data and ad personalisation are always denied. The site shows no ads.</li>
+  </ul>
+  <p>Your choice is stored in your browser's local storage under <code>mcpstamp-consent</code>. You can change it at any time with <button type="button" class="inline-link" data-cookie-settings>Cookie settings</button>, also linked in the footer of every page. When you reject, we also remove Google Analytics cookies already set on this site.</p>
+  <div class="tbl">
+    <table class="table">
+      <thead><tr><th scope="col">Name</th><th scope="col">Set by</th><th scope="col">Purpose</th><th scope="col">Duration</th></tr></thead>
+      <tbody>
+        <tr><td><code>_ga</code>, <code>_ga_*</code> (cookies)</td><td>Google Analytics, only with consent where required</td><td>Distinguish visitors and sessions for statistics</td><td>Up to 2 years</td></tr>
+        <tr><td><code>mcpstamp-consent</code> (local storage)</td><td>This website</td><td>Remember your cookie choice</td><td>Until changed or cleared</td></tr>
+        <tr><td><code>mode</code>, <code>theme</code> (local storage)</td><td>This website</td><td>Remember light or dark display</td><td>Until changed or cleared</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="bases">11. Purposes and legal bases</h2>
+  <div class="tbl">
+    <table class="table">
+      <thead><tr><th scope="col">Purpose</th><th scope="col">Data</th><th scope="col">Legal basis (GDPR article 6(1))</th></tr></thead>
+      <tbody>
+        <tr><td>Run the hosted endpoints and OAuth connections you use</td><td>Tokens, tool arguments, documents, uploads</td><td>(b) performance of a contract</td></tr>
+        <tr><td>Sell and deliver a Pro Licence; let you recover a lost key</td><td>Stripe session id, licence key, product, receipt email</td><td>(b) contract; (c) legal obligations such as accounting</td></tr>
+        <tr><td>Send setup tips</td><td>Email address, signup time, source</td><td>(a) consent, which you can withdraw by unsubscribing</td></tr>
+        <tr><td>Answer support requests</td><td>Email and message content</td><td>(b) contract or (f) legitimate interest in answering you</td></tr>
+        <tr><td>Security, abuse prevention and rate limits</td><td>Request logs, rate-limit counters</td><td>(f) legitimate interest in keeping the service available and safe</td></tr>
+        <tr><td>Count use of the hosted service in aggregate</td><td>Pseudonymous hashes, daily counters</td><td>(f) legitimate interest in understanding and improving the service</td></tr>
+        <tr><td>Website analytics</td><td>Google Analytics events and cookies</td><td>(a) consent in the EEA, UK and Switzerland; elsewhere (f) legitimate interest, with the option to reject</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>We do not sell personal data, do not share it for cross-context behavioural advertising, and do not use your data, tool inputs or tool results to train AI models. We do not make decisions about you based solely on automated processing that have legal or similarly significant effects.</p>
+
+  <h2 id="recipients">12. Processors and recipients</h2>
+  <ul>
+    <li><strong>Cloudflare, Inc.</strong> (processor): hosting of this website, the hosted endpoints and the checkout pages; storage in Workers KV.</li>
+    <li><strong>Stripe</strong> (independent controller for payment data): payment processing and receipts.</li>
+    <li><strong>Resend</strong> (processor): sending licence-key and setup-tip emails.</li>
+    <li><strong>Google</strong> (processor for Google Analytics): website analytics on {brand.domain} only, with consent where required.</li>
+    <li><strong>The AI client you choose</strong>, such as Google Gemini, OpenAI ChatGPT or Anthropic Claude: receives the tool results you ask for (see section 5).</li>
+    <li><strong>Authorities</strong>, when the law requires us to disclose data.</li>
+  </ul>
+
+  <h2 id="transfers">13. International transfers</h2>
+  <p>autom8 LLC is based in Armenia, and our providers process data in other countries, including the United States, through Cloudflare's global network. Armenia does not have an adequacy decision from the European Commission. When we transfer personal data from the EEA, the UK or Switzerland, we rely on the European Commission's Standard Contractual Clauses (with the UK and Swiss addenda) or, for US providers certified under it, the EU-U.S. Data Privacy Framework and its UK and Swiss extensions. You can ask us for more information about these safeguards.</p>
+
+  <h2 id="retention">14. How long we keep data</h2>
+  <div class="tbl">
+    <table class="table">
+      <thead><tr><th scope="col">Data</th><th scope="col">Kept for</th></tr></thead>
+      <tbody>
+        {retention.map(([what, how]) => <tr><td>{what}</td><td>{how}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="rights">15. Your rights</h2>
+  <p>Depending on where you live, you have the right to:</p>
+  <ul>
+    <li><strong>access</strong> the personal data we hold about you and get a copy;</li>
+    <li><strong>correct</strong> inaccurate data;</li>
+    <li><strong>delete</strong> your data;</li>
+    <li><strong>export</strong> data you gave us in a structured, machine-readable format (data portability);</li>
+    <li><strong>object</strong> to processing based on legitimate interests, and to restrict processing;</li>
+    <li><strong>withdraw consent</strong> at any time, for analytics with Cookie settings and for setup tips with the unsubscribe link, without affecting earlier processing;</li>
+    <li><strong>complain to a supervisory authority</strong>, in particular in the country where you live or work, or in Armenia to the Personal Data Protection Agency.</li>
+  </ul>
+  <p>Email {email} to use these rights. We reply within one month. Hosted data is stored under an anonymous token, so to find it we need the token or, for a purchase, the Stripe session id. We will not ask for more information than we need to verify the request. Many tools also let you list, export and delete your records yourself, for example the <code>*_list</code>, <code>*_export</code> and <code>*_delete</code> tools.</p>
+
+  <h2 id="delete">16. Deleting your data</h2>
+  <ul>
+    <li><strong>Hosted data:</strong> delete individual records with the server's delete tools, or stop using the token; everything stored under it is deleted automatically 35 days after the last use. To delete everything sooner, email {email} from a private channel with the token, and we will delete the data under it.</li>
+    <li><strong>OAuth connection:</strong> remove or disconnect the connector in your AI client. Its tokens then expire (access token after 30 days, refresh token after at most 365 days) and the data under it is deleted 35 days after the last use, or sooner on request as above.</li>
+    <li><strong>Purchase record, setup-tips record or anything else:</strong> email {email}. Include the Stripe session id for a purchase. Deleting a purchase record means we can no longer help you recover a lost key.</li>
+  </ul>
+
+  <h2 id="security">17. Security</h2>
+  <p>All traffic uses HTTPS. Hosted data is separated per token, licence keys are signed with Ed25519, and card details are handled only by Stripe. No system is perfectly secure; if we learn of a breach that affects your personal data, we will inform you and the authorities as the law requires.</p>
+
+  <h2 id="children">18. Children</h2>
+  <p>The Service is for adults. You must be at least 18 years old, or the age of majority where you live, to use the hosted endpoints, connect through OAuth or buy a licence (see the <a href="/terms/#eligibility">Terms of Service</a>). We do not knowingly collect data from children. If you believe a child has given us personal data, contact us and we will delete it.</p>
+
+  <h2 id="changes">19. Changes and contact</h2>
+  <p>We will update this policy when the Service changes, change the "Last updated" date above and, for material changes, post a notice on this website. Questions and requests: autom8 LLC, Yerevan, Republic of Armenia, <span class="select-all">{email}</span>.</p>
 </LegalPage>
+
+<style>
+  .inline-link { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+</style>

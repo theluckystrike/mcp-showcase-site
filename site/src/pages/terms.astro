@@ -1,191 +1,136 @@
 ---
-// Terms of Service (a3-legal, 2026-11-01). Source: the owner's published Zovo Terms of Service at
-// https://zovo.one/legal/terms (last updated 26 January 2026; governing law and contact from its legalDefinitions),
-// adapted in naming to McpStamp. Product facts (free tier, $19/$39 one-time lifetime licence, 14-day refund, key on
-// the confirmation page, MIT) come from ~/mcp-servers/billing/src/index.js purchasePromiseHtml, the mcp.zovo.one home
-// page and ~/mcp-servers/LICENSE. Do not add clauses without a source.
+// Terms of Service. a3-legal (2026-11-01) first version; a7-site (2026-11-02) owner decisions applied: operator
+// autom8 LLC (Republic of Armenia), Armenian law and Yerevan courts with mandatory consumer protections kept,
+// age 18+, no professional advice, no forged documents. Product facts (free tier, $19/$39 one-time lifetime licence
+// through Stripe, 14-day refund on the first payment, key on the confirmation page, MIT) come from
+// ~/mcp-servers/billing/src/index.js purchasePromiseHtml, /pricing/ and ~/mcp-servers/LICENSE. Token and OAuth
+// lifetimes come from ~/mcp-servers/remote/src/index.ts and oauth-refresh.ts. Keep in step with /privacy/.
 import LegalPage from '../components/LegalPage.astro';
 import { brand } from '../config/brand';
 import { bundlePrice } from '../data/servers';
-const updated = '1 November 2026';
+const updated = '2 November 2026';
 const one = brand.pricing.serverUsd;
 const all = bundlePrice();
 const email = 'support@zovo.one';
 const sections = [
-  { id: 'acceptance', title: '1. Acceptance of Terms' },
-  { id: 'definitions', title: '2. Definitions' },
-  { id: 'services', title: '3. Description of Services' },
-  { id: 'licences', title: '4. Free Tier, Pro Licences and Payment' },
-  { id: 'ip', title: '5. Intellectual Property Rights' },
-  { id: 'conduct', title: '6. Acceptable Use' },
-  { id: 'liability', title: '7. Limitation of Liability' },
-  { id: 'warranties', title: '8. Disclaimer of Warranties' },
-  { id: 'indemnification', title: '9. Indemnification' },
-  { id: 'termination', title: '10. Termination' },
-  { id: 'modifications', title: '11. Modifications to Terms' },
-  { id: 'governing', title: '12. Governing Law' },
-  { id: 'disputes', title: '13. Dispute Resolution' },
-  { id: 'severability', title: '14. Severability' },
-  { id: 'entire', title: '15. Entire Agreement' },
-  { id: 'contact', title: '16. Contact Information' },
+  { id: 'who', title: '1. Who we are' },
+  { id: 'acceptance', title: '2. Acceptance of these Terms' },
+  { id: 'eligibility', title: '3. Age and eligibility' },
+  { id: 'services', title: '4. The Service' },
+  { id: 'access', title: '5. Hosted tokens and OAuth connections' },
+  { id: 'ai-clients', title: '6. AI clients and third-party services' },
+  { id: 'licences', title: '7. Free tier, Pro licences and payment' },
+  { id: 'refunds', title: '8. Refunds' },
+  { id: 'no-advice', title: '9. No professional advice' },
+  { id: 'conduct', title: '10. Acceptable use' },
+  { id: 'your-content', title: '11. Your content and data' },
+  { id: 'ip', title: '12. Intellectual property and open source' },
+  { id: 'warranties', title: '13. Disclaimer of warranties' },
+  { id: 'liability', title: '14. Limitation of liability' },
+  { id: 'indemnification', title: '15. Indemnification' },
+  { id: 'termination', title: '16. Suspension and termination' },
+  { id: 'changes', title: '17. Changes to the Service and these Terms' },
+  { id: 'law', title: '18. Governing law and disputes' },
+  { id: 'general', title: '19. General' },
+  { id: 'contact', title: '20. Contact' },
 ];
 ---
 <LegalPage
   title="Terms of Service"
-  description={`The terms for using ${brand.name}: the MCP servers, the hosted endpoints at mcp.zovo.one, the free tier and the one-time Pro licences.`}
+  description={`The terms for using ${brand.name}, operated by autom8 LLC (Armenia): the MCP servers, the hosted endpoints at mcp.zovo.one, the free tier and the Pro licences.`}
   eyebrow="Terms"
-  lead={`The terms for using ${brand.name}: the MCP servers, the hosted endpoints at mcp.zovo.one, the free tier and the Pro licences.`}
+  lead={`The terms for using ${brand.name}: the MCP servers, the hosted endpoints at mcp.zovo.one, this website, the free tier and the one-time Pro licences.`}
   updated={updated}
   sections={sections}
   other={{ href: '/privacy/', label: 'Privacy Policy' }}
 >
-  <h2 id="acceptance">1. Acceptance of Terms</h2>
-  <p>By installing, accessing, or using any {brand.name} MCP server, hosted endpoint or this website, you agree to be bound by these Terms of Service. If you do not agree to these terms, you must not use our Service.</p>
-  <p>These Terms constitute a legally binding agreement between you and Zovo. Your continued use of the Service after any modifications to these Terms constitutes acceptance of those changes.</p>
+  <h2 id="who">1. Who we are</h2>
+  <p>{brand.name} is operated by <strong>autom8 LLC</strong>, a limited liability company registered in the <strong>Republic of Armenia</strong> (Yerevan, registered on 8 October 2024). autom8 LLC also runs the Zovo brand; the hosted endpoints and the checkout run under the Zovo domain <code>mcp.zovo.one</code>. In these Terms, "autom8 LLC", "we", "us" and "our" mean autom8 LLC. You can reach us at <span class="select-all">{email}</span>.</p>
 
-  <h2 id="definitions">2. Definitions</h2>
-  <p>For purposes of these Terms:</p>
+  <h2 id="acceptance">2. Acceptance of these Terms</h2>
+  <p>These Terms are a binding agreement between you and autom8 LLC. By installing, connecting to or using any {brand.name} MCP server, hosted endpoint or this website, or by buying a Pro Licence, you agree to these Terms. If you do not agree, do not use the Service. Our <a href="/privacy/">Privacy Policy</a> explains how we handle personal data.</p>
+  <p>If you use the Service on behalf of a company or other organisation, you confirm that you may bind it to these Terms, and "you" includes that organisation.</p>
+
+  <h2 id="eligibility">3. Age and eligibility</h2>
+  <p>You must be at least 18 years old, or the age of majority where you live if that is higher, to use the hosted endpoints, to connect the Service to an AI client through OAuth, or to buy a Pro Licence. The Service is not directed at children. You must not use the Service if the law of your country forbids it.</p>
+
+  <h2 id="services">4. The Service</h2>
+  <p>"Service" means this website ({brand.domain}), the hosted MCP endpoints at <code>{'mcp.zovo.one/mcp/<server>'}</code>, the checkout and licence pages at <code>mcp.zovo.one</code>, and the open-source MCP servers listed on {brand.domain}. The servers produce back-office documents and records, such as invoices, quotes, receipts, PDFs, spreadsheets and resumes, when an MCP client calls their tools. You can run a server on your own machine or connect to its hosted endpoint by URL.</p>
   <ul>
-    <li><strong>Service:</strong> The {brand.name} website ({brand.domain}), the hosted endpoints at mcp.zovo.one, and the MCP servers listed on {brand.domain}.</li>
-    <li><strong>MCP Servers:</strong> The Model Context Protocol servers listed on {brand.domain}, run on your own machine or at a hosted endpoint.</li>
-    <li><strong>Hosted Endpoints:</strong> The server URLs at <code>{'mcp.zovo.one/mcp/<server>'}</code>.</li>
-    <li><strong>Pro Licence:</strong> A one-time payment that removes the listed free-tier limits: ${one} for one server, or ${all} for all paid servers.</li>
-    <li><strong>Free Tier:</strong> Basic functionality available to all users at no cost.</li>
-    <li><strong>User:</strong> Any individual accessing or using the Service.</li>
+    <li><strong>Free Tier:</strong> every server has a free tier, with no payment and no expiry. Its limits are listed on each server's page.</li>
+    <li><strong>Pro Licence:</strong> a one-time payment that removes the listed free-tier limits: ${one} for one server, or ${all} for all paid servers.</li>
+    <li><strong>Open source:</strong> the server source code is public under the MIT License.</li>
   </ul>
 
-  <h2 id="services">3. Description of Services</h2>
-  <p>Zovo provides MCP servers designed to enhance productivity and back-office workflows in MCP clients such as Claude and Cursor. Our Services include:</p>
+  <h2 id="access">5. Hosted tokens and OAuth connections</h2>
+  <p>The hosted endpoints have no username and password. Access works through a token that acts as your account:</p>
   <ul>
-    <li><strong>Free Tier:</strong> Every server has a free tier, with no key, no account and no expiry.</li>
-    <li><strong>Pro Licences:</strong> Removal of the listed free-tier limits for paying users.</li>
-    <li><strong>Hosted Endpoints:</strong> Servers you connect by URL, with no install.</li>
-    <li><strong>Open Source:</strong> The server source code is public under the MIT License.</li>
+    <li>an anonymous token (<code>{'anon_<32 hex>'}</code>) that lasts 30 days and is refreshed on each use; or</li>
+    <li>an OAuth 2.1 connection that your AI client sets up when you click Allow. It receives an access token of the same kind (30 days) and a rotating refresh token (up to 365 days).</li>
   </ul>
-  <p>We reserve the right to modify, suspend, or discontinue any part of the Service at any time without notice. We are not liable for any modification, suspension, or discontinuation of the Service.</p>
+  <p>You agree to keep your tokens and licence keys secret, because anyone who holds them can use the Service as you and read your stored data. You are responsible for activity under your tokens and keys. Tell us at {email} if you think someone else has them.</p>
 
-  <h2 id="licences">4. Free Tier, Pro Licences and Payment</h2>
-  <h3>4.1 Hosted tokens and licence keys</h3>
-  <p>The Service has no user accounts. A hosted endpoint uses an anonymous token, which lasts 30 days and is refreshed on each use. A Pro Licence is a licence key. You agree to:</p>
-  <ul>
-    <li>Keep your hosted token and licence key secret. Anyone holding your token can read your data.</li>
-    <li>Be responsible for all activities under your token and licence key</li>
-    <li>Notify us immediately of any unauthorized access</li>
-  </ul>
-  <h3>4.2 Pro Licences</h3>
-  <p>A Pro Licence is a lifetime licence: one payment of ${one} for one server, or ${all} for all paid servers together. There is no subscription, no renewal and no per-seat charge. Pro removes the listed free-tier limits; hosted rate limits still apply.</p>
-  <h3>4.3 Payment and Billing</h3>
-  <p>Payments are processed through Stripe, a third-party payment processor. You agree to pay all fees associated with the licence you choose. Your key is shown on the confirmation page after payment. If you lose it, contact {email} with your Stripe receipt.</p>
-  <h3>4.4 Refund Policy</h3>
-  <p>You can ask for a refund within 14 days of your first payment. Email {email} with your checkout details. Pro Licences are non-refundable after 14 days from purchase. We reserve the right to issue refunds at our sole discretion.</p>
+  <h2 id="ai-clients">6. AI clients and third-party services</h2>
+  <p>You can use the Service through AI clients such as Google Gemini, ChatGPT and Claude, or editors such as Cursor. These clients are made by other companies. When you connect a server, your client sends our tools the arguments you or the AI model supply, and receives the tool results you ask for. Your use of an AI client is governed by its provider's own terms and privacy policy. We do not control what an AI model asks for, what it writes, or how it presents a tool result, and we are not responsible for the AI client.</p>
+  <p>Payments are processed by Stripe. Links to other services, such as GitHub, Telegram, Buy Me a Coffee and PayPal, lead to sites with their own terms.</p>
 
-  <h2 id="ip">5. Intellectual Property Rights</h2>
-  <h3>5.1 Ownership</h3>
-  <p>All intellectual property rights in the Service, including but not limited to software, code, design, trademarks, and content, are owned by Zovo or its licensors. These Terms do not grant you any ownership rights.</p>
-  <h3>5.2 License</h3>
-  <p>Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to:</p>
-  <ul>
-    <li>Install and use the MCP Servers for personal or commercial purposes</li>
-    <li>Use the Hosted Endpoints</li>
-    <li>Use Pro features if you hold a Pro Licence</li>
-  </ul>
-  <h3>5.3 Open Source</h3>
-  <p>The MCP Server source code is released under the MIT License at <a href={brand.links.github} rel="noopener">github.com/theluckystrike/mcp-servers</a>. That code is governed by its license, which takes precedence over these Terms for that code.</p>
+  <h2 id="licences">7. Free tier, Pro licences and payment</h2>
+  <h3>7.1 Pro Licences</h3>
+  <p>A Pro Licence is a lifetime licence: one payment of ${one} for one server, or ${all} for all paid servers together. It is not a subscription. There is no renewal and no per-seat charge. Pro removes the listed free-tier limits; hosted rate limits still apply. A Pro Licence key also works with the server on your own machine, where it is verified offline.</p>
+  <h3>7.2 Payment</h3>
+  <p>Prices are in US dollars and are shown before you pay. Payment is taken by Stripe on Stripe's own checkout page; we never see your full card details. Your key is shown on the confirmation page after payment. If you lose it, contact {email} with your Stripe receipt.</p>
 
-  <h2 id="conduct">6. Acceptable Use</h2>
+  <h2 id="refunds">8. Refunds</h2>
+  <p>You can ask for a full refund within 14 days of your payment. Email {email} with your checkout details or Stripe receipt; you do not need to give a reason. After a refund, the licence key is no longer licensed and you must stop using it. After 14 days, payments are not refundable, except where the law of your country gives you a right to a refund or to another remedy, for example because the Service is faulty or not as described. These statutory rights are not affected by these Terms.</p>
+
+  <h2 id="no-advice">9. No professional advice</h2>
+  <p>The Service is a set of software tools. Invoices, quotes, receipts, tax and VAT lines, contracts, letters, resumes and other documents it produces are drafts made from the data you or your AI client provide. <strong>The Service does not give tax, legal, accounting, financial or employment advice.</strong> You are responsible for checking that every document is correct and meets the legal, tax and accounting rules that apply to you, for example invoice content and numbering rules or VAT rates. Ask a qualified professional when you need advice.</p>
+
+  <h2 id="conduct">10. Acceptable use</h2>
   <p>You agree not to:</p>
   <ul>
-    <li>Use the Service for any unlawful purpose or in violation of applicable laws</li>
-    <li>Attempt to gain unauthorized access to our systems or networks</li>
-    <li>Interfere with or disrupt the Service or servers</li>
-    <li>Share Pro licence keys or hosted tokens with others</li>
-    <li>Sell or resell Pro licence keys or access to the Hosted Endpoints</li>
-    <li>Use the Service to transmit malware or malicious code</li>
-    <li>Abuse, harass, or harm others through the Service</li>
+    <li>use the Service to create fake, forged or misleading documents, including invoices, receipts, payslips, bank statements, certificates or resumes that imitate a real third party or that state false facts in order to deceive someone;</li>
+    <li>use the Service for fraud, tax evasion, money laundering or any other unlawful purpose;</li>
+    <li>upload or process personal data of other people without a lawful basis to do so;</li>
+    <li>infringe the intellectual property, privacy or other rights of others;</li>
+    <li>try to gain unauthorised access to our systems or to another user's data, or test their security without our written permission;</li>
+    <li>interfere with or overload the Service, or get around rate limits or free-tier limits other than by buying a Pro Licence;</li>
+    <li>share, sell or resell Pro licence keys, tokens or access to the hosted endpoints;</li>
+    <li>use the Service to send malware or to harass or harm others.</li>
   </ul>
 
-  <h2 id="liability">7. Limitation of Liability</h2>
-  <p><strong>IMPORTANT - PLEASE READ CAREFULLY</strong></p>
-  <p class="caps">TO THE MAXIMUM EXTENT PERMITTED BY LAW, ZOVO SHALL NOT BE LIABLE FOR:</p>
-  <ul>
-    <li><strong>Data Loss or Corruption:</strong> Any loss, corruption, or deletion of data resulting from your use of the MCP Servers or Hosted Endpoints</li>
-    <li><strong>System Crashes:</strong> Crashes, freezes, or system instability caused by conflicts or errors in the MCP Servers</li>
-    <li><strong>Client Conflicts:</strong> Conflicts with MCP clients, other MCP servers, or other software</li>
-    <li><strong>Business Losses:</strong> Loss of profits, revenue, business opportunities, or goodwill</li>
-    <li><strong>Indirect Damages:</strong> Any indirect, incidental, special, consequential, or punitive damages</li>
-    <li><strong>Third-Party Actions:</strong> Actions or omissions of third parties, including payment processors, hosting providers and MCP client apps</li>
-    <li><strong>Service Interruptions:</strong> Any interruption, suspension, or termination of the Service</li>
-  </ul>
-  <p class="caps">IN NO EVENT SHALL ZOVO'S TOTAL LIABILITY TO YOU FOR ALL DAMAGES EXCEED THE AMOUNT YOU PAID TO US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR $100 USD, WHICHEVER IS GREATER.</p>
-  <p>Some jurisdictions do not allow the limitation of liability for incidental or consequential damages. In such jurisdictions, our liability is limited to the maximum extent permitted by law.</p>
+  <h2 id="your-content">11. Your content and data</h2>
+  <p>The data you send to the Service and the documents it produces for you are yours. You give us permission to store and process them only as needed to run the Service for you, as described in the <a href="/privacy/">Privacy Policy</a>. We do not sell your data and do not use it to train AI models. You are responsible for having the right to use the data you put into the Service, including personal data of your clients or employees.</p>
 
-  <h2 id="warranties">8. Disclaimer of Warranties</h2>
-  <p><strong>AS IS - NO WARRANTIES</strong></p>
-  <p class="caps">THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO:</p>
-  <ul class="caps">
-    <li>IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT</li>
-    <li>WARRANTIES THAT THE SERVICE WILL BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE</li>
-    <li>WARRANTIES REGARDING THE QUALITY, ACCURACY, OR RELIABILITY OF THE SERVICE</li>
-    <li>WARRANTIES THAT DEFECTS OR ERRORS WILL BE CORRECTED</li>
-  </ul>
-  <p class="caps">YOU ACKNOWLEDGE THAT YOUR USE OF THE SERVICE IS AT YOUR SOLE RISK. YOU ARE SOLELY RESPONSIBLE FOR ANY DAMAGE TO YOUR COMPUTER SYSTEM OR LOSS OF DATA RESULTING FROM YOUR USE OF THE SERVICE.</p>
+  <h2 id="ip">12. Intellectual property and open source</h2>
+  <p>The MCP server source code is released under the MIT License at <a href={brand.links.github} rel="noopener">github.com/theluckystrike/mcp-servers</a>. That license governs the code and takes precedence over these Terms for the code. The {brand.name} and Zovo names, logos, this website's design and text, and the hosted service are owned by autom8 LLC or its licensors. Subject to these Terms, we give you a limited, non-exclusive, non-transferable, revocable right to use the hosted endpoints and, if you hold a Pro Licence, the Pro features it covers.</p>
 
-  <h2 id="indemnification">9. Indemnification</h2>
-  <p>You agree to indemnify, defend, and hold harmless Zovo, its owner, and its affiliates from any claims, damages, losses, liabilities, and expenses (including reasonable attorney fees) arising from:</p>
-  <ul>
-    <li>Your use or misuse of the Service</li>
-    <li>Your violation of these Terms</li>
-    <li>Your violation of any rights of another party</li>
-    <li>Your violation of applicable laws or regulations</li>
-  </ul>
+  <h2 id="warranties">13. Disclaimer of warranties</h2>
+  <p>To the extent the law allows, the Service is provided "as is" and "as available". We do not promise that it will be uninterrupted, error-free or suitable for a particular purpose, or that any document it produces is accurate or legally sufficient. You use the Service at your own risk and should keep your own copies of important data. If you are a consumer, this section does not limit any warranty or guarantee that the law of your country gives you and that cannot be excluded.</p>
 
-  <h2 id="termination">10. Termination</h2>
-  <h3>10.1 Your Right to Terminate</h3>
-  <p>You may terminate your use of the Service at any time by:</p>
-  <ul>
-    <li>Removing the MCP Servers from your MCP client</li>
-    <li>Stopping use of your hosted token. Data under it is deleted 35 days after the last use.</li>
-  </ul>
-  <h3>10.2 Our Right to Terminate</h3>
-  <p>We reserve the right to suspend or terminate your access to the Service at any time, with or without cause, with or without notice, including for:</p>
-  <ul>
-    <li>Violation of these Terms</li>
-    <li>Fraudulent, abusive, or illegal activity</li>
-    <li>Discontinuation of the Service</li>
-  </ul>
-  <h3>10.3 Effect of Termination</h3>
-  <p>Upon termination, your license to use the Service immediately ceases. We are not liable for any termination of your access to the Service. Sections of these Terms that by their nature should survive termination will survive, including ownership provisions, warranty disclaimers, and limitations of liability.</p>
+  <h2 id="liability">14. Limitation of liability</h2>
+  <p>To the extent the law allows, autom8 LLC is not liable for indirect, incidental, special or consequential damages, for loss of profits, revenue, business or goodwill, or for loss or corruption of data, arising from your use of the Service, from conflicts with MCP clients or other software, or from acts of third parties such as AI clients, payment processors and hosting providers.</p>
+  <p>To the extent the law allows, our total liability to you for all claims about the Service is limited to the greater of the amount you paid us in the 12 months before the claim and 100 US dollars.</p>
+  <p>Nothing in these Terms excludes or limits liability for death or personal injury caused by negligence, for fraud or wilful misconduct, for gross negligence, or any other liability that cannot be excluded or limited under the applicable law, including mandatory consumer protection law.</p>
 
-  <h2 id="modifications">11. Modifications to Terms</h2>
-  <p>We reserve the right to modify these Terms at any time. We will notify users of material changes by:</p>
-  <ul>
-    <li>Updating the "Last updated" date at the top of this page</li>
-    <li>Posting a notice on our website</li>
-  </ul>
-  <p>Your continued use of the Service after changes become effective constitutes acceptance of the modified Terms. If you do not agree to the modified Terms, you must stop using the Service.</p>
+  <h2 id="indemnification">15. Indemnification</h2>
+  <p>If you use the Service for business purposes, you agree to compensate autom8 LLC for claims, losses and reasonable legal costs brought by third parties that arise from your breach of these Terms, from your violation of law, or from documents you create or distribute with the Service. This section does not apply to consumers to the extent their local law does not allow it.</p>
 
-  <h2 id="governing">12. Governing Law</h2>
-  <p>These Terms are governed by and construed in accordance with the laws of the State of Delaware, United States, without regard to its conflict of law principles. You agree to submit to the personal and exclusive jurisdiction of the courts located in Delaware for resolution of any disputes.</p>
+  <h2 id="termination">16. Suspension and termination</h2>
+  <p>You can stop using the Service at any time: remove the server from your MCP client, disconnect the connector in your AI client, and stop using your token. Data under an unused token is deleted 35 days after it was last used; you can ask us to delete it sooner (see the <a href="/privacy/#delete">Privacy Policy</a>).</p>
+  <p>We may suspend or end your access if you break these Terms, if your use creates a security or legal risk, or if required by law. Where reasonable, we will tell you first. Sections that by their nature should survive termination, such as sections 9, 13, 14, 15 and 18, survive.</p>
 
-  <h2 id="disputes">13. Dispute Resolution</h2>
-  <h3>13.1 Informal Resolution</h3>
-  <p>Before filing a claim, you agree to contact us at {email} to attempt to resolve the dispute informally. We will attempt to resolve disputes in good faith within 30 days.</p>
-  <h3>13.2 Binding Arbitration</h3>
-  <p>If informal resolution fails, you agree that any dispute arising from these Terms or the Service will be resolved through binding arbitration in accordance with the American Arbitration Association's rules, rather than in court, except that you may assert claims in small claims court if your claims qualify.</p>
-  <h3>13.3 Class Action Waiver</h3>
-  <p>You agree to resolve disputes with us on an individual basis and waive your right to participate in class actions, class arbitrations, or representative actions.</p>
-  <h3>13.4 Small Claims Exception</h3>
-  <p>Either party may bring a claim in small claims court instead of arbitration if the claim qualifies for small claims court jurisdiction.</p>
+  <h2 id="changes">17. Changes to the Service and these Terms</h2>
+  <p>We may change, improve or discontinue parts of the Service. If we discontinue a hosted endpoint covered by a Pro Licence, the open-source server and your licence key continue to work on your own machine. We may update these Terms. We will change the "Last updated" date above and, for material changes, post a notice on this website before they apply. If you do not agree to the changed Terms, stop using the Service; continued use after the change takes effect means you accept them.</p>
 
-  <h2 id="severability">14. Severability</h2>
-  <p>If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary so that these Terms will otherwise remain in full force and effect.</p>
+  <h2 id="law">18. Governing law and disputes</h2>
+  <p>These Terms and any dispute about them or the Service are governed by the laws of the <strong>Republic of Armenia</strong>, without regard to its conflict-of-law rules. The courts of Yerevan, Republic of Armenia, have jurisdiction over any dispute.</p>
+  <p>If you are a consumer, you keep the protection of the mandatory provisions of the law of the country where you live, and nothing in these Terms takes it away. This includes the consumer protection laws of the European Union, the European Economic Area, the United Kingdom, Switzerland and the United States. If you are a consumer living in the European Union, the European Economic Area, the United Kingdom or Switzerland, you may also bring a claim in the courts of the country where you live.</p>
+  <p>Before starting a formal claim, please contact us at {email} so that we can try to resolve the issue. We will reply within 30 days.</p>
 
-  <h2 id="entire">15. Entire Agreement</h2>
-  <p>These Terms, together with our <a href="/privacy/">Privacy Policy</a> and any other legal notices published by us, constitute the entire agreement between you and Zovo regarding the Service and supersede all prior or contemporaneous communications, whether electronic, oral, or written.</p>
+  <h2 id="general">19. General</h2>
+  <p>These Terms and the <a href="/privacy/">Privacy Policy</a> are the entire agreement between you and autom8 LLC about the Service. If a provision is found to be invalid or unenforceable, the rest of these Terms stays in effect. If we do not enforce a provision, that is not a waiver. You may not transfer your rights under these Terms without our consent; we may transfer them to a company that takes over the Service, without reducing your rights. These Terms are written in English, and the English version applies.</p>
 
-  <h2 id="contact">16. Contact Information</h2>
-  <p>For questions about these Terms, please contact us at <span class="select-all">{email}</span>.</p>
-  <p>{brand.name} is a Zovo product. Zovo is a brand operated by autom8 LLC.</p>
-
-  <p class="note">These Terms adapt the Zovo Terms of Service at <a href="https://zovo.one/legal/terms" rel="noopener">zovo.one/legal/terms</a> to {brand.name}.</p>
+  <h2 id="contact">20. Contact</h2>
+  <p>autom8 LLC, Yerevan, Republic of Armenia. Email: <span class="select-all">{email}</span>.</p>
 </LegalPage>

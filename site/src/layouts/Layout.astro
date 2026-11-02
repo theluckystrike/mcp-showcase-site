@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { brand } from '../config/brand';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CookieConsent from '../components/CookieConsent.astro';
 import { buildGraph, citationFor, CONTENT_REVIEWED } from '../data/schema';
 import { getServer } from '../data/servers';
 import { pageMeta } from '../data/pages';
@@ -114,8 +115,20 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
     {brand.analytics?.ga4 && (
       <script is:inline define:vars={{ ga4: brand.analytics.ga4 }}>
         // GA4, loaded after window load so it never delays first paint. Buy and support clicks become events.
+        // Google Consent Mode v2 (a7-site, 2026-11-02): the consent defaults MUST be pushed before 'config'.
+        // EEA + UK + CH: everything denied until the visitor clicks Accept. Elsewhere: analytics granted, ads denied
+        // (the site has no ads). A stored choice from the banner (src/components/CookieConsent.astro) wins everywhere.
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
+        window.gtag = gtag; // define:vars wraps this script in a function; the consent banner needs the global.
+        gtag('consent', 'default', {
+          analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+          region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'],
+          wait_for_update: 500
+        });
+        gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+        gtag('set', 'ads_data_redaction', true);
+        try { var cc = localStorage.getItem('mcpstamp-consent'); if (cc === 'granted' || cc === 'denied') gtag('consent', 'update', { analytics_storage: cc }); } catch (e) {}
         gtag('js', new Date());
         gtag('config', ga4);
         addEventListener('load', function () {
@@ -141,6 +154,7 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
       <Fragment set:html={body} />
     </main>
     <Footer />
+    {brand.analytics?.ga4 && <CookieConsent />}
     <script is:inline>
       // Copy buttons: <button data-copy="text"> or data-copy-target="#id". One delegated handler, no framework.
       document.addEventListener('click', function (e) {

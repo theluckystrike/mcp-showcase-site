@@ -60,7 +60,7 @@ const year = new Date().getFullYear();
   </div>
   <div class="foot-base">
     <div class="wrap flex flex-wrap justify-between gap-3 py-5">
-      <span>&copy; {year} {brand.name} &middot; {brand.domain} &middot; <a href="/terms/" class="foot-legal">Terms</a> &middot; <a href="/privacy/" class="foot-legal">Privacy</a></span>
+      <span>&copy; {year} autom8 LLC (Armenia), operator of {brand.name} &middot; {brand.domain} &middot; <a href="/terms/" class="foot-legal">Terms</a> &middot; <a href="/privacy/" class="foot-legal">Privacy</a>{brand.analytics?.ga4 && <> &middot; <button type="button" class="foot-legal foot-btn" data-cookie-settings>Cookie settings</button></>}</span>
       <span>Case examples are scenarios, labeled "Example".</span>
     </div>
   </div>
@@ -73,5 +73,6 @@ const year = new Date().getFullYear();
   .foot-list a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
   .foot-legal { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
   .foot-legal:hover { color: var(--text); }
+  .foot-btn { font: inherit; letter-spacing: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
   .foot-base { border-top: 1px solid var(--border-strong); font-family: var(--font-mono); font-size: .76rem; color: var(--faint); letter-spacing: .02em; }
 </style>
