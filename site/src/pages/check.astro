@@ -1,0 +1,587 @@
+---
+// /check/: McpStamp Check (s1102m). Paste a remote MCP URL, get a 0-100 score, per-store readiness and fixes.
+// The result is rendered in the browser from GET /api/check?url= (Pages Function proxy to the mcpstamp-check worker,
+// see site/functions/api/). /check/?id=<id> loads a stored result, /check/?url=<url> runs the check on load.
+// No framework, no external JS. Everything from the API is written with textContent, never innerHTML.
+import Layout from '../layouts/Layout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import { stats, CONTENT_DIR } from '../data/servers';
+import { STORES } from '../data/readiness';
+
+const st = stats();
+const title = 'McpStamp Check: is your MCP server store-ready?';
+const description = 'Free check for remote MCP servers. Get a 0-100 score, what blocks you in Claude, ChatGPT, Gemini and the MCP Registry, and the fix for each problem.';
+const GROUPS = [
+  { id: 'transport', name: 'Transport', text: 'HTTPS, initialize over Streamable HTTP, a supported protocol version, the response Content-Type, JSON-RPC errors, GET handling and latency.' },
+  { id: 'auth', name: 'Auth', text: 'When the server asks for sign-in: the 401 challenge, protected resource metadata (RFC 9728), authorization server metadata, PKCE S256, client registration and refresh tokens.' },
+  { id: 'tools', name: 'Tools', text: 'tools/list returns tools with object input schemas, portable names, titles, descriptions and the readOnlyHint, destructiveHint and openWorldHint annotations.' },
+  { id: 'metadata', name: 'Metadata', text: 'serverInfo name and version, server instructions, and the tools capability in the initialize answer.' },
+];
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'WebApplication', name: 'McpStamp Check', url: new URL('/check/', Astro.site).href,
+    applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', isAccessibleForFree: true,
+    description, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+];
+// Pay-now link only when the svc-audit Stripe product is live (services.json checkout_live, lane SITE-OFFERS).
+// Missing or false = a mailto link; the script fills the subject and body with the checked URL and score.
+let checkoutLive = false;
+try { checkoutLive = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'services.json'), 'utf8')).checkout_live === true; } catch { /* false */ }
+const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.check.result' : 'mailto:support@zovo.one?subject=' + encodeURIComponent('Readiness Audit ($490)');
+---
+<Layout title={title} description={description} jsonLd={jsonLd} crumbs={[{ name: 'Check', path: '/check/' }]}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-10 sm:pt-14">
+      <span class="eyebrow">Free check</span>
+      <h1 class="display mt-5 max-w-4xl !text-[clamp(2.2rem,5.4vw,4rem)]">McpStamp Check. <span class="mark">Is your server store-ready?</span></h1>
+      <p class="lead mt-5 max-w-2xl">Paste the URL of a remote MCP server. You get a score from 0 to 100, what blocks it in Claude, ChatGPT, Gemini and the MCP Registry, and the fix for each problem.</p>
+
+      <form id="ck-form" class="ck-form mt-8 max-w-3xl" novalidate>
+        <label for="ck-url" class="ck-label">Remote MCP server URL</label>
+        <div class="ck-row">
+          <input id="ck-url" name="url" type="url" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" required
+            placeholder="https://example.com/mcp" aria-describedby="ck-hint" class="ck-input" />
+          <button class="btn btn-primary ck-go" type="submit" id="ck-go">Check</button>
+        </div>
+        <p id="ck-hint" class="ck-hint">HTTPS only. Free, no sign-up. Each result gets a link you can share.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="wrap pb-14" aria-label="Check result">
+    <div id="ck-status" class="ck-status" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <div id="ck-out" hidden>
+      <article id="ck-result" class="sheet ck-sheet" aria-labelledby="ck-r-h">
+        <header class="ck-head">
+          <div class="min-w-0">
+            <p class="serial ck-serial">Check report <span data-f="id"></span></p>
+            <h2 id="ck-r-h" tabindex="-1" class="ck-title">Result for <span data-f="host"></span></h2>
+            <dl class="ck-meta">
+              <div><dt>URL</dt><dd data-f="url" class="ck-break"></dd></div>
+              <div><dt>Checked</dt><dd data-f="checked"></dd></div>
+              <div><dt>Took</dt><dd data-f="took"></dd></div>
+              <div><dt>Auth</dt><dd data-f="auth"></dd></div>
+              <div data-row="server"><dt>Server</dt><dd data-f="server" class="ck-break"></dd></div>
+              <div data-row="tools"><dt>Tools</dt><dd data-f="tools"></dd></div>
+            </dl>
+          </div>
+          <div class="ck-stamp-wrap">
+            <svg id="ck-stamp" class="ck-stamp" viewBox="0 0 210 128" width="210" height="128" role="img" aria-labelledby="ck-stamp-t">
+              <title id="ck-stamp-t">Score</title>
+              <defs>
+                <filter id="ck-ink" x="-5%" y="-10%" width="110%" height="120%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="2" seed="11" result="grain" />
+                  <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3 2.45" result="holes" />
+                  <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3" result="wobble" />
+                  <feDisplacementMap in="SourceGraphic" in2="wobble" scale="2.2" result="rough" />
+                  <feComposite in="rough" in2="holes" operator="in" />
+                </filter>
+              </defs>
+              <g filter="url(#ck-ink)" fill="none" stroke="currentColor" aria-hidden="true">
+                <rect x="3" y="3" width="204" height="122" rx="6" stroke-width="3.4" />
+                <rect x="9.5" y="9.5" width="191" height="109" rx="3" stroke-width="1.4" />
+                <text x="105" y="29" text-anchor="middle" fill="currentColor" stroke="none" font-family="'IBM Plex Mono', ui-monospace, monospace" font-weight="600" font-size="11" letter-spacing="2.2">MCPSTAMP SCORE</text>
+                <line x1="20" y1="37" x2="190" y2="37" stroke-width="1.3" />
+                <text id="ck-stamp-score" x="70" y="101" text-anchor="middle" fill="currentColor" stroke="none" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="850" font-size="58" style="font-stretch: 72%">0</text>
+                <line x1="132" y1="47" x2="132" y2="108" stroke-width="1.3" />
+                <text id="ck-stamp-grade" x="166" y="102" text-anchor="middle" fill="currentColor" stroke="none" font-family="Archivo, 'Arial Narrow', sans-serif" font-weight="850" font-size="62" style="font-stretch: 80%">F</text>
+              </g>
+            </svg>
+            <p class="ck-stamp-cap">Score out of 100, grade A to F</p>
+          </div>
+        </header>
+
+        <p id="ck-limited" class="ck-limited" hidden>Tools could not be verified without sign-in, so the score is capped at 85. <span data-f="coverage"></span></p>
+        <p id="ck-unreach" class="ck-limited" hidden></p>
+
+        <hr class="perf-rule" />
+
+        <section aria-labelledby="ck-stores-h">
+          <h3 id="ck-stores-h" class="ck-h3">Store readiness</h3>
+          <ul id="ck-stores" class="ck-stores"></ul>
+        </section>
+
+        <section aria-labelledby="ck-checks-h" class="mt-8">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 id="ck-checks-h" class="ck-h3">Checks</h3>
+            <p id="ck-tally" class="ck-tally"></p>
+          </div>
+          <div id="ck-groups"></div>
+        </section>
+
+        <hr class="perf-rule" />
+
+        <section aria-labelledby="ck-badge-h" class="ck-badge">
+          <h3 id="ck-badge-h" class="ck-h3">Badge for your README</h3>
+          <p class="sheet-muted mt-1 text-[.93rem]">The badge shows the latest score and links to this report. It updates when the server is checked again.</p>
+          <p class="mt-3"><img id="ck-badge-img" alt="McpStamp badge preview" height="20" decoding="async" /></p>
+          <div class="ck-snips">
+            <div class="ck-snip">
+              <p class="ck-snip-l">Markdown</p>
+              <pre class="code ck-code" id="ck-md"></pre>
+              <button type="button" class="btn btn-sm ck-copy" data-copy-target="#ck-md" aria-label="Copy Markdown badge">Copy</button>
+            </div>
+            <div class="ck-snip">
+              <p class="ck-snip-l">HTML</p>
+              <pre class="code ck-code" id="ck-html"></pre>
+              <button type="button" class="btn btn-sm ck-copy" data-copy-target="#ck-html" aria-label="Copy HTML badge">Copy</button>
+            </div>
+          </div>
+          <div class="ck-share">
+            <label for="ck-link" class="ck-snip-l">Link to this report</label>
+            <div class="ck-row mt-1">
+              <input id="ck-link" class="ck-input ck-input-sm" type="text" readonly />
+              <button type="button" class="btn btn-sm" data-copy-target="#ck-link-text" aria-label="Copy report link">Copy link</button>
+            </div>
+            <span id="ck-link-text" hidden></span>
+          </div>
+        </section>
+      </article>
+
+      <aside id="ck-offer" class="ck-offer" aria-labelledby="ck-offer-h">
+        <span class="eyebrow">Fix it for you</span>
+        <h2 id="ck-offer-h" class="h2 mt-3"></h2>
+        <p id="ck-offer-lead" class="lead mt-3"></p>
+        <ol class="ck-offers mt-6">
+          <li data-offer="audit">
+            <div>
+              <h3 class="ck-offer-name">Readiness Audit</h3>
+              <p class="muted mt-1">The full check run and read by hand. Every blocker for Claude, ChatGPT, Gemini and the MCP Registry, with the exact code or config change for each. Report in 3 business days.</p>
+            </div>
+            <div class="ck-offer-buy">
+              <p class="ck-price"><span class="tnum">$490</span> <span class="ck-per">{checkoutLive ? 'fixed, pay now' : 'fixed, invoiced'}</span></p>
+              <a id="ck-audit" class="btn btn-primary" href={AUDIT_URL} rel="nofollow" data-live={checkoutLive ? '1' : '0'}>{checkoutLive ? 'Buy the audit' : 'Order the audit by email'}</a>
+            </div>
+          </li>
+          <li data-offer="launch">
+            <div>
+              <h3 class="ck-offer-name">Store Launch</h3>
+              <p class="muted mt-1">The blockers fixed in your code, OAuth added where a store needs it, the listing text written, and the server submitted to Claude, ChatGPT, Gemini and the MCP Registry.</p>
+            </div>
+            <div class="ck-offer-buy">
+              <p class="ck-price"><span class="tnum">$4,900</span> <span class="ck-per">fixed, $1,500 deposit</span></p>
+              <a class="btn" href="/services/#launch">See Store Launch</a>
+            </div>
+          </li>
+          <li data-offer="care">
+            <div>
+              <h3 class="ck-offer-name">Care plan</h3>
+              <p class="muted mt-1">A McpStamp Check of your server every day, changes when the MCP spec or a store rule changes, and store re-submits. Invoiced monthly.</p>
+            </div>
+            <div class="ck-offer-buy">
+              <p class="ck-price"><span class="tnum">$490</span> <span class="ck-per">a month</span></p>
+              <a class="btn" href="/services/#care">Ask about care</a>
+            </div>
+          </li>
+        </ol>
+        <p class="muted mt-5 text-[.95rem]">Done by the maintainer of {st.hosted} hosted MCP servers, all listed in the MCP Registry. All jobs and prices: <a href="/services/" class="link">Services</a>.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="wrap pb-16" aria-labelledby="ck-what-h">
+    <div class="border-t-2 border-fg pt-8">
+      <span class="eyebrow">What it checks</span>
+      <h2 id="ck-what-h" class="h2 mt-3">Four groups, four stores</h2>
+      <p class="lead mt-3">Each check passes (full weight), warns (half) or fails (none). The score is the weighted share over the checks that apply. Grades: A from 90, B from 80, C from 65, D from 50, F below. A store is ready when none of its blocking checks fail.</p>
+      <div class="mt-8 grid gap-8 lg:grid-cols-2">
+        <ol class="index-list index-plain">
+          {GROUPS.map((g) => (
+            <li><div class="index-row"><span class="index-title">{g.name}</span><p class="index-text">{g.text}</p></div></li>
+          ))}
+        </ol>
+        <ol class="index-list index-plain">
+          {STORES.map((s) => (
+            <li><div class="index-row"><span class="index-title">{s.long}</span><p class="index-text">{
+              s.key === 'claude' ? 'Blocked by: no HTTPS or initialize, missing OAuth discovery or PKCE when sign-in is used, tools without object schemas, annotations or titles.' :
+              s.key === 'chatgpt' ? 'Blocked by the same as Claude, plus tools without an explicit openWorldHint.' :
+              s.key === 'gemini' ? 'Blocked by: no HTTPS or initialize, an unsupported protocol version, missing authorization server metadata or PKCE, tools without object schemas.' :
+              'Blocked by: no HTTPS, or no answer to initialize at the public URL.'
+            }</p></div></li>
+          ))}
+        </ol>
+      </div>
+      <p class="muted mt-6 max-w-3xl text-[.95rem]">The check connects the way an MCP client does and reads what the server publishes. See how public servers score in the <a href="/readiness/" class="link">McpStamp Readiness Index</a>.</p>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // McpStamp Check client. Same-origin /api first (Pages Function). If that path is not deployed (404/405 without
+  // JSON), fall back to the engine's public base, which sends CORS headers.
+  const DIRECT = 'https://mcp.zovo.one/stamp/api';
+  const TIMEOUT_MS = 60000;
+  const STORE_LIST: [string, string][] = [['claude', 'Claude'], ['chatgpt', 'ChatGPT'], ['gemini', 'Gemini'], ['registry', 'MCP Registry']];
+  const GROUP_LIST: [string, string][] = [['transport', 'Transport'], ['auth', 'Auth'], ['tools', 'Tools'], ['metadata', 'Metadata']];
+  const STATUS_ORDER: Record<string, number> = { fail: 0, warn: 1, pass: 2, skip: 3 };
+  const AUTH_TEXT: Record<string, string> = { none: 'None (open)', oauth: 'OAuth', other: 'Other (API key or header)', unknown: 'Unknown' };
+
+  const $ = <T extends HTMLElement = HTMLElement>(s: string, root: ParentNode = document) => root.querySelector(s) as T;
+  const form = $<HTMLFormElement>('#ck-form');
+  const input = $<HTMLInputElement>('#ck-url');
+  const go = $<HTMLButtonElement>('#ck-go');
+  const statusEl = $('#ck-status');
+  const out = $('#ck-out');
+
+  type Json = Record<string, any>;
+  interface ApiRes { status: number; body: Json | null; retryAfter: string | null }
+
+  function el(tag: string, cls?: string, text?: string): HTMLElement {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  const safeUrl = (u: unknown) => (typeof u === 'string' && /^https:\/\//i.test(u) ? u : '');
+
+  async function get(base: string, path: string): Promise<Response> {
+    const ctl = new AbortController();
+    const t = setTimeout(() => ctl.abort(), TIMEOUT_MS);
+    try { return await fetch(base + '/' + path, { headers: { accept: 'application/json' }, signal: ctl.signal }); }
+    finally { clearTimeout(t); }
+  }
+  async function api(path: string): Promise<ApiRes> {
+    let res: Response | null = null;
+    try { res = await get('/api', path); } catch (e) { if ((e as Error).name === 'AbortError') throw e; }
+    const isJson = (r: Response | null) => !!r && (r.headers.get('content-type') || '').includes('json');
+    if (!res || (!isJson(res) && (res.status === 404 || res.status === 405 || res.status >= 500))) res = await get(DIRECT, path);
+    let body: Json | null = null;
+    try { body = await res.json(); } catch { body = null; }
+    return { status: res.status, body, retryAfter: res.headers.get('retry-after') };
+  }
+
+  function setStatus(text: string, kind: 'busy' | 'error' | 'ok' | '' = '') {
+    statusEl.textContent = text;
+    statusEl.dataset.kind = kind;
+  }
+  function busy(on: boolean) {
+    go.disabled = on;
+    go.textContent = on ? 'Checking' : 'Check';
+    form.setAttribute('aria-busy', String(on));
+  }
+
+  function errorText(r: ApiRes, mode: 'check' | 'result'): string {
+    const code = r.body?.error;
+    if (r.status === 400 && code === 'blocked_host') return 'This host cannot be checked. IP addresses and private, local or internal names are blocked. Use the public HTTPS URL of the server.';
+    if (r.status === 400) return `That URL cannot be checked.${r.body?.detail ? ' ' + String(r.body.detail).slice(0, 200).replace(/^./, (m) => m.toUpperCase()) + '.' : ''} Paste the full HTTPS URL of the MCP endpoint, for example https://example.com/mcp.`;
+    if (r.status === 429) {
+      const s = Number(r.body?.retry_after ?? r.retryAfter);
+      const wait = Number.isFinite(s) && s > 0 ? (s >= 90 ? `${Math.ceil(s / 60)} minutes` : `${Math.ceil(s)} seconds`) : 'a few minutes';
+      return `Too many checks from your network. Try again in ${wait}.`;
+    }
+    if (r.status === 502) return `The server did not answer as an MCP server.${r.body?.detail ? ' Detail: ' + String(r.body.detail).slice(0, 240) : ''} Check that the URL is the MCP endpoint and that it is public.`;
+    if (r.status === 404 && mode === 'result') return 'No stored result for this link. It may have expired. Run the check again with the server URL.';
+    return `The check failed with status ${r.status || 'none'}. Try again in a minute.`;
+  }
+
+  function normalizeUrl(raw: string): string | null {
+    let v = raw.trim();
+    if (!v) return null;
+    if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(v)) v = 'https://' + v;
+    try { const u = new URL(v); return u.protocol === 'https:' && u.hostname.includes('.') ? u.href : null; } catch { return null; }
+  }
+
+  function inkFor(grade: string) {
+    return grade === 'A' || grade === 'B' ? 'var(--ink-blue)' : grade === 'C' ? 'var(--ink-violet)' : 'var(--ink-red)';
+  }
+
+  function fmtDate(iso: string) {
+    const d = new Date(iso);
+    if (isNaN(+d)) return iso || '';
+    return d.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }) + ' UTC';
+  }
+
+  function render(r: Json) {
+    const score = Math.max(0, Math.min(100, Math.round(Number(r.score) || 0)));
+    const grade = String(r.grade || '').toUpperCase().slice(0, 1) || '?';
+    let host = String(r.url || '');
+    try { host = new URL(host).host; } catch { /* keep */ }
+    const f = (k: string) => $(`[data-f="${k}"]`);
+    f('id').textContent = r.id ? 'No. ' + r.id : '';
+    f('host').textContent = host;
+    f('url').textContent = String(r.url || '');
+    f('checked').textContent = fmtDate(String(r.checked_at || ''));
+    const ms = Number(r.duration_ms);
+    f('took').textContent = Number.isFinite(ms) && ms > 0 ? (ms / 1000).toFixed(1) + ' s' : '';
+    f('took').parentElement!.hidden = !f('took').textContent;
+    f('auth').textContent = AUTH_TEXT[String(r.auth)] || String(r.auth || 'Unknown');
+    const sv = r.server && typeof r.server === 'object' ? [r.server.title || r.server.name, r.server.version].filter(Boolean).join(' ') : '';
+    const proto = r.protocol_version ? `protocol ${r.protocol_version}` : '';
+    f('server').textContent = [sv, proto].filter(Boolean).join(', ');
+    $('[data-row="server"]').hidden = !f('server').textContent;
+    const tc = Number.isFinite(Number(r.tool_count)) && r.tool_count !== null ? String(r.tool_count) : '';
+    f('tools').textContent = tc || (r.limited ? 'Behind sign-in' : '');
+    $('[data-row="tools"]').hidden = !f('tools').textContent;
+    $('#ck-limited').hidden = !r.limited;
+    f('coverage').textContent = Number.isFinite(Number(r.coverage)) ? `${Math.round(Number(r.coverage))}% of the check weight was verified.` : '';
+    const unreach = $('#ck-unreach');
+    unreach.hidden = r.reachable !== false;
+    unreach.textContent = r.reachable === false ? `The server did not complete initialize, so the score is 0.${r.error ? ' Detail: ' + String(r.error).slice(0, 240) : ''}` : '';
+
+    // Stamp
+    const stamp = $('#ck-stamp') as unknown as SVGSVGElement;
+    $('#ck-stamp-score').textContent = String(score);
+    $('#ck-stamp-grade').textContent = grade;
+    $('#ck-stamp-t').textContent = `Score ${score} out of 100, grade ${grade}`;
+    stamp.style.color = inkFor(grade);
+    stamp.classList.remove('ck-land'); void stamp.getBoundingClientRect(); stamp.classList.add('ck-land');
+
+    // Stores. Engine blockers are check ids; show the check title and its fix.
+    const byId: Record<string, Json> = {};
+    (Array.isArray(r.checks) ? r.checks : []).forEach((c: Json) => { if (c && c.id) byId[String(c.id)] = c; });
+    const label = (b: unknown) => {
+      if (typeof b !== 'string') return String((b as Json)?.title ?? (b as Json)?.fix ?? '');
+      const c = byId[b];
+      return c ? String(c.title || b) + (c.fix ? ': ' + String(c.fix) : '') : b === 'initialize' ? 'The server did not answer initialize' : b;
+    };
+    const stores = $('#ck-stores'); stores.replaceChildren();
+    let notReady = 0;
+    for (const [key, name] of STORE_LIST) {
+      const s = r.stores?.[key] ?? {};
+      const ok = Boolean(s.ready);
+      if (!ok) notReady++;
+      const li = el('li', 'ck-store');
+      const top = el('div', 'ck-store-top');
+      top.append(el('span', 'ck-store-name', name));
+      if (Number.isFinite(Number(s.score))) top.append(el('span', 'ck-store-score tnum', `${Math.round(Number(s.score))}/100`));
+      const mark = el('span', ok ? 'stamp stamp-black ck-mark' : 'stamp ck-mark', ok ? 'Ready' : 'Not yet');
+      top.append(mark);
+      li.append(top);
+      const blockers: string[] = (Array.isArray(s.blockers) ? s.blockers : []).map(label).filter(Boolean);
+      if (!ok && blockers.length) {
+        const ul = el('ul', 'ck-blockers');
+        for (const b of blockers) ul.append(el('li', '', b));
+        li.append(ul);
+      }
+      const unv: string[] = (Array.isArray(s.unverified) ? s.unverified : []).map((u: unknown) => typeof u === 'string' ? String(byId[u]?.title || u) : '').filter(Boolean);
+      if (unv.length) li.append(el('p', 'ck-unverified', `Not verified without sign-in: ${unv.join(', ')}.`));
+      stores.append(li);
+    }
+
+    // Checks, grouped
+    const checks: Json[] = Array.isArray(r.checks) ? r.checks : [];
+    const groups = $('#ck-groups'); groups.replaceChildren();
+    const known = new Set(GROUP_LIST.map((g) => g[0]));
+    const extra = [...new Set(checks.map((c) => String(c.group || 'other')).filter((g) => !known.has(g)))].map((g): [string, string] => [g, g.charAt(0).toUpperCase() + g.slice(1)]);
+    const tally: Record<string, number> = { pass: 0, warn: 0, fail: 0, skip: 0 };
+    for (const [gid, gname] of [...GROUP_LIST, ...extra]) {
+      const list = checks.filter((c) => String(c.group || 'other') === gid)
+        .sort((a, b) => (STATUS_ORDER[a.status] ?? 9) - (STATUS_ORDER[b.status] ?? 9));
+      if (!list.length) continue;
+      const sec = el('section', 'ck-group');
+      const head = el('div', 'ck-group-head');
+      head.append(el('h4', 'ck-group-name', gname));
+      const counts: Record<string, number> = {};
+      list.forEach((c) => { counts[c.status] = (counts[c.status] || 0) + 1; tally[c.status] = (tally[c.status] || 0) + 1; });
+      head.append(el('span', 'ck-group-count', ['pass', 'warn', 'fail', 'skip'].filter((k) => counts[k]).map((k) => `${counts[k]} ${k}`).join(' · ')));
+      sec.append(head);
+      const ul = el('ul', 'ck-checks');
+      for (const c of list) {
+        const st = ['pass', 'warn', 'fail', 'skip'].includes(c.status) ? c.status : 'skip';
+        const li = el('li', `ck-check ck-${st}`);
+        li.append(el('span', 'ck-st', st.toUpperCase()));
+        const body = el('div', 'ck-check-body');
+        body.append(el('p', 'ck-check-title', String(c.title || c.id || '')));
+        if (c.detail) body.append(el('p', 'ck-check-detail', String(c.detail)));
+        if (c.fix && (st === 'fail' || st === 'warn')) {
+          const fx = el('p', 'ck-fix');
+          fx.append(el('span', 'ck-fix-l', 'Fix'), document.createTextNode(String(c.fix)));
+          body.append(fx);
+        }
+        li.append(body);
+        ul.append(li);
+      }
+      sec.append(ul);
+      groups.append(sec);
+    }
+    $('#ck-tally').textContent = `${checks.length} checks: ${tally.pass} pass, ${tally.warn} warn, ${tally.fail} fail${tally.skip ? `, ${tally.skip} skipped` : ''}`;
+
+    // Badge + share
+    const report = safeUrl(r.report_url) || (r.id ? `https://www.mcpstamp.com/check/?id=${encodeURIComponent(r.id)}` : location.href);
+    const badge = safeUrl(r.badge_url) || (r.id ? `https://www.mcpstamp.com/badge/${encodeURIComponent(r.id)}.svg` : '');
+    const img = $<HTMLImageElement>('#ck-badge-img');
+    img.hidden = !badge;
+    img.onerror = () => { img.hidden = true; };
+    if (badge) img.src = badge;
+    img.alt = `McpStamp score ${score} ${grade}`;
+    $('#ck-md').textContent = `[![McpStamp score](${badge})](${report})`;
+    $('#ck-html').textContent = `<a href="${report}"><img src="${badge}" alt="McpStamp score" height="20"></a>`;
+    $<HTMLInputElement>('#ck-link').value = report;
+    $('#ck-link-text').textContent = report;
+
+    // Audit CTA: mailto with the checked URL and score while Stripe checkout is not live.
+    const audit = $<HTMLAnchorElement>('#ck-audit');
+    if (audit.dataset.live !== '1') {
+      const body = `Hello,\n\nI would like a Readiness Audit ($490) for this MCP server:\n\nURL: ${String(r.url || '')}\nMcpStamp score: ${score} (${grade})\nReport: ${report}\n\nName:\nCompany:\n`;
+      audit.href = 'mailto:support@zovo.one?subject=' + encodeURIComponent('Readiness Audit ($490)') + '&body=' + encodeURIComponent(body);
+    }
+
+    // Offers, ordered by score
+    const offer = $('#ck-offer');
+    const ol = $('.ck-offers', offer);
+    const items: Record<string, HTMLElement> = {};
+    ol.querySelectorAll<HTMLElement>('[data-offer]').forEach((li) => { items[li.dataset.offer!] = li; });
+    const order = score < 90 ? ['audit', 'launch', 'care'] : notReady > 0 ? ['care', 'launch'] : ['care'];
+    Object.values(items).forEach((li) => { li.hidden = true; });
+    order.forEach((k) => { items[k].hidden = false; ol.append(items[k]); });
+    $('#ck-offer-h').textContent = score < 90 ? `Score ${score}. Want the fixes done for you?` : notReady > 0 ? `Score ${score}. ${notReady} store${notReady > 1 ? 's' : ''} still say not yet.` : `Score ${score}. Keep it there.`;
+    $('#ck-offer-lead').textContent = score < 90
+      ? 'Fixed prices. Start with the audit to get every fix written down, or have the whole store launch done.'
+      : 'Specs and store rules change every few months. The care plan checks your server each day and fixes what breaks.';
+
+    out.hidden = false;
+    setStatus(`Done. ${host} scored ${score} out of 100, grade ${grade}. Ready in ${4 - notReady} of 4 stores.`, 'ok');
+    $('#ck-r-h').focus({ preventScroll: true });
+    $('#ck-result').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  function setQuery(params: Record<string, string>) {
+    const q = new URLSearchParams(params).toString();
+    history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + location.hash);
+  }
+
+  async function run(kind: 'check' | 'result', value: string) {
+    busy(true);
+    out.hidden = true;
+    input.removeAttribute('aria-invalid');
+    setStatus(kind === 'check' ? `Checking ${value}. This takes 5 to 30 seconds.` : 'Loading the stored result.', 'busy');
+    try {
+      const fresh = new URLSearchParams(location.search).get('fresh') === '1' ? '&fresh=1' : '';
+      const r = await api(kind === 'check' ? `check?url=${encodeURIComponent(value)}${fresh}` : `result/${encodeURIComponent(value)}`);
+      if (r.status === 200 && r.body && typeof r.body.score !== 'undefined') {
+        if (kind === 'result' && r.body.url) input.value = String(r.body.url);
+        if (r.body.id) setQuery({ id: String(r.body.id) });
+        render(r.body);
+      } else {
+        setStatus(errorText(r, kind), 'error');
+        if (r.status === 400) { input.setAttribute('aria-invalid', 'true'); input.focus(); }
+      }
+    } catch (e) {
+      setStatus((e as Error).name === 'AbortError' ? 'The check took longer than 60 seconds and was stopped. The server may be slow or down. Try again.' : 'Could not reach the check service. Check your connection and try again.', 'error');
+    } finally {
+      busy(false);
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (go.disabled) return;
+    const u = normalizeUrl(input.value);
+    if (!u) {
+      input.setAttribute('aria-invalid', 'true');
+      setStatus('Enter the full HTTPS URL of the MCP endpoint, for example https://example.com/mcp.', 'error');
+      input.focus();
+      return;
+    }
+    input.value = u;
+    setQuery({ url: u });
+    run('check', u);
+  });
+
+  const qs = new URLSearchParams(location.search);
+  const qid = qs.get('id');
+  const qurl = qs.get('url');
+  if (qid && /^[A-Za-z0-9_-]{1,80}$/.test(qid)) run('result', qid);
+  else if (qurl) { input.value = qurl; const u = normalizeUrl(qurl); if (u) { input.value = u; run('check', u); } else setStatus('The link has a URL that cannot be checked. Use the full HTTPS URL of the MCP endpoint.', 'error'); }
+</script>
+
+<style is:global>
+  .ck-label { display: block; font-family: var(--font-mono); font-size: .76rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .45rem; }
+  .ck-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .ck-input {
+    flex: 1 1 16rem; min-width: 0; min-height: 3rem; padding: .7rem .9rem; border-radius: 3px;
+    border: 1px solid var(--border-strong); border-bottom-width: 2px; background: var(--surface-solid); color: var(--text);
+    font-family: var(--font-mono); font-size: 1rem;
+  }
+  .ck-input::placeholder { color: var(--faint); }
+  .ck-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ck-input[aria-invalid='true'] { border-color: var(--stamp); }
+  .ck-input-sm { min-height: 2.5rem; font-size: .88rem; padding: .45rem .7rem; }
+  .ck-go { flex: 0 0 auto; min-width: 7.5rem; }
+  @media (max-width: 479px) { .ck-go { flex: 1 1 100%; } }
+  .ck-hint { margin-top: .55rem; font-size: .9rem; color: var(--muted); }
+
+  .ck-status:empty { display: none; }
+  .ck-status { margin-bottom: 1.25rem; padding: .85rem 1rem; border: 1px solid var(--border-strong); border-left-width: 4px; border-radius: 3px; background: var(--surface-solid); max-width: 48rem; }
+  .ck-status[data-kind='busy'] { border-left-color: var(--accent); }
+  .ck-status[data-kind='busy']::before { content: ''; display: inline-block; width: .7rem; height: .7rem; margin-right: .6rem; border: 2px solid var(--accent); border-right-color: transparent; border-radius: 99px; vertical-align: -.05rem; animation: ck-spin .8s linear infinite; }
+  .ck-status[data-kind='error'] { border-left-color: var(--stamp); }
+  .ck-status[data-kind='ok'] { border-left-color: var(--ok); }
+  @keyframes ck-spin { to { transform: rotate(360deg); } }
+
+  .ck-sheet { padding: 1.25rem; max-width: 60rem; }
+  @media (min-width: 640px) { .ck-sheet { padding: 2rem 2.25rem; } }
+  .ck-head { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 640px) { .ck-head { grid-template-columns: minmax(0, 1fr) auto; align-items: start; } }
+  .ck-serial { color: var(--stamp); }
+  .ck-title { margin-top: .35rem; font-size: clamp(1.4rem, 3vw, 1.9rem); overflow-wrap: anywhere; }
+  .ck-title:focus { outline: none; }
+  .ck-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .ck-meta { margin-top: .9rem; font-size: .93rem; }
+  .ck-meta > div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: .75rem; padding: .4rem 0; border-bottom: 1px solid var(--rule); }
+  .ck-meta dt { font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); padding-top: .15rem; }
+  .ck-break { overflow-wrap: anywhere; font-family: var(--font-mono); font-size: .86rem; }
+  .ck-stamp-wrap { display: flex; flex-direction: column; align-items: center; justify-self: center; padding: .25rem .5rem; }
+  .ck-stamp { width: 210px; max-width: 100%; height: auto; transform: rotate(-6deg); opacity: .92; mix-blend-mode: multiply; overflow: visible; }
+  .ck-stamp-cap { margin-top: .6rem; font-family: var(--font-mono); font-size: .7rem; letter-spacing: .04em; color: var(--faint); }
+  @media (prefers-reduced-motion: no-preference) {
+    .ck-land { animation: ck-stamp-land .42s cubic-bezier(.2,1.3,.4,1) 1 both; animation-delay: .15s; }
+  }
+  @keyframes ck-stamp-land { 0% { transform: rotate(-6deg) scale(1.5); opacity: 0; } 70% { transform: rotate(-6deg) scale(.97); opacity: .95; } 100% { transform: rotate(-6deg) scale(1); opacity: .92; } }
+
+  .ck-h3 { font-size: 1.2rem; }
+  .ck-stores { margin-top: .75rem; border-top: 2px solid var(--text); }
+  .ck-store { padding: .8rem 0; border-bottom: 1px solid var(--border-strong); }
+  .ck-store-top { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+  .ck-store-name { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; min-width: 7.5rem; }
+  .ck-store-score { font-family: var(--font-mono); font-size: .8rem; color: var(--faint); }
+  .ck-mark { margin-left: auto; font-size: .78rem; transform: rotate(-4deg); }
+  .ck-blockers { margin: .5rem 0 0; padding-left: 1.1rem; list-style: square; font-size: .93rem; color: var(--muted); }
+  .ck-blockers li + li { margin-top: .2rem; }
+  .ck-unverified { margin-top: .4rem; font-size: .85rem; color: var(--faint); }
+  .ck-limited { margin-top: 1rem; padding: .6rem .8rem; border: 1px dashed var(--warn); border-radius: 3px; font-size: .93rem; color: var(--text); }
+  .ck-limited[hidden] { display: none; }
+  .ck-meta > div[hidden] { display: none; }
+
+  .ck-tally { font-family: var(--font-mono); font-size: .78rem; color: var(--faint); }
+  .ck-group { margin-top: 1.1rem; }
+  .ck-group-head { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; flex-wrap: wrap; border-bottom: 2px solid var(--text); padding-bottom: .35rem; }
+  .ck-group-name { font-family: var(--font-mono); font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .ck-group-count { font-family: var(--font-mono); font-size: .75rem; color: var(--faint); }
+  .ck-checks { list-style: none; margin: 0; padding: 0; }
+  .ck-check { display: grid; grid-template-columns: 3.6rem minmax(0, 1fr); gap: .75rem; padding: .7rem 0; border-bottom: 1px solid var(--rule); }
+  .ck-st { align-self: start; text-align: center; font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .08em; padding: .12rem 0; border: 1.5px solid currentColor; border-radius: 2px; }
+  .ck-pass .ck-st { color: var(--ok); }
+  .ck-warn .ck-st { color: var(--warn); }
+  .ck-fail .ck-st { color: var(--stamp); }
+  .ck-skip .ck-st { color: var(--faint); }
+  .ck-check-title { font-weight: 600; line-height: 1.4; }
+  .ck-check-detail { margin-top: .15rem; font-size: .92rem; color: var(--muted); overflow-wrap: anywhere; }
+  .ck-fix { margin-top: .35rem; font-size: .93rem; overflow-wrap: anywhere; }
+  .ck-fix-l { display: inline-block; margin-right: .5rem; font-family: var(--font-mono); font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+
+  .ck-badge img { display: inline-block; }
+  .ck-snips { display: grid; gap: 1rem; margin-top: 1rem; }
+  @media (min-width: 900px) { .ck-snips { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  .ck-snip { position: relative; min-width: 0; }
+  .ck-snip-l { display: block; margin-bottom: .35rem; font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+  .ck-code { white-space: pre-wrap !important; overflow-wrap: anywhere; padding-right: 5rem; font-size: .8rem; }
+  .ck-copy { position: absolute; right: .5rem; top: 1.75rem; min-height: 2rem !important; padding: .3rem .7rem !important; font-size: .8rem; }
+  .ck-share { margin-top: 1.25rem; }
+
+  .ck-offer { margin-top: 2.5rem; max-width: 60rem; }
+  .ck-offers { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--text); }
+  .ck-offers > li { display: grid; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--border-strong); }
+  .ck-offers > li[hidden] { display: none; }
+  .ck-offers > li:first-child:not([hidden]) { background: var(--manila); border: 1px solid var(--manila-2); padding: 1.25rem; margin-top: .75rem; border-radius: 3px; }
+  @media (min-width: 768px) { .ck-offers > li { grid-template-columns: minmax(0, 1fr) 15rem; align-items: center; } }
+  .ck-offer-name { font-size: 1.3rem; }
+  .ck-offer-buy { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
+  @media (min-width: 768px) { .ck-offer-buy { align-items: flex-end; text-align: right; } }
+  .ck-price { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
+  .ck-per { display: block; font-family: var(--font-sans); font-size: .85rem; font-weight: 400; color: var(--muted); }
+</style>
