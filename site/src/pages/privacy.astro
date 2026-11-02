@@ -64,7 +64,7 @@ const retention: [string, string][] = [
   other={{ href: '/terms/', label: 'Terms of Service' }}
 >
   <h2 id="who">1. Who is responsible</h2>
-  <p>The data controller is <strong>autom8 LLC</strong>, a limited liability company registered in the <strong>Republic of Armenia</strong> (Yerevan, registered on 8 October 2024). autom8 LLC operates {brand.name} and the Zovo brand; the hosted endpoints, the checkout and the licence keys run on <code>mcp.zovo.one</code>. For any privacy question or request, email <span class="select-all">{email}</span>.</p>
+  <p>The data controller is autom8 LLC, a limited liability company registered in the Republic of Armenia (Yerevan, registered on 8 October 2024). autom8 LLC operates {brand.name} and the Zovo brand; the hosted endpoints, the checkout and the licence keys run on <code>mcp.zovo.one</code>. For any privacy question or request, email <span class="select-all">{email}</span>.</p>
   <p>We process personal data under the Law of the Republic of Armenia on Protection of Personal Data and, for people in the European Economic Area, the United Kingdom and Switzerland, under the GDPR, the UK GDPR and the Swiss Federal Act on Data Protection where they apply. The <a href="/terms/">Terms of Service</a> name the same operator.</p>
 
   <h2 id="summary">2. Summary</h2>
@@ -74,7 +74,7 @@ const retention: [string, string][] = [
     <li>AI clients such as Gemini, ChatGPT and Claude receive the tool results you ask for.</li>
     <li>Payments go through Stripe. We keep your receipt email so you can recover a lost key.</li>
     <li>This website uses Google Analytics. In the EEA, the UK and Switzerland it sets no cookies unless you click Accept.</li>
-    <li>We do not sell your data, do not share it for advertising, and do not use it to train AI models.</li>
+    <li>We don't sell your data, don't share it for advertising, and don't use it to train AI models.</li>
   </ul>
   <p>The code is public, so the technical claims here can be checked in <a href={repo} rel="noopener">github.com/theluckystrike/mcp-servers</a>. The hosted service also publishes a technical privacy page at <a href={`${origin}/privacy`} rel="noopener">mcp.zovo.one/privacy</a>.</p>
 
@@ -110,12 +110,12 @@ const retention: [string, string][] = [
   <p>The hosted endpoints and the checkout run on Cloudflare, which processes request data such as IP addresses to deliver and protect the service. <code>mcp.zovo.one</code> counts clicks on upgrade links and records hosted tool-response and checkout-stage counts by fixed source labels. The hosted-response counter keeps a SHA-256 hash of the token and private daily deduplication hashes; these are pseudonymous identifiers kept for at most 31 days. Aggregate reports contain no hashes, tokens, tool arguments or results, file names, emails or IP addresses. Local servers send no usage data.</p>
 
   <h2 id="cookies">10. Website analytics and cookies</h2>
-  <p>This website, <code>www.{brand.domain}</code>, is served by Cloudflare Pages. It uses <strong>Google Analytics 4</strong> to count page views, clicks on buy links (sent as a <code>begin_checkout</code> event with the product and the link's source label) and clicks on support links such as GitHub, Telegram, Buy Me a Coffee and PayPal (sent as a <code>support_click</code> event with the link address). Google Analytics runs on this website only; the hosted endpoints and the servers do not use it.</p>
-  <p>We use Google Consent Mode:</p>
+  <p>This website, <code>www.{brand.domain}</code>, is served by Cloudflare Pages. It uses Google Analytics 4 to count page views, clicks on buy links (sent as a <code>begin_checkout</code> event with the product and the link's source label) and clicks on support links such as GitHub, Telegram, Buy Me a Coffee and PayPal (sent as a <code>support_click</code> event with the link address). Google Analytics runs on this website only; the hosted endpoints and the servers do not use it.</p>
+  <p>We use Google Consent Mode.</p>
   <ul>
-    <li><strong>EEA, United Kingdom and Switzerland:</strong> analytics cookies are off until you click Accept in the cookie banner. Until then Google Analytics sets no cookies and receives only cookieless signals without identifiers.</li>
-    <li><strong>Other countries:</strong> analytics is on by default. You can switch it off with Reject in the banner.</li>
-    <li><strong>Everywhere:</strong> advertising storage, ad user data and ad personalisation are always denied. The site shows no ads.</li>
+    <li>In the EEA, the United Kingdom and Switzerland, analytics cookies are off until you click Accept in the cookie banner. Until then Google Analytics sets no cookies and receives only cookieless signals without identifiers.</li>
+    <li>In other countries, analytics is on by default. You can switch it off with Reject in the banner.</li>
+    <li>Everywhere, advertising storage, ad user data and ad personalisation are always denied. The site shows no ads.</li>
   </ul>
   <p>Your choice is stored in your browser's local storage under <code>mcpstamp-consent</code>. You can change it at any time with <button type="button" class="inline-link" data-cookie-settings>Cookie settings</button>, also linked in the footer of every page. When you reject, we also remove Google Analytics cookies already set on this site.</p>
   <div class="tbl">
@@ -148,12 +148,12 @@ const retention: [string, string][] = [
 
   <h2 id="recipients">12. Processors and recipients</h2>
   <ul>
-    <li><strong>Cloudflare, Inc.</strong> (processor): hosting of this website, the hosted endpoints and the checkout pages; storage in Workers KV.</li>
-    <li><strong>Stripe</strong> (independent controller for payment data): payment processing and receipts.</li>
-    <li><strong>Resend</strong> (processor): sending licence-key and setup-tip emails.</li>
-    <li><strong>Google</strong> (processor for Google Analytics): website analytics on {brand.domain} only, with consent where required.</li>
-    <li><strong>The AI client you choose</strong>, such as Google Gemini, OpenAI ChatGPT or Anthropic Claude: receives the tool results you ask for (see section 5).</li>
-    <li><strong>Authorities</strong>, when the law requires us to disclose data.</li>
+    <li>Cloudflare, Inc. (processor) hosts this website, the hosted endpoints and the checkout pages, and stores data in Workers KV.</li>
+    <li>Stripe (independent controller for payment data) processes payments and receipts.</li>
+    <li>Resend (processor) sends licence-key and setup-tip emails.</li>
+    <li>Google (processor for Google Analytics) runs website analytics on {brand.domain} only, with consent where required.</li>
+    <li>The AI client you choose, such as Google Gemini, OpenAI ChatGPT or Anthropic Claude, receives the tool results you ask for (see section 5).</li>
+    <li>Authorities receive data when the law requires us to disclose it.</li>
   </ul>
 
   <h2 id="transfers">13. International transfers</h2>
@@ -172,21 +172,21 @@ const retention: [string, string][] = [
   <h2 id="rights">15. Your rights</h2>
   <p>Depending on where you live, you have the right to:</p>
   <ul>
-    <li><strong>access</strong> the personal data we hold about you and get a copy;</li>
-    <li><strong>correct</strong> inaccurate data;</li>
-    <li><strong>delete</strong> your data;</li>
-    <li><strong>export</strong> data you gave us in a structured, machine-readable format (data portability);</li>
-    <li><strong>object</strong> to processing based on legitimate interests, and to restrict processing;</li>
-    <li><strong>withdraw consent</strong> at any time, for analytics with Cookie settings and for setup tips with the unsubscribe link, without affecting earlier processing;</li>
-    <li><strong>complain to a supervisory authority</strong>, in particular in the country where you live or work, or in Armenia to the Personal Data Protection Agency.</li>
+    <li>access the personal data we hold about you and get a copy;</li>
+    <li>correct inaccurate data;</li>
+    <li>delete your data;</li>
+    <li>export data you gave us in a structured, machine-readable format (data portability);</li>
+    <li>object to processing based on legitimate interests, and to restrict processing;</li>
+    <li>withdraw consent at any time, for analytics with Cookie settings and for setup tips with the unsubscribe link, without affecting earlier processing;</li>
+    <li>complain to a supervisory authority, in particular in the country where you live or work, or in Armenia to the Personal Data Protection Agency.</li>
   </ul>
   <p>Email {email} to use these rights. We reply within one month. Hosted data is stored under an anonymous token, so to find it we need the token or, for a purchase, the Stripe session id. We will not ask for more information than we need to verify the request. Many tools also let you list, export and delete your records yourself, for example the <code>*_list</code>, <code>*_export</code> and <code>*_delete</code> tools.</p>
 
   <h2 id="delete">16. Deleting your data</h2>
   <ul>
-    <li><strong>Hosted data:</strong> delete individual records with the server's delete tools, or stop using the token; everything stored under it is deleted automatically 35 days after the last use. To delete everything sooner, email {email} from a private channel with the token, and we will delete the data under it.</li>
-    <li><strong>OAuth connection:</strong> remove or disconnect the connector in your AI client. Its tokens then expire (access token after 30 days, refresh token after at most 365 days) and the data under it is deleted 35 days after the last use, or sooner on request as above.</li>
-    <li><strong>Purchase record, setup-tips record or anything else:</strong> email {email}. Include the Stripe session id for a purchase. Deleting a purchase record means we can no longer help you recover a lost key.</li>
+    <li>For hosted data, delete individual records with the server's delete tools, or stop using the token; everything stored under it is deleted automatically 35 days after the last use. To delete everything sooner, email {email} from a private channel with the token, and we will delete the data under it.</li>
+    <li>For an OAuth connection, remove or disconnect the connector in your AI client. Its tokens then expire (access token after 30 days, refresh token after at most 365 days) and the data under it is deleted 35 days after the last use, or sooner on request as above.</li>
+    <li>For a purchase record, a setup-tips record or anything else, email {email}. Include the Stripe session id for a purchase. Deleting a purchase record means we can no longer help you recover a lost key.</li>
   </ul>
 
   <h2 id="security">17. Security</h2>

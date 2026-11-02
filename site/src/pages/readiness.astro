@@ -24,7 +24,7 @@ const maxGrade = Math.max(1, ...GRADES.map((g) => T?.by_grade[g] ?? 0));
 const graded = GRADES.reduce((a, g) => a + (T?.by_grade[g] ?? 0), 0);
 const auths = [...new Set(rows.map((r) => r.auth))].sort();
 
-const title = 'McpStamp Readiness Index: remote MCP servers scored';
+const title = 'McpStamp Readiness Index of remote MCP servers';
 const description = hasRows
   ? `${n(T!.scanned)} remote MCP servers from the official MCP Registry, scored 0-100 for Claude, ChatGPT, Gemini and the Registry. Average score ${n(T!.avg_score)}.`
   : 'Every remote server in the official MCP Registry, scored 0-100 for Claude, ChatGPT, Gemini and the Registry, with the top fixes for each server.';
@@ -44,11 +44,11 @@ const jsonLd = hasRows && !R!.sample ? [{
       <h1 class="display mt-5 max-w-4xl !text-[clamp(2.2rem,5.4vw,4rem)]">McpStamp Readiness Index</h1>
       <p class="lead mt-5 max-w-2xl">
         {hasRows
-          ? <>{n(T!.scanned)} remote servers from the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>{dateText && <> on {dateText}</>}. A score from 0 to 100, readiness for four stores, and the top fixes for each server.</>
-          : <>Every remote server in the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>: a score from 0 to 100, readiness for four stores, and the top fixes for each server.</>}
+          ? <>{n(T!.scanned)} remote servers from the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>{dateText && <> on {dateText}</>}. Each one gets a score from 0 to 100 and its top fixes, plus a ready or not-ready call for four stores.</>
+          : <>Every remote server in the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>. Each one gets a score from 0 to 100 and its top fixes, plus a ready or not-ready call for four stores.</>}
       </p>
       {R?.sample && <p class="rx-note mt-5" role="note">Sample data for layout testing. The full scan replaces it.</p>}
-      {hasRows && R && !R.partial.complete && <p class="rx-note mt-5" role="note"><strong>Partial scan.</strong> {n(T!.scanned)}{R.partial.registry_urls > 0 && <> of {n(R.partial.registry_urls)}</>} remote URLs in the registry are scored so far. {R.partial.sampling} We publish a new snapshot when more results are in; the date above is the date of this snapshot.</p>}
+      {hasRows && R && !R.partial.complete && <p class="rx-note mt-5" role="note">Partial scan. {n(T!.scanned)}{R.partial.registry_urls > 0 && <> of {n(R.partial.registry_urls)}</>} remote URLs in the registry are scored so far. {R.partial.sampling} We'll publish a new snapshot when more results are in. The date above is this snapshot's date.</p>}
     </div>
   </section>
 
@@ -103,7 +103,7 @@ const jsonLd = hasRows && !R!.sample ? [{
                 </li>
               ))}
             </ul>
-            <p class="rx-cap mt-2">MCP Registry means a valid remote for the registry (public HTTPS, Streamable HTTP or SSE). It does not mean the server is listed. Unverified means nothing failed, but a blocking check could not run, mostly because tools are behind sign-in. In the table, a store with ? is unverified.</p>
+            <p class="rx-cap mt-2">MCP Registry means a valid remote for the registry (public HTTPS, Streamable HTTP or SSE). It doesn't mean the server is listed. Unverified means nothing failed, but a blocking check couldn't run, mostly because the tools sit behind sign-in. In the table, a store with ? is unverified.</p>
           
           </figure>
         </div>
@@ -152,7 +152,7 @@ const jsonLd = hasRows && !R!.sample ? [{
                   <td class="rx-num rx-rank tnum">{i + 1}</td>
                   <td class="rx-server">
                     <span class="rx-name">{r.name}</span>
-                    <span class="rx-host">{host(r.url)}</span>
+                    <code class="rx-host">{host(r.url)}</code>
                     {repoUrl(r.repo) && <a class="rx-repo" href={repoUrl(r.repo)} rel="nofollow noopener" target="_blank">Source<span class="sr-only"> of {r.name}</span></a>}
                   </td>
                   <td class="rx-num">
@@ -189,7 +189,7 @@ const jsonLd = hasRows && !R!.sample ? [{
           </div>
           <div class="prose-site">
             {R!.method.text.map((p) => <p>{p}</p>)}
-            {R!.method.text.length === 0 && <p>Every server in the official MCP Registry that lists a remote URL was checked with the same engine as McpStamp Check. Each check has a weight; the score is the weighted share of checks that pass. A store counts as ready when none of its blockers fail.</p>}
+            {R!.method.text.length === 0 && <p>Every server in the official MCP Registry that lists a remote URL was checked with the same engine as McpStamp Check. Each check has a weight, and the score is the weighted share of checks that pass. A store counts as ready when none of its blockers fail.</p>}
             {R!.method.items.length > 0 && (
               <dl class="rx-method">
                 {R!.method.items.map((m) => <div><dt>{m.label}</dt><dd>{m.value}</dd></div>)}

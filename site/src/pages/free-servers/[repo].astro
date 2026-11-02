@@ -14,7 +14,7 @@ const all = getFreeServers();
 const others = all.filter((x) => x.repo !== s.repo);
 const lines = installLines(s);
 const url = new URL(s.path, Astro.site).href;
-const title = `${s.h1}: free, no token`.length <= 60 ? `${s.h1}: free, no token` : s.h1;
+const title = `${s.h1} (free, no token)`.length <= 60 ? `${s.h1} (free, no token)` : s.h1;
 const description = `${s.tagline} Free hosted MCP server with ${s.tools.length} tools. Paste one URL into Claude, Cursor or VS Code. No token, no account.`;
 const faq = [
   { q: `Is the ${/^.[A-Z]/.test(s.h1) ? s.h1 : s.h1[0].toLowerCase() + s.h1.slice(1)} free?`, a: `Yes. The hosted URL is free and needs no token, key or account. The source is open on GitHub.` },
@@ -69,7 +69,7 @@ const moneyExternal = money && !money.startsWith('/');
   <section class="fs-band py-14">
     <div class="wrap grid gap-10 lg:grid-cols-[.8fr_1.4fr]">
       <div>
-        <h2 class="h2">What it knows that a model does not</h2>
+        <h2 class="h2">What it knows that a model doesn't</h2>
         <p class="muted mt-3 max-w-sm">A model answers from training data. This server reads the source when you ask.</p>
       </div>
       <div>

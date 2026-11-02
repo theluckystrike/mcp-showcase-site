@@ -40,7 +40,7 @@ export const COMPARISONS: Comparison[] = [
       'You are fine with usage-based monthly billing.',
     ],
     pickUs: [
-      'You are not building a product. You want the back-office job done in chat today.',
+      'You aren\'t building a product. You want the back-office job done in chat today.',
       'You want document output (PDF, Word, spreadsheet) and local records.',
       'You want a one-time price and an MIT-licensed server you can read.',
     ],
@@ -57,7 +57,7 @@ export const COMPARISONS: Comparison[] = [
       'Your accountant works in that ledger.',
     ],
     pickUs: [
-      'You do not run a full ledger yet: you need invoices, quotes, a cash book or a bank CSV summary.',
+      'You don\'t run a full ledger yet: you need invoices, quotes, a cash book or a bank CSV summary.',
       'You need checks around the ledger: three-way match, duplicate invoices, supplier statements.',
       'You want local files and records with no accounting subscription.',
     ],

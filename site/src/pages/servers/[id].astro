@@ -34,7 +34,8 @@ const metaBase = `${s.tagline} ${s.hosted ? 'Paste one URL or install locally.' 
 const seoMeta = seo(`/servers/${s.id}/`, { title: `${s.name} for Claude and ChatGPT | ${brand.name}`, description: metaBase });
 // QA (t-qa): the sitemap server metas are cut mid-phrase and say "$19 Pro once" for every server, also for the 8 free-only
 // servers and the bundle-only office-suite. Use the description built from catalog price data. Keep the sitemap title.
-const firstSentence = (s.plain.match(/^[^.!?]+[.!?]/)?.[0] ?? '').trim();
+// A sentence ends at . ! or ? followed by a space or the end, so "4.50" and ".ics" don't cut it short.
+const firstSentence = (s.plain.match(/^.+?[.!?](?=\s|$)/)?.[0] ?? '').trim();
 const meta = { ...seoMeta, description: firstSentence && (metaBase + ' ' + firstSentence).length <= 160 ? `${metaBase} ${firstSentence}` : metaBase };
 const afterCase = single
   ? upsell('server', 'after_case', { copy: `Doing this every week? Pro removes the free-tier limit for $${s.priceUsd}, once.`, cta_url: buy('after_case') }, vars)

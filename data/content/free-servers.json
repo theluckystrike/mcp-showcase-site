@@ -61,7 +61,7 @@
    "name": "Gold Price per Gram",
    "tagline": "Live gold price per gram by karat, in about 160 currencies.",
    "knows": [
-    "The gold spot price right now. Prices change every minute, so a model cannot know them.",
+    "The gold spot price right now. Prices change every minute, so a model can't know them.",
     "Silver, platinum and palladium spot prices, with central-bank FX rates for about 160 currencies.",
     "Melt value of a ring or chain from its weight and karat, and units like tola, baht and tael."
    ],
@@ -765,7 +765,7 @@
    "knows": [
     "The 2027 Social Security COLA of 3.6%, the $192,300 wage base and the earnings test limits, announced in October 2026.",
     "The 2027 HSA limits of $4,500 self and $9,000 family, and the 2025 and 2026 401(k), IRA, SIMPLE and HSA limits.",
-    "The age 60 to 63 super catch-up and the Roth catch-up rule for high earners that applies from 2027. 2027 401(k) limits are not out yet, and the tool says so."
+    "The age 60 to 63 super catch-up and the Roth catch-up rule for high earners that applies from 2027. 2027 401(k) limits aren't out yet, and the tool says so."
    ],
    "sources": "IRS Notices 2024-80 and 2025-67, Rev. Procs. 2025-19 and 2026-24, IR-2025-91, and SSA Federal Register notices.",
    "hosted_url": "https://retirement-contribution-limits-2027-mcp.lipmichal.workers.dev/mcp",

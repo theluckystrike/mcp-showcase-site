@@ -167,7 +167,7 @@
       }
     ],
     "example_session": {
-      "transport": "MCP streamable HTTP, protocol 2025-06-18, stateless (no Mcp-Session-Id header returned). One JSON-RPC object per POST; batching is refused.",
+      "transport": "MCP streamable HTTP, protocol 2025-06-18, stateless (no Mcp-Session-Id header returned). One JSON-RPC object per POST. Batching is refused.",
       "requests": [
         {
           "step": "initialize",
@@ -312,7 +312,7 @@
   "faq": [
     {
       "q": "Is the npm package published?",
-      "a": "Yes. npm view @theluckystrike/mcp-currency returns 0.22.6 (checked 2026-10-30). Some older pages and llms-install.md files still say it isn't published. They are out of date."
+      "a": "Yes. npm view @theluckystrike/mcp-currency returns 0.22.6 (checked 2026-10-30). Some older pages and llms-install.md files still say it isn't published. They're out of date."
     },
     {
       "q": "Why does my hosted URL list tools but every call fails?",
@@ -328,7 +328,7 @@
     },
     {
       "q": "Does the hosted endpoint support OAuth?",
-      "a": "The server publishes OAuth discovery documents and an authorize endpoint. The /mcp index says it has no OAuth flow. Use the token forms. They are tested."
+      "a": "The server publishes OAuth discovery documents and an authorize endpoint. The /mcp index says it has no OAuth flow. Use the token forms. They're tested."
     },
     {
       "q": "Where is my data?",

@@ -16,7 +16,7 @@ const meta = seo('/developers/hosted-endpoints/', { title: `Hosted MCP endpoints
   <section class="wrap pb-8 pt-14 sm:pt-20">
     <span class="eyebrow">Developers</span>
     <h1 class="display mt-5 !text-[clamp(2.2rem,5.5vw,4rem)]">{meta.h1 || 'Hosted endpoints'}</h1>
-    <p class="lead mt-5 max-w-2xl">{st.hosted} servers answer over MCP streamable HTTP. {d.hosted?.session.transport}</p>
+    <p class="lead mt-5 max-w-2xl">{st.hosted} servers answer at one hosted URL, over {d.hosted?.session.transport}</p>
   </section>
   {d.hosted && (
     <section class="wrap grid gap-6 py-6 lg:grid-cols-2">

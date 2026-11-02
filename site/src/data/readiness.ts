@@ -40,7 +40,8 @@ function method(m: unknown): Readiness['method'] {
   if (Array.isArray(m)) return { text: m.map(str).filter(Boolean), items: [] };
   if (m && typeof m === 'object') {
     const o = m as Record<string, unknown>;
-    const text = [o.summary, o.text, o.description].filter((x) => typeof x === 'string').map(str).filter(Boolean);
+    // Blank lines in the generator text mark paragraphs. Keep them, so the method reads as paragraphs, not one block.
+    const text = [o.summary, o.text, o.description].filter((x): x is string => typeof x === 'string').flatMap((x) => x.split(/\n\s*\n/)).map(str).filter(Boolean);
     const items = Object.entries(o)
       .filter(([k]) => !['summary', 'text', 'description'].includes(k))
       .map(([k, v]) => ({ label: k.replace(/_/g, ' '), value: Array.isArray(v) ? v.map(str).join('; ') : typeof v === 'object' && v ? JSON.stringify(v) : str(v) }))

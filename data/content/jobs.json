@@ -929,7 +929,7 @@
    "answer": "Claude.ai can create Word files when file creation is on. Claude Desktop, Cursor and VS Code can't without a tool. The DOCX server works in any MCP client: it writes .docx files, fills your own templates and reads existing documents."
   },
   "/can-claude/make-a-pdf/": {
-   "intro": "Claude.ai can make a PDF with file creation on. Other chat apps need a tool. These are the three PDF jobs people search for most: an invoice PDF, a business document PDF, and editing an existing PDF.",
+   "intro": "Claude.ai can make a PDF with file creation on. Other chat apps need a tool. The three PDF jobs people search for most are an invoice PDF, a business document PDF and edits to an existing PDF.",
    "without_tool": "In Claude.ai with code execution and file creation turned on, Claude can generate a PDF in its sandbox. In Claude Desktop, Cursor or VS Code without a tool, you get text only. And it never remembers invoice numbers or your business details between chats.",
    "with_tool": "Invoice writes numbered A4 invoice PDFs. Billing Docs writes purchase order and credit note PDFs in the same layout, and the PDF server merges, splits, stamps and watermarks the PDFs you already have. Each tool returns the path of the new file.",
    "example": {

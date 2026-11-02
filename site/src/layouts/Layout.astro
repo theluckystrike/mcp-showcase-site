@@ -30,7 +30,7 @@ const fullTitle = baseTitle.includes(brand.name) || (baseTitle + suffix).length 
 const pageServerId = /^\/servers\/([^/]+)\/$/.exec(Astro.url.pathname)?.[1] ?? pageMeta(Astro.url.pathname)?.servers[0];
 const pageServer = pageServerId ? getServer(pageServerId) : undefined;
 const toolCount = pageServer ? pageServer.tools.filter((t) => !t.name.startsWith('license_')).length : 0;
-const FILLERS = [...(toolCount > 1 ? [` ${pageServer!.name} has ${toolCount} tools.`] : []), ' Works in Claude and Cursor.', ' Open source, with a free tier.', ` ${brand.tagline}`];
+const FILLERS = [...(toolCount > 1 ? [` ${pageServer!.name} has ${toolCount} tools.`] : []), ' Works in Claude and Cursor.', ' Open source under MIT.', ` ${brand.tagline}`];
 function fitDescription(d: string): string {
   let out = String(d ?? '').replace(/\s+/g, ' ').trim();
   if (out && !/[.!?]$/.test(out)) out += '.';

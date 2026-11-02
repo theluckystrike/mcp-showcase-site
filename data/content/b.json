@@ -1838,8 +1838,8 @@
      "minutes_basis": "INFERRED: retyping and summing receipt lines takes 2-4 min"
     },
     {
-     "title": "Find a line that does not parse",
-     "persona": "Ben Foster, office admin in Manchester",
+     "title": "Find a line that doesn't parse",
+     "persona": "Ben Fowler, office admin in Manchester",
      "prompt": "Parse these at 20%: 4 x Printer paper 5.99, Toner 64.00, Staples.",
      "steps": [
       {
@@ -3373,7 +3373,7 @@
       },
       {
        "tool": "contacts_list",
-       "does": "Shows each contact's local time now and whether they are in working hours"
+       "does": "Shows each contact's local time now and whether they're in working hours"
       }
      ],
      "result": "At 14:30 in Gdansk, Lena is in hours and Mark isn't (07:30 in Austin). Zofia calls Lena now and messages Mark for later.",
