@@ -1,35 +1,44 @@
 ---
 // /services/: the paid ladder (run s1102m). Content: data/content/services.json, loaded by src/data/services.ts.
-// Audit, Store Launch and Custom have pay-now links to mcp.zovo.one/buy/<product> (src=site.services.<slot>).
-// The Care plan is invoiced: its CTA is a prefilled email. Proof numbers come from services.json "proof" only.
+// checkout_live=true: Audit, Store Launch and Custom pay buttons go to mcp.zovo.one/buy/<product> (src=site.services.<slot>).
+// checkout_live=false: those buttons are prefilled order emails to support@zovo.one. Prices stay visible either way.
+// The Care plan and the per-row options (one store, simple server) are always email. Proof numbers come from services.json only.
 import Layout from '../layouts/Layout.astro';
 import Faq from '../components/Faq.astro';
 import SupportBand from '../components/SupportBand.astro';
 import TelegramCta from '../components/TelegramCta.astro';
 import { brand } from '../config/brand';
-import { getServicesContent, ctaHref, mailto, SUPPORT_EMAIL } from '../data/services';
+import { getServicesContent, ctaHref, ctaLabel, mailto, orderMailto, usd, SUPPORT_EMAIL } from '../data/services';
 
 const c = getServicesContent();
+const live = c.checkout_live;
 const email = SUPPORT_EMAIL;
 const tg = brand.links.telegram;
 const proof = c.proof;
 const gh = c.github;
 const audit = c.services.find((s) => s.id === 'audit');
 const title = 'MCP store launch, audits and custom servers';
-const description = 'Get your MCP server listed in the Claude Directory, ChatGPT Apps, Gemini Connected Apps and the MCP Registry. Readiness Audit $490, Store Launch $4,900, custom servers from $2,900. Pay by card.';
-const offerOf = (s: (typeof c.services)[number]) => {
-  if (!c.show_prices || !s.price_usd) return {};
-  // The pay link is the offer URL only when it charges the full price (not a deposit).
-  const url = s.cta?.url && !s.cta.mailto && !s.deposit_usd ? s.cta.url : undefined;
-  if (s.price_unit) return { offers: { '@type': 'Offer', priceCurrency: 'USD', price: String(s.price_usd), priceSpecification: { '@type': 'UnitPriceSpecification', price: s.price_usd, priceCurrency: 'USD', referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' } } } };
-  if (s.price_from) return { offers: { '@type': 'Offer', priceCurrency: 'USD', priceSpecification: { '@type': 'PriceSpecification', minPrice: s.price_usd, priceCurrency: 'USD' }, ...(url ? { url } : {}) } };
-  return { offers: { '@type': 'Offer', priceCurrency: 'USD', price: String(s.price_usd), ...(url ? { url } : {}) } };
+const description = 'Get your MCP server listed in the Claude Directory, ChatGPT Apps, Gemini Connected Apps and the MCP Registry. Readiness Audit $490, Store Launch $4,900, custom servers from $4,500.';
+type Svc = (typeof c.services)[number];
+const offerList = (s: Svc) => {
+  if (!c.show_prices || !s.price_usd) return [];
+  // The pay link is the offer URL only when checkout is live and it charges the full price (not a deposit).
+  const url = live && s.cta?.url && !s.cta.mailto && !s.deposit_usd ? s.cta.url : undefined;
+  const main = s.price_unit
+    ? { '@type': 'Offer', name: s.name, priceCurrency: 'USD', price: String(s.price_usd), priceSpecification: { '@type': 'UnitPriceSpecification', price: s.price_usd, priceCurrency: 'USD', referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' } } }
+    : s.price_from
+      ? { '@type': 'Offer', name: s.name, priceCurrency: 'USD', priceSpecification: { '@type': 'PriceSpecification', minPrice: s.price_usd, priceCurrency: 'USD' } }
+      : { '@type': 'Offer', name: s.name, priceCurrency: 'USD', price: String(s.price_usd), ...(url ? { url } : {}) };
+  return [main, ...(s.options ?? []).map((o) => ({ '@type': 'Offer', name: o.label, priceCurrency: 'USD', price: String(o.price_usd) }))];
 };
 const jsonLd = [
   { '@context': 'https://schema.org', '@type': 'ItemList', name: 'MCP store launch and custom MCP work',
-    itemListElement: c.services.map((s, i) => ({ '@type': 'ListItem', position: i + 1,
-      item: { '@type': 'Service', name: s.name, description: s.short, serviceType: 'Software development',
-        provider: { '@type': 'Organization', name: 'autom8 LLC', url: brand.siteUrl }, ...offerOf(s) } })) },
+    itemListElement: c.services.map((s, i) => {
+      const offers = offerList(s);
+      return { '@type': 'ListItem', position: i + 1,
+        item: { '@type': 'Service', name: s.name, description: s.short, serviceType: 'Software development',
+          provider: { '@type': 'Organization', name: 'autom8 LLC', url: brand.siteUrl }, ...(offers.length ? { offers: offers.length === 1 ? offers[0] : offers } : {}) } };
+    }) },
   ...(c.faq.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: c.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
 ];
 ---
@@ -41,7 +50,7 @@ const jsonLd = [
       <p class="lead mt-5">{c.lead}</p>
       <div class="mt-8 flex flex-wrap items-center gap-3">
         {audit && c.show_prices ? (
-          <a href={ctaHref(audit.cta, 'services', 'hero')} rel="nofollow" class="btn btn-primary">{audit.cta?.label}</a>
+          <a href={ctaHref(audit, 'services', 'hero')} rel="nofollow" class="btn btn-primary">{ctaLabel(audit)}</a>
         ) : (
           <a href={tg} rel="noopener" target="_blank" class="btn btn-primary">Describe your job on Telegram</a>
         )}
@@ -59,7 +68,7 @@ const jsonLd = [
         <div><dt>Stores</dt><dd>Claude Directory, ChatGPT Apps, Gemini Connected Apps, MCP Registry</dd></div>
         <div><dt>Auth</dt><dd>OAuth 2.1, DCR, PKCE, refresh</dd></div>
         <div><dt>Tools</dt><dd>Annotations, descriptions, errors</dd></div>
-        <div><dt>Check</dt><dd>McpStamp score, 0 to 100</dd></div>
+        <div><dt>Review</dt><dd>Up to 2 rounds of fixes included</dd></div>
         <div><dt>Owner</dt><dd>You. Fixes land in your repo.</dd></div>
       </dl>
       <p class="mt-4 font-mono text-[.78rem] text-faint">Price: fixed, shown before you pay</p>
@@ -70,7 +79,7 @@ const jsonLd = [
     <h2 id="svc-h" class="h2 font-display">Four ways to get it done</h2>
     <ol class="mt-6 border-t-2 border-fg">
       {c.services.map((s, i) => (
-        <li id={s.id} class="svc-row grid gap-5 border-b border-line-strong py-7 md:grid-cols-[3.5rem_1fr_14rem]">
+        <li id={s.id} class="svc-row grid gap-5 border-b border-line-strong py-7 md:grid-cols-[3.5rem_1fr_14.5rem]">
           <p class="font-mono text-[.9rem] text-faint">{String(i + 1).padStart(2, '0')}</p>
           <div>
             <h3 class="font-display text-[1.45rem] font-bold leading-tight sm:text-[1.7rem]">{s.name}</h3>
@@ -86,11 +95,23 @@ const jsonLd = [
                 </ul>
               </div>
             </div>
+            {s.guarantee && <p class="mt-5 max-w-2xl text-[.95rem] font-medium">{s.guarantee}</p>}
+            {s.credit && <p class="mt-5 max-w-2xl text-[.95rem] font-medium">{s.credit}</p>}
+            {c.show_prices && s.options?.map((o) => (
+              <p class="svc-opt mt-4 flex max-w-2xl flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span>{o.label}</span>
+                <span class="leader hidden sm:block" aria-hidden="true"></span>
+                <span class="tnum font-mono font-semibold">{o.price_label}</span>
+                <a href={orderMailto(o.subject)} class="link text-[.9rem]">Order by email</a>
+              </p>
+            ))}
             {s.note && <p class="svc-note mt-5 max-w-2xl text-[.93rem]"><span class="svc-note-tab font-mono">Note</span>{s.note}</p>}
           </div>
           <div class="flex flex-col items-start gap-2 md:items-end md:text-right">
+            {c.show_prices && s.price_tag && <p class="price-tag font-mono">{s.price_tag}</p>}
             {c.show_prices && s.price_usd ? (
               <p class="leading-none">
+                {s.list_usd && <s class="tnum mr-2 font-mono text-[1.05rem] text-faint" aria-label={`List price ${usd(s.list_usd)}`}>{usd(s.list_usd)}</s>}
                 {s.price_from && <span class="muted text-[.9rem]">from </span>}
                 <span class="tnum font-mono text-[1.75rem] font-semibold">{(s.price_label ?? '').replace(/^from /, '')}</span>
                 {s.price_unit && <span class="muted text-[.9rem]"> {s.price_unit}</span>}
@@ -98,11 +119,11 @@ const jsonLd = [
             ) : (
               <p class="muted text-[.9rem]">Fixed quote</p>
             )}
-            {c.show_prices && s.price_note && <p class="font-mono text-[.78rem] leading-snug text-faint md:max-w-[14rem]">{s.price_note}</p>}
+            {c.show_prices && s.price_note && <p class="font-mono text-[.78rem] leading-snug text-faint md:max-w-[14.5rem]">{s.price_note}</p>}
             {s.cta && (
-              <a href={c.show_prices || !s.cta.pay ? ctaHref(s.cta, 'services', s.slot) : tg}
+              <a href={c.show_prices || !s.cta.pay ? ctaHref(s, 'services', s.slot) : tg}
                 rel={s.cta.pay ? 'nofollow' : undefined}
-                class:list={['btn mt-2 w-full md:w-auto', (s.cta.pay || s.cta.mailto) && 'btn-primary']}>{c.show_prices || !s.cta.pay ? s.cta.label : 'Ask about this'}</a>
+                class:list={['btn mt-2 w-full md:w-auto', (s.cta.pay || s.cta.mailto) && 'btn-primary']}>{c.show_prices || !s.cta.pay ? ctaLabel(s) : 'Ask about this'}</a>
             )}
             {s.cta2 && (
               <p class="text-[.9rem]"><a href={mailto(s.cta2.subject || s.cta2.label)} class="link">{s.cta2.label}</a><span class="muted"> by email or on </span><a href={tg} rel="noopener" target="_blank" class="link">Telegram</a></p>
@@ -111,7 +132,7 @@ const jsonLd = [
         </li>
       ))}
     </ol>
-    {c.show_prices && <p class="muted mt-4 text-[.9rem]">Prices in US dollars. Paid by card on Stripe's checkout page. Not sure which one you need? <a href="/check/" class="link">Run the free McpStamp Check</a> first.</p>}
+    {c.show_prices && <p class="muted mt-4 text-[.9rem]">Prices in US dollars. {live ? "Paid by card on Stripe's checkout page." : c.checkout_off_note} Not sure which one you need? <a href="/check/" class="link">Run the free McpStamp Check</a> first.</p>}
   </section>
 
   {c.steps.length > 0 && (
@@ -134,7 +155,7 @@ const jsonLd = [
       <div class="grid gap-8 lg:grid-cols-[1fr_1.3fr]">
         <div>
           <h2 id="why-h" class="h2 font-display">Why us</h2>
-          <p class="muted mt-3 max-w-lg">We ship MCP servers to the same stores, with the same checks. No client logos here. Each number below links to a public page you can check.</p>
+          <p class="muted mt-3 max-w-lg">We ship MCP servers to the same stores, with the same checks. No client logos here. The numbers below link to public pages you can check.</p>
           {proof.lines?.length > 0 && (
             <ul class="mt-5 grid max-w-lg gap-2 text-[.95rem]">
               {proof.lines.map((x: string) => <li class="scope-li pl-5">{x}</li>)}
@@ -151,13 +172,13 @@ const jsonLd = [
               </div>
             ))}
           </dl>
-          <p class="mt-2 font-mono text-[.75rem] text-faint">As of {proof.as_of}.{gh?.merged_prs_url && <> <a class="underline underline-offset-2" href={gh.merged_prs_url} rel="noopener" target="_blank">Search the merged PRs yourself</a>.</>}</p>
+          <p class="mt-2 font-mono text-[.75rem] text-faint">{proof.footnote ?? `As of ${proof.as_of}.`}{gh?.merged_prs_url && <> <a class="underline underline-offset-2" href={gh.merged_prs_url} rel="noopener" target="_blank">Run the search yourself</a>.</>}</p>
           {gh?.examples?.length > 0 && (
             <>
               <p class="mt-6 text-[.92rem] font-semibold">A few merged fixes</p>
               <ul class="mt-2 grid gap-1.5 text-[.95rem]">
                 {gh.examples.map((e: any) => (
-                  <li><a href={e.url} rel="noopener" target="_blank" class="text-accent underline decoration-1 underline-offset-4 hover:no-underline">{e.repo}</a> <span class="muted">{e.title}</span></li>
+                  <li><a href={e.url} rel="noopener" target="_blank" class="text-accent underline decoration-1 underline-offset-4 hover:no-underline">{e.name ?? e.repo}</a> <span class="muted">{e.title}</span></li>
                 ))}
               </ul>
             </>
@@ -188,6 +209,9 @@ const jsonLd = [
   .scope-li { position: relative; }
   .scope-li::before { content: ''; position: absolute; left: 0; top: .62em; width: .55rem; height: 1px; background: var(--text); }
   .svc-row { scroll-margin-top: 5rem; }
+  .price-tag { font-size: .7rem; text-transform: uppercase; letter-spacing: .07em; color: var(--stamp); border: 1px solid currentColor; border-radius: 2px; padding: .12rem .45rem; transform: rotate(-1.5deg); }
+  .svc-opt { border-top: 1px dashed var(--border-strong); padding-top: .7rem; }
+  .leader { flex: 1; border-bottom: 1px dotted var(--border-strong); transform: translateY(-.3em); min-width: 1rem; }
   .svc-note { background: var(--manila); color: var(--manila-ink); padding: .6rem .85rem; border-radius: 2px; }
   .svc-note-tab { display: inline-block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; padding: .05rem .4rem; margin-right: .6rem; border: 1px solid currentColor; border-radius: 2px; vertical-align: .1em; }
   .step + .step { margin-top: -1px; }

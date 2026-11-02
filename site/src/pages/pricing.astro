@@ -11,7 +11,7 @@ import { getPricing } from '../data/content';
 import { CATEGORIES } from '../data/categories';
 import { stats, getServers, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
 import { seo } from '../data/pages';
-import { getServicesContent, priceText } from '../data/services';
+import { getServicesContent, priceText, usd } from '../data/services';
 const meta = seo('/pricing/', { title: 'Pricing', description: '' });
 // Internal links never carry src tags (seo.json canonical rule). src tags go only on mcp.zovo.one buy links.
 const href = (u: string) => (u.startsWith('/') ? u.replace(/\?src=[^#]*/, '') : u);
@@ -168,9 +168,9 @@ const faq = p.faq.length ? p.faq : [
             <p class="flex items-baseline justify-between gap-3">
               <a href={`/services/#${s.id}`} class="font-semibold hover:underline">{s.name}</a>
               <span class="leader" aria-hidden="true"></span>
-              <span class="tnum font-mono text-[.95rem] font-semibold">{priceText(s)}</span>
+              <span class="tnum font-mono text-[.95rem] font-semibold">{s.list_usd && <s class="mr-1.5 font-normal text-faint" aria-label={`List price ${usd(s.list_usd)}`}>{usd(s.list_usd)}</s>}{priceText(s)}</span>
             </p>
-            <p class="muted mt-1 text-[.9rem]">{s.short}</p>
+            <p class="muted mt-1 text-[.9rem]">{s.short}{s.price_tag && <> {s.price_tag}.</>}</p>
           </li>
         ))}
       </ul>
@@ -178,7 +178,7 @@ const faq = p.faq.length ? p.faq : [
       <p class="mt-4"><a href="/services/" class="link">See custom work</a></p>
     )}
     <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-      <a href="/services/" class="btn btn-primary">See services and pay online</a>
+      <a href="/services/" class="btn btn-primary">{svc.checkout_live ? 'See services and pay online' : 'See services and order'}</a>
       <p class="text-[.95rem]"><span class="muted">Not sure where you stand? </span><a href="/check/" class="link">Run the free McpStamp Check</a><span class="muted">: a score from 0 to 100 for each store.</span></p>
     </div>
   </section>

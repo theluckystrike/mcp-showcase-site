@@ -30,11 +30,13 @@ const JOB_PATHS = [
 ];
 const freeCount = getFreeServers().length;
 const svc = getServicesContent();
-const svcPrice = (id: string) => (svc.show_prices ? svc.services.find((x) => x.id === id)?.price_label : undefined);
+const svcOf = (id: string) => (svc.show_prices ? svc.services.find((x) => x.id === id) : undefined);
+const svcPrice = (id: string) => svcOf(id)?.price_label;
+const svcList = (id: string) => svcOf(id)?.list_usd;
 const TEAM_BAND = [
-  { name: 'McpStamp Check', price: 'Free', text: 'A score from 0 to 100 and the blockers for each store.', href: '/check/' },
-  { name: 'Readiness Audit', price: svcPrice('audit'), text: 'A fix list ranked by store blocker, in 3 business days.', href: '/services/#audit' },
-  { name: 'Store Launch', price: svcPrice('launch'), text: 'Fixed and listed in Claude, ChatGPT, Gemini and the MCP Registry.', href: '/services/#launch' },
+  { name: 'McpStamp Check', price: 'Free', list: undefined as number | undefined, text: 'A score from 0 to 100 and the blockers for each store.', href: '/check/' },
+  { name: 'Readiness Audit', price: svcPrice('audit'), list: svcList('audit'), text: 'A fix list ranked by store blocker, in 3 business days. Founding price for the first 10.', href: '/services/#audit' },
+  { name: 'Store Launch', price: svcPrice('launch'), list: undefined, text: 'We fix it, then submit it to Claude, ChatGPT, Gemini and the MCP Registry.', href: '/services/#launch' },
 ];
 const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
 ---
@@ -123,7 +125,7 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
             <a href={b.href} class="team-cell">
               <span class="flex items-baseline justify-between gap-3">
                 <span class="font-mono text-[.78rem] text-faint">{String(i + 1).padStart(2, '0')}</span>
-                {b.price && <span class="tnum font-mono text-[1.35rem] font-semibold">{b.price}</span>}
+                {b.price && <span class="tnum font-mono text-[1.35rem] font-semibold">{b.list && <s class="mr-2 text-[.95rem] font-normal text-faint" aria-label={`List price $${b.list}`}>${b.list}</s>}{b.price}</span>}
               </span>
               <span class="mt-2 block font-display text-[1.2rem] font-bold leading-tight">{b.name}</span>
               <span class="muted mt-1 block text-[.93rem]">{b.text}</span>
