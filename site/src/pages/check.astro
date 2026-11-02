@@ -187,7 +187,7 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
     <div class="border-t-2 border-fg pt-8">
       <span class="eyebrow">What it checks</span>
       <h2 id="ck-what-h" class="h2 mt-3">Four groups, four stores</h2>
-      <p class="lead mt-3">Each check passes (full weight), warns (half) or fails (none). The score is the weighted share over the checks that apply. Grades: A from 90, B from 80, C from 65, D from 50, F below. A store is ready when none of its blocking checks fail.</p>
+      <p class="lead mt-3">Each check passes (full weight), warns (half) or fails (none). The score is the weighted share over the checks that apply. Grades: A from 90, B from 80, C from 65, D from 50, F below. A store is ready when none of its blocking checks fail and every blocking check could run. If a blocking check could not run (for example, tools are behind sign-in), the store shows Unverified.</p>
       <div class="mt-8 grid gap-8 lg:grid-cols-2">
         <ol class="index-list index-plain">
           {GROUPS.map((g) => (
@@ -348,7 +348,8 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
       const top = el('div', 'ck-store-top');
       top.append(el('span', 'ck-store-name', name));
       if (Number.isFinite(Number(s.score))) top.append(el('span', 'ck-store-score tnum', `${Math.round(Number(s.score))}/100`));
-      const mark = el('span', ok ? 'stamp stamp-black ck-mark' : 'stamp ck-mark', ok ? 'Ready' : 'Not yet');
+      const unvState = !ok && s.status === 'unverified';
+      const mark = el('span', ok ? 'stamp stamp-black ck-mark' : 'stamp ck-mark', ok ? 'Ready' : unvState ? 'Unverified' : 'Not yet');
       top.append(mark);
       li.append(top);
       const blockers: string[] = (Array.isArray(s.blockers) ? s.blockers : []).map(label).filter(Boolean);
