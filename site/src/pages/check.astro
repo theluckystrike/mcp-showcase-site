@@ -10,7 +10,7 @@ import { stats, CONTENT_DIR } from '../data/servers';
 import { STORES } from '../data/readiness';
 
 const st = stats();
-const title = 'McpStamp Check: is your MCP server store-ready?';
+const title = 'Is your MCP server store-ready? Free McpStamp Check';
 const description = 'Free check for remote MCP servers. Get a 0-100 score, what blocks you in Claude, ChatGPT, Gemini and the MCP Registry, and the fix for each problem.';
 const GROUPS = [
   { id: 'transport', name: 'Transport', text: 'HTTPS, initialize over Streamable HTTP, a supported protocol version, the response Content-Type, JSON-RPC errors, GET handling and latency.' },
@@ -32,14 +32,33 @@ try { checkoutLive = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'services
 const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.check.result' : 'mailto:support@zovo.one?subject=' + encodeURIComponent('Readiness Audit ($490)');
 // Unverified box (s1102m SITE2): same product, its own src tag so the coordinator can see which box sold.
 const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.check.unverified' : AUDIT_URL;
+// Offer buttons under the result (s1102m sales). All paid upfront. The script sets src=site.check.<state>_<offer>
+// (state: blocked, unverified, ready) so each sale shows which result sold it. Checkout off = prefilled emails.
+const order = (subject: string) => 'mailto:support@zovo.one?subject=' + encodeURIComponent(subject);
+const BUY = {
+  launch: checkoutLive ? 'https://mcp.zovo.one/buy/svc-launch' : order('Store Launch, 4 stores ($4,900)'),
+  one: checkoutLive ? 'https://mcp.zovo.one/buy/svc-launch-one' : order('Store Launch, one store ($1,900)'),
+  care: checkoutLive ? 'https://mcp.zovo.one/buy/svc-care-quarter' : order('McpStamp Care plan, 3 months ($1,470)'),
+};
+// Loss line for the lead: Readiness Index totals at build time. Missing file = the plain lead only.
+let indexLine = '';
+try {
+  const j = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'readiness.json'), 'utf8'));
+  const n = Number(j?.totals?.reachable), all4 = Number(j?.totals?.ready_all4);
+  if (!j.sample && n > 0 && all4 >= 0) {
+    const d = new Date(j.generated_at);
+    const when = isNaN(+d) ? '' : ` on ${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })}`;
+    indexLine = `Only ${(Math.round((all4 / n) * 1000) / 10).toFixed(1)} % of the ${n.toLocaleString('en-US')} registry servers I checked${when} were.`;
+  }
+} catch { /* plain lead */ }
 ---
 <Layout title={title} description={description} jsonLd={jsonLd} crumbs={[{ name: 'Check', path: '/check/' }]}>
   <section class="relative isolate">
     <div class="grid-lines"></div>
     <div class="wrap pb-8 pt-10 sm:pt-14">
       <span class="eyebrow">Free check</span>
-      <h1 class="display mt-5 max-w-4xl !text-[clamp(2.2rem,5.4vw,4rem)]">McpStamp Check. <span class="mark">Is your server store-ready?</span></h1>
-      <p class="lead mt-5 max-w-2xl">Paste the URL of a remote MCP server. You get a score from 0 to 100, what blocks it in Claude, ChatGPT, Gemini and the MCP Registry, and the fix for each problem.</p>
+      <h1 class="display mt-5 max-w-4xl !text-[clamp(2.2rem,5.4vw,4rem)]">McpStamp Check. <span class="mark">Is your MCP server ready for all four stores?</span></h1>
+      <p class="lead mt-5 max-w-2xl">{indexLine && <>{indexLine} </>}Paste the URL of a remote MCP server. In 5 to 30 seconds you get a score from 0 to 100, what blocks it in Claude, ChatGPT, Gemini and the MCP Registry, and the fix for each problem.</p>
 
       <form id="ck-form" class="ck-form mt-8 max-w-3xl" novalidate>
         <label for="ck-url" class="ck-label">Remote MCP server URL</label>
@@ -108,7 +127,7 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
           <div id="ck-unv" class="ck-unv" role="note" aria-labelledby="ck-unv-t" hidden>
             <p id="ck-unv-t" class="ck-unv-t"></p>
             <div class="ck-unv-buy">
-              <a id="ck-unv-audit" class="btn btn-primary" href={AUDIT_UNV_URL} rel="nofollow" data-cta="audit" data-cta-slot="unverified">{checkoutLive ? 'Buy the audit, $490' : 'Order the audit by email, $490'}</a>
+              <a id="ck-unv-audit" class="btn btn-primary" href={AUDIT_UNV_URL} rel="nofollow" data-cta="audit" data-cta-slot="unverified">{checkoutLive ? 'Pay $490 for an audit with a test account' : 'Order the audit by email, $490'}</a>
               <a class="link text-[.9rem]" href="/services/#audit" data-cta="services" data-cta-slot="unverified">What the audit covers</a>
             </div>
           </div>
@@ -159,35 +178,39 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
           <li data-offer="audit">
             <div>
               <h3 class="ck-offer-name">Readiness Audit</h3>
-              <p class="muted mt-1">The full check run and read by hand. Every blocker for Claude, ChatGPT, Gemini and the MCP Registry, with the exact code or config change for each. Report in 3 business days.</p>
+              <p class="muted mt-1">I run this check, then read your server by hand. You get every blocker for Claude, ChatGPT, Gemini and the MCP Registry, with the exact code or config change for each, in 3 business days. Follow-up questions are answered by email for 14 days.</p>
+              <p class="ck-small mt-2">The full $490 is refunded if you buy Store Launch or a custom server within 30 days.</p>
             </div>
             <div class="ck-offer-buy">
-              <p class="ck-price"><span class="tnum">$490</span> <span class="ck-per">{checkoutLive ? 'fixed, pay now' : 'fixed, invoiced'}</span></p>
-              <a id="ck-audit" class="btn btn-primary" href={AUDIT_URL} rel="nofollow" data-live={checkoutLive ? '1' : '0'} data-cta="audit" data-cta-slot="offer">{checkoutLive ? 'Buy the audit' : 'Order the audit by email'}</a>
+              <p class="ck-price"><span class="tnum">$490</span> <span class="ck-per">{checkoutLive ? 'fixed, paid upfront' : 'fixed, by email'}</span></p>
+              <a id="ck-audit" class="btn" href={AUDIT_URL} rel="nofollow" data-live={checkoutLive ? '1' : '0'} data-cta="audit" data-cta-slot="offer">{checkoutLive ? 'Pay $490 for the audit' : 'Order the audit by email'}</a>
             </div>
           </li>
           <li data-offer="launch">
             <div>
               <h3 class="ck-offer-name">Store Launch</h3>
-              <p class="muted mt-1">The blockers fixed in your code, OAuth added where a store needs it, the listing text written, and the server submitted to Claude, ChatGPT, Gemini and the MCP Registry.</p>
+              <p class="muted mt-1">I fix the blockers in your code, add OAuth where a store needs it, write the listings and submit the server to Claude, ChatGPT, Gemini and the MCP Registry. Up to 2 review rounds. No one can promise approval, the stores decide.</p>
+              <p class="ck-small mt-2">Only one store? <a id="ck-one" class="link" href={BUY.one} rel="nofollow" data-base={BUY.one} data-cta="launch-one" data-cta-slot="offer">Pay $1,900 for one store</a>.</p>
             </div>
             <div class="ck-offer-buy">
-              <p class="ck-price"><span class="tnum">$4,900</span> <span class="ck-per">fixed, $1,500 deposit</span></p>
-              <a class="btn" href="/services/#launch" data-cta="launch" data-cta-slot="offer">See Store Launch</a>
+              <p class="ck-price"><span class="tnum">$4,900</span> <span class="ck-per">all 4 stores, paid upfront</span></p>
+              <a id="ck-launch" class="btn" href={BUY.launch} rel="nofollow" data-base={BUY.launch} data-cta="launch" data-cta-slot="offer">Pay $4,900 for Store Launch</a>
             </div>
           </li>
           <li data-offer="care">
             <div>
               <h3 class="ck-offer-name">Care plan</h3>
-              <p class="muted mt-1">A McpStamp Check of your server every day, changes when the MCP spec or a store rule changes, and store re-submits. Invoiced monthly.</p>
+              <p class="muted mt-1">This check runs on your server every day and emails you when the score drops. I fix what breaks, with 2 fix hours a month, and re-submit when a store asks. The MCP spec had three new versions in 2025 alone.</p>
+              <p class="ck-small mt-2">$490 a month, paid for 3 months at once. No subscription. It ends unless you pay the renewal link.</p>
             </div>
             <div class="ck-offer-buy">
-              <p class="ck-price"><span class="tnum">$490</span> <span class="ck-per">a month</span></p>
-              <a class="btn" href="/services/#care" data-cta="care" data-cta-slot="offer">Ask about care</a>
+              <p class="ck-price"><span class="tnum">$1,470</span> <span class="ck-per">for 3 months, paid upfront</span></p>
+              <a id="ck-care" class="btn" href={BUY.care} rel="nofollow" data-base={BUY.care} data-cta="care" data-cta-slot="offer">Pay $1,470 for 3 months</a>
             </div>
           </li>
         </ol>
-        <p class="muted mt-5 text-[.95rem]">Done by the maintainer of {st.hosted} hosted MCP servers, all listed in the MCP Registry. All jobs and prices: <a href="/services/" class="link" data-cta="services" data-cta-slot="offer">Services</a>.</p>
+        <p class="mt-5 max-w-3xl text-[.95rem]">How it works. You pay upfront on Stripe and I'm notified at once. Work starts the next business day, and everything happens by email with support@zovo.one, no calls.</p>
+        <p class="muted mt-2 max-w-3xl text-[.95rem]">Done by the maintainer of {st.hosted} hosted MCP servers, all listed in the MCP Registry. <a href="/check/?url=https%3A%2F%2Fmcp.zovo.one%2Fmcp%2Finvoice%2Fv1" rel="nofollow" class="link">My own invoice server scores 100/100 here</a>. All jobs and prices are on <a href="/services/" class="link" data-cta="services" data-cta-slot="offer">Services</a>.</p>
       </section>
     </div>
   </section>
@@ -458,22 +481,42 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
       $<HTMLAnchorElement>('#ck-unv-audit').href = audit.href;
     }
 
-    // Offers, ordered by score
+    // Offers by result state (s1102m sales). blocked = a blocking check failed for at least one store;
+    // unverified = nothing failed but a blocking check could not run; ready = all four stores ready.
+    const blockedNames = STORE_LIST.filter(([k]) => { const s = r.stores?.[k]; return s && !s.ready && s.status !== 'unverified'; }).map(([, n]) => n);
+    const state = blockedNames.length ? 'blocked' : notReady > 0 ? 'unverified' : 'ready';
     const offer = $('#ck-offer');
     const ol = $('.ck-offers', offer);
     const items: Record<string, HTMLElement> = {};
     ol.querySelectorAll<HTMLElement>('[data-offer]').forEach((li) => { items[li.dataset.offer!] = li; });
-    const order = score < 90 ? ['audit', 'launch', 'care'] : notReady > 0 ? ['care', 'launch'] : ['care'];
+    const order = state === 'ready' ? ['care', 'launch'] : ['audit', 'launch', 'care'];
     Object.values(items).forEach((li) => { li.hidden = true; });
-    order.forEach((k) => { items[k].hidden = false; ol.append(items[k]); });
-    $('#ck-offer-h').textContent = score < 90 ? `Score ${score}. Want the fixes done for you?` : notReady > 0 ? `Score ${score}. ${notReady} store${notReady > 1 ? 's' : ''} still say not yet.` : `Score ${score}. Keep it there.`;
-    $('#ck-offer-lead').textContent = score < 90
-      ? 'Fixed prices. Start with the audit to get every fix written down, or have the whole store launch done.'
-      : 'Specs and store rules change every few months. The care plan checks your server each day and fixes what breaks.';
+    order.forEach((k, i) => {
+      items[k].hidden = false; ol.append(items[k]);
+      // One primary button per result: the first offer.
+      items[k].querySelectorAll<HTMLAnchorElement>('.ck-offer-buy .btn').forEach((b) => b.classList.toggle('btn-primary', i === 0));
+    });
+    // Pay links carry the result state in src; GA4 click events carry it in the slot.
+    const live = audit.dataset.live === '1';
+    if (live) audit.href = `https://mcp.zovo.one/buy/svc-audit?src=site.check.${state}_audit`;
+    offer.querySelectorAll<HTMLAnchorElement>('a[data-base]').forEach((a) => {
+      const base = a.dataset.base || '';
+      if (base.startsWith('https://')) a.href = `${base}?src=site.check.${state}_${a.dataset.cta === 'launch-one' ? 'one' : a.dataset.cta}`;
+    });
+    offer.querySelectorAll<HTMLElement>('[data-cta]').forEach((a) => { a.dataset.ctaSlot = `offer_${state}`; });
+    const names = (xs: string[]) => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0] || '';
+    $('#ck-offer-h').textContent = state === 'blocked' ? `Score ${score}. Not ready for ${names(blockedNames)} yet.`
+      : state === 'unverified' ? `Score ${score}. ${notReady} store${notReady > 1 ? 's' : ''} I couldn't verify.`
+      : `Score ${score}. Ready for all four stores.`;
+    $('#ck-offer-lead').textContent = state === 'blocked'
+      ? "Every fix is listed above, so you can do them yourself. If you'd rather hand it over, the audit writes up each change for your codebase, and Store Launch does the fixes and submits the server."
+      : state === 'unverified'
+        ? "The free check can't sign in, and it stops at a time limit. With a test account, the audit checks every tool a store reviewer will see."
+        : "Put the badge in your README. Then keep it there. Specs and store rules change, and the Care plan checks your server every day and fixes what breaks.";
 
     track('mcpstamp_check_result', {
       grade, score_band: score >= 90 ? '90+' : score >= 80 ? '80-89' : score >= 65 ? '65-79' : '<65',
-      stores_ready: 4 - notReady, any_unverified: unvStores.length > 0, result_kind: kind,
+      stores_ready: 4 - notReady, any_unverified: unvStores.length > 0, result_kind: kind, offer_state: state,
     });
 
     out.hidden = false;
@@ -635,5 +678,6 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
   .ck-offer-buy { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
   @media (min-width: 768px) { .ck-offer-buy { align-items: flex-end; text-align: right; } }
   .ck-price { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
+  .ck-small { font-size: .9rem; color: var(--muted); }
   .ck-per { display: block; font-family: var(--font-sans); font-size: .85rem; font-weight: 400; color: var(--muted); }
 </style>

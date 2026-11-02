@@ -1,34 +1,71 @@
 ---
-// /services/: the paid ladder (run s1102m). Content: data/content/services.json, loaded by src/data/services.ts.
-// checkout_live=true: Audit, Store Launch and Custom pay buttons go to mcp.zovo.one/buy/<product> (src=site.services.<slot>).
-// checkout_live=false: those buttons are prefilled order emails to support@zovo.one. Prices stay visible either way.
-// The Care plan and the per-row options (one store, simple server) are always email. Proof numbers come from services.json only.
+// /services/: the paid ladder (run s1102m, sales lane). Content: data/content/services.json, loaded by src/data/services.ts.
+// Every service is paid upfront by card on Stripe before work starts. checkout_live=true: each pay button goes to
+// mcp.zovo.one/buy/<product>?src=site.services.<slot> (options: <slot>_<option slot>). checkout_live=false: prefilled emails.
+// The loss lead and the store ledger read data/content/readiness.json at build time, so they move with the Index.
+// Proof numbers come from services.json only.
+import fs from 'node:fs';
+import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import Faq from '../components/Faq.astro';
-import TelegramCta from '../components/TelegramCta.astro';
 import { brand } from '../config/brand';
-import { getServicesContent, ctaHref, ctaLabel, mailto, orderMailto, usd, SUPPORT_EMAIL } from '../data/services';
+import { CONTENT_DIR } from '../data/servers';
+import { getServicesContent, ctaHref, ctaLabel, optionHref, optionLabel, mailto, SUPPORT_EMAIL } from '../data/services';
 
 const c = getServicesContent();
 const live = c.checkout_live;
 const email = SUPPORT_EMAIL;
-const tg = brand.links.telegram;
 const proof = c.proof;
 const gh = c.github;
 const audit = c.services.find((s) => s.id === 'audit');
 const title = 'MCP store launch, audits and custom servers';
-const description = 'Get your MCP server listed in the Claude Directory, the ChatGPT app directory, Gemini Connected Apps and the MCP Registry. Readiness Audit $490, Store Launch $4,900, custom servers from $4,500.';
+const description = 'Get your MCP server ready for the Claude Directory, the ChatGPT app directory, Gemini Connected Apps and the MCP Registry. Readiness Audit $490, Store Launch $4,900, simple server $2,900. Paid upfront, work starts the next business day.';
+
+// Readiness Index totals (engine snapshot). Missing file or fields = the ledger and the loss line are left out.
+const BLOCKER_TEXT: Record<string, string> = {
+  tool_open_world: 'Missing tool hints', tool_annotations: 'Missing tool annotations', tool_titles: 'Tools without titles',
+  auth_resource: 'A wrong OAuth resource URL',
+};
+const STORE_NAME: Record<string, string> = { claude: 'Claude', chatgpt: 'ChatGPT', gemini: 'Gemini', registry: 'the MCP Registry' };
+let idx: { n: number; all4: number; date: string; ready: Record<string, number>; blocker?: { text: string; n: number; stores: string } } | null = null;
+try {
+  const j = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'readiness.json'), 'utf8'));
+  const t = j?.totals ?? {};
+  const n = Number(t.reachable);
+  if (!j.sample && n > 0 && Number.isFinite(Number(t.ready_all4)) && t.store_ready) {
+    const b = (t.top_blockers ?? [])[0];
+    const d = new Date(j.generated_at);
+    idx = {
+      n, all4: Number(t.ready_all4), ready: t.store_ready,
+      date: isNaN(+d) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }),
+      blocker: b && BLOCKER_TEXT[b.id] && Number(b.servers_blocked) > 0
+        ? { text: BLOCKER_TEXT[b.id], n: Number(b.servers_blocked), stores: (b.stores ?? []).map((s: string) => STORE_NAME[s] ?? s).join(' and ') }
+        : undefined,
+    };
+  }
+} catch { idx = null; }
+const fmt = (n: number) => n.toLocaleString('en-US');
+const pct = (n: number) => idx ? `${(Math.round((n / idx.n) * 1000) / 10).toFixed(1)} %` : '';
+const lossLine = idx
+  ? `Of the ${fmt(idx.n)} MCP Registry servers that answered my check${idx.date ? ` on ${idx.date}` : ''}, only ${fmt(idx.all4)} were ready for all four stores.${idx.blocker ? ` ${idx.blocker.text} alone kept ${fmt(idx.blocker.n)} out of ${idx.blocker.stores}.` : ''}`
+  : '';
+const LEDGER = idx ? [
+  { name: 'Claude', v: pct(idx.ready.claude) }, { name: 'ChatGPT', v: pct(idx.ready.chatgpt) },
+  { name: 'Gemini', v: pct(idx.ready.gemini) }, { name: 'All four stores', v: pct(idx.all4) },
+] : [];
+
 type Svc = (typeof c.services)[number];
 const offerList = (s: Svc) => {
   if (!c.show_prices || !s.price_usd) return [];
-  // The pay link is the offer URL only when checkout is live and it charges the full price (not a deposit).
+  // The pay link is the offer URL only when checkout is live and it charges the full price (not the custom spec fee).
   const url = live && s.cta?.url && !s.cta.mailto && !s.deposit_usd ? s.cta.url : undefined;
-  const main = s.price_unit
-    ? { '@type': 'Offer', name: s.name, priceCurrency: 'USD', price: String(s.price_usd), priceSpecification: { '@type': 'UnitPriceSpecification', price: s.price_usd, priceCurrency: 'USD', referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' } } }
+  const main = s.months
+    ? { '@type': 'Offer', name: `${s.name}, ${s.months} months`, priceCurrency: 'USD', price: String(s.price_usd), ...(url ? { url } : {}),
+        priceSpecification: { '@type': 'UnitPriceSpecification', price: s.price_usd, priceCurrency: 'USD', referenceQuantity: { '@type': 'QuantitativeValue', value: s.months, unitCode: 'MON' } } }
     : s.price_from
       ? { '@type': 'Offer', name: s.name, priceCurrency: 'USD', priceSpecification: { '@type': 'PriceSpecification', minPrice: s.price_usd, priceCurrency: 'USD' } }
       : { '@type': 'Offer', name: s.name, priceCurrency: 'USD', price: String(s.price_usd), ...(url ? { url } : {}) };
-  return [main, ...(s.options ?? []).map((o) => ({ '@type': 'Offer', name: o.label, priceCurrency: 'USD', price: String(o.price_usd) }))];
+  return [main, ...(s.options ?? []).map((o) => ({ '@type': 'Offer', name: o.label, priceCurrency: 'USD', price: String(o.price_usd), ...(live && o.cta?.url ? { url: o.cta.url } : {}) }))];
 };
 const jsonLd = [
   { '@context': 'https://schema.org', '@type': 'ItemList', name: 'MCP store launch and custom MCP work',
@@ -42,43 +79,55 @@ const jsonLd = [
 ];
 ---
 <Layout title={title} description={description} crumbs={[{ name: 'Services', path: '/services/' }]} jsonLd={jsonLd}>
-  <section class="wrap grid gap-10 pb-8 pt-10 sm:pt-14 lg:grid-cols-[1.25fr_1fr] lg:items-start">
+  <section class="wrap grid gap-10 pb-6 pt-10 sm:pt-14 lg:grid-cols-[1.25fr_1fr] lg:items-start">
     <div>
       <span class="eyebrow">{c.eyebrow}</span>
-      <h1 class="display mt-5 max-w-3xl font-display !text-[clamp(2.2rem,4.8vw,3.8rem)]">{c.h1}</h1>
-      <p class="lead mt-5">{c.lead}</p>
+      <h1 class="display mt-5 max-w-3xl font-display !text-[clamp(2.1rem,4.4vw,3.5rem)]">{c.h1}</h1>
+      {lossLine && <p class="lead mt-5 font-medium text-fg">{lossLine}</p>}
+      <p class="lead mt-3">{c.lead}</p>
       <div class="mt-8 flex flex-wrap items-center gap-3">
         {audit && c.show_prices ? (
           <a href={ctaHref(audit, 'services', 'hero')} rel="nofollow" class="btn btn-primary" data-cta="audit" data-cta-slot="hero">{ctaLabel(audit)}</a>
         ) : (
-          <a href={tg} rel="noopener" target="_blank" class="btn btn-primary" data-cta="telegram" data-cta-slot="hero">Describe your job on Telegram</a>
+          <a href={mailto('MCP services')} class="btn btn-primary" data-cta="email" data-cta-slot="hero">Email {email}</a>
         )}
         <a href="/check/" class="btn" data-cta="check" data-cta-slot="hero">Check your server free</a>
       </div>
-      <p class="mt-4 text-[.95rem]"><span class="muted">Questions first? Email </span><a href={mailto('Question about MCP services')} class="select-all font-mono font-semibold" data-cta="question" data-cta-slot="hero">{email}</a></p>
+      {c.hero_cta_note && <p class="cta-note mt-3">{c.hero_cta_note}</p>}
+      <p class="mt-4 text-[.95rem]"><span class="muted">Questions before you pay? Email </span><a href={mailto('Question about MCP services')} class="select-all font-mono font-semibold" data-cta="question" data-cta-slot="hero">{email}</a></p>
     </div>
-    <aside class="wo-sheet relative border border-line-strong bg-surface-solid p-5 sm:p-6" aria-label="What a Store Launch covers">
+    <aside class="wo-sheet relative border border-line-strong bg-surface-solid p-5 sm:p-6" aria-label="How an order runs">
       <div class="flex items-baseline justify-between border-b border-line-strong pb-3">
         <p class="font-display text-lg font-bold uppercase tracking-wide">Work order</p>
         <p class="font-mono text-[.8rem] text-faint">No. ______</p>
       </div>
       <dl class="wo-lines mt-1 text-[.95rem]">
-        <div><dt>Job</dt><dd>List your MCP server in 4 places</dd></div>
+        <div><dt>Job</dt><dd>Get your MCP server listed in 4 places</dd></div>
         <div><dt>Stores</dt><dd>Claude Directory, ChatGPT app directory, Gemini Connected Apps, MCP Registry</dd></div>
-        <div><dt>Auth</dt><dd>OAuth 2.1, DCR, PKCE, refresh</dd></div>
-        <div><dt>Tools</dt><dd>Annotations, descriptions, errors</dd></div>
-        <div><dt>Review</dt><dd>Up to 2 rounds of fixes included</dd></div>
+        <div><dt>Payment</dt><dd>Upfront, by card on Stripe</dd></div>
+        <div><dt>Start</dt><dd>The next business day</dd></div>
+        <div><dt>Contact</dt><dd>Email only, no calls</dd></div>
         <div><dt>Owner</dt><dd>You. Fixes land in your repo.</dd></div>
       </dl>
-      <p class="mt-4 font-mono text-[.78rem] text-faint">Price: fixed, shown before you pay</p>
+      <p class="mt-4 font-mono text-[.78rem] text-faint">Price fixed and shown before you pay</p>
     </aside>
   </section>
 
+  {LEDGER.length > 0 && (
+    <section class="wrap pb-6" aria-labelledby="ledger-h">
+      <h2 id="ledger-h" class="font-mono text-[.78rem] uppercase tracking-wider text-faint">Ready for each store, {fmt(idx!.n)} registry servers{idx!.date ? `, ${idx!.date}` : ''}</h2>
+      <dl class="ledger mt-2 grid grid-cols-2 border-l-2 border-t-2 border-fg sm:grid-cols-4">
+        {LEDGER.map((x) => <div><dt>{x.name}</dt><dd class="tnum">{x.v}</dd></div>)}
+      </dl>
+      <p class="mt-2 text-[.9rem]"><a href="/readiness/" class="link">See how every server scored in the Readiness Index</a></p>
+    </section>
+  )}
+
   <section class="wrap py-8" aria-labelledby="svc-h">
-    <h2 id="svc-h" class="h2 font-display">Four ways to get it done</h2>
+    <h2 id="svc-h" class="h2 font-display">Pick the job, pay, and I start the next business day</h2>
     <ol class="mt-6 border-t-2 border-fg">
       {c.services.map((s, i) => (
-        <li id={s.id} class="svc-row grid gap-5 border-b border-line-strong py-7 md:grid-cols-[3.5rem_1fr_14.5rem]">
+        <li id={s.id} class="svc-row grid gap-5 border-b border-line-strong py-7 md:grid-cols-[3.5rem_1fr_15rem]">
           <p class="font-mono text-[.9rem] text-faint">{String(i + 1).padStart(2, '0')}</p>
           <div>
             <h3 class="font-display text-[1.45rem] font-bold leading-tight sm:text-[1.7rem]">{s.name}</h3>
@@ -96,21 +145,23 @@ const jsonLd = [
             </div>
             {s.guarantee && <p class="mt-5 max-w-2xl text-[.95rem] font-medium">{s.guarantee}</p>}
             {s.credit && <p class="mt-5 max-w-2xl text-[.95rem] font-medium">{s.credit}</p>}
+            {c.show_prices && s.price_compare && <p class="mt-4 max-w-2xl text-[.95rem]">{s.price_compare}</p>}
             {c.show_prices && s.options?.map((o) => (
-              <p class="svc-opt mt-4 flex max-w-2xl flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span>{o.label}</span>
-                <span class="leader hidden sm:block" aria-hidden="true"></span>
-                <span class="tnum font-mono font-semibold">{o.price_label}</span>
-                <a href={orderMailto(o.subject)} class="link text-[.9rem]" data-cta={`${s.id}-option`} data-cta-slot={s.slot}>Order by email</a>
-              </p>
+              <div class="svc-opt mt-4 max-w-2xl">
+                <p class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span>{o.label}</span>
+                  <span class="leader hidden sm:block" aria-hidden="true"></span>
+                  <span class="tnum font-mono font-semibold">{o.price_label}</span>
+                  <a href={optionHref(o, 'services', `${s.slot}_${o.slot ?? 'option'}`)} rel="nofollow" class="btn btn-sm" data-cta={`${s.id}-option`} data-cta-slot={`${s.slot}_${o.slot ?? 'option'}`}>{optionLabel(o)}</a>
+                </p>
+                {o.note && <p class="muted mt-1.5 text-[.9rem]">{o.note}</p>}
+              </div>
             ))}
-            {s.note && <p class="svc-note mt-5 max-w-2xl text-[.93rem]"><span class="svc-note-tab font-mono">Note</span>{s.note}</p>}
+            {s.note && <p class="svc-note mt-5 max-w-2xl text-[.93rem]"><span class="svc-note-tab font-mono">Gemini</span>{s.note}</p>}
           </div>
           <div class="flex flex-col items-start gap-2 md:items-end md:text-right">
-            {c.show_prices && s.price_tag && <p class="price-tag font-mono">{s.price_tag}</p>}
             {c.show_prices && s.price_usd ? (
               <p class="leading-none">
-                {s.list_usd && <s class="tnum mr-2 font-mono text-[1.05rem] text-faint" aria-label={`List price ${usd(s.list_usd)}`}>{usd(s.list_usd)}</s>}
                 {s.price_from && <span class="muted text-[.9rem]">from </span>}
                 <span class="tnum font-mono text-[1.75rem] font-semibold">{(s.price_label ?? '').replace(/^from /, '')}</span>
                 {s.price_unit && <span class="muted text-[.9rem]"> {s.price_unit}</span>}
@@ -118,25 +169,26 @@ const jsonLd = [
             ) : (
               <p class="muted text-[.9rem]">Fixed quote</p>
             )}
-            {c.show_prices && s.price_note && <p class="font-mono text-[.78rem] leading-snug text-faint md:max-w-[14.5rem]">{s.price_note}</p>}
+            {c.show_prices && s.price_note && <p class="font-mono text-[.78rem] leading-snug text-faint md:max-w-[15rem]">{s.price_note}</p>}
             {s.cta && (
-              <a href={c.show_prices || !s.cta.pay ? ctaHref(s, 'services', s.slot) : tg}
-                rel={s.cta.pay ? 'nofollow' : undefined} data-cta={s.id} data-cta-slot={s.slot}
-                class:list={['btn mt-2 w-full md:w-auto', (s.cta.pay || s.cta.mailto) && 'btn-primary']}>{c.show_prices || !s.cta.pay ? ctaLabel(s) : 'Ask about this'}</a>
+              <a href={ctaHref(s, 'services', s.slot)} rel={s.cta.pay ? 'nofollow' : undefined} data-cta={s.id} data-cta-slot={s.slot}
+                class="btn btn-primary mt-2 w-full md:w-auto">{ctaLabel(s)}</a>
             )}
+            {s.cta_note && <p class="cta-note md:max-w-[15rem]">{s.cta_note}</p>}
             {s.cta2 && (
-              <p class="text-[.9rem]"><a href={mailto(s.cta2.subject || s.cta2.label)} class="link" data-cta={`${s.id}-describe`} data-cta-slot={s.slot}>{s.cta2.label}</a><span class="muted"> by email or on </span><a href={tg} rel="noopener" target="_blank" class="link">Telegram</a></p>
+              <p class="text-[.9rem]"><a href={mailto(s.cta2.subject || s.cta2.label)} class="link" data-cta={`${s.id}-describe`} data-cta-slot={s.slot}>{s.cta2.label}</a><span class="muted"> by email</span></p>
             )}
           </div>
         </li>
       ))}
     </ol>
-    {c.show_prices && <p class="muted mt-4 text-[.9rem]">Prices in US dollars. {live ? "Paid by card on Stripe's checkout page." : c.checkout_off_note} Not sure which one you need? <a href="/check/" class="link">Run the free McpStamp Check</a> first.</p>}
+    {c.show_prices && <p class="muted mt-4 text-[.9rem]">Prices in US dollars. {live ? "Paid upfront by card on Stripe's checkout page, before any work starts. No invoice comes later." : c.checkout_off_note} Not sure which one you need? <a href="/check/" class="link">Run the free McpStamp Check</a> first.</p>}
   </section>
 
   {c.steps.length > 0 && (
     <section class="wrap py-10" aria-labelledby="steps-h">
-      <h2 id="steps-h" class="h2 font-display">How a job runs</h2>
+      <h2 id="steps-h" class="h2 font-display">How it works</h2>
+      <p class="muted mt-2 max-w-2xl">I work async, with no calls and no invoices after delivery.</p>
       <ol class="mt-6 grid gap-0 sm:grid-cols-2 lg:grid-cols-4">
         {c.steps.map((s: any, i: number) => (
           <li class="step relative border border-line bg-surface p-5">
@@ -153,8 +205,8 @@ const jsonLd = [
     <section class="wrap py-10" aria-labelledby="why-h">
       <div class="grid gap-8 lg:grid-cols-[1fr_1.3fr]">
         <div>
-          <h2 id="why-h" class="h2 font-display">Why us</h2>
-          <p class="muted mt-3 max-w-lg">We ship MCP servers to the same stores, with the same checks. No client logos here. The numbers below link to public pages you can check.</p>
+          <h2 id="why-h" class="h2 font-display">Who does the work</h2>
+          <p class="muted mt-3 max-w-lg">I do, from start to finish. I ship my own MCP servers to the same stores, with the same check. I don't show client logos, so every number on the right links to a public page you can check.</p>
           {proof.lines?.length > 0 && (
             <ul class="mt-5 grid max-w-lg gap-2 text-[.95rem]">
               {proof.lines.map((x: string) => <li class="scope-li pl-5">{x}</li>)}
@@ -191,13 +243,25 @@ const jsonLd = [
     <section class="wrap py-10" aria-labelledby="sfaq-h">
       <h2 id="sfaq-h" class="h2 font-display">Before you pay</h2>
       <div class="mt-6 max-w-3xl"><Faq items={c.faq} /></div>
-      <p class="muted mt-4 text-[.9rem]">Deposits, refunds, store approval, code ownership and confidentiality: <a href="/terms/#paid-services" class="link">Terms of Service, section 9</a>.</p>
+      <p class="muted mt-4 text-[.9rem]">Payment, refunds, store approval, code ownership and confidentiality are set out in <a href="/terms/#paid-services" class="link">section 9 of the Terms of Service</a>.</p>
     </section>
   )}
 
-  <section class="wrap py-6">
-    <TelegramCta text={`Prefer to talk first? Ask in the community chat, or email ${email}.`} />
-    <p class="muted mt-6 text-[.9rem]">Sold by autom8 LLC, Yerevan, Armenia. Every order is under our <a href="/terms/#paid-services" class="link">service terms</a>: deposits, refunds, no promise of store approval, your code stays yours, your data stays confidential.</p>
+  {c.final && audit && (
+    <section class="wrap py-10" aria-labelledby="final-h">
+      <div class="closing">
+        <h2 id="final-h" class="h2 font-display">{c.final.h2}</h2>
+        {c.final.text.map((x) => <p class="lead mt-3 max-w-2xl">{x}</p>)}
+        <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <a href={ctaHref(audit, 'services', 'final')} rel="nofollow" class="btn btn-primary" data-cta="audit" data-cta-slot="final">{ctaLabel(audit)}</a>
+          <a href="/check/" class="link text-[.95rem]" data-cta="check" data-cta-slot="final">Run the free check first</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="wrap pb-10 pt-2">
+    <p class="muted text-[.9rem]">Sold by autom8 LLC, Yerevan, Armenia. Every order follows our <a href="/terms/#paid-services" class="link">service terms</a>. You pay upfront, get a refund for work not done, and get no promise of store approval. Your code stays yours and your data stays confidential.</p>
   </section>
 </Layout>
 
@@ -215,6 +279,12 @@ const jsonLd = [
   .svc-note-tab { display: inline-block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; padding: .05rem .4rem; margin-right: .6rem; border: 1px solid currentColor; border-radius: 2px; vertical-align: .1em; }
   .step + .step { margin-top: -1px; }
   @media (min-width: 640px) { .step + .step { margin-top: 0; margin-left: -1px; } .step { border-style: dashed; border-color: var(--border-strong); } }
+  .cta-note { font-size: .86rem; line-height: 1.4; color: var(--muted); }
+  .ledger > div { border-right: 2px solid var(--text); border-bottom: 2px solid var(--text); padding: .7rem .9rem; display: flex; flex-direction: column-reverse; gap: .25rem; }
+  .ledger dt { font-size: .82rem; color: var(--muted); }
+  .ledger dd { font-family: var(--font-mono); font-size: clamp(1.3rem, 2.6vw, 1.7rem); font-weight: 600; line-height: 1; }
+  .closing { border-left: 3px solid var(--text); padding: .25rem 0 .25rem 1.25rem; max-width: 50rem; }
+  @media (min-width: 768px) { .closing { padding-left: 2rem; } }
   .gh-stats > div { border-right: 2px solid var(--text); border-bottom: 2px solid var(--text); padding: .9rem 1rem; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: .35rem; }
   .gh-stats dt { font-size: .82rem; color: var(--muted); line-height: 1.35; }
   .gh-stats dd { font-family: var(--font-mono); font-size: clamp(1.6rem, 3vw, 2.1rem); font-weight: 600; line-height: 1; }

@@ -1,90 +1,97 @@
 {
  "meta": {
-  "author": "s1102m site-offers",
+  "author": "s1102m sales lane",
   "date": "2026-11-02",
-  "price_status": "LIVE prices from run s1102m coordinator (price update after market intel, 37 price points, 2026-11-02). checkout_live=false until lane BILLING deploys svc-audit ($490), svc-launch-deposit ($1,500), svc-custom-deposit ($1,500); while false every pay button is a prefilled mailto.",
-  "proof_source": "lane GH-PROOF ~/mcpstamp-work/s1102m/gh/proof.json (measured 2026-11-02T05:51Z): merged_prs_external 348, distinct_org_owners 109; MCP numbers from BRIEF measured facts."
+  "price_status": "LIVE prices, run s1102m coordinator offer design (2026-11-02). Every service is paid upfront by card on Stripe before work starts: svc-audit 490, svc-launch 4900, svc-launch-one 1900, svc-custom-simple 2900, svc-custom-deposit 1500 (spec and fixed quote, builds from 4500), svc-care-quarter 1470. svc-launch-deposit is no longer linked. checkout_live=false turns every pay button into a prefilled email to support@zovo.one.",
+  "proof_source": "~/mcpstamp-work/s1102m/gh/proof.json (measured 2026-11-02T05:51Z): merged_prs_external 348, distinct_repos 226, distinct_owners 200, distinct_org_owners 109. Readiness numbers are read at build time from data/content/readiness.json."
  },
  "show_prices": true,
  "checkout_live": true,
- "checkout_off_note": "Each button opens an email to support@zovo.one with the job in the subject. We reply within 1 business day with a Stripe payment link at the price shown.",
+ "checkout_off_note": "Each button opens an email to support@zovo.one with the job in the subject. I reply with a Stripe payment link at the price shown.",
  "eyebrow": "MCP store launch",
- "h1": "Get your MCP server into the Claude, ChatGPT and Gemini stores",
- "lead": "Each store checks different things: OAuth, tool annotations, descriptions, error handling, policy text. We find what blocks you, fix it, and submit. Fixed prices in US dollars.",
+ "h1": "I fix what McpStamp Check flags and submit your MCP server to four stores",
+ "lead": "Claude, ChatGPT, Gemini and the MCP Registry each check different things. I find what blocks yours, fix it in your repo and file the listings. Fixed prices, paid upfront, and I start the next business day.",
  "services": [
   {
    "id": "audit",
    "name": "Readiness Audit",
-   "short": "Find out what stops your server from being listed, in order of what blocks you first.",
+   "short": "Every blocker for all four stores, in the order to fix them, with the code change for each.",
    "price_usd": 490,
    "price_label": "$490",
-   "price_note": "Fixed price. Report in 3 business days.",
+   "price_note": "Paid upfront. Report in 3 business days.",
    "scope": [
-    "We run McpStamp Check on your endpoint, then read the server by hand.",
-    "OAuth flow, tool annotations, tool descriptions and error handling.",
-    "Store policies for the Claude Directory, ChatGPT apps, Gemini Connected Apps and the MCP Registry."
+    "I run McpStamp Check on your endpoint, then read the server by hand. OAuth flow, tool annotations, descriptions and error handling.",
+    "I hold it against the published rules of the Claude Directory, ChatGPT apps, Gemini Connected Apps and the MCP Registry."
    ],
    "you_get": [
-    "A written fix list, ranked by store blocker",
-    "A code snippet for each fix",
-    "A 30-minute call to go through it"
+    "A written fix list, ranked by store blocker, with a code snippet for each fix",
+    "Written answers to your follow-up questions by email for 14 days"
    ],
    "cta": {
-    "label": "Pay $490 and start",
+    "label": "Pay $490 and start the audit",
     "url": "https://mcp.zovo.one/buy/svc-audit",
     "pay": true,
     "label_email": "Order the $490 audit"
    },
+   "cta_note": "I start the next business day. The report comes by email within 3 business days of having your server URL.",
    "slot": "audit",
-   "credit": "100% of the audit fee is credited if you buy Store Launch or a custom server within 30 days.",
+   "credit": "Buy Store Launch or a custom server within 30 days and the full $490 comes back to you, so the audit costs nothing extra if you go on.",
    "order_subject": "Readiness Audit ($490)"
   },
   {
    "id": "launch",
    "name": "Store Launch",
-   "short": "We fix your server so it passes, then submit it to all four stores.",
+   "short": "I fix your server until it passes, write the listings and submit them. Four stores, one fixed price.",
    "price_usd": 4900,
    "price_label": "$4,900",
-   "price_note": "All 4 stores. About 10 business days. $1,500 deposit now, $3,400 at handover.",
-   "deposit_usd": 1500,
+   "price_note": "All 4 stores. Paid upfront. About 10 business days.",
    "scope": [
-    "We fix your server until it passes McpStamp Check and each store's published review list.",
-    "OAuth 2.1 with dynamic client registration, PKCE and refresh tokens.",
-    "Tool annotations, server instructions and clear tool descriptions.",
-    "We prepare the listings and submit them from your store accounts: Claude, ChatGPT, the MCP Registry, and Gemini when your account has access."
+    "Fixes in your repo until the server passes McpStamp Check and each store's published review list.",
+    "OAuth 2.1 with dynamic client registration, PKCE and refresh tokens, where a store needs sign-in.",
+    "Tool annotations, titles, server instructions and tool descriptions a reviewer can follow.",
+    "Listings written and submitted from your store accounts to Claude, ChatGPT, the MCP Registry, and Gemini when your account has access."
    ],
    "you_get": [
     "Fixes as commits in your repository",
     "Four listings written and submitted",
-    "Up to 2 review rounds: we fix what reviewers ask and resubmit"
+    "Up to 2 review rounds, where I fix what reviewers ask and resubmit",
+    "A McpStamp report from before and after the fixes"
    ],
-   "note": "Gemini: Google opened Connected Apps in preview on 28 Oct 2026, for US developers through a waitlist; over 50 apps were listed at launch (TechCrunch, 28 Oct 2026). If your account has no Gemini access when we finish, we deliver a Gemini-ready server and the submission pack, and you choose: we submit later at no charge, or we take $900 off the balance.",
+   "price_compare": "One store costs $1,900. All four cost $4,900, so the third and fourth store add $1,100 between them.",
+   "note": "Gemini Connected Apps opened in preview on 28 Oct 2026, for US developers through a waitlist, with over 50 apps at launch (TechCrunch, 28 Oct 2026). If your account has no Gemini access when I finish, you get a Gemini-ready server and the submission pack, and you choose. I submit later at no charge, or I refund $900.",
    "cta": {
-    "label": "Pay $1,500 deposit",
-    "url": "https://mcp.zovo.one/buy/svc-launch-deposit",
+    "label": "Pay $4,900 for all four stores",
+    "url": "https://mcp.zovo.one/buy/svc-launch",
     "pay": true,
-    "label_email": "Book Store Launch by email"
+    "label_email": "Order Store Launch by email"
    },
+   "cta_note": "Paid upfront. Work starts the next business day.",
    "slot": "launch",
    "order_subject": "Store Launch, 4 stores ($4,900)",
-   "guarantee": "No store can guarantee approval. Up to 2 review rounds are included: we fix what reviewers ask and resubmit.",
+   "guarantee": "No one can promise that a store approves a listing. Anthropic, OpenAI and Google each decide for themselves. What I do promise is up to 2 review rounds, where I fix what the reviewer asks and resubmit.",
    "options": [
     {
-     "label": "One store only: Claude, ChatGPT or Gemini",
+     "label": "One store only, Claude, ChatGPT or Gemini",
      "price_usd": 1900,
      "price_label": "$1,900",
-     "subject": "Store Launch, one store ($1,900)"
+     "subject": "Store Launch, one store ($1,900)",
+     "cta": {
+      "label": "Pay $1,900",
+      "url": "https://mcp.zovo.one/buy/svc-launch-one",
+      "pay": true
+     },
+     "slot": "one"
     }
    ]
   },
   {
    "id": "custom-server",
    "name": "Custom MCP server",
-   "short": "No server yet? We build one on your API, database or docs, with OAuth and one account per user.",
+   "short": "No server yet? I build one on your API, database or docs, with OAuth and one account per user.",
    "price_usd": 4500,
    "price_from": true,
    "price_label": "from $4,500",
-   "price_note": "With OAuth and multi-user. Fixed quote first. $1,500 deposit books the work.",
+   "price_note": "Starts with a $1,500 spec and fixed quote. The rest is paid upfront before the build.",
    "deposit_usd": 1500,
    "scope": [
     "Wrap your API. The model gets typed tools with clear names, and your keys stay in your config.",
@@ -99,69 +106,80 @@
     "Local stdio, or a hosted URL with OAuth"
    ],
    "cta": {
-    "label": "Pay $1,500 deposit",
+    "label": "Pay $1,500 for the spec and quote",
     "url": "https://mcp.zovo.one/buy/svc-custom-deposit",
     "pay": true,
     "label_email": "Ask for a fixed quote"
    },
+   "cta_note": "Fixed quote within 2 business days. The $1,500 counts toward the build, and if you decline the quote you get all of it back.",
    "cta2": {
-    "label": "Describe your job",
+    "label": "Not sure which one fits? Describe your job",
     "subject": "Custom MCP server: my job"
    },
    "slot": "custom_server",
    "order_subject": "Custom MCP server (from $4,500)",
    "options": [
     {
-     "label": "Simple read-only server, no auth, up to 10 tools",
+     "label": "Simple server, read-only, no sign-in, up to 10 tools",
      "price_usd": 2900,
      "price_label": "$2,900",
-     "subject": "Simple read-only MCP server ($2,900)"
+     "subject": "Simple read-only MCP server ($2,900)",
+     "cta": {
+      "label": "Pay $2,900",
+      "url": "https://mcp.zovo.one/buy/svc-custom-simple",
+      "pay": true
+     },
+     "slot": "simple",
+     "note": "Paid upfront. If your job needs sign-in, writes or more tools, I say so before I start, and you get a full refund or a quote."
     }
    ]
   },
   {
    "id": "care",
    "name": "Care plan",
-   "short": "Keep a listed server listed when the spec or a store policy changes.",
-   "price_usd": 490,
-   "price_label": "$490",
-   "price_unit": "a month",
-   "price_note": "3-month minimum. Invoiced monthly by email.",
+   "short": "Keeps a listed server listed when the MCP spec or a store rule changes. The spec had three new versions in 2025 alone.",
+   "price_usd": 1470,
+   "price_label": "$1,470",
+   "price_unit": "for 3 months",
+   "months": 3,
+   "price_note": "$490 a month, paid upfront for 3 months. Renew by paying again. Nothing charges automatically.",
    "scope": [
-    "McpStamp Check runs on your endpoint every day. You get an alert when the score drops.",
-    "2 fix hours a month for whatever the check or a store flags.",
-    "We track MCP spec and store policy changes, and re-submit your listings when a store asks."
+    "McpStamp Check runs on your endpoint every day, and you get an email when the score drops.",
+    "2 fix hours a month for whatever the check, a spec change or a store flags, plus re-submits when a store asks."
    ],
    "you_get": [
-    "A daily check with an alert",
+    "A daily check with an email alert",
     "2 fix hours each month",
-    "Re-submits to the stores"
+    "Re-submits to the stores",
+    "A renewal link by email before the 3 months end"
    ],
    "cta": {
-    "label": "Email to start",
-    "mailto": true,
-    "subject": "McpStamp Care plan ($490/month)"
+    "label": "Pay $1,470 for 3 months",
+    "url": "https://mcp.zovo.one/buy/svc-care-quarter",
+    "pay": true,
+    "label_email": "Order the Care plan by email"
    },
+   "cta_note": "No subscription. If you don't renew, the plan just ends.",
    "slot": "care",
-   "order_subject": "McpStamp Care plan ($490/month)"
+   "order_subject": "McpStamp Care plan, 3 months ($1,470)"
   }
  ],
  "steps": [
   {
-   "title": "Run the free check",
-   "text": "Paste your server URL into McpStamp Check. You get a score from 0 to 100 and the store blockers."
+   "title": "You pay upfront",
+   "text": "Pick a fixed-price job and pay by card on Stripe. The receipt arrives at once."
   },
   {
-   "title": "Order and pay",
-   "text": "The audit is paid in full. Launch and custom work start with a $1,500 deposit."
+   "title": "I'm notified",
+   "text": "Stripe tells me the moment you pay, and my email reaches you right away. Reply with your server URL, repo or access."
   },
   {
-   "title": "We work in your repo",
-   "text": "You see each commit. We need your server URL and repo access."
+   "title": "Work starts the next business day",
+   "text": "I work async in your repo, so you see each commit. Questions go by email, in writing, which means nothing gets lost in a call."
   },
   {
-   "title": "Handover",
-   "text": "You own the code. We walk your team through it once."
+   "title": "Delivery by email",
+   "text": "The report, the fixes or the code arrive from support@zovo.one. You own all of it."
   }
  ],
  "proof": {
@@ -174,23 +192,23 @@
    },
    {
     "value": "58",
-    "label": "open-source MCP servers we maintain (MIT), most of them hosted at mcp.zovo.one",
+    "label": "open-source MCP servers I maintain (MIT), most of them hosted at mcp.zovo.one",
     "url": "https://github.com/theluckystrike/mcp-servers"
    },
    {
-    "value": "100/100",
-    "label": "McpStamp score of our own hosted invoice server: ready for Claude, ChatGPT, Gemini and the MCP Registry",
-    "url": "https://www.mcpstamp.com/check/?url=https%3A%2F%2Fmcp.zovo.one%2Fmcp%2Finvoice%2Fv1"
+    "value": "12,362",
+    "label": "MCP Registry servers that answered McpStamp Check for the Readiness Index, 2 Nov 2026",
+    "url": "https://www.mcpstamp.com/readiness/"
    },
    {
-    "value": "Sent",
-    "label": "our own Google Connected Apps (Gemini) waitlist application, 1 Nov 2026"
+    "value": "100/100",
+    "label": "McpStamp score of my own hosted invoice server: ready for Claude, ChatGPT, Gemini and the MCP Registry",
+    "url": "https://www.mcpstamp.com/check/?url=https%3A%2F%2Fmcp.zovo.one%2Fmcp%2Finvoice%2Fv1"
    }
   ],
   "lines": [
-   "Merged fixes include agent and MCP software: AnythingLLM, Cyrus, Sympozium (MCP server tool status), unifi-mcp and mcp-gitlab.",
-   "OAuth 2.1 with dynamic client registration, PKCE, refresh tokens and a branded consent page, live on our own servers.",
-   "The same McpStamp Check you can run for free is the first step of every audit."
+   "Merged fixes include agent and MCP software, among them AnythingLLM, Cyrus, Sympozium (MCP server tool status), unifi-mcp and mcp-gitlab.",
+   "OAuth 2.1 with dynamic client registration, PKCE, refresh tokens and a branded consent page runs live on my own servers. Every audit starts with the same McpStamp Check you can run free."
   ],
   "footnote": "PR count measured 2 Nov 2026 with the GitHub search API (public repos only). It leaves out repos the maintainer owns or runs."
  },
@@ -251,16 +269,24 @@
  },
  "faq": [
   {
-   "q": "How do I pay?",
-   "a": "By card, through Stripe. We never see your card number. The seller is autom8 LLC, as set out in our Terms."
+   "q": "Why do you take payment upfront?",
+   "a": "I work async and start the next business day, so paying upfront lets me start the moment you're ready, with no invoice to chase and no call to book. If I haven't started, you get a full refund. If you cancel later, you get back the part of the price for work not done."
+  },
+  {
+   "q": "Can I talk to you first?",
+   "a": "I don't do calls. Email support@zovo.one with any question before you pay and I'll answer in writing. Everything after that happens by email too, so you have a record of every decision."
+  },
+  {
+   "q": "How do I pay, and who am I paying?",
+   "a": "By card, through Stripe. I never see your card number. The seller is autom8 LLC, a company registered in Yerevan, Armenia, and our Terms set out your rights, refunds included."
   },
   {
    "q": "Can I get an invoice?",
-   "a": "Yes. Email support@zovo.one with your company name, address and tax ID, and we send an invoice for any payment."
+   "a": "Stripe emails a receipt when you pay. For an invoice with your company name, address and tax ID, email support@zovo.one and I'll send one for that payment."
   },
   {
    "q": "Can I get a refund?",
-   "a": "Yes. You get a full refund if we have not started the work. After we start, we refund the part of the price for work not done, pro rata. Email support@zovo.one with your receipt.",
+   "a": "Yes. You get a full refund if I haven't started the work. After I start, I refund the part of the price for work not done, pro rata. Email support@zovo.one with your receipt.",
    "link": {
     "href": "/terms/#services-refunds",
     "label": "Refunds in our Terms"
@@ -268,35 +294,39 @@
   },
   {
    "q": "Does the audit fee count toward a launch?",
-   "a": "Yes. If you buy Store Launch or a custom server within 30 days of the audit, we credit 100% of the audit fee."
+   "a": "Yes. Buy Store Launch or a custom server within 30 days of the audit, pay the usual price, and I refund the full $490 to your card."
   },
   {
-   "q": "What happens after I order?",
-   "a": "We email you to ask for your server URL and repo access. The audit's 3 business days start when we have access."
-  },
-  {
-   "q": "Does the deposit count toward the price?",
-   "a": "Yes. For Store Launch, you pay $1,500 first and $3,400 at handover. For a custom server, the $1,500 deposit comes off the fixed quote, and if we do not agree a quote, we refund the deposit in full."
+   "q": "What happens after I pay?",
+   "a": "Stripe confirms the payment and I'm notified at once. Work starts the next business day. My email asks for what I need, which is your server URL, repo access and, for Store Launch, who can submit from your store accounts. Delivery dates count from the day I have access."
   },
   {
    "q": "Can you promise the stores will accept my server?",
-   "a": "No. Anthropic reviews Claude connectors, OpenAI reviews ChatGPT apps (plugins), and Google reviews Gemini Connected Apps, each under its own rules. Store Launch includes up to 2 review rounds: we fix what reviewers ask and resubmit. Gemini submission also needs your account to have Connected Apps access (a US waitlist preview since 28 Oct 2026)."
+   "a": "No. Anthropic reviews Claude connectors, OpenAI reviews ChatGPT apps (plugins), and Google reviews Gemini Connected Apps, each under its own rules. Store Launch includes up to 2 review rounds where I fix what reviewers ask and resubmit. Gemini submission also needs your account to have Connected Apps access (a US waitlist preview since 28 Oct 2026)."
   },
   {
-   "q": "Is there a minimum term for the Care plan?",
-   "a": "Yes, 3 months. After that it runs month to month, and you can end it with 30 days' notice by email. It is invoiced each month and includes 2 fix hours a month."
+   "q": "How does the Care plan renew?",
+   "a": "It doesn't renew by itself. You pay $1,470 for 3 months upfront. Before the 3 months end, I email you a renewal link. Pay it and the plan goes on. Ignore it and the plan ends, with nothing charged."
   },
   {
    "q": "Do you have client references?",
-   "a": "Not on this page. We'd rather show work you can check. The merged pull requests and the MCP Registry listings above are public."
+   "a": "Not on this page. I'd rather show work you can check. The merged pull requests and the MCP Registry listings above are public."
   },
   {
    "q": "Who owns the code?",
    "a": "You do. It goes into your repository under the licence you choose."
   },
   {
-   "q": "Can you work with our private data?",
-   "a": "Yes, and we can also build against a sample or a test account, so your real data never has to leave your side. We keep your data and credentials confidential and delete them within 30 days of delivery."
+   "q": "Are my data and credentials safe with you?",
+   "a": "I keep your code, data and credentials confidential, use them only for your job and delete them within 30 days of delivery. I can also build against a sample or a test account, so your real data never has to leave your side. Rotate any keys you gave me after handover."
   }
- ]
+ ],
+ "hero_cta_note": "Card payment on Stripe. I'm notified at once and start the next business day. Email only, no calls.",
+ "final": {
+  "h2": "Fix it yourself, or hand it to me",
+  "text": [
+   "The free check already lists every fix with the change to make. If your team has the time, do them yourself. That's a fine choice.",
+   "If you'd rather spend that time on your product, start with the audit. It's $490, I start the next business day, and the whole fee counts toward a launch within 30 days."
+  ]
+ }
 }

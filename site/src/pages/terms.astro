@@ -13,7 +13,7 @@ const updated = '2 November 2026';
 const one = brand.pricing.serverUsd;
 const all = bundlePrice();
 const email = 'support@zovo.one';
-// Section 9 (paid services, s1102m SITE2): scope, prices and deposits come from data/content/services.json,
+// Section 9 (paid services, s1102m SITE2, upfront payment from the s1102m sales lane): scope and prices come from data/content/services.json,
 // so the terms and /services/ cannot drift apart.
 const svc = getServicesContent().services;
 const audit = svc.find((s) => s.id === 'audit');
@@ -23,12 +23,13 @@ const care = svc.find((s) => s.id === 'care');
 const usd = (n?: number) => (typeof n === 'number' ? usdFmt(n) : '');
 const launchOne = launch?.options?.[0];
 const customSimple = custom?.options?.[0];
-const launchBalance = (launch?.price_usd ?? 0) - (launch?.deposit_usd ?? 0);
 const auditDays = /(\d+) business days/.exec(audit?.price_note ?? '')?.[0] ?? '3 business days';
 const lower1 = (x: string) => x.charAt(0).toLowerCase() + x.slice(1);
-const scopeText = (s?: (typeof svc)[number]) => (s?.scope ?? []).join(' ');
+// The Services page speaks as "I" (the developer doing the work); these Terms speak as "we" (autom8 LLC).
+const asWe = (x: string) => x.replace(/^I /, 'We ').replace(/([.!?] )I /g, '$1We ').replace(/ I /g, ' we ').replace(/\bmy\b/g, 'our');
+const scopeText = (s?: (typeof svc)[number]) => (s?.scope ?? []).map(asWe).join(' ');
 const youGet = (s?: (typeof svc)[number]) => {
-  const g = (s?.you_get ?? []).map(lower1);
+  const g = (s?.you_get ?? []).map((x) => asWe(lower1(x)));
   return g.join('; ');
 };
 const sections = [
@@ -109,33 +110,35 @@ const sections = [
   <p>This section covers the paid work that autom8 LLC, the seller, does for you on your own MCP server: the Readiness Audit, Store Launch, a custom MCP server and the Care plan. The prices and the current description are on the <a href="/services/">Services page</a>. The rest of these Terms also applies to this work, including section 15 (liability) and section 19 (Armenian law and the courts of Yerevan).</p>
   <h3 id="services-scope">9.1 What each service includes</h3>
   <ul>
-    <li><strong>Readiness Audit ({usd(audit?.price_usd)}, paid in full when you order).</strong> {scopeText(audit)} You get: {youGet(audit)}. The report is due {auditDays} after we have access to your server. {audit?.credit}</li>
-    <li><strong>Store Launch ({usd(launch?.price_usd)} for all four stores{launchOne && <>, or {launchOne.price_label} for one store: Claude, ChatGPT or Gemini</>}).</strong> {scopeText(launch)} You get: {youGet(launch)}. It takes about 10 business days from the day we have access.</li>
-    <li><strong>Custom MCP server (from {usd(custom?.price_usd)} with OAuth and one account per user{customSimple && <>; {customSimple.price_label} for a simple read-only server without auth and up to 10 tools</>}).</strong> We build a server on your API, database, spreadsheet or docs. You get: {youGet(custom)}. Before we start, we agree a fixed quote with you in writing (email is enough).</li>
-    <li><strong>Care plan ({usd(care?.price_usd)} a month).</strong> {scopeText(care)}</li>
+    <li>Readiness Audit, {usd(audit?.price_usd)}. {scopeText(audit)} You get {youGet(audit)}. The report is due {auditDays} after we have access to your server. {audit?.credit}</li>
+    <li>Store Launch, {usd(launch?.price_usd)} for all four stores{launchOne && <>, or {launchOne.price_label} for one store (Claude, ChatGPT or Gemini)</>}. {scopeText(launch)} You get {youGet(launch)}. It takes about 10 business days from the day we have access.</li>
+    <li>Custom MCP server, from {usd(custom?.price_usd)} with OAuth and one account per user{customSimple && <>, or {customSimple.price_label} for a simple read-only server without sign-in and up to 10 tools</>}. We build a server on your API, database, spreadsheet or docs. You get {youGet(custom)}.</li>
+    <li>Care plan, {usd(care?.price_usd)} for {care?.months ?? 3} months. {scopeText(care)}</li>
   </ul>
   <p>The scope of your order is the description on the Services page on the day you order, plus anything we confirm to you in writing. Work outside that scope needs a new written quote.</p>
-  <h3 id="services-payment">9.2 Deposits, balance and invoices</h3>
+  <h3 id="services-payment">9.2 Payment upfront</h3>
   <ul>
-    <li>Prices are in US dollars. Card payments are taken by Stripe. You can ask for an invoice for any payment.</li>
-    <li><strong>Store Launch:</strong> you pay a {usd(launch?.deposit_usd)} deposit when you order and the balance of {usd(launchBalance)} at handover. The deposit counts toward the total of {usd(launch?.price_usd)}.</li>
-    <li><strong>Custom MCP server:</strong> the {usd(custom?.deposit_usd)} deposit books the work and counts toward the fixed quote. The rest of the quote is due at handover, unless the quote says otherwise. If we do not agree a fixed quote, we refund the deposit in full.</li>
-    <li><strong>Orders by email</strong> (one-store launch, simple server): we confirm the price, the deposit and the balance in writing before we start, on the same terms as above.</li>
-    <li><strong>Handover</strong> means the day we deliver the work: the fixes or the code in your repository and, for Store Launch, the listings submitted. We send the payment link for the balance on that day.</li>
+    <li>Prices are in US dollars. You pay the full price upfront, by card through Stripe, before any work starts. We do not send an invoice for a balance after delivery. Stripe emails you a receipt, and you can ask us for an invoice for any payment.</li>
+    <li>Readiness Audit, Store Launch (all four stores or one store), the simple read-only server and the Care plan are each paid in full when you order.</li>
+    <li>For a custom MCP server you first pay {usd(custom?.deposit_usd)} for a written spec and a fixed quote, which we send within 2 business days of having your requirements. The {usd(custom?.deposit_usd)} counts toward the build. You pay the rest of the quote upfront before the build starts. If you decline the quote, we refund the {usd(custom?.deposit_usd)} in full.</li>
+    <li>If a simple read-only server turns out to need sign-in, writes or more than 10 tools, we tell you before we start. You then choose a full refund or a fixed quote for a custom build.</li>
+    <li>If you bought a Readiness Audit and buy Store Launch or a custom server within 30 days, we refund the audit fee to your card.</li>
+    <li>We work asynchronously, by email with {email}. We are notified when you pay and start work on the next business day.</li>
   </ul>
   <h3 id="services-care">9.3 Care plan term</h3>
-  <p>The Care plan is invoiced monthly by email. It has a minimum term of 3 months. After that it runs month to month, and you or we can end it by email with 30 days' notice.</p>
+  <p>One Care plan payment covers {care?.months ?? 3} months and is paid upfront. It does not renew automatically and we never charge your card again on our own. Before the period ends we email you a renewal link. If you pay it, the plan continues for another {care?.months ?? 3} months. If you do not, the plan ends at the end of the period. You can cancel earlier by email, and months that have not started are refunded.</p>
   <h3 id="services-you">9.4 What we need from you</h3>
   <p>We need your server URL, access to the repository, and, for Store Launch, access to your store accounts or someone on your side who can submit with us. A test account helps us check tools behind sign-in. Delivery dates count from the day we have this access. Time spent waiting for access, answers or store reviewers does not count.</p>
   <h3 id="services-approval">9.5 Store approval and Gemini</h3>
-  <p>No one can guarantee that a store accepts a listing. Anthropic, OpenAI and Google review each listing themselves, under their own rules, which can change. We do not promise approval. Store Launch includes up to 2 review rounds: we fix what reviewers ask and resubmit.</p>
-  <p>Gemini Connected Apps is a preview that Google opened on 28 October 2026 for US developers through a waitlist. If your account has no Gemini access when we finish, we deliver a Gemini-ready server and the submission pack, and you choose: we submit it later at no charge when your account gets access, or we take $900 off the balance.</p>
+  <p>No one can guarantee that a store accepts a listing. Anthropic, OpenAI and Google review each listing themselves, under their own rules, which can change. We do not promise approval. Store Launch includes up to 2 review rounds, in which we fix what reviewers ask and resubmit.</p>
+  <p>Gemini Connected Apps is a preview that Google opened on 28 October 2026 for US developers through a waitlist. If your account has no Gemini access when we finish a four-store launch, we deliver a Gemini-ready server and the submission pack, and you choose. We submit it later at no charge when your account gets access, or we refund $900.</p>
   <h3 id="services-refunds">9.6 Cancellation and refunds</h3>
   <ul>
     <li>If we have not started the work, you get a full refund. Work starts when we first open your server, repository or accounts for the job.</li>
     <li>After we start, you can cancel at any time by email. We stop, hand over what is done, and refund the part of the price for work not done, pro rata. We decide the amount fairly and show you how we worked it out.</li>
     <li>A delivered audit report and a Care plan month that has already started are not refunded, except as below.</li>
     <li>If we cannot deliver what we promised, we refund what you paid for the part we could not deliver.</li>
+    <li>The custom server spec fee is refunded in full if you decline the quote, as set out in section 9.2.</li>
   </ul>
   <p>Email {email} with your receipt. Refunds go back to the card you paid with. Section 8 (14 days) applies to Pro Licences, not to these services. Any statutory rights you have stay in place.</p>
   <h3 id="services-code">9.7 Who owns the code</h3>

@@ -11,7 +11,7 @@ import { getPricing } from '../data/content';
 import { CATEGORIES } from '../data/categories';
 import { stats, getServers, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
 import { seo } from '../data/pages';
-import { getServicesContent, priceText, usd } from '../data/services';
+import { getServicesContent, priceText, usd, ctaHref, ctaLabel } from '../data/services';
 const meta = seo('/pricing/', { title: 'Pricing', description: '' });
 // Internal links never carry src tags (seo.json canonical rule). src tags go only on mcp.zovo.one buy links.
 const href = (u: string) => (u.startsWith('/') ? u.replace(/\?src=[^#]*/, '') : u);
@@ -38,6 +38,12 @@ const first = groups.flatMap((g) => g.items).find((x) => x.id === DEFAULT_ID) ??
 
 const svc = getServicesContent();
 const svcList = svc.show_prices ? svc.services : [];
+// One line per thing you can pay for: each service, then its options (one-store launch, simple server) under it.
+const svcLines = svcList.flatMap((s) => [
+  { href: `/services/#${s.id}`, name: s.name, price: priceText(s), list: s.list_usd, text: s.short },
+  ...(s.options ?? []).map((o) => ({ href: `/services/#${s.id}`, name: o.label, price: o.price_label, list: undefined as number | undefined, text: '' })),
+]);
+const svcAudit = svcList.find((s) => s.id === 'audit');
 const refundSrc = 'https://github.com/theluckystrike/mcp-servers/blob/main/billing/src/index.js#L1217';
 const srcText = (s?: string) => (s ?? '').replace(/~\/mcp-servers\//g, 'mcp-servers/');
 const faq = p.faq.length ? p.faq : [
@@ -159,18 +165,18 @@ const faq = p.faq.length ? p.faq : [
 
   <section class="wrap py-10" aria-labelledby="svc-h">
     <span class="eyebrow">Services</span>
-    <h2 id="svc-h" class="h2 mt-3 font-display">Need it built or fixed?</h2>
-    <p class="muted mt-2 max-w-2xl">Shipping your own MCP server? We get it ready for the Claude, ChatGPT and Gemini stores and the MCP Registry, or build one for you. Fixed prices, paid by card.</p>
-    {svcList.length > 0 ? (
+    <h2 id="svc-h" class="h2 mt-3 font-display">Your own MCP server, ready for four stores</h2>
+    <p class="muted mt-2 max-w-2xl">I get it past the checks of Claude, ChatGPT, Gemini and the MCP Registry, or build one for you. Fixed prices, paid upfront by card, and I start the next business day. Everything runs by email.</p>
+    {svcLines.length > 0 ? (
       <ul class="srv-list svc-lines mt-6 grid gap-x-8 md:grid-cols-2">
-        {svcList.map((s) => (
+        {svcLines.map((s) => (
           <li class="py-3">
             <p class="flex items-baseline justify-between gap-3">
-              <a href={`/services/#${s.id}`} class="font-semibold hover:underline">{s.name}</a>
+              <a href={s.href} class="font-semibold hover:underline">{s.name}</a>
               <span class="leader" aria-hidden="true"></span>
-              <span class="tnum font-mono text-[.95rem] font-semibold">{s.list_usd && <s class="mr-1.5 font-normal text-faint" aria-label={`List price ${usd(s.list_usd)}`}>{usd(s.list_usd)}</s>}{priceText(s)}</span>
+              <span class="tnum font-mono text-[.95rem] font-semibold">{s.list && <s class="mr-1.5 font-normal text-faint" aria-label={`List price ${usd(s.list)}`}>{usd(s.list)}</s>}{s.price}</span>
             </p>
-            <p class="muted mt-1 text-[.9rem]">{s.short}{s.price_tag && <> {s.price_tag}.</>}</p>
+            {s.text && <p class="muted mt-1 text-[.9rem]">{s.text}</p>}
           </li>
         ))}
       </ul>
@@ -178,9 +184,14 @@ const faq = p.faq.length ? p.faq : [
       <p class="mt-4"><a href="/services/" class="link">See custom work</a></p>
     )}
     <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-      <a href="/services/" class="btn btn-primary">{svc.checkout_live ? 'See services and pay online' : 'See services and order'}</a>
-      <p class="text-[.95rem]"><span class="muted">Not sure where you stand? </span><a href="/check/" class="link">Run the free McpStamp Check</a><span class="muted">: a score from 0 to 100 for each store.</span></p>
+      {svcAudit ? (
+        <a href={ctaHref(svcAudit, 'pricing', 'services')} rel="nofollow" class="btn btn-primary" data-cta="audit" data-cta-slot="pricing">{ctaLabel(svcAudit)}</a>
+      ) : (
+        <a href="/services/" class="btn btn-primary">See services</a>
+      )}
+      <a href="/services/" class="link text-[.95rem]">What each job includes</a>
     </div>
+    <p class="mt-4 text-[.95rem]"><span class="muted">Not sure where you stand? </span><a href="/check/" class="link">Run the free McpStamp Check</a><span class="muted"> and get a score from 0 to 100 for each store.</span></p>
   </section>
 
   <section class="wrap py-4">
