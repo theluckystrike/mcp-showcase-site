@@ -32,5 +32,6 @@ jobs:
           name: dist
           path: |
             site/dist
+            site/functions
             build.log
           retention-days: 7
