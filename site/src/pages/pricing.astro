@@ -11,6 +11,7 @@ import { getPricing } from '../data/content';
 import { CATEGORIES } from '../data/categories';
 import { stats, getServers, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
 import { seo } from '../data/pages';
+import { getServicesContent, priceText } from '../data/services';
 const meta = seo('/pricing/', { title: 'Pricing', description: '' });
 // Internal links never carry src tags (seo.json canonical rule). src tags go only on mcp.zovo.one buy links.
 const href = (u: string) => (u.startsWith('/') ? u.replace(/\?src=[^#]*/, '') : u);
@@ -35,6 +36,8 @@ const loose = paidServers.filter((s) => !CATEGORIES.some((c) => c.id === s.categ
 if (loose.length) groups.push({ name: 'Other', items: loose });
 const first = groups.flatMap((g) => g.items).find((x) => x.id === DEFAULT_ID) ?? groups[0]?.items[0];
 
+const svc = getServicesContent();
+const svcList = svc.show_prices ? svc.services : [];
 const refundSrc = 'https://github.com/theluckystrike/mcp-servers/blob/main/billing/src/index.js#L1217';
 const srcText = (s?: string) => (s ?? '').replace(/~\/mcp-servers\//g, 'mcp-servers/');
 const faq = p.faq.length ? p.faq : [
@@ -154,11 +157,36 @@ const faq = p.faq.length ? p.faq : [
     <p class="muted mt-6 text-[.92rem]">Free, no paid tier: {freeServers.map((s, i) => <>{i > 0 && ', '}<a class="underline underline-offset-2" href={`/servers/${s.id}/`}>{s.name}</a></>)}.</p>
   </section>
 
+  <section class="wrap py-10" aria-labelledby="svc-h">
+    <span class="eyebrow">Services</span>
+    <h2 id="svc-h" class="h2 mt-3 font-display">Need it built or fixed?</h2>
+    <p class="muted mt-2 max-w-2xl">Shipping your own MCP server? We get it ready for the Claude, ChatGPT and Gemini stores and the MCP Registry, or build one for you. Fixed prices, paid by card.</p>
+    {svcList.length > 0 ? (
+      <ul class="srv-list svc-lines mt-6 grid gap-x-8 md:grid-cols-2">
+        {svcList.map((s) => (
+          <li class="py-3">
+            <p class="flex items-baseline justify-between gap-3">
+              <a href={`/services/#${s.id}`} class="font-semibold hover:underline">{s.name}</a>
+              <span class="leader" aria-hidden="true"></span>
+              <span class="tnum font-mono text-[.95rem] font-semibold">{priceText(s)}</span>
+            </p>
+            <p class="muted mt-1 text-[.9rem]">{s.short}</p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="mt-4"><a href="/services/" class="link">See custom work</a></p>
+    )}
+    <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <a href="/services/" class="btn btn-primary">See services and pay online</a>
+      <p class="text-[.95rem]"><span class="muted">Not sure where you stand? </span><a href="/check/" class="link">Run the free McpStamp Check</a><span class="muted">: a score from 0 to 100 for each store.</span></p>
+    </div>
+  </section>
+
   <section class="wrap py-4">
     <TelegramCta text="Not sure which server you need? Ask in the community chat." />
   </section>
   <SupportBand page="pricing" />
-  <section class="wrap pb-12 pt-2"><p class="muted text-[.95rem]">Need a server for your own system? <a href="/services/" class="text-accent underline underline-offset-4">See custom work</a>.</p></section>
 </Layout>
 
 <script>

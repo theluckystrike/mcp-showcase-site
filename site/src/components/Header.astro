@@ -10,8 +10,9 @@ const nav = [
   { href: '/free-servers/', label: 'Free servers' },
   { href: '/connect/', label: 'Connect' },
   { href: '/pricing/', label: 'Pricing' },
+  { href: '/check/', label: 'Check' },
   { href: '/services/', label: 'Services' },
-  { href: '/developers/', label: 'Developers' },
+  { href: '/developers/', label: 'Developers', wide: true },
 ];
 ---
 <script is:inline>
@@ -29,7 +30,7 @@ const nav = [
     </a>
     <nav class="ml-6 hidden items-center lg:flex" aria-label="Main">
       {nav.map((n) => (
-        <a href={n.href} class:list={['nav-link', path.startsWith(n.href) && 'is-active']} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
+        <a href={n.href} class:list={['nav-link', path.startsWith(n.href) && 'is-active', n.wide && 'xl-only']} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
       ))}
     </nav>
     <div class="ml-auto flex items-center gap-2">
@@ -54,6 +55,7 @@ const nav = [
   .site-head { background: var(--bg); border-bottom: 2px solid var(--text); box-shadow: 0 2px 0 0 var(--bg), 0 3px 0 0 var(--text); }
   .nav-link { position: relative; padding: .45rem .7rem; font-size: .93rem; font-weight: 520; color: var(--muted); transition: color .15s; }
   .nav-link:hover { color: var(--text); }
+  @media (max-width: 1279px) { .nav-link.xl-only { display: none; } }
   .nav-link.is-active { color: var(--text); font-weight: 640; }
   .nav-link.is-active::after { content: ''; position: absolute; left: .55rem; right: .55rem; bottom: .05rem; height: 2px; background: var(--stamp); transform: rotate(-1.2deg); border-radius: 2px; }
   .menu-sheet { background: var(--surface-solid); border: 1px solid var(--border-strong); border-radius: 3px; box-shadow: var(--shadow-lift); }

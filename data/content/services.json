@@ -1,94 +1,139 @@
 {
  "meta": {
-  "author": "d-money",
-  "date": "2026-10-30",
-  "price_status": "PROPOSAL, HIDDEN. price_from_usd values are owner proposals (agents/d-money/FINDINGS.md). show_prices=false until the owner approves them (d-gate D4).",
-  "github_source": "gh api users/theluckystrike; gh api --paginate 'users/theluckystrike/repos?per_page=100'; gh api 'search/issues?q=author:theluckystrike+type:pr+is:merged+-user:theluckystrike+-org:zovo-one+-org:BeLikeNative'. Run 2026-10-30 16:05 +07."
+  "author": "s1102m site-offers",
+  "date": "2026-11-02",
+  "price_status": "LIVE. Offer ladder from run s1102m BRIEF (coordinator decision 2026-11-02). Pay links go to mcp.zovo.one/buy/<product>; products svc-audit, svc-launch-deposit, svc-custom-deposit are built by lane BILLING.",
+  "proof_source": "Owner GitHub bio and BRIEF measured facts (2026-11-02). merged_prs from lane GH-PROOF when present."
  },
- "show_prices": false,
- "eyebrow": "Custom work",
- "h1": "Get an MCP server built around your own data",
- "lead": "The person who maintains the servers on this site also builds them to order. You tell us the job your team repeats. You get a server that does it inside Claude, Cursor or any other MCP client, with a test for each tool.",
+ "show_prices": true,
+ "eyebrow": "MCP store launch",
+ "h1": "Get your MCP server into the Claude, ChatGPT and Gemini stores",
+ "lead": "Each store checks different things: OAuth, tool annotations, descriptions, error handling, policy text. We find what blocks you, fix it, and submit. Fixed prices, paid by card.",
  "services": [
   {
-   "id": "custom-server",
-   "name": "A custom MCP server for your business",
-   "short": "Your API, a spreadsheet or your internal docs, turned into tools your AI can call.",
-   "price_from_usd": 1500,
+   "id": "audit",
+   "name": "Readiness Audit",
+   "short": "Find out what stops your server from being listed, in order of what blocks you first.",
+   "price_usd": 490,
+   "price_label": "$490",
+   "price_note": "Fixed price. Report in 3 business days.",
    "scope": [
-    "Wrap your API. Claude gets typed tools with clear names, and your keys stay in your config.",
-    "Put a spreadsheet or CSV behind tools that read it, check it and write back the rows you allow.",
-    "Make internal docs searchable from chat, with answers that point to the page they came from."
+    "We run McpStamp Check on your endpoint, then read the server by hand.",
+    "OAuth flow, tool annotations, tool descriptions and error handling.",
+    "Store policies for the Claude Directory, ChatGPT Apps, Gemini Connected Apps and the MCP Registry."
+   ],
+   "you_get": [
+    "A written fix list, ranked by store blocker",
+    "A code snippet for each fix",
+    "A 30-minute call to go through it"
+   ],
+   "cta": { "label": "Pay $490 and start", "url": "https://mcp.zovo.one/buy/svc-audit", "pay": true },
+   "slot": "audit"
+  },
+  {
+   "id": "launch",
+   "name": "Store Launch",
+   "short": "We fix your server so it passes, then list it in four places.",
+   "price_usd": 4900,
+   "price_label": "$4,900",
+   "price_note": "Fixed price. About 10 business days. $1,500 deposit now, the rest at handover.",
+   "deposit_usd": 1500,
+   "scope": [
+    "We fix your server until it passes McpStamp Check and each store's review list.",
+    "OAuth 2.1 with dynamic client registration, PKCE and refresh tokens.",
+    "Tool annotations, server instructions and clear tool descriptions.",
+    "We prepare and submit the listings to Claude, ChatGPT, Gemini and the MCP Registry."
+   ],
+   "you_get": [
+    "Fixes as commits in your repository",
+    "Four listings written and submitted",
+    "Answers to reviewer questions while the job runs"
+   ],
+   "note": "Google opened Connected Apps for Gemini in preview on 28 Oct 2026. Few apps are listed so far.",
+   "cta": { "label": "Pay $1,500 deposit", "url": "https://mcp.zovo.one/buy/svc-launch-deposit", "pay": true },
+   "slot": "launch"
+  },
+  {
+   "id": "custom-server",
+   "name": "Custom MCP server",
+   "short": "No server yet? We build one on your API, spreadsheet or docs.",
+   "price_usd": 2900,
+   "price_from": true,
+   "price_label": "from $2,900",
+   "price_note": "Fixed quote first. $900 deposit books the work.",
+   "deposit_usd": 900,
+   "scope": [
+    "Wrap your API. The model gets typed tools with clear names, and your keys stay in your config.",
+    "Put a spreadsheet or CSV behind tools that read it, check it and write back only the rows you allow.",
+    "Make internal docs searchable from chat, with answers that point to the page they came from.",
+    "Set it up in Claude, Cursor or VS Code for your team, with a one-page runbook."
    ],
    "you_get": [
     "Source code in your repository",
     "A SPEC.md that lists every tool with its inputs and outputs",
     "A test for each tool",
-    "Local stdio by default, and a hosted URL if you want one"
+    "Local stdio, or a hosted URL with OAuth"
    ],
+   "cta": { "label": "Pay $900 deposit", "url": "https://mcp.zovo.one/buy/svc-custom-deposit", "pay": true },
+   "cta2": { "label": "Describe your job", "subject": "Custom MCP server: my job" },
    "slot": "custom_server"
   },
   {
-   "id": "setup",
-   "name": "Setup and integration for your team",
-   "short": "We connect the servers to the clients your people already use.",
-   "price_from_usd": 600,
+   "id": "care",
+   "name": "Care plan",
+   "short": "Keep a listed server listed when the spec or a store policy changes.",
+   "price_usd": 490,
+   "price_label": "$490",
+   "price_unit": "a month",
+   "price_note": "Invoiced monthly by email.",
    "scope": [
-    "Claude Desktop, Claude Code, Cursor or VS Code, set up for each person who needs it.",
-    "Hosted URLs or local installs. We pick with you, based on where your data may go.",
-    "Pro keys put in place, and a one-page runbook your team can follow without us."
+    "McpStamp Check runs on your endpoint every day. You get an alert when the score drops.",
+    "We track MCP spec changes and store policy changes, and update your server.",
+    "We re-submit your listings when a store asks for it."
    ],
    "you_get": [
-    "Working connections, checked on a real task",
-    "A short runbook for new hires",
-    "A list of what each server can and can't touch"
+    "A daily check with an alert",
+    "Spec and policy updates as commits",
+    "Re-submits to the stores"
    ],
-   "slot": "setup"
-  },
-  {
-   "id": "audit",
-   "name": "Audit of your MCP server",
-   "short": "A second pair of eyes on a server you built or bought.",
-   "price_from_usd": 300,
-   "scope": [
-    "Tool names, descriptions and schemas. Can a model pick the right tool and fill it in?",
-    "Input checks, error messages and what happens on bad or hostile input.",
-    "Secrets, file access and data that leaves the machine."
-   ],
-   "you_get": [
-    "A written report with each problem ranked by risk",
-    "The exact fix for each one, as a patch where it's small"
-   ],
-   "slot": "audit"
+   "cta": { "label": "Email to start", "mailto": true, "subject": "McpStamp Care plan ($490/month)" },
+   "slot": "care"
   }
  ],
  "steps": [
   {
-   "title": "Tell us the job",
-   "text": "Write on Telegram or by email. Two or three lines are enough."
+   "title": "Run the free check",
+   "text": "Paste your server URL into McpStamp Check. You get a score from 0 to 100 and the store blockers."
   },
   {
-   "title": "Get a fixed quote",
-   "text": "We reply with questions, then a price and a date before any work starts."
+   "title": "Pay by card",
+   "text": "The audit is paid in full. Launch and custom work start with a deposit."
   },
   {
-   "title": "We build in your repo",
-   "text": "You see each commit. Every tool gets a test."
+   "title": "We work in your repo",
+   "text": "You see each commit. We need your server URL and repo access."
   },
   {
    "title": "Handover",
    "text": "You own the code. We walk your team through it once."
   }
  ],
+ "proof": {
+  "as_of": "2026-11-02",
+  "items": [
+   { "value": "308", "label": "pull requests merged in 102 orgs, including Chrome, Prefect and urllib3", "url": "https://github.com/theluckystrike" },
+   { "value": "48", "label": "hosted MCP servers in production, with 579 tools", "url": "https://github.com/theluckystrike/mcp-servers" },
+   { "value": "48/48", "label": "of those servers listed in the official MCP Registry", "url": "https://registry.modelcontextprotocol.io/v0.1/servers?search=theluckystrike" },
+   { "value": "Done", "label": "our own Google Connected Apps submission, 1 Nov 2026" }
+  ],
+  "lines": [
+   "OAuth 2.1 with dynamic client registration, PKCE, refresh tokens and a branded consent page, live on our own servers.",
+   "The same McpStamp Check you can run for free is the first step of every audit."
+  ]
+ },
  "github": {
   "as_of": "2026-10-30",
   "profile_url": "https://github.com/theluckystrike",
-  "public_repos": 1642,
-  "total_stars": 122,
-  "followers": 49,
-  "merged_prs_elsewhere": 367,
-  "merged_prs_repos": 231,
-  "merged_prs_owners": 199,
   "merged_prs_url": "https://github.com/search?q=author%3Atheluckystrike+is%3Apr+is%3Amerged+-user%3Atheluckystrike+-org%3Azovo-one+-org%3ABeLikeNative&type=pullrequests",
   "examples": [
    {
@@ -115,16 +160,36 @@
  },
  "faq": [
   {
+   "q": "How do I pay?",
+   "a": "By card, on Stripe's checkout page. We never see your card number. The seller is autom8 LLC, as set out in our Terms."
+  },
+  {
+   "q": "Can I get an invoice?",
+   "a": "Yes. Email support@zovo.one with your company name, address and tax ID, and we send an invoice for any payment."
+  },
+  {
+   "q": "Can I get a refund?",
+   "a": "Yes, a full refund if we have not started the work. Email support@zovo.one with your Stripe receipt."
+  },
+  {
+   "q": "What happens after I pay?",
+   "a": "Stripe sends you a receipt. We email you to ask for your server URL and repo access. The audit's 3 business days start when we have access."
+  },
+  {
+   "q": "Does the deposit count toward the price?",
+   "a": "Yes. For Store Launch, you pay $1,500 now and $3,400 at handover. For a custom server, the $900 deposit comes off the fixed quote."
+  },
+  {
+   "q": "Can you promise the stores will accept my server?",
+   "a": "No one can. Anthropic, OpenAI and Google review each listing themselves. We fix every blocker we find and answer reviewer questions while the job runs."
+  },
+  {
    "q": "Do you have client references?",
-   "a": "Not on this page. We'd rather show code you can read. Every merged pull request above is public, and so is the source of all 58 servers on this site."
+   "a": "Not on this page. We'd rather show work you can check. The merged pull requests and the MCP Registry listings above are public."
   },
   {
    "q": "Who owns the code?",
    "a": "You do. It goes into your repository under the licence you choose."
-  },
-  {
-   "q": "Is the price fixed?",
-   "a": "Yes, once we agree the scope. Tell us the job and you get a fixed price and a date before any work starts. It depends on how many tools and systems are involved."
   },
   {
    "q": "Can you work with our private data?",
