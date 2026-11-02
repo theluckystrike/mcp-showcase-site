@@ -804,6 +804,54 @@
    ],
    "added": "2026-11-02",
    "tools_checked": "2026-11-02"
+  },
+  {
+   "repo": "student-loan-repayment-assistance-plan-calculator-mcp",
+   "topic": "Student loan RAP calculator",
+   "name": "Student Loan RAP Calculator",
+   "tagline": "The new federal Repayment Assistance Plan, worked out from the 2025 law, plus the new loan limits and SAVE transition dates.",
+   "knows": [
+    "The Repayment Assistance Plan created by P.L. 119-21 in July 2025. Payments run from 1% to 10% of AGI, with a $10 minimum and $50 off per dependent.",
+    "The interest the Department waives, the principal match that makes each payment cut the balance by at least $50, and cancellation after 360 payments.",
+    "The new Grad PLUS and Parent PLUS limits and the dates borrowers leave SAVE. Rules still waiting on regulations are marked as estimates."
+   ],
+   "sources": "P.L. 119-21 enrolled text on govinfo (sections 81001 and 82001-82004), studentaid.gov and the FSA Handbook 2025-26.",
+   "hosted_url": "https://student-loan-repayment-assistance-plan-calculator-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/student-loan-repayment-assistance-plan-calculator-mcp",
+   "npm": null,
+   "money_site": {
+    "name": "McpStamp",
+    "url": "https://www.mcpstamp.com/free-servers/"
+   },
+   "prompts": [
+    "My AGI is $50,000, I have one child and owe $30,000 at 5%. What would I pay under RAP?",
+    "Compare RAP with the standard plan for $60,000 at 6% and AGI $72,000.",
+    "When do SAVE borrowers have to move to a new plan?"
+   ],
+   "tools": [
+    {
+     "name": "calculate_rap_payment",
+     "title": "Repayment Assistance Plan (RAP) monthly payment",
+     "description": "Calculates the federal student loan Repayment Assistance Plan (RAP) payment created by the One Big Beautiful Bill Act (P.L. 119-21, HEA sec. 455(q)), open since July 1, 2026. Base payment is 1% to 10% of the WHOLE AGI by $10,000 band ($120 a year flat at $10,000 or less, 10% above $100,000), divided by 12, minus $50 per dependent, never below $10. With balance and rate it also shows the first month: interest paid first, unpaid interest waived (interest subsidy), the up-to-$50 principal match, and a constant-income projection to payoff or cancellation after 360 qualifying payments. Copied from the statute text, not model memory."
+    },
+    {
+     "name": "compare_rap_vs_standard",
+     "title": "Compare RAP with the Tiered Standard and 10-year Standard plans",
+     "description": "Compares the new Repayment Assistance Plan with the Tiered Standard plan (P.L. 119-21: 10 years under $25,000, 15 under $50,000, 20 under $100,000, 25 at $100,000 or more) and, for borrowers with no loan made on or after July 1, 2026, the 10-year Standard plan. Returns monthly payment, months, total paid, interest waived, principal match and the amount cancelled after 360 RAP payments, assuming constant income and on-time payments. Says which plans count for PSLF (RAP yes, Tiered Standard no)."
+    },
+    {
+     "name": "get_federal_loan_limits",
+     "title": "Federal student loan limits before and after July 1, 2026",
+     "description": "Returns federal Direct Loan borrowing limits in force on a date. From July 1, 2026 (P.L. 119-21 sec. 81001): Grad PLUS ends for new borrowers; graduate unsubsidized $20,500 a year / $100,000 aggregate; professional $50,000 a year / $200,000 aggregate; Parent PLUS $20,000 a year and $65,000 total per dependent student across all parents; $257,500 lifetime cap; less-than-full-time proration; the interim exception for students enrolled with a loan on June 30, 2026. Undergraduate limits ($5,500-$7,500 dependent, $9,500-$12,500 independent) from the FSA Handbook."
+    },
+    {
+     "name": "get_plan_transition_dates",
+     "title": "SAVE, PAYE, ICR and RAP transition dates",
+     "description": "Lists the dated steps of the federal student loan repayment overhaul: SAVE ended by court order (March 2026) with 90-day servicer notices from July 1, 2026 plus a final 30-day notice; RAP and the Tiered Standard plan from July 1, 2026; deferment and forbearance limits on loans from July 1, 2027; PAYE and ICR end and remaining borrowers move to RAP or IBR on July 1, 2028; the Parent PLUS consolidation deadline of June 30, 2028. Marks each as past or upcoming against a date and gives the current status of every plan."
+    }
+   ],
+   "added": "2026-11-02",
+   "tools_checked": "2026-11-02"
   }
  ]
 }

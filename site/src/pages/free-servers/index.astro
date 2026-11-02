@@ -9,7 +9,7 @@ import { getFreeServers } from '../../data/freeServers';
 const list = getFreeServers();
 const tools = list.reduce((n, s) => n + s.tools.length, 0);
 const title = `Free live-data MCP servers, no token`;
-const description = `${list.length} free MCP servers with live data and new rules. Lake levels, gold prices, wages, 2026 tax limits, 401(k) limits, Section 179, nutrition, AP scores, A/B tests and subdomains. Paste one URL.`;
+const description = `${list.length} free MCP servers with live data and new rules. Lake levels, gold prices, wages, 2026 tax limits, 401(k) limits, student loans, Section 179, nutrition, AP scores, A/B tests and subdomains. Paste one URL.`;
 const example = list[0];
 const jsonLd = [
   { '@type': 'CollectionPage', name: 'Free live-data MCP servers' },
