@@ -6,6 +6,7 @@ import { pagesOfType } from '../data/pages';
 import { COMPARISONS } from '../data/compare';
 import { CONTENT_REVIEWED } from '../data/schema';
 import { getFreeServers } from '../data/freeServers';
+import { getReadiness, readinessPublished } from '../data/readiness';
 
 export const GET: APIRoute = ({ site }) => {
   const u = (p: string) => new URL(p, site).href;
@@ -38,6 +39,10 @@ export const GET: APIRoute = ({ site }) => {
     '## Free live-data servers (no token)',
     `- [Free live-data MCP servers](${u('/free-servers/')}): paste one URL, no token, no account.`,
     ...getFreeServers().map((f) => `- [${f.h1}](${u(f.path)}): ${f.tagline} Hosted URL: ${f.hostedUrl}`),
+    '',
+    '## McpStamp Check',
+    `- [McpStamp Check](${u('/check/')}): free check for any remote MCP server URL. Score 0-100, grade A-F, readiness for Claude, ChatGPT, Gemini and the MCP Registry, and the fix for each failed check. JSON API: ${u('/api/check')}?url=<https MCP URL>. README badge: ${u('/badge')}?url=<https MCP URL>.`,
+    ...(readinessPublished() ? [`- [McpStamp Readiness Index](${u('/readiness/')}): ${getReadiness()!.totals.scanned} remote servers from the official MCP Registry, scored with the same check. Average score ${Math.round(getReadiness()!.totals.avg_score)}. Updated ${getReadiness()!.generated_at.slice(0, 10)}.`] : []),
     '',
     '## Pricing',
     `- [Pricing](${u('/pricing/')}): Free tier, $${brand.pricing.serverUsd} once per server, $${bundlePrice()} once for all ${st.paid} paid servers. Buy at ${brand.backend.origin}/buy/bundle.`,

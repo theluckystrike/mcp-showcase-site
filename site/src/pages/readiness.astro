@@ -1,0 +1,335 @@
+---
+// /readiness/: McpStamp Readiness Index (s1102m). Data: data/content/readiness.json (registry scan, src/data/readiness.ts).
+// All rows are rendered at build time, so the table is readable without JS. A small inline script adds sort and filter.
+// No data = "first scan running" page, noindex. Sample data ("sample": true) = rendered with a notice, noindex.
+import Layout from '../layouts/Layout.astro';
+import { getReadiness, STORES, GRADES } from '../data/readiness';
+
+const R = getReadiness();
+const hasRows = Boolean(R && R.rows.length);
+const noindex = !hasRows || Boolean(R?.sample);
+const T = R?.totals;
+const n = (v: number) => Math.round(v).toLocaleString('en-US');
+const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 100) : 0);
+const dateText = (() => {
+  const d = R?.generated_at ? new Date(R.generated_at) : null;
+  return d && !isNaN(+d) ? d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : '';
+})();
+const host = (u: string) => { try { return new URL(u).host; } catch { return u; } };
+const repoUrl = (r: string) => (/^https?:\/\//.test(r) ? r : /^[\w.-]+\/[\w.-]+$/.test(r) ? `https://github.com/${r}` : '');
+const ink = (g: string) => (g === 'A' || g === 'B' ? 'var(--ink-blue)' : g === 'C' ? 'var(--ink-violet)' : 'var(--ink-red)');
+const AUTH: Record<string, string> = { none: 'None', oauth: 'OAuth', other: 'Other', unknown: 'Unknown' };
+const rows = (R?.rows ?? []).slice().sort((a, b) => (b.score ?? -1) - (a.score ?? -1) || a.name.localeCompare(b.name));
+const maxGrade = Math.max(1, ...GRADES.map((g) => T?.by_grade[g] ?? 0));
+const graded = GRADES.reduce((a, g) => a + (T?.by_grade[g] ?? 0), 0);
+const auths = [...new Set(rows.map((r) => r.auth))].sort();
+
+const title = 'McpStamp Readiness Index: remote MCP servers scored';
+const description = hasRows
+  ? `${n(T!.scanned)} remote MCP servers from the official MCP Registry, scored 0-100 for Claude, ChatGPT, Gemini and the Registry. Average score ${n(T!.avg_score)}.`
+  : 'Every remote server in the official MCP Registry, scored 0-100 for Claude, ChatGPT, Gemini and the Registry, with the top fixes for each server.';
+const jsonLd = hasRows && !R!.sample ? [{
+  '@context': 'https://schema.org', '@type': 'Dataset', name: 'McpStamp Readiness Index',
+  description, url: new URL('/readiness/', Astro.site).href, isAccessibleForFree: true,
+  ...(R!.generated_at ? { dateModified: R!.generated_at } : {}),
+  creator: { '@type': 'Organization', name: 'McpStamp', url: new URL('/', Astro.site).href },
+  variableMeasured: ['score', 'grade', 'auth', 'tools', ...STORES.map((s) => `${s.name} ready`)],
+}] : [];
+---
+<Layout title={title} description={description} jsonLd={jsonLd} noindex={noindex} crumbs={[{ name: 'Readiness Index', path: '/readiness/' }]}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-10 sm:pt-14">
+      <span class="eyebrow">Readiness Index</span>
+      <h1 class="display mt-5 max-w-4xl !text-[clamp(2.2rem,5.4vw,4rem)]">McpStamp Readiness Index</h1>
+      <p class="lead mt-5 max-w-2xl">
+        {hasRows
+          ? <>{n(T!.scanned)} remote servers from the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>{dateText && <> on {dateText}</>}. A score from 0 to 100, readiness for four stores, and the top fixes for each server.</>
+          : <>Every remote server in the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>: a score from 0 to 100, readiness for four stores, and the top fixes for each server.</>}
+      </p>
+      {R?.sample && <p class="rx-note mt-5" role="note">Sample data for layout testing. The full scan replaces it.</p>}
+    </div>
+  </section>
+
+  {!hasRows && (
+    <section class="wrap pb-16">
+      <div class="card max-w-3xl p-6">
+        <h2 class="text-2xl font-bold">The first scan is running</h2>
+        <p class="muted mt-2">The index appears here when the scan of the MCP Registry finishes. You can check any server now.</p>
+        <a href="/check/" class="btn btn-primary mt-5">Check your own server</a>
+      </div>
+    </section>
+  )}
+
+  {hasRows && T && (
+    <>
+      <section class="wrap pb-10" aria-labelledby="rx-totals-h">
+        <h2 id="rx-totals-h" class="sr-only">Headline numbers</h2>
+        <dl class="rx-stats">
+          <div><dt>Servers scanned</dt><dd class="tnum">{n(T.scanned)}</dd></div>
+          <div><dt>Answered as MCP</dt><dd class="tnum">{n(T.reachable)}<span class="rx-sub">{pct(T.reachable, T.scanned)}%</span></dd></div>
+          <div><dt>Average score</dt><dd class="tnum">{n(T.avg_score)}<span class="rx-sub">of 100</span></dd></div>
+          <div><dt>Use OAuth</dt><dd class="tnum">{n(T.oauth)}</dd></div>
+          <div><dt>No auth</dt><dd class="tnum">{n(T.authless)}</dd></div>
+        </dl>
+      </section>
+
+      <section class="wrap pb-12" aria-labelledby="rx-dist-h">
+        <span class="eyebrow">Distribution</span>
+        <h2 id="rx-dist-h" class="h2 mt-3">How the servers score</h2>
+        <div class="mt-8 grid gap-10 lg:grid-cols-2">
+          <figure>
+            <figcaption class="rx-cap">Grade, servers that answered ({n(graded)})</figcaption>
+            <ul class="rx-bars">
+              {GRADES.map((g) => (
+                <li>
+                  <span class="rx-bar-l" style={`color:${ink(g)}`}>{g}</span>
+                  <span class="rx-bar-track"><span class="rx-bar" style={`width:${(100 * (T.by_grade[g] ?? 0)) / maxGrade}%; background:${ink(g)}${(T.by_grade[g] ?? 0) === 0 ? '; min-width:0' : ''}`}></span></span>
+                  <span class="rx-bar-v tnum">{n(T.by_grade[g] ?? 0)} <span class="rx-bar-p">{pct(T.by_grade[g] ?? 0, graded)}%</span></span>
+                </li>
+              ))}
+            </ul>
+          </figure>
+          <figure>
+            <figcaption class="rx-cap">Ready for each store, of {n(T.reachable)} that answered</figcaption>
+            <ul class="rx-bars rx-bars-wide">
+              {STORES.map((s) => (
+                <li>
+                  <span class="rx-bar-l">{s.name}</span>
+                  <span class="rx-bar-track"><span class="rx-bar" style={`width:${pct(T.store_ready[s.key], T.reachable)}%; background:var(--accent)`}></span></span>
+                  <span class="rx-bar-v tnum">{n(T.store_ready[s.key])} <span class="rx-bar-p">{pct(T.store_ready[s.key], T.reachable)}%</span></span>
+                </li>
+              ))}
+            </ul>
+          </figure>
+        </div>
+      </section>
+
+      <section class="wrap pb-12" aria-labelledby="rx-table-h">
+        <span class="eyebrow">All servers</span>
+        <h2 id="rx-table-h" class="h2 mt-3">Every server that answered, ranked</h2>
+        <form id="rx-filter" class="rx-filters mt-6" role="search" aria-label="Filter servers" onsubmit="return false">
+          <div class="rx-f rx-f-q">
+            <label for="rx-q">Name or URL</label>
+            <input id="rx-q" type="search" class="rx-in" placeholder="Type to filter" autocomplete="off" spellcheck="false" />
+          </div>
+          <div class="rx-f">
+            <label for="rx-grade">Grade</label>
+            <select id="rx-grade" class="rx-in"><option value="">All</option>{GRADES.map((g) => <option value={g}>{g}</option>)}</select>
+          </div>
+          <div class="rx-f">
+            <label for="rx-auth">Auth</label>
+            <select id="rx-auth" class="rx-in"><option value="">All</option>{auths.map((a) => <option value={a}>{AUTH[a] ?? a}</option>)}</select>
+          </div>
+          <div class="rx-f">
+            <label for="rx-store">Ready for</label>
+            <select id="rx-store" class="rx-in"><option value="">Any or none</option>{STORES.map((s) => <option value={s.key}>{s.name}</option>)}</select>
+          </div>
+        </form>
+        <p id="rx-count" class="rx-count" role="status" aria-live="polite">{n(rows.length)} servers</p>
+        <div class="rx-scroll" tabindex="0" role="region" aria-labelledby="rx-table-h">
+          <table class="table rx-table" id="rx-table">
+            <thead>
+              <tr>
+                <th scope="col" class="rx-num" aria-sort="none"><button type="button" data-sort="rank">#</button></th>
+                <th scope="col" aria-sort="none"><button type="button" data-sort="name">Server</button></th>
+                <th scope="col" class="rx-num" aria-sort="descending"><button type="button" data-sort="score">Score</button></th>
+                <th scope="col" aria-sort="none"><button type="button" data-sort="auth">Auth</button></th>
+                <th scope="col" class="rx-num" aria-sort="none"><button type="button" data-sort="tools">Tools</button></th>
+                <th scope="col">Stores ready</th>
+                <th scope="col">Top fix</th>
+                <th scope="col"><span class="sr-only">Check</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r, i) => (
+                <tr data-rank={i + 1} data-name={r.name.toLowerCase()} data-q={`${r.name} ${r.url} ${r.repo}`.toLowerCase()} data-score={r.score ?? -1}
+                  data-grade={r.grade} data-auth={r.auth} data-tools={r.tools ?? -1} data-stores={STORES.filter((s) => r.stores[s.key]).map((s) => s.key).join(' ')}>
+                  <td class="rx-num rx-rank tnum">{i + 1}</td>
+                  <td class="rx-server">
+                    <span class="rx-name">{r.name}</span>
+                    <span class="rx-host">{host(r.url)}</span>
+                    {repoUrl(r.repo) && <a class="rx-repo" href={repoUrl(r.repo)} rel="nofollow noopener" target="_blank">Source<span class="sr-only"> of {r.name}</span></a>}
+                  </td>
+                  <td class="rx-num">
+                    {r.score == null ? <span class="rx-dash">No answer</span> : (
+                      <span class="rx-score"><span class="tnum">{n(r.score)}</span><span class="rx-grade" style={`color:${ink(r.grade)}`}>{r.grade}</span></span>
+                    )}
+                  </td>
+                  <td>{AUTH[r.auth] ?? r.auth}</td>
+                  <td class="rx-num tnum">{r.tools == null || r.tools < 0 ? '–' : r.tools}</td>
+                  <td>
+                    <ul class="rx-stores">
+                      {STORES.map((s) => (
+                        <li class:list={['rx-store', r.stores[s.key] && 'is-ready']} title={`${s.long}: ${r.stores[s.key] ? 'ready' : 'not yet'}`}>
+                          <span aria-hidden="true">{s.short}</span><span class="sr-only">{s.name}: {r.stores[s.key] ? 'ready' : 'not yet'}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td class="rx-fix">{r.top_fixes[0] ?? (r.score != null && r.score >= 90 ? 'Nothing major' : '–')}{r.top_fixes.length > 1 && <span class="rx-more"> +{r.top_fixes.length - 1} more</span>}</td>
+                  <td><a class="rx-go" href={`/check/?url=${encodeURIComponent(r.url)}`}>Check<span class="sr-only"> {r.name}</span></a></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="rx-key mt-3">Stores: Cl = Claude, GPT = ChatGPT, Gem = Gemini, Reg = MCP Registry. A filled mark means ready. "Check" runs a fresh check of that server.</p>
+      </section>
+
+      <section class="wrap pb-12" aria-labelledby="rx-method-h">
+        <div class="grid gap-8 border-t-2 border-fg pt-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-12">
+          <div>
+            <span class="eyebrow">Method</span>
+            <h2 id="rx-method-h" class="h2 mt-3">How the index is made</h2>
+          </div>
+          <div class="prose-site">
+            {R!.method.text.map((p) => <p>{p}</p>)}
+            {R!.method.text.length === 0 && <p>Every server in the official MCP Registry that lists a remote URL was checked with the same engine as McpStamp Check. Each check has a weight; the score is the weighted share of checks that pass. A store counts as ready when none of its blockers fail.</p>}
+            {R!.method.items.length > 0 && (
+              <dl class="rx-method">
+                {R!.method.items.map((m) => <div><dt>{m.label}</dt><dd>{m.value}</dd></div>)}
+              </dl>
+            )}
+            <p>Scores change when a server changes. If your server is listed and the result looks wrong, run a fresh check and email support@zovo.one with the report link.</p>
+          </div>
+        </div>
+      </section>
+    </>
+  )}
+
+  <section class="wrap pb-16" aria-labelledby="rx-cta-h">
+    <div class="rx-cta">
+      <div>
+        <h2 id="rx-cta-h" class="text-2xl font-bold sm:text-3xl">Check your own server</h2>
+        <p class="muted mt-2 max-w-xl">Paste a remote MCP URL. Free, no sign-up. You get the score, the store blockers and the fixes in under a minute.</p>
+      </div>
+      <form action="/check/" method="get" class="rx-cta-form">
+        <label for="rx-cta-url" class="sr-only">Remote MCP server URL</label>
+        <input id="rx-cta-url" name="url" type="url" inputmode="url" required placeholder="https://example.com/mcp" class="rx-in" autocomplete="url" spellcheck="false" />
+        <button type="submit" class="btn btn-primary">Check</button>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Sort + filter for the index table. Rows are already in the DOM; this only hides and reorders them.
+  const table = document.getElementById('rx-table') as HTMLTableElement | null;
+  if (table) {
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    const q = document.getElementById('rx-q') as HTMLInputElement;
+    const grade = document.getElementById('rx-grade') as HTMLSelectElement;
+    const auth = document.getElementById('rx-auth') as HTMLSelectElement;
+    const store = document.getElementById('rx-store') as HTMLSelectElement;
+    const count = document.getElementById('rx-count')!;
+    const total = rows.length;
+    let sortKey = 'score';
+    let dir = -1;
+
+    const apply = () => {
+      const term = q.value.trim().toLowerCase();
+      let shown = 0;
+      for (const r of rows) {
+        const d = r.dataset;
+        const ok = (!term || d.q!.includes(term)) && (!grade.value || d.grade === grade.value) && (!auth.value || d.auth === auth.value)
+          && (!store.value || (' ' + d.stores + ' ').includes(' ' + store.value + ' '));
+        r.hidden = !ok;
+        if (ok) shown++;
+      }
+      count.textContent = shown === total ? `${total.toLocaleString('en-US')} servers` : `${shown.toLocaleString('en-US')} of ${total.toLocaleString('en-US')} servers`;
+    };
+    const sort = () => {
+      const num = sortKey === 'score' || sortKey === 'tools' || sortKey === 'rank';
+      const sorted = rows.slice().sort((a, b) => {
+        const x = a.dataset[sortKey] ?? '', y = b.dataset[sortKey] ?? '';
+        const c = num ? Number(x) - Number(y) : x.localeCompare(y);
+        return c * dir || Number(a.dataset.rank) - Number(b.dataset.rank);
+      });
+      tbody.append(...sorted);
+      table.querySelectorAll<HTMLElement>('th[aria-sort]').forEach((th) => {
+        const k = th.querySelector('button')?.dataset.sort;
+        th.setAttribute('aria-sort', k === sortKey ? (dir > 0 ? 'ascending' : 'descending') : 'none');
+      });
+    };
+    table.querySelectorAll<HTMLButtonElement>('th button[data-sort]').forEach((b) => {
+      b.addEventListener('click', () => {
+        const k = b.dataset.sort!;
+        if (k === sortKey) dir = -dir;
+        else { sortKey = k; dir = k === 'score' || k === 'tools' ? -1 : 1; }
+        sort();
+      });
+    });
+    [q, grade, auth, store].forEach((x) => x.addEventListener('input', apply));
+  }
+</script>
+
+<style>
+  .rx-note { display: inline-block; padding: .45rem .8rem; border: 1px dashed var(--stamp); border-radius: 3px; font-family: var(--font-mono); font-size: .8rem; color: var(--stamp); }
+  .rx-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-left: 2px solid var(--text); border-top: 2px solid var(--text); }
+  @media (min-width: 768px) { .rx-stats { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .rx-stats > div { border-right: 2px solid var(--text); border-bottom: 2px solid var(--text); padding: .9rem 1rem; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: .3rem; }
+  .rx-stats > div:last-child:nth-child(odd) { grid-column: span 2; }
+  @media (min-width: 768px) { .rx-stats > div:last-child:nth-child(odd) { grid-column: auto; } }
+  .rx-stats dt { font-size: .8rem; color: var(--muted); line-height: 1.3; }
+  .rx-stats dd { font-family: var(--font-mono); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1; }
+  .rx-sub { margin-left: .4rem; font-size: .8rem; font-weight: 400; color: var(--faint); }
+
+  .rx-cap { font-family: var(--font-mono); font-size: .74rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-bottom: .5rem; border-bottom: 2px solid var(--text); }
+  .rx-bars { list-style: none; margin: 0; padding: 0; }
+  .rx-bars li { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr) 5.5rem; gap: .75rem; align-items: center; padding: .55rem 0; border-bottom: 1px solid var(--rule); }
+  .rx-bars-wide li { grid-template-columns: 6.8rem minmax(0, 1fr) 5.5rem; }
+  .rx-bar-l { font-family: var(--font-display); font-weight: 800; font-stretch: 90%; font-size: 1.05rem; }
+  .rx-bars-wide .rx-bar-l { font-size: .95rem; font-weight: 650; font-stretch: 100%; }
+  .rx-bar-track { height: .9rem; background: var(--surface-2); border-radius: 1px; overflow: hidden; }
+  .rx-bar { display: block; height: 100%; min-width: 2px; opacity: .85; }
+  .rx-bar-v { font-family: var(--font-mono); font-size: .88rem; text-align: right; }
+  .rx-bar-p { color: var(--faint); font-size: .76rem; }
+  .rx-key { font-family: var(--font-mono); font-size: .74rem; color: var(--faint); margin-top: .6rem; }
+
+  .rx-filters { display: grid; gap: .75rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (min-width: 900px) { .rx-filters { grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)); } }
+  .rx-f-q { grid-column: 1 / -1; }
+  @media (min-width: 900px) { .rx-f-q { grid-column: auto; } }
+  .rx-f label { display: block; margin-bottom: .3rem; font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .rx-in { width: 100%; min-height: 2.75rem; padding: .5rem .7rem; border: 1px solid var(--border-strong); border-bottom-width: 2px; border-radius: 3px; background: var(--surface-solid); color: var(--text); font-size: .95rem; }
+  .rx-in:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rx-count { margin-top: 1rem; font-family: var(--font-mono); font-size: .8rem; color: var(--faint); }
+  .rx-scroll { margin-top: .5rem; overflow-x: auto; max-width: 100%; min-width: 0; position: relative; }
+  .rx-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rx-table { min-width: 56rem; }
+  .rx-table th button { font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; padding: 0; background: none; border: 0; }
+  .rx-table th button:hover { color: var(--text); text-decoration: underline; }
+  .rx-table th[aria-sort='ascending'] button::after { content: ' ↑'; color: var(--stamp); }
+  .rx-table th[aria-sort='descending'] button::after { content: ' ↓'; color: var(--stamp); }
+  .rx-num { text-align: right; }
+  .rx-table th.rx-num { text-align: right; }
+  .rx-rank { font-family: var(--font-mono); font-size: .8rem; color: var(--stamp); }
+  .rx-server { max-width: 18rem; }
+  .rx-name { display: block; font-weight: 650; overflow-wrap: anywhere; }
+  .rx-host { display: block; font-family: var(--font-mono); font-size: .76rem; color: var(--faint); overflow-wrap: anywhere; }
+  .rx-repo { font-size: .8rem; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .rx-score { display: inline-flex; align-items: baseline; gap: .4rem; font-family: var(--font-mono); font-weight: 600; }
+  .rx-grade { font-family: var(--font-display); font-weight: 850; font-stretch: 80%; font-size: 1.1rem; }
+  .rx-dash { font-size: .82rem; color: var(--faint); }
+  .rx-stores { display: flex; gap: .25rem; list-style: none; margin: 0; padding: 0; }
+  .rx-store { font-family: var(--font-mono); font-size: .66rem; font-weight: 600; padding: .1rem .3rem; border: 1px dashed var(--border-strong); border-radius: 2px; color: var(--faint); }
+  .rx-store.is-ready { border-style: solid; border-color: var(--text); background: var(--text); color: var(--bg); }
+  .rx-fix { font-size: .88rem; color: var(--muted); max-width: 22rem; }
+  .rx-more { color: var(--faint); font-size: .8rem; }
+  .rx-go { font-family: var(--font-mono); font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+  .rx-go:hover { text-decoration: underline; }
+  tr[hidden] { display: none; }
+
+  .rx-method { margin-top: 1rem; }
+  .rx-method > div { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: .75rem; padding: .5rem 0; border-bottom: 1px solid var(--rule); }
+  .rx-method dt { font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); padding-top: .2rem; }
+  .rx-method dd { overflow-wrap: anywhere; }
+
+  .rx-cta { display: grid; gap: 1.25rem; padding: 1.5rem; border: 1px solid var(--manila-2); background: var(--manila); border-radius: 3px; }
+  @media (min-width: 900px) { .rx-cta { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; padding: 2rem; } }
+  .rx-cta-form { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .rx-cta-form .rx-in { flex: 1 1 14rem; width: auto; min-height: 3rem; font-family: var(--font-mono); }
+  @media (max-width: 479px) { .rx-cta-form .btn { flex: 1 1 100%; } }
+</style>

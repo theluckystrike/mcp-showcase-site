@@ -4,6 +4,7 @@ import { getServers } from './servers';
 import { pagesOfType, pageMeta } from './pages';
 import { COMPARISONS } from './compare';
 import { getFreeServers, freeServerLastmod } from './freeServers';
+import { getReadiness, readinessPublished } from './readiness';
 
 export const BUILT_PAGE_TYPES = ['use-case', 'answer', 'audience', 'client-guide'];
 
@@ -21,6 +22,9 @@ export function allRoutes(): { path: string; priority: number; lastmod?: string 
     ...(getFreeServers().length ? [{ path: '/free-servers/', priority: 0.7, lastmod: freeServerLastmod() || undefined }] : []),
     ...getFreeServers().map((s) => ({ path: s.path, priority: 0.6, lastmod: freeServerLastmod(s) || undefined })),
     ...(getFreeServers().length ? [{ path: '/free-servers/privacy/', priority: 0.2 }] : []),
+    // McpStamp Check + Readiness Index (s1102m). /readiness/ only with real scan data (sample or missing = noindex).
+    { path: '/check/', priority: 0.8 },
+    ...(readinessPublished() ? [{ path: '/readiness/', priority: 0.7, lastmod: getReadiness()!.generated_at.slice(0, 10) || undefined }] : []),
   ];
   const seen = new Set<string>();
   return out.filter((r) => (seen.has(r.path) ? false : (seen.add(r.path), true)));
