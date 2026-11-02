@@ -6,7 +6,7 @@
   "proof_source": "lane GH-PROOF ~/mcpstamp-work/s1102m/gh/proof.json (measured 2026-11-02T05:51Z): merged_prs_external 348, distinct_org_owners 109; MCP numbers from BRIEF measured facts."
  },
  "show_prices": true,
- "checkout_live": false,
+ "checkout_live": true,
  "checkout_off_note": "Each button opens an email to support@zovo.one with the job in the subject. We reply within 1 business day with a Stripe payment link at the price shown.",
  "eyebrow": "MCP store launch",
  "h1": "Get your MCP server into the Claude, ChatGPT and Gemini stores",
@@ -254,7 +254,7 @@
  "faq": [
   {
    "q": "How do I pay?",
-   "a": "By card, through Stripe. We never see your card number. The seller is autom8 LLC, as set out in our Terms. While online checkout is closed, we email you a Stripe payment link."
+   "a": "By card, through Stripe. We never see your card number. The seller is autom8 LLC, as set out in our Terms."
   },
   {
    "q": "Can I get an invoice?",
