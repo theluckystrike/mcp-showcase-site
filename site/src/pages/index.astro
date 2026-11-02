@@ -59,6 +59,8 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
           <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn hidden sm:inline-flex">All {st.paid} paid servers, ${bundlePrice()} once</a>
         </div>
         <p class="hero-check mt-4 text-[.95rem]"><span class="muted">Building your own MCP server? </span><a href="/check/" class="link font-semibold">Check your MCP server free</a></p>
+        <!-- Live proof (s1102m SITE2): our own invoice server scored 100/100, ready in all 4 stores (engine 1.2.0, 2 Nov 2026). nofollow: the link runs a live check. -->
+        <p class="hero-proof mt-1.5 font-mono text-[.78rem] text-faint"><a href="/check/?url=https%3A%2F%2Fmcp.zovo.one%2Fmcp%2Finvoice%2Fv1" rel="nofollow" class="underline decoration-1 underline-offset-2 hover:no-underline">Our own servers: 100/100, ready for all four stores</a></p>
       </div>
       <HeroDemo />
       <!-- Form foot: one ruled docket line under both columns (counts left, clients right) -->

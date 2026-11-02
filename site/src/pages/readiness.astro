@@ -68,7 +68,7 @@ const jsonLd = hasRows && !R!.sample ? [{
         <h2 id="rx-totals-h" class="sr-only">Headline numbers</h2>
         <dl class="rx-stats">
           <div><dt>Servers scanned</dt><dd class="tnum">{n(T.scanned)}</dd></div>
-          <div><dt>Answered as MCP</dt><dd class="tnum">{n(T.reachable)}<span class="rx-sub">{pct(T.reachable, T.scanned)}%</span></dd></div>
+          <div><dt>Responded over HTTPS</dt><dd class="tnum">{n(T.reachable)}<span class="rx-sub">{pct(T.reachable, T.scanned)}%</span></dd></div>
           <div><dt>Average score</dt><dd class="tnum">{n(T.avg_score)}<span class="rx-sub">of 100</span></dd></div>
           <div><dt>Use OAuth</dt><dd class="tnum">{n(T.oauth)}</dd></div>
           <div><dt>No auth</dt><dd class="tnum">{n(T.authless)}</dd></div>
@@ -80,7 +80,7 @@ const jsonLd = hasRows && !R!.sample ? [{
         <h2 id="rx-dist-h" class="h2 mt-3">How the servers score</h2>
         <div class="mt-8 grid gap-10 lg:grid-cols-2">
           <figure>
-            <figcaption class="rx-cap">Grade, servers that answered ({n(graded)})</figcaption>
+            <figcaption class="rx-cap">Grade, servers that responded ({n(graded)})</figcaption>
             <ul class="rx-bars">
               {GRADES.map((g) => (
                 <li>
@@ -92,7 +92,7 @@ const jsonLd = hasRows && !R!.sample ? [{
             </ul>
           </figure>
           <figure>
-            <figcaption class="rx-cap">Ready for each store, of {n(T.reachable)} that answered</figcaption>
+            <figcaption class="rx-cap">Ready for each store, of {n(T.reachable)} that responded</figcaption>
             <ul class="rx-bars rx-bars-wide">
               {STORES.map((s) => (
                 <li>
@@ -108,7 +108,7 @@ const jsonLd = hasRows && !R!.sample ? [{
 
       <section class="wrap pb-12" aria-labelledby="rx-table-h">
         <span class="eyebrow">All servers</span>
-        <h2 id="rx-table-h" class="h2 mt-3">Every server that answered, ranked</h2>
+        <h2 id="rx-table-h" class="h2 mt-3">Every server that responded, ranked</h2>
         <form id="rx-filter" class="rx-filters mt-6" role="search" aria-label="Filter servers" onsubmit="return false">
           <div class="rx-f rx-f-q">
             <label for="rx-q">Name or URL</label>

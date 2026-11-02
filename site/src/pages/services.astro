@@ -17,7 +17,7 @@ const proof = c.proof;
 const gh = c.github;
 const audit = c.services.find((s) => s.id === 'audit');
 const title = 'MCP store launch, audits and custom servers';
-const description = 'Get your MCP server listed in the Claude Directory, ChatGPT Apps, Gemini Connected Apps and the MCP Registry. Readiness Audit $490, Store Launch $4,900, custom servers from $4,500.';
+const description = 'Get your MCP server listed in the Claude Directory, the ChatGPT app directory, Gemini Connected Apps and the MCP Registry. Readiness Audit $490, Store Launch $4,900, custom servers from $4,500.';
 type Svc = (typeof c.services)[number];
 const offerList = (s: Svc) => {
   if (!c.show_prices || !s.price_usd) return [];
@@ -49,13 +49,13 @@ const jsonLd = [
       <p class="lead mt-5">{c.lead}</p>
       <div class="mt-8 flex flex-wrap items-center gap-3">
         {audit && c.show_prices ? (
-          <a href={ctaHref(audit, 'services', 'hero')} rel="nofollow" class="btn btn-primary">{ctaLabel(audit)}</a>
+          <a href={ctaHref(audit, 'services', 'hero')} rel="nofollow" class="btn btn-primary" data-cta="audit" data-cta-slot="hero">{ctaLabel(audit)}</a>
         ) : (
-          <a href={tg} rel="noopener" target="_blank" class="btn btn-primary">Describe your job on Telegram</a>
+          <a href={tg} rel="noopener" target="_blank" class="btn btn-primary" data-cta="telegram" data-cta-slot="hero">Describe your job on Telegram</a>
         )}
-        <a href="/check/" class="btn">Check your server free</a>
+        <a href="/check/" class="btn" data-cta="check" data-cta-slot="hero">Check your server free</a>
       </div>
-      <p class="mt-4 text-[.95rem]"><span class="muted">Questions first? Email </span><a href={mailto('Question about MCP services')} class="select-all font-mono font-semibold">{email}</a></p>
+      <p class="mt-4 text-[.95rem]"><span class="muted">Questions first? Email </span><a href={mailto('Question about MCP services')} class="select-all font-mono font-semibold" data-cta="question" data-cta-slot="hero">{email}</a></p>
     </div>
     <aside class="wo-sheet relative border border-line-strong bg-surface-solid p-5 sm:p-6" aria-label="What a Store Launch covers">
       <div class="flex items-baseline justify-between border-b border-line-strong pb-3">
@@ -64,7 +64,7 @@ const jsonLd = [
       </div>
       <dl class="wo-lines mt-1 text-[.95rem]">
         <div><dt>Job</dt><dd>List your MCP server in 4 places</dd></div>
-        <div><dt>Stores</dt><dd>Claude Directory, ChatGPT Apps, Gemini Connected Apps, MCP Registry</dd></div>
+        <div><dt>Stores</dt><dd>Claude Directory, ChatGPT app directory, Gemini Connected Apps, MCP Registry</dd></div>
         <div><dt>Auth</dt><dd>OAuth 2.1, DCR, PKCE, refresh</dd></div>
         <div><dt>Tools</dt><dd>Annotations, descriptions, errors</dd></div>
         <div><dt>Review</dt><dd>Up to 2 rounds of fixes included</dd></div>
@@ -101,7 +101,7 @@ const jsonLd = [
                 <span>{o.label}</span>
                 <span class="leader hidden sm:block" aria-hidden="true"></span>
                 <span class="tnum font-mono font-semibold">{o.price_label}</span>
-                <a href={orderMailto(o.subject)} class="link text-[.9rem]">Order by email</a>
+                <a href={orderMailto(o.subject)} class="link text-[.9rem]" data-cta={`${s.id}-option`} data-cta-slot={s.slot}>Order by email</a>
               </p>
             ))}
             {s.note && <p class="svc-note mt-5 max-w-2xl text-[.93rem]"><span class="svc-note-tab font-mono">Note</span>{s.note}</p>}
@@ -121,11 +121,11 @@ const jsonLd = [
             {c.show_prices && s.price_note && <p class="font-mono text-[.78rem] leading-snug text-faint md:max-w-[14.5rem]">{s.price_note}</p>}
             {s.cta && (
               <a href={c.show_prices || !s.cta.pay ? ctaHref(s, 'services', s.slot) : tg}
-                rel={s.cta.pay ? 'nofollow' : undefined}
+                rel={s.cta.pay ? 'nofollow' : undefined} data-cta={s.id} data-cta-slot={s.slot}
                 class:list={['btn mt-2 w-full md:w-auto', (s.cta.pay || s.cta.mailto) && 'btn-primary']}>{c.show_prices || !s.cta.pay ? ctaLabel(s) : 'Ask about this'}</a>
             )}
             {s.cta2 && (
-              <p class="text-[.9rem]"><a href={mailto(s.cta2.subject || s.cta2.label)} class="link">{s.cta2.label}</a><span class="muted"> by email or on </span><a href={tg} rel="noopener" target="_blank" class="link">Telegram</a></p>
+              <p class="text-[.9rem]"><a href={mailto(s.cta2.subject || s.cta2.label)} class="link" data-cta={`${s.id}-describe`} data-cta-slot={s.slot}>{s.cta2.label}</a><span class="muted"> by email or on </span><a href={tg} rel="noopener" target="_blank" class="link">Telegram</a></p>
             )}
           </div>
         </li>
@@ -191,12 +191,13 @@ const jsonLd = [
     <section class="wrap py-10" aria-labelledby="sfaq-h">
       <h2 id="sfaq-h" class="h2 font-display">Before you pay</h2>
       <div class="mt-6 max-w-3xl"><Faq items={c.faq} /></div>
-      <p class="muted mt-4 text-[.9rem]">Full terms: <a href="/terms/" class="link">Terms of service</a>.</p>
+      <p class="muted mt-4 text-[.9rem]">Deposits, refunds, store approval, code ownership and confidentiality: <a href="/terms/#paid-services" class="link">Terms of Service, section 9</a>.</p>
     </section>
   )}
 
   <section class="wrap py-6">
     <TelegramCta text={`Prefer to talk first? Ask in the community chat, or email ${email}.`} />
+    <p class="muted mt-6 text-[.9rem]">Sold by autom8 LLC, Yerevan, Armenia. Every order is under our <a href="/terms/#paid-services" class="link">service terms</a>: deposits, refunds, no promise of store approval, your code stays yours, your data stays confidential.</p>
   </section>
 </Layout>
 

@@ -309,7 +309,7 @@ html[data-mode='dark'] {
   }
   /* A sheet is paper in both modes, so it keeps the light inks. Without this, dark inks print pale on white (1.2-2.7:1). */
   html[data-mode='dark'] .sheet {
-    --text: #1a1d22; --muted: #454b55; --faint: #59606b; --accent: #2b3c9e; --accent-hover: #1f2d80;
+    --text: #1a1d22; --muted: #454b55; --faint: #59606b; --accent: #2b3c9e; --accent-hover: #1f2d80; --accent-text: #ffffff; --surface-2: #e3e7e0;
     --stamp: #b42318; --ink-red: #b42318; --ink-blue: #2b3c9e; --ink-violet: #5a3a8e; --ink-black: #1a1d22;
     --ok: #1f6a46; --warn: #8a5300; --border: #cfd4cb; --border-strong: #7c837a; --surface: #f7f8f4; --surface-solid: #fcfcfa;
     --rule: rgb(43 60 158 / 0.11); --cat-l: 0.46; --cat-c: 0.12;

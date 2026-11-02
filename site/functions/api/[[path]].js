@@ -3,7 +3,7 @@
 // The client IP goes out as x-mcpstamp-client-ip (and X-Forwarded-For) so the engine rate-limits the real visitor.
 // The engine trusts x-mcpstamp-client-ip only with x-mcpstamp-proxy-key = env.PROXY_KEY (Pages secret, never in git).
 // Without PROXY_KEY the request is still proxied, but all visitors share the proxy's rate-limit bucket.
-// The same file shape is used for functions/api and functions/badge; keep them in sync.
+// The same file shape is used for functions/api and functions/badge; keep them in sync (only /api maps the firewall 403 to JSON).
 const ORIGIN = 'https://mcp.zovo.one/stamp/api';
 const PASS = ['content-type', 'cache-control', 'retry-after', 'etag', 'last-modified', 'expires', 'vary'];
 const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET, HEAD, OPTIONS', 'access-control-max-age': '86400' };
@@ -30,6 +30,17 @@ export async function onRequest({ request, params, env }) {
     res = await fetch(target, { method: request.method, headers, redirect: 'manual' });
   } catch (e) {
     return json(502, { error: 'unreachable', detail: 'The check service did not answer. Try again in a minute.' });
+  }
+  // The zovo.one edge firewall (Cloudflare WAF) answers some requests with an HTML 403 page before the engine sees them.
+  // /check/ only reads JSON, so turn that page into a JSON 403 it can explain (QA P2-13). Any other answer passes through.
+  const ctype = res.headers.get('content-type') || '';
+  if (res.status === 403 && !/json/i.test(ctype)) {
+    try { await res.body?.cancel(); } catch { /* ignore */ }
+    return json(403, {
+      error: 'blocked_by_edge_firewall',
+      detail: 'The firewall in front of the check service blocked this request before it reached the checker. This happens for URLs that look like an attack, such as a raw IP address or a script tag.',
+      ray: res.headers.get('cf-ray') || undefined,
+    });
   }
   const out = new Headers(CORS);
   for (const h of PASS) { const v = res.headers.get(h); if (v) out.set(h, v); }

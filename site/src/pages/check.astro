@@ -30,6 +30,8 @@ const jsonLd = [
 let checkoutLive = false;
 try { checkoutLive = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'services.json'), 'utf8')).checkout_live === true; } catch { /* false */ }
 const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.check.result' : 'mailto:support@zovo.one?subject=' + encodeURIComponent('Readiness Audit ($490)');
+// Unverified box (s1102m SITE2): same product, its own src tag so the coordinator can see which box sold.
+const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.check.unverified' : AUDIT_URL;
 ---
 <Layout title={title} description={description} jsonLd={jsonLd} crumbs={[{ name: 'Check', path: '/check/' }]}>
   <section class="relative isolate">
@@ -103,6 +105,13 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
         <section aria-labelledby="ck-stores-h">
           <h3 id="ck-stores-h" class="ck-h3">Store readiness</h3>
           <ul id="ck-stores" class="ck-stores"></ul>
+          <div id="ck-unv" class="ck-unv" role="note" aria-labelledby="ck-unv-t" hidden>
+            <p id="ck-unv-t" class="ck-unv-t"></p>
+            <div class="ck-unv-buy">
+              <a id="ck-unv-audit" class="btn btn-primary" href={AUDIT_UNV_URL} rel="nofollow" data-cta="audit" data-cta-slot="unverified">{checkoutLive ? 'Buy the audit, $490' : 'Order the audit by email, $490'}</a>
+              <a class="link text-[.9rem]" href="/services/#audit" data-cta="services" data-cta-slot="unverified">What the audit covers</a>
+            </div>
+          </div>
         </section>
 
         <section aria-labelledby="ck-checks-h" class="mt-8">
@@ -123,26 +132,26 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
             <div class="ck-snip">
               <p class="ck-snip-l">Markdown</p>
               <pre class="code ck-code" id="ck-md"></pre>
-              <button type="button" class="btn btn-sm ck-copy" data-copy-target="#ck-md" aria-label="Copy Markdown badge">Copy</button>
+              <button type="button" class="btn btn-sm ck-copy" data-copy-target="#ck-md" aria-label="Copy Markdown badge" data-cta="badge_copy" data-cta-slot="markdown">Copy</button>
             </div>
             <div class="ck-snip">
               <p class="ck-snip-l">HTML</p>
               <pre class="code ck-code" id="ck-html"></pre>
-              <button type="button" class="btn btn-sm ck-copy" data-copy-target="#ck-html" aria-label="Copy HTML badge">Copy</button>
+              <button type="button" class="btn btn-sm ck-copy" data-copy-target="#ck-html" aria-label="Copy HTML badge" data-cta="badge_copy" data-cta-slot="html">Copy</button>
             </div>
           </div>
           <div class="ck-share">
             <label for="ck-link" class="ck-snip-l">Link to this report</label>
             <div class="ck-row mt-1">
               <input id="ck-link" class="ck-input ck-input-sm" type="text" readonly />
-              <button type="button" class="btn btn-sm" data-copy-target="#ck-link-text" aria-label="Copy report link">Copy link</button>
+              <button type="button" class="btn btn-sm" data-copy-target="#ck-link-text" aria-label="Copy report link" data-cta="badge_copy" data-cta-slot="link">Copy link</button>
             </div>
             <span id="ck-link-text" hidden></span>
           </div>
         </section>
       </article>
 
-      <aside id="ck-offer" class="ck-offer" aria-labelledby="ck-offer-h">
+      <section id="ck-offer" class="ck-offer" aria-labelledby="ck-offer-h">
         <span class="eyebrow">Fix it for you</span>
         <h2 id="ck-offer-h" class="h2 mt-3"></h2>
         <p id="ck-offer-lead" class="lead mt-3"></p>
@@ -154,7 +163,7 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
             </div>
             <div class="ck-offer-buy">
               <p class="ck-price"><span class="tnum">$490</span> <span class="ck-per">{checkoutLive ? 'fixed, pay now' : 'fixed, invoiced'}</span></p>
-              <a id="ck-audit" class="btn btn-primary" href={AUDIT_URL} rel="nofollow" data-live={checkoutLive ? '1' : '0'}>{checkoutLive ? 'Buy the audit' : 'Order the audit by email'}</a>
+              <a id="ck-audit" class="btn btn-primary" href={AUDIT_URL} rel="nofollow" data-live={checkoutLive ? '1' : '0'} data-cta="audit" data-cta-slot="offer">{checkoutLive ? 'Buy the audit' : 'Order the audit by email'}</a>
             </div>
           </li>
           <li data-offer="launch">
@@ -164,7 +173,7 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
             </div>
             <div class="ck-offer-buy">
               <p class="ck-price"><span class="tnum">$4,900</span> <span class="ck-per">fixed, $1,500 deposit</span></p>
-              <a class="btn" href="/services/#launch">See Store Launch</a>
+              <a class="btn" href="/services/#launch" data-cta="launch" data-cta-slot="offer">See Store Launch</a>
             </div>
           </li>
           <li data-offer="care">
@@ -174,12 +183,12 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
             </div>
             <div class="ck-offer-buy">
               <p class="ck-price"><span class="tnum">$490</span> <span class="ck-per">a month</span></p>
-              <a class="btn" href="/services/#care">Ask about care</a>
+              <a class="btn" href="/services/#care" data-cta="care" data-cta-slot="offer">Ask about care</a>
             </div>
           </li>
         </ol>
-        <p class="muted mt-5 text-[.95rem]">Done by the maintainer of {st.hosted} hosted MCP servers, all listed in the MCP Registry. All jobs and prices: <a href="/services/" class="link">Services</a>.</p>
-      </aside>
+        <p class="muted mt-5 text-[.95rem]">Done by the maintainer of {st.hosted} hosted MCP servers, all listed in the MCP Registry. All jobs and prices: <a href="/services/" class="link" data-cta="services" data-cta-slot="offer">Services</a>.</p>
+      </section>
     </div>
   </section>
 
@@ -274,9 +283,9 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
       return `Too many checks from your network. Try again in ${wait}.`;
     }
     if (r.status === 502 && code === 'blocked_by_firewall') return `A firewall or bot filter in front of this server blocked our checker, so nothing could be checked.${r.body?.detail ? ' Detail: ' + String(r.body.detail).slice(0, 240) : ''} If it is your server, allow the user agent McpStampCheck/1.0 or check from a network the filter allows.`;
-    if (r.status === 403 && !r.body) return 'Our firewall blocked this request before it reached the checker. This happens for URLs that look like an attack (for example a raw IP address or a script tag). Paste the plain public HTTPS URL of the MCP endpoint.';
+    if (r.status === 403 && (!r.body || code === 'blocked_by_edge_firewall')) return 'Our firewall blocked this request before it reached the checker. This happens for URLs that look like an attack (for example a raw IP address or a script tag). Paste the plain public HTTPS URL of the MCP endpoint.';
     if (r.status === 502) return `The server did not answer as an MCP server.${r.body?.detail ? ' Detail: ' + String(r.body.detail).slice(0, 240) : ''} Check that the URL is the MCP endpoint and that it is public.`;
-    if (r.status === 404 && mode === 'result') return 'No stored result for this link. It may have expired. Run the check again with the server URL.';
+    if ((r.status === 404 || r.status === 400) && mode === 'result') return 'No report has this ID. The link may be cut short or the report may have expired. Paste the server URL above and run the check again.';
     return `The check failed with status ${r.status || 'none'}. Try again in a minute.`;
   }
 
@@ -297,7 +306,13 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
     return d.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }) + ' UTC';
   }
 
-  function render(r: Json) {
+  // GA4 (consent mode lives in Layout.astro). Never send the checked URL or host: only grade, bands and counts.
+  function track(name: string, params: Record<string, unknown> = {}) {
+    const g = (window as any).gtag;
+    if (typeof g === 'function') { try { g('event', name, params); } catch { /* analytics must never break the page */ } }
+  }
+
+  function render(r: Json, kind: 'check' | 'result') {
     const score = Math.max(0, Math.min(100, Math.round(Number(r.score) || 0)));
     const grade = String(r.grade || '').toUpperCase().slice(0, 1) || '?';
     let host = String(r.url || '');
@@ -308,7 +323,8 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
     f('url').textContent = String(r.url || '');
     f('checked').textContent = fmtDate(String(r.checked_at || ''));
     const ms = Number(r.duration_ms);
-    f('took').textContent = Number.isFinite(ms) && ms > 0 ? (ms / 1000).toFixed(1) + ' s' : '';
+    // Hidden when 0 or missing (stored results). Under 1 s in ms, so a fast answer never shows as "0.0 s".
+    f('took').textContent = Number.isFinite(ms) && ms > 0 ? (ms < 1000 ? Math.round(ms) + ' ms' : (ms / 1000).toFixed(1) + ' s') : '';
     f('took').parentElement!.hidden = !f('took').textContent;
     f('auth').textContent = AUTH_TEXT[String(r.auth)] || String(r.auth || 'Unknown');
     const sv = r.server && typeof r.server === 'object' ? [r.server.title || r.server.name, r.server.version].filter(Boolean).join(' ') : '';
@@ -409,6 +425,18 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
     }
     $('#ck-tally').textContent = `${checks.length} checks: ${tally.pass} pass, ${tally.warn} warn, ${tally.fail} fail${tally.skip ? `, ${tally.skip} skipped` : ''}`;
 
+    // Unverified box: a store is "unverified" when nothing failed but a blocking check could not run.
+    const unvStores = STORE_LIST.map(([k]) => r.stores?.[k]).filter((s: Json | undefined) => s && s.status === 'unverified' && !s.ready);
+    const unvBox = $('#ck-unv');
+    unvBox.hidden = unvStores.length === 0;
+    if (unvStores.length) {
+      const reasons = unvStores.flatMap((s: Json) => (s.unverified_reasons && typeof s.unverified_reasons === 'object') ? Object.values(s.unverified_reasons).map(String) : []);
+      const onlyBudget = reasons.length > 0 && reasons.every((x) => x === 'not_probed');
+      $('#ck-unv-t').textContent = onlyBudget
+        ? 'We could not run every check within our request and time limit. An audit covers what this check cannot.'
+        : 'We could not see everything without signing in. An audit with a test account covers what this check cannot.';
+    }
+
     // Badge + share
     const report = safeUrl(r.report_url) || (r.id ? `https://www.mcpstamp.com/check/?id=${encodeURIComponent(r.id)}` : location.href);
     const badge = safeUrl(r.badge_url) || (r.id ? `https://www.mcpstamp.com/badge/${encodeURIComponent(r.id)}.svg` : '');
@@ -427,6 +455,7 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
     if (audit.dataset.live !== '1') {
       const body = `Hello,\n\nI would like a Readiness Audit ($490) for this MCP server:\n\nURL: ${String(r.url || '')}\nMcpStamp score: ${score} (${grade})\nReport: ${report}\n\nName:\nCompany:\n`;
       audit.href = 'mailto:support@zovo.one?subject=' + encodeURIComponent('Readiness Audit ($490)') + '&body=' + encodeURIComponent(body);
+      $<HTMLAnchorElement>('#ck-unv-audit').href = audit.href;
     }
 
     // Offers, ordered by score
@@ -441,6 +470,11 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
     $('#ck-offer-lead').textContent = score < 90
       ? 'Fixed prices. Start with the audit to get every fix written down, or have the whole store launch done.'
       : 'Specs and store rules change every few months. The care plan checks your server each day and fixes what breaks.';
+
+    track('mcpstamp_check_result', {
+      grade, score_band: score >= 90 ? '90+' : score >= 80 ? '80-89' : score >= 65 ? '65-79' : '<65',
+      stores_ready: 4 - notReady, any_unverified: unvStores.length > 0, result_kind: kind,
+    });
 
     out.hidden = false;
     setStatus(`Done. ${host} scored ${score} out of 100, grade ${grade}. Ready in ${4 - notReady} of 4 stores.`, 'ok');
@@ -458,13 +492,14 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
     out.hidden = true;
     input.removeAttribute('aria-invalid');
     setStatus(kind === 'check' ? `Checking ${value}. This takes 5 to 30 seconds.` : 'Loading the stored result.', 'busy');
+    if (kind === 'check') track('mcpstamp_check_run');
     try {
       const fresh = new URLSearchParams(location.search).get('fresh') === '1' ? '&fresh=1' : '';
       const r = await api(kind === 'check' ? `check?url=${encodeURIComponent(value)}${fresh}` : `result/${encodeURIComponent(value)}`);
       if (r.status === 200 && r.body && typeof r.body.score !== 'undefined') {
         if (kind === 'result' && r.body.url) input.value = String(r.body.url);
         if (r.body.id) setQuery({ id: String(r.body.id) });
-        render(r.body);
+        render(r.body, kind);
       } else {
         setStatus(errorText(r, kind), 'error');
         if (r.status === 400) { input.setAttribute('aria-invalid', 'true'); input.focus(); }
@@ -487,7 +522,9 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
       return;
     }
     input.value = u;
-    setQuery({ url: u });
+    // Clear ?id=/?url= while the check runs. The result sets ?id=<id>. The checked URL never goes into history,
+    // so GA4 history page_views cannot carry it.
+    setQuery({});
     run('check', u);
   });
 
@@ -495,6 +532,7 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
   const qid = qs.get('id');
   const qurl = qs.get('url');
   if (qid && /^[A-Za-z0-9_-]{1,80}$/.test(qid)) run('result', qid);
+  else if (qid !== null) setStatus('This report link is not valid: the ID after ?id= should be letters and digits only. Check that you copied the whole link, or paste the server URL above and run the check again.', 'error');
   else if (qurl) { input.value = qurl; const u = normalizeUrl(qurl); if (u) { input.value = u; run('check', u); } else setStatus('The link has a URL that cannot be checked. Use the full HTTPS URL of the MCP endpoint.', 'error'); }
 </script>
 
@@ -552,6 +590,11 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
   .ck-blockers { margin: .5rem 0 0; padding-left: 1.1rem; list-style: square; font-size: .93rem; color: var(--muted); }
   .ck-blockers li + li { margin-top: .2rem; }
   .ck-unverified { margin-top: .4rem; font-size: .85rem; color: var(--faint); }
+  .ck-unv { margin-top: 1rem; padding: 1rem 1.1rem; border: 1px solid var(--border-strong); border-left: 4px solid var(--warn); border-radius: 3px; background: color-mix(in srgb, var(--warn) 9%, var(--surface-solid)); color: var(--text); display: grid; gap: .8rem; }
+  .ck-unv[hidden] { display: none; }
+  .ck-unv-t { font-weight: 600; line-height: 1.45; }
+  .ck-unv-buy { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; }
+  @media (min-width: 768px) { .ck-unv { grid-template-columns: minmax(0, 1fr) auto; align-items: center; } }
   .ck-limited { margin-top: 1rem; padding: .6rem .8rem; border: 1px dashed var(--warn); border-radius: 3px; font-size: .93rem; color: var(--text); }
   .ck-limited[hidden] { display: none; }
   .ck-meta > div[hidden] { display: none; }
@@ -568,7 +611,7 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
   .ck-warn .ck-st { color: var(--warn); }
   .ck-fail .ck-st { color: var(--stamp); }
   .ck-skip .ck-st { color: var(--faint); }
-  .ck-check-title { font-weight: 600; line-height: 1.4; }
+  .ck-check-title { font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
   .ck-check-detail { margin-top: .15rem; font-size: .92rem; color: var(--muted); overflow-wrap: anywhere; }
   .ck-fix { margin-top: .35rem; font-size: .93rem; overflow-wrap: anywhere; }
   .ck-fix-l { display: inline-block; margin-right: .5rem; font-family: var(--font-mono); font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }

@@ -8,10 +8,29 @@
 import LegalPage from '../components/LegalPage.astro';
 import { brand } from '../config/brand';
 import { bundlePrice } from '../data/servers';
+import { getServicesContent, usd as usdFmt } from '../data/services';
 const updated = '2 November 2026';
 const one = brand.pricing.serverUsd;
 const all = bundlePrice();
 const email = 'support@zovo.one';
+// Section 9 (paid services, s1102m SITE2): scope, prices and deposits come from data/content/services.json,
+// so the terms and /services/ cannot drift apart.
+const svc = getServicesContent().services;
+const audit = svc.find((s) => s.id === 'audit');
+const launch = svc.find((s) => s.id === 'launch');
+const custom = svc.find((s) => s.id === 'custom-server');
+const care = svc.find((s) => s.id === 'care');
+const usd = (n?: number) => (typeof n === 'number' ? usdFmt(n) : '');
+const launchOne = launch?.options?.[0];
+const customSimple = custom?.options?.[0];
+const launchBalance = (launch?.price_usd ?? 0) - (launch?.deposit_usd ?? 0);
+const auditDays = /(\d+) business days/.exec(audit?.price_note ?? '')?.[0] ?? '3 business days';
+const lower1 = (x: string) => x.charAt(0).toLowerCase() + x.slice(1);
+const scopeText = (s?: (typeof svc)[number]) => (s?.scope ?? []).join(' ');
+const youGet = (s?: (typeof svc)[number]) => {
+  const g = (s?.you_get ?? []).map(lower1);
+  return g.join('; ');
+};
 const sections = [
   { id: 'who', title: '1. Who we are' },
   { id: 'acceptance', title: '2. Acceptance of these Terms' },
@@ -21,25 +40,26 @@ const sections = [
   { id: 'ai-clients', title: '6. AI clients and third-party services' },
   { id: 'licences', title: '7. Free tier, Pro licences and payment' },
   { id: 'refunds', title: '8. Refunds' },
-  { id: 'no-advice', title: '9. No professional advice' },
-  { id: 'conduct', title: '10. Acceptable use' },
-  { id: 'your-content', title: '11. Your content and data' },
-  { id: 'ip', title: '12. Intellectual property and open source' },
-  { id: 'warranties', title: '13. Disclaimer of warranties' },
-  { id: 'liability', title: '14. Limitation of liability' },
-  { id: 'indemnification', title: '15. Indemnification' },
-  { id: 'termination', title: '16. Suspension and termination' },
-  { id: 'changes', title: '17. Changes to the Service and these Terms' },
-  { id: 'law', title: '18. Governing law and disputes' },
-  { id: 'general', title: '19. General' },
-  { id: 'contact', title: '20. Contact' },
+  { id: 'paid-services', title: '9. Paid services' },
+  { id: 'no-advice', title: '10. No professional advice' },
+  { id: 'conduct', title: '11. Acceptable use' },
+  { id: 'your-content', title: '12. Your content and data' },
+  { id: 'ip', title: '13. Intellectual property and open source' },
+  { id: 'warranties', title: '14. Disclaimer of warranties' },
+  { id: 'liability', title: '15. Limitation of liability' },
+  { id: 'indemnification', title: '16. Indemnification' },
+  { id: 'termination', title: '17. Suspension and termination' },
+  { id: 'changes', title: '18. Changes to the Service and these Terms' },
+  { id: 'law', title: '19. Governing law and disputes' },
+  { id: 'general', title: '20. General' },
+  { id: 'contact', title: '21. Contact' },
 ];
 ---
 <LegalPage
   title="Terms of Service"
-  description={`The terms for using ${brand.name}, operated by autom8 LLC (Armenia): the MCP servers, the hosted endpoints at mcp.zovo.one, the free tier and the Pro licences.`}
+  description={`The terms for using ${brand.name}, operated by autom8 LLC (Armenia): the MCP servers, the hosted endpoints, the Pro licences and paid services such as audits and store launches.`}
   eyebrow="Terms"
-  lead={`The terms for using ${brand.name}: the MCP servers, the hosted endpoints at mcp.zovo.one, this website, the free tier and the one-time Pro licences.`}
+  lead={`The terms for using ${brand.name}: the MCP servers, the hosted endpoints at mcp.zovo.one, this website, the free tier, the one-time Pro licences and our paid services (audits, store launches, custom servers and the Care plan).`}
   updated={updated}
   sections={sections}
   other={{ href: '/privacy/', label: 'Privacy Policy' }}
@@ -48,7 +68,7 @@ const sections = [
   <p>{brand.name} is operated by <strong>autom8 LLC</strong>, a limited liability company registered in the <strong>Republic of Armenia</strong> (Yerevan, registered on 8 October 2024). autom8 LLC also runs the Zovo brand; the hosted endpoints and the checkout run under the Zovo domain <code>mcp.zovo.one</code>. In these Terms, "autom8 LLC", "we", "us" and "our" mean autom8 LLC. You can reach us at <span class="select-all">{email}</span>.</p>
 
   <h2 id="acceptance">2. Acceptance of these Terms</h2>
-  <p>These Terms are a binding agreement between you and autom8 LLC. By installing, connecting to or using any {brand.name} MCP server, hosted endpoint or this website, or by buying a Pro Licence, you agree to these Terms. If you do not agree, do not use the Service. Our <a href="/privacy/">Privacy Policy</a> explains how we handle personal data.</p>
+  <p>These Terms are a binding agreement between you and autom8 LLC. By installing, connecting to or using any {brand.name} MCP server, hosted endpoint or this website, or by buying a Pro Licence or ordering a paid service, you agree to these Terms. If you do not agree, do not use the Service. Our <a href="/privacy/">Privacy Policy</a> explains how we handle personal data.</p>
   <p>If you use the Service on behalf of a company or other organisation, you confirm that you may bind it to these Terms, and "you" includes that organisation.</p>
 
   <h2 id="eligibility">3. Age and eligibility</h2>
@@ -60,6 +80,8 @@ const sections = [
     <li><strong>Free Tier:</strong> every server has a free tier, with no payment and no expiry. Its limits are listed on each server's page.</li>
     <li><strong>Pro Licence:</strong> a one-time payment that removes the listed free-tier limits: ${one} for one server, or ${all} for all paid servers.</li>
     <li><strong>Open source:</strong> the server source code is public under the MIT License.</li>
+    <li><strong>McpStamp Check:</strong> a free check of a remote MCP server at <a href="/check/">/check/</a>. A score and a store status are our reading of what the server publishes, not a decision by any store.</li>
+    <li><strong>Paid services:</strong> audits, store launches, custom servers and the Care plan, described on the <a href="/services/">Services page</a> and in <a href="#paid-services">section 9</a>.</li>
   </ul>
 
   <h2 id="access">5. Hosted tokens and OAuth connections</h2>
@@ -81,12 +103,51 @@ const sections = [
   <p>Prices are in US dollars and are shown before you pay. Payment is taken by Stripe on Stripe's own checkout page; we never see your full card details. Your key is shown on the confirmation page after payment. If you lose it, contact {email} with your Stripe receipt.</p>
 
   <h2 id="refunds">8. Refunds</h2>
-  <p>You can ask for a full refund within 14 days of your payment. Email {email} with your checkout details or Stripe receipt; you do not need to give a reason. After a refund, the licence key is no longer licensed and you must stop using it. After 14 days, payments are not refundable, except where the law of your country gives you a right to a refund or to another remedy, for example because the Service is faulty or not as described. These statutory rights are not affected by these Terms.</p>
+  <p>This section covers Pro Licences. Refunds for paid services are in <a href="#services-refunds">section 9.6</a>. You can ask for a full refund within 14 days of your payment. Email {email} with your checkout details or Stripe receipt; you do not need to give a reason. After a refund, the licence key is no longer licensed and you must stop using it. After 14 days, payments are not refundable, except where the law of your country gives you a right to a refund or to another remedy, for example because the Service is faulty or not as described. These statutory rights are not affected by these Terms.</p>
 
-  <h2 id="no-advice">9. No professional advice</h2>
+  <h2 id="paid-services">9. Paid services</h2>
+  <p>This section covers the paid work that autom8 LLC, the seller, does for you on your own MCP server: the Readiness Audit, Store Launch, a custom MCP server and the Care plan. The prices and the current description are on the <a href="/services/">Services page</a>. The rest of these Terms also applies to this work, including section 15 (liability) and section 19 (Armenian law and the courts of Yerevan).</p>
+  <h3 id="services-scope">9.1 What each service includes</h3>
+  <ul>
+    <li><strong>Readiness Audit ({usd(audit?.price_usd)}, paid in full when you order).</strong> {scopeText(audit)} You get: {youGet(audit)}. The report is due {auditDays} after we have access to your server. {audit?.credit}</li>
+    <li><strong>Store Launch ({usd(launch?.price_usd)} for all four stores{launchOne && <>, or {launchOne.price_label} for one store: Claude, ChatGPT or Gemini</>}).</strong> {scopeText(launch)} You get: {youGet(launch)}. It takes about 10 business days from the day we have access.</li>
+    <li><strong>Custom MCP server (from {usd(custom?.price_usd)} with OAuth and one account per user{customSimple && <>; {customSimple.price_label} for a simple read-only server without auth and up to 10 tools</>}).</strong> We build a server on your API, database, spreadsheet or docs. You get: {youGet(custom)}. Before we start, we agree a fixed quote with you in writing (email is enough).</li>
+    <li><strong>Care plan ({usd(care?.price_usd)} a month).</strong> {scopeText(care)}</li>
+  </ul>
+  <p>The scope of your order is the description on the Services page on the day you order, plus anything we confirm to you in writing. Work outside that scope needs a new written quote.</p>
+  <h3 id="services-payment">9.2 Deposits, balance and invoices</h3>
+  <ul>
+    <li>Prices are in US dollars. Card payments are taken by Stripe. You can ask for an invoice for any payment.</li>
+    <li><strong>Store Launch:</strong> you pay a {usd(launch?.deposit_usd)} deposit when you order and the balance of {usd(launchBalance)} at handover. The deposit counts toward the total of {usd(launch?.price_usd)}.</li>
+    <li><strong>Custom MCP server:</strong> the {usd(custom?.deposit_usd)} deposit books the work and counts toward the fixed quote. The rest of the quote is due at handover, unless the quote says otherwise. If we do not agree a fixed quote, we refund the deposit in full.</li>
+    <li><strong>Orders by email</strong> (one-store launch, simple server): we confirm the price, the deposit and the balance in writing before we start, on the same terms as above.</li>
+    <li><strong>Handover</strong> means the day we deliver the work: the fixes or the code in your repository and, for Store Launch, the listings submitted. We send the payment link for the balance on that day.</li>
+  </ul>
+  <h3 id="services-care">9.3 Care plan term</h3>
+  <p>The Care plan is invoiced monthly by email. It has a minimum term of 3 months. After that it runs month to month, and you or we can end it by email with 30 days' notice.</p>
+  <h3 id="services-you">9.4 What we need from you</h3>
+  <p>We need your server URL, access to the repository, and, for Store Launch, access to your store accounts or someone on your side who can submit with us. A test account helps us check tools behind sign-in. Delivery dates count from the day we have this access. Time spent waiting for access, answers or store reviewers does not count.</p>
+  <h3 id="services-approval">9.5 Store approval and Gemini</h3>
+  <p>No one can guarantee that a store accepts a listing. Anthropic, OpenAI and Google review each listing themselves, under their own rules, which can change. We do not promise approval. Store Launch includes up to 2 review rounds: we fix what reviewers ask and resubmit.</p>
+  <p>Gemini Connected Apps is a preview that Google opened on 28 October 2026 for US developers through a waitlist. If your account has no Gemini access when we finish, we deliver a Gemini-ready server and the submission pack, and you choose: we submit it later at no charge when your account gets access, or we take $900 off the balance.</p>
+  <h3 id="services-refunds">9.6 Cancellation and refunds</h3>
+  <ul>
+    <li>If we have not started the work, you get a full refund. Work starts when we first open your server, repository or accounts for the job.</li>
+    <li>After we start, you can cancel at any time by email. We stop, hand over what is done, and refund the part of the price for work not done, pro rata. We decide the amount fairly and show you how we worked it out.</li>
+    <li>A delivered audit report and a Care plan month that has already started are not refunded, except as below.</li>
+    <li>If we cannot deliver what we promised, we refund what you paid for the part we could not deliver.</li>
+  </ul>
+  <p>Email {email} with your receipt. Refunds go back to the card you paid with. Section 8 (14 days) applies to Pro Licences, not to these services. Any statutory rights you have stay in place.</p>
+  <h3 id="services-code">9.7 Who owns the code</h3>
+  <p>You do. The code we write for you goes into your repository under the licence you choose, and you can use, change and sell it without paying us more. Your existing code stays yours. Open-source parts we use, including our own MIT-licensed MCP servers, stay under their own licences. We keep only general know-how, which we may use in other work.</p>
+  <h3 id="services-confidential">9.8 Confidentiality of your data and credentials</h3>
+  <p>We keep your code, data, documents and credentials (API keys, tokens, test accounts and store account access) confidential. We use them only to do the job you ordered, and we share them with no one, except the store reviewers when you ask us to submit a listing. We do not use your data to train AI models. We do not name you as a client without your permission.</p>
+  <p>We delete your credentials and our copies of your data within 30 days of delivery. For the Care plan, that is within 30 days after the plan ends. We tell you when it is done, if you ask. We recommend that you rotate any keys and passwords you gave us after handover.</p>
+
+  <h2 id="no-advice">10. No professional advice</h2>
   <p>The Service is a set of software tools. Invoices, quotes, receipts, tax and VAT lines, contracts, letters, resumes and other documents it produces are drafts made from the data you or your AI client provide. <strong>The Service does not give tax, legal, accounting, financial or employment advice.</strong> You are responsible for checking that every document is correct and meets the legal, tax and accounting rules that apply to you, for example invoice content and numbering rules or VAT rates. Ask a qualified professional when you need advice.</p>
 
-  <h2 id="conduct">10. Acceptable use</h2>
+  <h2 id="conduct">11. Acceptable use</h2>
   <p>You agree not to:</p>
   <ul>
     <li>use the Service to create fake, forged or misleading documents, including invoices, receipts, payslips, bank statements, certificates or resumes that imitate a real third party or that state false facts in order to deceive someone;</li>
@@ -99,38 +160,38 @@ const sections = [
     <li>use the Service to send malware or to harass or harm others.</li>
   </ul>
 
-  <h2 id="your-content">11. Your content and data</h2>
+  <h2 id="your-content">12. Your content and data</h2>
   <p>The data you send to the Service and the documents it produces for you are yours. You give us permission to store and process them only as needed to run the Service for you, as described in the <a href="/privacy/">Privacy Policy</a>. We do not sell your data and do not use it to train AI models. You are responsible for having the right to use the data you put into the Service, including personal data of your clients or employees.</p>
 
-  <h2 id="ip">12. Intellectual property and open source</h2>
+  <h2 id="ip">13. Intellectual property and open source</h2>
   <p>The MCP server source code is released under the MIT License at <a href={brand.links.github} rel="noopener">github.com/theluckystrike/mcp-servers</a>. That license governs the code and takes precedence over these Terms for the code. The {brand.name} and Zovo names, logos, this website's design and text, and the hosted service are owned by autom8 LLC or its licensors. Subject to these Terms, we give you a limited, non-exclusive, non-transferable, revocable right to use the hosted endpoints and, if you hold a Pro Licence, the Pro features it covers.</p>
 
-  <h2 id="warranties">13. Disclaimer of warranties</h2>
+  <h2 id="warranties">14. Disclaimer of warranties</h2>
   <p>To the extent the law allows, the Service is provided "as is" and "as available". We do not promise that it will be uninterrupted, error-free or suitable for a particular purpose, or that any document it produces is accurate or legally sufficient. You use the Service at your own risk and should keep your own copies of important data. If you are a consumer, this section does not limit any warranty or guarantee that the law of your country gives you and that cannot be excluded.</p>
 
-  <h2 id="liability">14. Limitation of liability</h2>
+  <h2 id="liability">15. Limitation of liability</h2>
   <p>To the extent the law allows, autom8 LLC is not liable for indirect, incidental, special or consequential damages, for loss of profits, revenue, business or goodwill, or for loss or corruption of data, arising from your use of the Service, from conflicts with MCP clients or other software, or from acts of third parties such as AI clients, payment processors and hosting providers.</p>
   <p>To the extent the law allows, our total liability to you for all claims about the Service is limited to the greater of the amount you paid us in the 12 months before the claim and 100 US dollars.</p>
   <p>Nothing in these Terms excludes or limits liability for death or personal injury caused by negligence, for fraud or wilful misconduct, for gross negligence, or any other liability that cannot be excluded or limited under the applicable law, including mandatory consumer protection law.</p>
 
-  <h2 id="indemnification">15. Indemnification</h2>
+  <h2 id="indemnification">16. Indemnification</h2>
   <p>If you use the Service for business purposes, you agree to compensate autom8 LLC for claims, losses and reasonable legal costs brought by third parties that arise from your breach of these Terms, from your violation of law, or from documents you create or distribute with the Service. This section does not apply to consumers to the extent their local law does not allow it.</p>
 
-  <h2 id="termination">16. Suspension and termination</h2>
+  <h2 id="termination">17. Suspension and termination</h2>
   <p>You can stop using the Service at any time: remove the server from your MCP client, disconnect the connector in your AI client, and stop using your token. Data under an unused token is deleted 35 days after it was last used; you can ask us to delete it sooner (see the <a href="/privacy/#delete">Privacy Policy</a>).</p>
-  <p>We may suspend or end your access if you break these Terms, if your use creates a security or legal risk, or if required by law. Where reasonable, we will tell you first. Sections that by their nature should survive termination, such as sections 9, 13, 14, 15 and 18, survive.</p>
+  <p>We may suspend or end your access if you break these Terms, if your use creates a security or legal risk, or if required by law. Where reasonable, we will tell you first. Sections that by their nature should survive termination, such as sections 9.7, 9.8, 10, 14, 15, 16 and 19, survive.</p>
 
-  <h2 id="changes">17. Changes to the Service and these Terms</h2>
+  <h2 id="changes">18. Changes to the Service and these Terms</h2>
   <p>We may change, improve or discontinue parts of the Service. If we discontinue a hosted endpoint covered by a Pro Licence, the open-source server and your licence key continue to work on your own machine. We may update these Terms. We will change the "Last updated" date above and, for material changes, post a notice on this website before they apply. If you do not agree to the changed Terms, stop using the Service; continued use after the change takes effect means you accept them.</p>
 
-  <h2 id="law">18. Governing law and disputes</h2>
+  <h2 id="law">19. Governing law and disputes</h2>
   <p>These Terms and any dispute about them or the Service are governed by the laws of the <strong>Republic of Armenia</strong>, without regard to its conflict-of-law rules. The courts of Yerevan, Republic of Armenia, have jurisdiction over any dispute.</p>
   <p>If you are a consumer, you keep the protection of the mandatory provisions of the law of the country where you live, and nothing in these Terms takes it away. This includes the consumer protection laws of the European Union, the European Economic Area, the United Kingdom, Switzerland and the United States. If you are a consumer living in the European Union, the European Economic Area, the United Kingdom or Switzerland, you may also bring a claim in the courts of the country where you live.</p>
   <p>Before starting a formal claim, please contact us at {email} so that we can try to resolve the issue. We will reply within 30 days.</p>
 
-  <h2 id="general">19. General</h2>
+  <h2 id="general">20. General</h2>
   <p>These Terms and the <a href="/privacy/">Privacy Policy</a> are the entire agreement between you and autom8 LLC about the Service. If a provision is found to be invalid or unenforceable, the rest of these Terms stays in effect. If we do not enforce a provision, that is not a waiver. You may not transfer your rights under these Terms without our consent; we may transfer them to a company that takes over the Service, without reducing your rights. These Terms are written in English, and the English version applies.</p>
 
-  <h2 id="contact">20. Contact</h2>
+  <h2 id="contact">21. Contact</h2>
   <p>autom8 LLC, Yerevan, Republic of Armenia. Email: <span class="select-all">{email}</span>.</p>
 </LegalPage>

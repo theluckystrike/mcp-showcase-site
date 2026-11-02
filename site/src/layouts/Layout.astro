@@ -130,12 +130,19 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
         gtag('set', 'ads_data_redaction', true);
         try { var cc = localStorage.getItem('mcpstamp-consent'); if (cc === 'granted' || cc === 'denied') gtag('consent', 'update', { analytics_storage: cc }); } catch (e) {}
         gtag('js', new Date());
-        gtag('config', ga4);
+        // /check/?url=<server> must never reach GA4 (s1102m SITE2): drop the url parameter from page_location and page_referrer.
+        var noUrl = function (h) { try { var u = new URL(h); u.searchParams.delete('url'); return u.href; } catch (e) { return ''; } };
+        var cfg = { page_location: noUrl(location.href) };
+        if (document.referrer) cfg.page_referrer = noUrl(document.referrer);
+        gtag('config', ga4, cfg);
         addEventListener('load', function () {
           var s = document.createElement('script'); s.async = true;
           s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4; document.head.appendChild(s);
         });
         document.addEventListener('click', function (e) {
+          // Service and check CTAs carry data-cta (services.astro, check.astro): one event name, the CTA id as a param.
+          var c = e.target.closest && e.target.closest('[data-cta]');
+          if (c) gtag('event', 'mcpstamp_cta_click', { cta: c.getAttribute('data-cta'), slot: c.getAttribute('data-cta-slot') || '', page_path: location.pathname });
           var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
           var h = a.href;
           if (h.indexOf('mcp.zovo.one/buy/') > -1) {

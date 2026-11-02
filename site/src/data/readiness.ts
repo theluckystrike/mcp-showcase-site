@@ -7,7 +7,7 @@ import { CONTENT_DIR } from './servers';
 
 export const STORES = [
   { key: 'claude', name: 'Claude', long: 'Claude Connectors Directory', short: 'Cl' },
-  { key: 'chatgpt', name: 'ChatGPT', long: 'ChatGPT Apps', short: 'GPT' },
+  { key: 'chatgpt', name: 'ChatGPT', long: 'ChatGPT app directory', short: 'GPT' },
   { key: 'gemini', name: 'Gemini', long: 'Gemini Connected Apps', short: 'Gem' },
   { key: 'registry', name: 'MCP Registry', long: 'Official MCP Registry', short: 'Reg' },
 ] as const;

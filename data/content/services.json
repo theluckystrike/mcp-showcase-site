@@ -262,7 +262,11 @@
   },
   {
    "q": "Can I get a refund?",
-   "a": "Yes, a full refund if we have not started the work. Email support@zovo.one with your receipt."
+   "a": "Yes. You get a full refund if we have not started the work. After we start, we refund the part of the price for work not done, pro rata. Email support@zovo.one with your receipt.",
+   "link": {
+    "href": "/terms/#services-refunds",
+    "label": "Refunds in our Terms"
+   }
   },
   {
    "q": "Does the audit fee count toward a launch?",
@@ -274,15 +278,15 @@
   },
   {
    "q": "Does the deposit count toward the price?",
-   "a": "Yes. For Store Launch, you pay $1,500 first and $3,400 at handover. For a custom server, the $1,500 deposit comes off the fixed quote."
+   "a": "Yes. For Store Launch, you pay $1,500 first and $3,400 at handover. For a custom server, the $1,500 deposit comes off the fixed quote, and if we do not agree a quote, we refund the deposit in full."
   },
   {
    "q": "Can you promise the stores will accept my server?",
-   "a": "No. Anthropic, OpenAI and Google review each listing themselves. Store Launch includes up to 2 review rounds: we fix what reviewers ask and resubmit. Gemini submission also needs your account to have Connected Apps access (a US waitlist preview since 28 Oct 2026)."
+   "a": "No. Anthropic reviews Claude connectors, OpenAI reviews ChatGPT apps (plugins), and Google reviews Gemini Connected Apps, each under its own rules. Store Launch includes up to 2 review rounds: we fix what reviewers ask and resubmit. Gemini submission also needs your account to have Connected Apps access (a US waitlist preview since 28 Oct 2026)."
   },
   {
    "q": "Is there a minimum term for the Care plan?",
-   "a": "Yes, 3 months. It is invoiced each month and includes 2 fix hours a month."
+   "a": "Yes, 3 months. After that it runs month to month, and you can end it with 30 days' notice by email. It is invoiced each month and includes 2 fix hours a month."
   },
   {
    "q": "Do you have client references?",
@@ -294,7 +298,7 @@
   },
   {
    "q": "Can you work with our private data?",
-   "a": "We can build against a sample or a test account, so your real data never has to leave your side."
+   "a": "Yes, and we can also build against a sample or a test account, so your real data never has to leave your side. We keep your data and credentials confidential and delete them within 30 days of delivery."
   }
  ]
 }

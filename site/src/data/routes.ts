@@ -5,6 +5,7 @@ import { pagesOfType, pageMeta } from './pages';
 import { COMPARISONS } from './compare';
 import { getFreeServers, freeServerLastmod } from './freeServers';
 import { getReadiness, readinessPublished } from './readiness';
+import { PAGE_MODIFIED } from './schema';
 
 export const BUILT_PAGE_TYPES = ['use-case', 'answer', 'audience', 'client-guide'];
 
@@ -27,5 +28,6 @@ export function allRoutes(): { path: string; priority: number; lastmod?: string 
     ...(readinessPublished() ? [{ path: '/readiness/', priority: 0.7, lastmod: getReadiness()!.generated_at.slice(0, 10) || undefined }] : []),
   ];
   const seen = new Set<string>();
-  return out.filter((r) => (seen.has(r.path) ? false : (seen.add(r.path), true)));
+  return out.filter((r) => (seen.has(r.path) ? false : (seen.add(r.path), true)))
+    .map((r) => (r.lastmod || !PAGE_MODIFIED[r.path] ? r : { ...r, lastmod: PAGE_MODIFIED[r.path] }));
 }

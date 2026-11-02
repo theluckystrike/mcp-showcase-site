@@ -11,6 +11,14 @@ import { getJob } from './content';
  *  Change it only when the content changes (goal5 5.5: no fake freshness). Not the build date. */
 export const CONTENT_REVIEWED = '2026-10-30';
 
+/** Pages reviewed after CONTENT_REVIEWED: path -> date of their last real content change (WebPage dateModified + sitemap lastmod). */
+export const PAGE_MODIFIED: Record<string, string> = {
+  '/services/': '2026-11-02',
+  '/terms/': '2026-11-02',
+  '/check/': '2026-11-02',
+};
+export const modifiedFor = (path: string): string => PAGE_MODIFIED[path] ?? CONTENT_REVIEWED;
+
 type Node = Record<string, unknown>;
 const FORBIDDEN = new Set(['AggregateRating', 'Review']);
 
@@ -86,7 +94,7 @@ export function webPageNode(site: URL, p: PageInput): Node {
     inLanguage: 'en',
     isPartOf: { '@id': ids(site).website },
     publisher: { '@id': ids(site).org },
-    dateModified: CONTENT_REVIEWED,
+    dateModified: modifiedFor(new URL(p.url).pathname),
     primaryImageOfPage: { '@type': 'ImageObject', url: new URL('/og.png', site).href, width: 1200, height: 630 },
     ...(p.hasBreadcrumb ? { breadcrumb: { '@id': `${p.url}#breadcrumb` } } : {}),
     ...(p.speakable ? { speakable: { '@type': 'SpeakableSpecification', cssSelector: [p.speakable] } } : {}),
