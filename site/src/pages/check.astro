@@ -491,8 +491,10 @@ try {
     ol.querySelectorAll<HTMLElement>('[data-offer]').forEach((li) => { items[li.dataset.offer!] = li; });
     const order = state === 'ready' ? ['care', 'launch'] : ['audit', 'launch', 'care'];
     Object.values(items).forEach((li) => { li.hidden = true; });
+    // Shown offers first, so the first visible item is also :first-child and gets the highlight.
+    order.slice().reverse().forEach((k) => ol.prepend(items[k]));
     order.forEach((k, i) => {
-      items[k].hidden = false; ol.append(items[k]);
+      items[k].hidden = false;
       // One primary button per result: the first offer.
       items[k].querySelectorAll<HTMLAnchorElement>('.ck-offer-buy .btn').forEach((b) => b.classList.toggle('btn-primary', i === 0));
     });
