@@ -900,6 +900,102 @@
    ],
    "added": "2026-11-02",
    "tools_checked": "2026-11-02"
+  },
+  {
+   "repo": "estate-gift-tax-exemption-calculator-mcp",
+   "topic": "Estate and gift tax exemption",
+   "name": "Estate and Gift Tax Exemption",
+   "tagline": "The federal estate and gift tax exemption for 2025 and 2026, with the $15 million amount set by the 2025 tax law.",
+   "knows": [
+    "The 2025 law made the 2026 exemption $15,000,000 per person instead of letting it fall by about half. Many models still expect the cut.",
+    "The 2026 annual gift exclusion of $19,000, gift splitting, and the $194,000 limit for gifts to a spouse who is not a US citizen.",
+    "The 40% rate table and portability of a late spouse's unused exemption. Federal only, and the tool says so."
+   ],
+   "sources": "P.L. 119-21 sec. 70106, Rev. Procs. 2024-40 and 2025-32, IRS estate and gift tax pages, 26 USC 2001(c) and 2010(c).",
+   "hosted_url": "https://estate-gift-tax-exemption-calculator-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/estate-gift-tax-exemption-calculator-mcp",
+   "npm": null,
+   "money_site": {
+    "name": "TaxBreakCalc",
+    "url": "https://taxbreakcalc.com"
+   },
+   "prompts": [
+    "We are married with a $28 million estate. How much federal estate tax would be due in 2026?",
+    "Can I give my three grandchildren $25,000 each this year without filing a gift tax return?",
+    "How did the estate tax exemption change from 2025 to 2026?"
+   ],
+   "tools": [
+    {
+     "name": "get_exemption_amounts",
+     "title": "Federal estate and gift tax exemption amounts by year",
+     "description": "Returns the federal basic exclusion amount (estate and lifetime gift tax exemption), the applicable credit, the filing threshold, the annual gift exclusion per recipient (and doubled with gift splitting), the annual exclusion for gifts to a non-citizen spouse, the 2026 GST exemption and the 40% top rate. Years 2011-2026 from the IRS. 2026: $15,000,000 under P.L. 119-21 (One Big Beautiful Bill Act) sec. 70106, NOT the scheduled TCJA sunset to about half; 2025: $13,990,000; 2026 annual exclusion $19,000; non-citizen spouse $194,000 (Rev. Proc. 2025-32). Models trained before mid-2025 often predict the sunset."
+    },
+    {
+     "name": "calculate_estate_tax",
+     "title": "Federal estate tax calculator (Form 706 method)",
+     "description": "Calculates US federal estate tax the Form 706 way: taxable estate (gross estate minus deductions such as debts, expenses, marital and charitable bequests), plus adjusted taxable gifts, tentative tax on the unified rate schedule of 26 USC 2001(c) (18% to 40%), minus gift tax payable, minus the applicable credit on the basic exclusion amount plus any DSUE (portability) from a deceased spouse. Years 2013-2026. Uses $15,000,000 for 2026 deaths (P.L. 119-21), $13,990,000 for 2025. Federal only."
+    },
+    {
+     "name": "check_gift",
+     "title": "Gift tax check: annual exclusion, gift splitting, spouse rules",
+     "description": "Checks a gift against the federal gift tax rules for a year (2013-2026): annual exclusion per recipient ($19,000 in 2025 and 2026), gift splitting with a spouse (sec. 2513, doubles it to $38,000), unlimited marital deduction for a US citizen spouse, and the separate annual exclusion for a non-citizen spouse ($190,000 in 2025, $194,000 in 2026 under Rev. Procs. 2024-40 and 2025-32). Returns taxable gifts, whether Form 709 is required, lifetime exemption used and left (2026: $15,000,000), and any gift tax due."
+    },
+    {
+     "name": "compare_years",
+     "title": "Compare estate and gift tax exemptions between years",
+     "description": "Compares two years (2013-2026) side by side: basic exclusion amount, applicable credit, annual gift exclusion and non-citizen spouse exclusion, and, with a taxable estate, the federal estate tax in each year. Default 2025 vs 2026, the year P.L. 119-21 raised the exemption to $15,000,000 instead of letting it fall to about half."
+    }
+   ],
+   "added": "2026-11-02",
+   "tools_checked": "2026-11-02"
+  },
+  {
+   "repo": "uk-statutory-sick-pay-maternity-pay-calculator-mcp",
+   "topic": "UK statutory sick pay and maternity pay",
+   "name": "UK Statutory Sick Pay and Maternity Pay",
+   "tagline": "UK Statutory Sick Pay after the April 2026 reform, maternity and paternity pay, and the minimum wage rates for 2026 and 2027.",
+   "knows": [
+    "Statutory Sick Pay from 6 April 2026 is paid from the first day of sickness at the lower of £123.25 or 80% of average weekly earnings. The old waiting days and earnings limit are gone.",
+    "Maternity, paternity, adoption and shared parental pay of £194.32 a week from April 2026, after six weeks at 90% of earnings.",
+    "The National Living Wage of £12.71 from April 2026 and the £13.21 rate already set for April 2027, with the lower age bands."
+   ],
+   "sources": "gov.uk rates pages, Employment Rights Act 2025 ss.10-11 and SI 2026/373 on legislation.gov.uk.",
+   "hosted_url": "https://uk-statutory-sick-pay-maternity-pay-calculator-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/uk-statutory-sick-pay-maternity-pay-calculator-mcp",
+   "npm": null,
+   "money_site": {
+    "name": "UKMoneyCalc",
+    "url": "https://ukmoneycalc.com"
+   },
+   "prompts": [
+    "I earn £400 a week and I am off sick for 8 days in May 2026. How much Statutory Sick Pay do I get?",
+    "My average weekly earnings are £650 and my baby is due in September 2026. What is my maternity pay week by week?",
+    "What is the minimum wage for a 19 year old apprentice in June 2026?"
+   ],
+   "tools": [
+    {
+     "name": "calculate_statutory_sick_pay",
+     "title": "UK Statutory Sick Pay",
+     "description": "Works out UK Statutory Sick Pay (SSP) for a period of sickness. Knows the Employment Rights Act 2025 changes in force from 6 April 2026: SSP is paid from the first qualifying day (no 3 waiting days), the lower earnings limit is gone, and the weekly rate is the lower of £123.25 or 80% of average weekly earnings. For sickness starting 6 April 2025 to 5 April 2026 it applies the old rules (£118.75 flat, £125 lower earnings limit, 3 waiting days, 4-day period of incapacity) and flags the SI 2026/373 transitional rules. Uses HMRC's unrounded daily rates and 28-week cap. Rates fetched from gov.uk and legislation.gov.uk on 2026-11-02."
+    },
+    {
+     "name": "calculate_statutory_maternity_pay",
+     "title": "UK Statutory Maternity Pay",
+     "description": "Works out UK Statutory Maternity Pay (SMP) week by week for 39 weeks: 90% of average weekly earnings for 6 weeks, then the lower of the flat rate or 90% for 33 weeks. Flat rate £187.18 from 6 April 2025 and £194.32 from 5 April 2026, switching for pay weeks that start after the April uprating. Finds the expected week of childbirth, the qualifying week (15th week before), the latest employment start date for 26 weeks' service and the lower earnings limit for that week (£125 in 2025/26, £129 in 2026/27). Same structure applies to Statutory Adoption Pay. Figures from gov.uk, fetched 2026-11-02."
+    },
+    {
+     "name": "get_minimum_wage_rates",
+     "title": "UK National Minimum Wage and National Living Wage",
+     "description": "Returns the UK National Living Wage and National Minimum Wage hourly rates in force on a date, by age band and apprentice rate, and the rate that applies to a given age. Holds April 2024, April 2025, April 2026 (£12.71 for 21 and over, £10.85 for 18 to 20, £8 under 18 and apprentices) and the published April 2027 rates (£13.21, £11.27, £8.31). Can also give weekly and annual pay at the rate for given hours. Rates fetched from gov.uk on 2026-11-02."
+    },
+    {
+     "name": "check_eligibility",
+     "title": "Check UK statutory pay eligibility",
+     "description": "Checks the qualifying conditions for UK Statutory Sick Pay, Maternity, Paternity, Adoption or Shared Parental Pay and returns each condition as met, not met or not checkable, plus the weekly amounts. Knows that from 6 April 2026 SSP has no earnings threshold and no waiting days, and applies the 26 weeks' continuous employment test into the qualifying week (15th week before the due week, or the matching week for adoption) and the lower earnings limit (£125 in 2025/26, £129 in 2026/27). Data from gov.uk and legislation.gov.uk, fetched 2026-11-02."
+    }
+   ],
+   "added": "2026-11-02",
+   "tools_checked": "2026-11-02"
   }
  ]
 }
