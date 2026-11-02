@@ -190,11 +190,11 @@ try {
             <div>
               <h3 class="ck-offer-name">Store Launch</h3>
               <p class="muted mt-1">I fix the blockers in your code, add OAuth where a store needs it, write the listings and submit the server to Claude, ChatGPT, Gemini and the MCP Registry. Up to 2 review rounds. No one can promise approval, the stores decide.</p>
-              <p class="ck-small mt-2">Only one store? <a id="ck-one" class="link" href={BUY.one} rel="nofollow" data-base={BUY.one} data-cta="launch-one" data-cta-slot="offer">Pay $1,900 for one store</a>.</p>
+              <p class="ck-small mt-2">Only one store? <a id="ck-one" class="link" href={BUY.one.startsWith('https://') ? `${BUY.one}?src=site.check.offer` : BUY.one} rel="nofollow" data-base={BUY.one} data-cta="launch-one" data-cta-slot="offer">Pay $1,900 for one store</a>.</p>
             </div>
             <div class="ck-offer-buy">
               <p class="ck-price"><span class="tnum">$4,900</span> <span class="ck-per">all 4 stores, paid upfront</span></p>
-              <a id="ck-launch" class="btn" href={BUY.launch} rel="nofollow" data-base={BUY.launch} data-cta="launch" data-cta-slot="offer">Pay $4,900 for Store Launch</a>
+              <a id="ck-launch" class="btn" href={BUY.launch.startsWith('https://') ? `${BUY.launch}?src=site.check.offer` : BUY.launch} rel="nofollow" data-base={BUY.launch} data-cta="launch" data-cta-slot="offer">Pay $4,900 for Store Launch</a>
             </div>
           </li>
           <li data-offer="care">
@@ -205,7 +205,7 @@ try {
             </div>
             <div class="ck-offer-buy">
               <p class="ck-price"><span class="tnum">$1,470</span> <span class="ck-per">for 3 months, paid upfront</span></p>
-              <a id="ck-care" class="btn" href={BUY.care} rel="nofollow" data-base={BUY.care} data-cta="care" data-cta-slot="offer">Pay $1,470 for 3 months</a>
+              <a id="ck-care" class="btn" href={BUY.care.startsWith('https://') ? `${BUY.care}?src=site.check.offer` : BUY.care} rel="nofollow" data-base={BUY.care} data-cta="care" data-cta-slot="offer">Pay $1,470 for 3 months</a>
             </div>
           </li>
         </ol>
