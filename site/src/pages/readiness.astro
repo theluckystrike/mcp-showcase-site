@@ -48,6 +48,7 @@ const jsonLd = hasRows && !R!.sample ? [{
           : <>Every remote server in the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>: a score from 0 to 100, readiness for four stores, and the top fixes for each server.</>}
       </p>
       {R?.sample && <p class="rx-note mt-5" role="note">Sample data for layout testing. The full scan replaces it.</p>}
+      {hasRows && R && !R.partial.complete && <p class="rx-note mt-5" role="note"><strong>Partial scan.</strong> {n(T!.scanned)}{R.partial.registry_urls > 0 && <> of {n(R.partial.registry_urls)}</>} remote URLs in the registry are scored so far. {R.partial.sampling} We publish a new snapshot when more results are in; the date above is the date of this snapshot.</p>}
     </div>
   </section>
 
@@ -168,7 +169,7 @@ const jsonLd = hasRows && !R!.sample ? [{
                     </ul>
                   </td>
                   <td class="rx-fix">{r.top_fixes[0] ?? (r.score != null && r.score >= 90 ? 'Nothing major' : '–')}{r.top_fixes.length > 1 && <span class="rx-more"> +{r.top_fixes.length - 1} more</span>}</td>
-                  <td><a class="rx-go" href={`/check/?url=${encodeURIComponent(r.url)}`}>Check<span class="sr-only"> {r.name}</span></a></td>
+                  <td><a class="rx-go" rel="nofollow" href={`/check/?url=${encodeURIComponent(r.url)}`}>Check<span class="sr-only"> {r.name}</span></a></td>
                 </tr>
               ))}
             </tbody>

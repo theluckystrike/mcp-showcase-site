@@ -26,6 +26,8 @@ export interface Readiness {
     scanned: number; reachable: number; oauth: number; authless: number; avg_score: number;
     by_grade: Record<string, number>; store_ready: Record<StoreKey, number>;
   };
+  /** Partial-scan facts (s1102m QA P1-3): complete=false means the scan is still running. */
+  partial: { complete: boolean; registry_urls: number; sampling: string };
   rows: ReadinessRow[];
 }
 
@@ -101,6 +103,7 @@ export function getReadiness(): Readiness | null {
       by_grade: byGrade,
       store_ready: Object.fromEntries(STORES.map((s) => [s.key, num(t.store_ready?.[s.key], rows.filter((r) => r.stores[s.key]).length)])) as Record<StoreKey, number>,
     },
+    partial: { complete: t.complete !== false, registry_urls: num(t.registry_remote_urls, 0), sampling: str(t.sampling) },
     rows,
   };
   return cache;

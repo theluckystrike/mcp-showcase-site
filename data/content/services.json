@@ -7,7 +7,7 @@
  },
  "show_prices": true,
  "checkout_live": false,
- "checkout_off_note": "Each button opens an email to support@zovo.one with the job in the subject. We reply with the next step. Prices are the same.",
+ "checkout_off_note": "Each button opens an email to support@zovo.one with the job in the subject. We reply within 1 business day with a Stripe payment link at the price shown.",
  "eyebrow": "MCP store launch",
  "h1": "Get your MCP server into the Claude, ChatGPT and Gemini stores",
  "lead": "Each store checks different things: OAuth, tool annotations, descriptions, error handling, policy text. We find what blocks you, fix it, and submit. Fixed prices in US dollars.",
@@ -22,7 +22,7 @@
    "scope": [
     "We run McpStamp Check on your endpoint, then read the server by hand.",
     "OAuth flow, tool annotations, tool descriptions and error handling.",
-    "Store policies for the Claude Directory, ChatGPT Apps, Gemini Connected Apps and the MCP Registry."
+    "Store policies for the Claude Directory, ChatGPT apps, Gemini Connected Apps and the MCP Registry."
    ],
    "you_get": [
     "A written fix list, ranked by store blocker",
@@ -50,17 +50,17 @@
    "price_note": "All 4 stores. About 10 business days. $1,500 deposit now, $3,400 at handover.",
    "deposit_usd": 1500,
    "scope": [
-    "We fix your server until it passes McpStamp Check and each store's review list.",
+    "We fix your server until it passes McpStamp Check and each store's published review list.",
     "OAuth 2.1 with dynamic client registration, PKCE and refresh tokens.",
     "Tool annotations, server instructions and clear tool descriptions.",
-    "We prepare and submit the listings to Claude, ChatGPT, Gemini and the MCP Registry."
+    "We prepare the listings and submit them from your store accounts: Claude, ChatGPT, the MCP Registry, and Gemini when your account has access."
    ],
    "you_get": [
     "Fixes as commits in your repository",
     "Four listings written and submitted",
     "Up to 2 review rounds: we fix what reviewers ask and resubmit"
    ],
-   "note": "Google opened Connected Apps for Gemini in preview on 28 Oct 2026. US developers join through a waitlist. Over 50 apps were listed at launch (TechCrunch, 28 Oct 2026).",
+   "note": "Gemini: Google opened Connected Apps in preview on 28 Oct 2026, for US developers through a waitlist; over 50 apps were listed at launch (TechCrunch, 28 Oct 2026). If your account has no Gemini access when we finish, we deliver a Gemini-ready server and the submission pack, and you choose: we submit later at no charge, or we take $900 off the balance.",
    "cta": {
     "label": "Pay $1,500 deposit",
     "url": "https://mcp.zovo.one/buy/svc-launch-deposit",
@@ -69,7 +69,7 @@
    },
    "slot": "launch",
    "order_subject": "Store Launch, 4 stores ($4,900)",
-   "guarantee": "No store can guarantee approval. We fix and resubmit until the review feedback is cleared. Up to 2 review rounds are included.",
+   "guarantee": "No store can guarantee approval. Up to 2 review rounds are included: we fix what reviewers ask and resubmit.",
    "options": [
     {
      "label": "One store only: Claude, ChatGPT or Gemini",
@@ -175,14 +175,14 @@
     "url": "https://github.com/search?type=pullrequests&q=is%3Apr+is%3Amerged+is%3Apublic+author%3Atheluckystrike+-user%3Atheluckystrike+-org%3Azovo-one+-org%3ABeLikeNative+-org%3Anotemods+-org%3Atoolsthatrank+-org%3Alakelevelnow+-org%3Aaiwebsitepipeline+-org%3Ahandsofflinks+-org%3Aseeninaianswers+-org%3Aml0x-com+-org%3Amakeroll+-org%3Aworthmyclaim+-org%3Aingredientcalculator+-org%3ATrustWrx-Inc"
    },
    {
-    "value": "48",
-    "label": "of our 58 open-source MCP servers run hosted at mcp.zovo.one",
-    "url": "https://mcp.zovo.one/"
+    "value": "58",
+    "label": "open-source MCP servers we maintain (MIT), most of them hosted at mcp.zovo.one",
+    "url": "https://github.com/theluckystrike/mcp-servers"
    },
    {
-    "value": "48/48",
-    "label": "of those servers listed in the official MCP Registry",
-    "url": "https://registry.modelcontextprotocol.io/v0.1/servers?search=theluckystrike"
+    "value": "100/100",
+    "label": "McpStamp score of our own hosted invoice server: ready for Claude, ChatGPT, Gemini and the MCP Registry",
+    "url": "https://www.mcpstamp.com/check/?url=https%3A%2F%2Fmcp.zovo.one%2Fmcp%2Finvoice%2Fv1"
    },
    {
     "value": "Sent",
@@ -254,7 +254,7 @@
  "faq": [
   {
    "q": "How do I pay?",
-   "a": "By card, through Stripe. We never see your card number. The seller is autom8 LLC, as set out in our Terms."
+   "a": "By card, through Stripe. We never see your card number. The seller is autom8 LLC, as set out in our Terms. While online checkout is closed, we email you a Stripe payment link."
   },
   {
    "q": "Can I get an invoice?",
@@ -278,7 +278,7 @@
   },
   {
    "q": "Can you promise the stores will accept my server?",
-   "a": "No store can guarantee approval. Anthropic, OpenAI and Google review each listing themselves. We fix and resubmit until the review feedback is cleared. Up to 2 review rounds are included in Store Launch."
+   "a": "No. Anthropic, OpenAI and Google review each listing themselves. Store Launch includes up to 2 review rounds: we fix what reviewers ask and resubmit. Gemini submission also needs your account to have Connected Apps access (a US waitlist preview since 28 Oct 2026)."
   },
   {
    "q": "Is there a minimum term for the Care plan?",
