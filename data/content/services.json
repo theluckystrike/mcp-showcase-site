@@ -18,7 +18,7 @@
    "short": "Find out what stops your server from being listed, in order of what blocks you first.",
    "price_usd": 490,
    "price_label": "$490",
-   "price_note": "List price $750. Report in 3 business days.",
+   "price_note": "Fixed price. Report in 3 business days.",
    "scope": [
     "We run McpStamp Check on your endpoint, then read the server by hand.",
     "OAuth flow, tool annotations, tool descriptions and error handling.",
@@ -36,8 +36,6 @@
     "label_email": "Order the $490 audit"
    },
    "slot": "audit",
-   "list_usd": 750,
-   "price_tag": "Founding price for the first 10 audits",
    "credit": "100% of the audit fee is credited if you buy Store Launch or a custom server within 30 days.",
    "order_subject": "Readiness Audit ($490)"
   },
@@ -171,7 +169,7 @@
   "items": [
    {
     "value": "348",
-    "label": "pull requests merged in public repos of 109 organizations, outside his own orgs",
+    "label": "pull requests merged in 226 public repos of 200 other owners, 109 of them organizations",
     "url": "https://github.com/search?type=pullrequests&q=is%3Apr+is%3Amerged+is%3Apublic+author%3Atheluckystrike+-user%3Atheluckystrike+-org%3Azovo-one+-org%3ABeLikeNative+-org%3Anotemods+-org%3Atoolsthatrank+-org%3Alakelevelnow+-org%3Aaiwebsitepipeline+-org%3Ahandsofflinks+-org%3Aseeninaianswers+-org%3Aml0x-com+-org%3Amakeroll+-org%3Aworthmyclaim+-org%3Aingredientcalculator+-org%3ATrustWrx-Inc"
    },
    {
@@ -194,7 +192,7 @@
    "OAuth 2.1 with dynamic client registration, PKCE, refresh tokens and a branded consent page, live on our own servers.",
    "The same McpStamp Check you can run for free is the first step of every audit."
   ],
-  "footnote": "PR count measured 2 Nov 2026 with the GitHub search API. It leaves out repos the maintainer owns or runs."
+  "footnote": "PR count measured 2 Nov 2026 with the GitHub search API (public repos only). It leaves out repos the maintainer owns or runs."
  },
  "github": {
   "as_of": "2026-11-02",

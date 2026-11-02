@@ -42,7 +42,7 @@ export const GET: APIRoute = ({ site }) => {
     '',
     '## McpStamp Check',
     `- [McpStamp Check](${u('/check/')}): free check for any remote MCP server URL. Score 0-100, grade A-F, readiness for Claude, ChatGPT, Gemini and the MCP Registry, and the fix for each failed check. JSON API: ${u('/api/check')}?url=<https MCP URL>. README badge: ${u('/badge')}?url=<https MCP URL>.`,
-    `- [Services](${u('/services/')}): paid help from the maintainer. Readiness Audit $490 (founding price, list $750), Store Launch for Claude, ChatGPT, Gemini and the MCP Registry $4,900 (one store $1,900), custom MCP server from $4,500, Care plan $490 a month.`,
+    `- [Services](${u('/services/')}): paid help from the maintainer. Readiness Audit $490, Store Launch for Claude, ChatGPT, Gemini and the MCP Registry $4,900 (one store $1,900), custom MCP server from $4,500, Care plan $490 a month.`,
     ...(readinessPublished() ? [`- [McpStamp Readiness Index](${u('/readiness/')}): ${getReadiness()!.totals.scanned} remote servers from the official MCP Registry, scored with the same check. Average score ${Math.round(getReadiness()!.totals.avg_score)}. Updated ${getReadiness()!.generated_at.slice(0, 10)}.`] : []),
     '',
     '## Pricing',

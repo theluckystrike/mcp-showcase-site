@@ -9,6 +9,8 @@ import { bundleUrl, buyUrl } from '../data/servers';
 const audiences = pagesOfType('audience');
 const foot = upsell('all', 'footer', { copy: `All paid servers, one key, $${brand.pricing.bundleUsd} once.`, cta_url: buyUrl(bundleUrl(), 'footer', 'bundle') });
 const year = new Date().getFullYear();
+// No tip links on pages that sell paid services (QA2, 2026-11-02).
+const noTips = ['/services/', '/terms/'].includes(Astro.url.pathname);
 ---
 <footer class="site-foot perf-top relative mt-24">
   <div class="wrap grid gap-10 pb-12 pt-16 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
@@ -54,13 +56,13 @@ const year = new Date().getFullYear();
         <li><a href={brand.links.telegram} rel="noopener" target="_blank">Join Zovo Chat on Telegram</a></li>
         <li><a href={brand.links.githubProfile} rel="noopener" target="_blank">Maintainer on GitHub</a></li>
         <li><a href="/services/">Hire the maintainer</a></li>
-        <li><a href={brand.links.buyMeACoffee} rel="noopener nofollow" target="_blank">Buy Me a Coffee</a></li>
-        <li><a href={brand.links.paypal} rel="noopener nofollow" target="_blank">PayPal</a></li>
+        {!noTips && <li><a href={brand.links.buyMeACoffee} rel="noopener nofollow" target="_blank">Buy Me a Coffee</a></li>}
+        {!noTips && <li><a href={brand.links.paypal} rel="noopener nofollow" target="_blank">PayPal</a></li>}
       </ul>
     </div>
   </div>
   <div class="wrap border-t border-dashed border-line-strong py-5">
-    <SupportBand compact />
+    {!noTips && <SupportBand compact />}
   </div>
   <div class="foot-base">
     <div class="wrap flex flex-wrap justify-between gap-3 py-5">

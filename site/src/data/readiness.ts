@@ -16,7 +16,7 @@ export const GRADES = ['A', 'B', 'C', 'D', 'F'] as const;
 
 export interface ReadinessRow {
   name: string; url: string; repo: string; score: number | null; grade: string; auth: string; tools: number | null;
-  stores: Record<StoreKey, boolean>; top_fixes: string[];
+  stores: Record<StoreKey, boolean>; unverified: Record<StoreKey, boolean>; top_fixes: string[];
 }
 export interface Readiness {
   sample: boolean;
@@ -24,7 +24,7 @@ export interface Readiness {
   method: { text: string[]; items: { label: string; value: string }[] };
   totals: {
     scanned: number; reachable: number; oauth: number; authless: number; avg_score: number;
-    by_grade: Record<string, number>; store_ready: Record<StoreKey, number>;
+    by_grade: Record<string, number>; store_ready: Record<StoreKey, number>; store_unverified: Record<StoreKey, number>;
   };
   /** Partial-scan facts (s1102m QA P1-3): complete=false means the scan is still running. */
   partial: { complete: boolean; registry_urls: number; sampling: string };
@@ -73,6 +73,7 @@ export function getReadiness(): Readiness | null {
       grade: str(r.grade).toUpperCase().slice(0, 1), auth: str(r.auth) || 'unknown',
       tools: r.tools == null ? null : Array.isArray(r.tools) ? r.tools.length : num(r.tools),
       stores: Object.fromEntries(STORES.map((s) => [s.key, ready(r.stores?.[s.key])])) as Record<StoreKey, boolean>,
+      unverified: Object.fromEntries(STORES.map((s) => [s.key, Boolean(r.stores?.[s.key] && typeof r.stores[s.key] === 'object' && r.stores[s.key].status === 'unverified')])) as Record<StoreKey, boolean>,
       top_fixes: (Array.isArray(r.top_fixes) ? r.top_fixes : []).map(fixText).filter(Boolean).slice(0, 3),
     }));
   const t = j.totals ?? {};
@@ -102,6 +103,7 @@ export function getReadiness(): Readiness | null {
       avg_score: num(t.avg_score, reachableRows.length ? reachableRows.reduce((a, r) => a + (r.score ?? 0), 0) / reachableRows.length : 0),
       by_grade: byGrade,
       store_ready: Object.fromEntries(STORES.map((s) => [s.key, num(t.store_ready?.[s.key], rows.filter((r) => r.stores[s.key]).length)])) as Record<StoreKey, number>,
+      store_unverified: Object.fromEntries(STORES.map((s) => [s.key, num(t.store_unverified?.[s.key], rows.filter((r) => r.unverified[s.key]).length)])) as Record<StoreKey, number>,
     },
     partial: { complete: t.complete !== false, registry_urls: num(t.registry_remote_urls, 0), sampling: str(t.sampling) },
     rows,

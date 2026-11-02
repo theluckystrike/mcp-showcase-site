@@ -99,9 +99,12 @@ const jsonLd = hasRows && !R!.sample ? [{
                   <span class="rx-bar-l">{s.name}</span>
                   <span class="rx-bar-track"><span class="rx-bar" style={`width:${pct(T.store_ready[s.key], T.reachable)}%; background:var(--accent)`}></span></span>
                   <span class="rx-bar-v tnum">{n(T.store_ready[s.key])} <span class="rx-bar-p">{pct(T.store_ready[s.key], T.reachable)}%</span></span>
+                  {T.store_unverified[s.key] > 0 && <span class="rx-bar-u">+ {n(T.store_unverified[s.key])} unverified</span>}
                 </li>
               ))}
             </ul>
+            <p class="rx-cap mt-2">MCP Registry means a valid remote for the registry (public HTTPS, Streamable HTTP or SSE). It does not mean the server is listed. Unverified means nothing failed, but a blocking check could not run, mostly because tools are behind sign-in. In the table, a store with ? is unverified.</p>
+          
           </figure>
         </div>
       </section>
@@ -162,8 +165,8 @@ const jsonLd = hasRows && !R!.sample ? [{
                   <td>
                     <ul class="rx-stores">
                       {STORES.map((s) => (
-                        <li class:list={['rx-store', r.stores[s.key] && 'is-ready']} title={`${s.long}: ${r.stores[s.key] ? 'ready' : 'not yet'}`}>
-                          <span aria-hidden="true">{s.short}</span><span class="sr-only">{s.name}: {r.stores[s.key] ? 'ready' : 'not yet'}</span>
+                        <li class:list={['rx-store', r.stores[s.key] && 'is-ready', !r.stores[s.key] && r.unverified[s.key] && 'is-unverified']} title={`${s.long}: ${r.stores[s.key] ? 'ready' : r.unverified[s.key] ? 'unverified (could not check everything without sign-in)' : 'not yet'}`}>
+                          <span aria-hidden="true">{s.short}{!r.stores[s.key] && r.unverified[s.key] ? '?' : ''}</span><span class="sr-only">{s.name}: {r.stores[s.key] ? 'ready' : r.unverified[s.key] ? 'unverified' : 'not yet'}</span>
                         </li>
                       ))}
                     </ul>
@@ -315,6 +318,8 @@ const jsonLd = hasRows && !R!.sample ? [{
   .rx-grade { font-family: var(--font-display); font-weight: 850; font-stretch: 80%; font-size: 1.1rem; }
   .rx-dash { font-size: .82rem; color: var(--faint); }
   .rx-stores { display: flex; gap: .25rem; list-style: none; margin: 0; padding: 0; }
+  .rx-store.is-unverified { border-style: dashed; }
+  .rx-bar-u { display: block; font-size: .8rem; color: var(--faint); }
   .rx-store { font-family: var(--font-mono); font-size: .66rem; font-weight: 600; padding: .1rem .3rem; border: 1px dashed var(--border-strong); border-radius: 2px; color: var(--faint); }
   .rx-store.is-ready { border-style: solid; border-color: var(--text); background: var(--text); color: var(--bg); }
   .rx-fix { font-size: .88rem; color: var(--muted); max-width: 22rem; }

@@ -33,7 +33,7 @@ export const brand = {
     buyMeACoffee: 'https://buymeacoffee.com/michaellip',
     paypal: 'https://paypal.me/najzzz',
     telegram: 'https://t.me/zovo_chat',
-    registry: 'https://registry.modelcontextprotocol.io/v0.1/servers?search=theluckystrike',
+    registry: 'https://registry.modelcontextprotocol.io/',
   },
   pricing: { serverUsd: 19, bundleUsd: 39 },
   // GA4 property 561638567 (account Portfolio sites), web stream www.mcpstamp.com. Created 2026-10-30 by the orchestrator.

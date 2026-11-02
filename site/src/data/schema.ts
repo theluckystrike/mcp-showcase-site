@@ -16,6 +16,9 @@ export const PAGE_MODIFIED: Record<string, string> = {
   '/services/': '2026-11-02',
   '/terms/': '2026-11-02',
   '/check/': '2026-11-02',
+  '/readiness/': '2026-11-02',
+  '/pricing/': '2026-11-02',
+  '/': '2026-11-02',
 };
 export const modifiedFor = (path: string): string => PAGE_MODIFIED[path] ?? CONTENT_REVIEWED;
 
