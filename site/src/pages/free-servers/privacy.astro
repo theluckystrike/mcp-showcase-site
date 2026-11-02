@@ -1,0 +1,16 @@
+---
+// Privacy note for the free public data servers (s1102). Separate from the site's /privacy/ page.
+import Layout from '../../layouts/Layout.astro';
+const title = `Privacy for the free data servers`;
+const description = `What the free public MCP data servers collect. No accounts, no tokens, nothing stored about you or your conversation.`;
+---
+<Layout title={title} description={description} crumbs={[{ name: 'Free servers', path: '/free-servers/' }, { name: 'Privacy', path: '/free-servers/privacy/' }]}>
+  <section class="wrap pb-16 pt-12 sm:pt-16">
+    <h1 class="display max-w-4xl">Privacy for the free data servers</h1>
+    <p class="lead mt-5 max-w-2xl">This page covers the free servers listed on <a href="/free-servers/">the free servers page</a>. The rest of the site is covered by <a href="/privacy/">the main privacy policy</a>.</p>
+      <p class="muted mt-4 max-w-[42em]">The free data servers hosted at addresses ending in lipmichal.workers.dev have no accounts and no tokens. They don't ask for your name, email address or location, and they store nothing about you or your conversation. A call sends only the arguments the tool needs, such as a lake name, a state or a dollar amount. Cloudflare hosts the servers and logs requests the way any web host does, including time, IP address and request path, under its own retention rules. Answers from public agencies can be cached at the edge for up to one hour, and the cache holds public agency data only.</p>
+      <p class="muted mt-4 max-w-[42em]">Results include a link to a source page and a related page on a site run by the same author. Those links carry a utm tag so the author can count visits. Following a link is optional and sends nothing to the server.</p>
+      <p class="muted mt-4 max-w-[42em]">Questions go to <a href="mailto:support@zovo.one">support@zovo.one</a>.</p>
+    <p class="muted mt-8 text-[.9rem]">Last updated 2 November 2026.</p>
+  </section>
+</Layout>

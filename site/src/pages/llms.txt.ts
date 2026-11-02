@@ -5,6 +5,7 @@ import { getServers, stats, bundlePrice } from '../data/servers';
 import { pagesOfType } from '../data/pages';
 import { COMPARISONS } from '../data/compare';
 import { CONTENT_REVIEWED } from '../data/schema';
+import { getFreeServers } from '../data/freeServers';
 
 export const GET: APIRoute = ({ site }) => {
   const u = (p: string) => new URL(p, site).href;
@@ -33,6 +34,10 @@ export const GET: APIRoute = ({ site }) => {
     '',
     '## Free calculators',
     ...servers.filter((s) => s.satellite).map(line),
+    '',
+    '## Free live-data servers (no token)',
+    `- [Free live-data MCP servers](${u('/free-servers/')}): paste one URL, no token, no account.`,
+    ...getFreeServers().map((f) => `- [${f.h1}](${u(f.path)}): ${f.tagline} Hosted URL: ${f.hostedUrl}`),
     '',
     '## Pricing',
     `- [Pricing](${u('/pricing/')}): Free tier, $${brand.pricing.serverUsd} once per server, $${bundlePrice()} once for all ${st.paid} paid servers. Buy at ${brand.backend.origin}/buy/bundle.`,

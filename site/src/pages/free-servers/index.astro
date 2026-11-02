@@ -1,0 +1,50 @@
+---
+// Free live-data MCP servers index (s1102). Data: data/content/free-servers.json.
+import Layout from '../../layouts/Layout.astro';
+import FreeServerList from '../../components/FreeServerList.astro';
+import CopyCode from '../../components/CopyCode.astro';
+import { brand } from '../../config/brand';
+import { getFreeServers } from '../../data/freeServers';
+
+const list = getFreeServers();
+const tools = list.reduce((n, s) => n + s.tools.length, 0);
+const title = `Free live-data MCP servers, no token`;
+const description = `${list.length} free MCP servers with live data and new rules. Lake levels, gold prices, wages, 2026 tax limits, Section 179, nutrition, AP scores, A/B tests and subdomains. Paste one URL.`;
+const example = list[0];
+const jsonLd = [
+  { '@type': 'CollectionPage', name: 'Free live-data MCP servers' },
+  {
+    '@context': 'https://schema.org', '@type': 'ItemList', name: 'Free live-data MCP servers', numberOfItems: list.length,
+    itemListElement: list.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(s.path, Astro.site).href, name: s.h1 })),
+  },
+];
+---
+<Layout title={title} description={description} jsonLd={jsonLd} crumbs={[{ name: 'Free servers', path: '/free-servers/' }]}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-12 sm:pt-16">
+      <h1 class="display max-w-4xl">Free live-data MCP servers. <span class="mark">Paste a URL.</span></h1>
+      <p class="lead mt-5 max-w-2xl">{list.length} servers, {tools} tools. Each one reads data a model cannot know from training: today's prices, this week's levels, rules passed after the cutoff, exact calendar math. No token, no account.</p>
+    </div>
+  </section>
+
+  <section class="wrap pb-10">
+    <FreeServerList headingLevel="h2" />
+  </section>
+
+  <section class="wrap py-12">
+    <div class="grid gap-8 border-y border-line py-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-12">
+      <div>
+        <span class="eyebrow">How to connect</span>
+        <h2 class="mt-3 text-2xl font-bold sm:text-3xl">One URL per server</h2>
+        <p class="muted mt-3 max-w-[34em]">In Claude.ai, open Settings, then Connectors, then Add custom connector, and paste the URL. In Claude Code, Cursor or VS Code, add it as a remote HTTP server. Each server page has the exact lines.</p>
+      </div>
+      {example && <CopyCode code={`claude mcp add --transport http ${example.repo.replace(/-mcp$/, '')} \\\n  ${example.hostedUrl}`} label={`Example: ${example.name}`} />}
+    </div>
+  </section>
+
+  <section class="wrap pb-6">
+    <p class="muted max-w-3xl">All servers are open source on GitHub and listed in the official MCP Registry. For invoices, quotes, PDFs and other back-office files, see the <a href="/servers/" class="link">{brand.name} servers</a>.</p>
+  </section>
+  <section class="wrap pb-12"><p class="muted text-[.95rem]">What these servers collect is on <a href="/free-servers/privacy/">the free servers privacy page</a>.</p></section>
+</Layout>

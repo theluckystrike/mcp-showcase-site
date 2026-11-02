@@ -9,6 +9,8 @@ import HomeJobs from '../components/HomeJobs.astro';
 import HomePricing from '../components/HomePricing.astro';
 import StickyCta from '../components/StickyCta.astro';
 import TelegramCta from '../components/TelegramCta.astro';
+import FreeServerList from '../components/FreeServerList.astro';
+import { getFreeServers } from '../data/freeServers';
 import { brand } from '../config/brand';
 import { stats, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
 import { seo } from '../data/pages';
@@ -25,6 +27,7 @@ const JOB_PATHS = [
   ['Sort a bank CSV', '/use-cases/categorize-bank-statement/'],
   ['Turn hours into an invoice', '/use-cases/track-billable-time-in-claude/'],
 ];
+const freeCount = getFreeServers().length;
 const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
 ---
 <Layout
@@ -69,6 +72,23 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
       <div class="mt-8"><HomeJobs /></div>
     </div>
   </section>
+
+  <!-- FREE LIVE-DATA SERVERS (s1102): data/content/free-servers.json -->
+  {freeCount > 0 && (
+    <section id="free-servers" class="section pt-0">
+      <div class="wrap">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <span class="eyebrow">Free servers</span>
+            <h2 class="h2 mt-3">Free live-data MCP servers</h2>
+          </div>
+          <a href="/free-servers/" class="link text-[.95rem]">All {freeCount} free servers</a>
+        </div>
+        <p class="lead mt-3">Data a model cannot know from training: today's gold price, this week's lake level, new tax rules, exact business days. Paste one URL. No token.</p>
+        <div class="mt-8"><FreeServerList /></div>
+      </div>
+    </section>
+  )}
 
   <!-- FREE VS PAID: receipt -->
   <section id="pricing" class="section pt-0">

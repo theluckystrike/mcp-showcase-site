@@ -3,10 +3,11 @@ import { CATEGORIES } from './categories';
 import { getServers } from './servers';
 import { pagesOfType, pageMeta } from './pages';
 import { COMPARISONS } from './compare';
+import { getFreeServers, freeServerLastmod } from './freeServers';
 
 export const BUILT_PAGE_TYPES = ['use-case', 'answer', 'audience', 'client-guide'];
 
-export function allRoutes(): { path: string; priority: number }[] {
+export function allRoutes(): { path: string; priority: number; lastmod?: string }[] {
   const prio = (p: string, d: number) => pageMeta(p)?.priority ?? d;
   const fixed = ['/', '/servers/', '/use-cases/', '/pricing/', '/connect/', '/developers/', '/developers/hosted-endpoints/', '/developers/tool-contracts/', '/developers/mcp-inspector/', '/compare/', '/services/', '/about/'];
   const out = [
@@ -16,6 +17,10 @@ export function allRoutes(): { path: string; priority: number }[] {
     ...COMPARISONS.map((c) => ({ path: `/compare/${c.slug}/`, priority: prio(`/compare/${c.slug}/`, 0.6) })),
     ...CATEGORIES.map((c) => ({ path: `/categories/${c.id}/`, priority: prio(`/categories/${c.id}/`, 0.6) })),
     ...getServers().map((s) => ({ path: `/servers/${s.id}/`, priority: prio(`/servers/${s.id}/`, 0.4) })),
+    // Free live-data servers (s1102): own lastmod = date added or tools re-checked (data/content/free-servers.json).
+    ...(getFreeServers().length ? [{ path: '/free-servers/', priority: 0.7, lastmod: freeServerLastmod() || undefined }] : []),
+    ...getFreeServers().map((s) => ({ path: s.path, priority: 0.6, lastmod: freeServerLastmod(s) || undefined })),
+    ...(getFreeServers().length ? [{ path: '/free-servers/privacy/', priority: 0.2 }] : []),
   ];
   const seen = new Set<string>();
   return out.filter((r) => (seen.has(r.path) ? false : (seen.add(r.path), true)));
