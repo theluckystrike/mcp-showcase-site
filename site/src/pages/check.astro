@@ -273,6 +273,8 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
       const wait = Number.isFinite(s) && s > 0 ? (s >= 90 ? `${Math.ceil(s / 60)} minutes` : `${Math.ceil(s)} seconds`) : 'a few minutes';
       return `Too many checks from your network. Try again in ${wait}.`;
     }
+    if (r.status === 502 && code === 'blocked_by_firewall') return `A firewall or bot filter in front of this server blocked our checker, so nothing could be checked.${r.body?.detail ? ' Detail: ' + String(r.body.detail).slice(0, 240) : ''} If it is your server, allow the user agent McpStampCheck/1.0 or check from a network the filter allows.`;
+    if (r.status === 403 && !r.body) return 'Our firewall blocked this request before it reached the checker. This happens for URLs that look like an attack (for example a raw IP address or a script tag). Paste the plain public HTTPS URL of the MCP endpoint.';
     if (r.status === 502) return `The server did not answer as an MCP server.${r.body?.detail ? ' Detail: ' + String(r.body.detail).slice(0, 240) : ''} Check that the URL is the MCP endpoint and that it is public.`;
     if (r.status === 404 && mode === 'result') return 'No stored result for this link. It may have expired. Run the check again with the server URL.';
     return `The check failed with status ${r.status || 'none'}. Try again in a minute.`;
@@ -359,7 +361,13 @@ const AUDIT_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=site.ch
         li.append(ul);
       }
       const unv: string[] = (Array.isArray(s.unverified) ? s.unverified : []).map((u: unknown) => typeof u === 'string' ? String(byId[u]?.title || u) : '').filter(Boolean);
-      if (unv.length) li.append(el('p', 'ck-unverified', `Not verified without sign-in: ${unv.join(', ')}.`));
+      if (unv.length) {
+        const reasons = (s.unverified_reasons && typeof s.unverified_reasons === 'object') ? Object.values(s.unverified_reasons).map(String) : [];
+        const why = reasons.length && reasons.every((x) => x === 'needs_sign_in') ? 'Not verified without sign-in'
+          : reasons.length && reasons.every((x) => x === 'not_probed') ? 'Not probed (request or time limit)'
+          : 'Not verified';
+        li.append(el('p', 'ck-unverified', `${why}: ${unv.join(', ')}.`));
+      }
       stores.append(li);
     }
 
