@@ -9,7 +9,9 @@ import TelegramCta from '../components/TelegramCta.astro';
 import { brand } from '../config/brand';
 import { getPricing } from '../data/content';
 import { CATEGORIES } from '../data/categories';
-import { stats, getServers, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
+import fs from 'node:fs';
+import path from 'node:path';
+import { stats, getServers, bundleUrl, bundlePrice, buyUrl, CONTENT_DIR } from '../data/servers';
 import { seo } from '../data/pages';
 import { getServicesContent, priceText, usd, ctaHref, ctaLabel } from '../data/services';
 const meta = seo('/pricing/', { title: 'Pricing', description: '' });
@@ -44,6 +46,13 @@ const svcLines = svcList.flatMap((s) => [
   ...(s.options ?? []).map((o) => ({ href: `/services/#${s.id}`, name: o.label, price: o.price_label, list: undefined as number | undefined, text: '' })),
 ]);
 const svcAudit = svcList.find((s) => s.id === 'audit');
+// Loss line from the Readiness Index snapshot. Missing file = no line.
+let svcLoss = '';
+try {
+  const j = JSON.parse(fs.readFileSync(path.join(CONTENT_DIR, 'readiness.json'), 'utf8'));
+  const n = Number(j?.totals?.reachable), all4 = Number(j?.totals?.ready_all4);
+  if (!j.sample && n > 0 && all4 >= 0) svcLoss = `Only ${all4.toLocaleString('en-US')} of the ${n.toLocaleString('en-US')} MCP Registry servers I checked are ready for all four stores. `;
+} catch { svcLoss = ''; }
 const refundSrc = 'https://github.com/theluckystrike/mcp-servers/blob/main/billing/src/index.js#L1217';
 const srcText = (s?: string) => (s ?? '').replace(/~\/mcp-servers\//g, 'mcp-servers/');
 const faq = p.faq.length ? p.faq : [
@@ -166,7 +175,7 @@ const faq = p.faq.length ? p.faq : [
   <section class="wrap py-10" aria-labelledby="svc-h">
     <span class="eyebrow">Services</span>
     <h2 id="svc-h" class="h2 mt-3 font-display">Your own MCP server, ready for four stores</h2>
-    <p class="muted mt-2 max-w-2xl">I get it past the checks of Claude, ChatGPT, Gemini and the MCP Registry, or build one for you. Fixed prices, paid upfront by card, and I start the next business day. Everything runs by email.</p>
+    <p class="muted mt-2 max-w-2xl">{svcLoss}I get yours past the checks of Claude, ChatGPT, Gemini and the MCP Registry, or build one for you. Fixed prices, paid upfront by card, and I start the next business day. Everything runs by email.</p>
     {svcLines.length > 0 ? (
       <ul class="srv-list svc-lines mt-6 grid gap-x-8 md:grid-cols-2">
         {svcLines.map((s) => (
@@ -191,7 +200,7 @@ const faq = p.faq.length ? p.faq : [
       )}
       <a href="/services/" class="link text-[.95rem]">What each job includes</a>
     </div>
-    <p class="mt-4 text-[.95rem]"><span class="muted">Not sure where you stand? </span><a href="/check/" class="link">Run the free McpStamp Check</a><span class="muted"> and get a score from 0 to 100 for each store.</span></p>
+    <p class="mt-4 text-[.95rem]"><span class="muted">Not sure where you stand? </span><a href="/check/" class="link">Run the free McpStamp Check</a><span class="muted"> and get a score from 0 to 100 for each store. </span><a href="/check/?url=https%3A%2F%2Fmcp.zovo.one%2Fmcp%2Finvoice%2Fv1" rel="nofollow" class="link">My own invoice server scores 100/100</a><span class="muted">.</span></p>
   </section>
 
   <section class="wrap py-4">
