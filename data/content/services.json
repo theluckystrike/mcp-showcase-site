@@ -176,8 +176,8 @@
    },
    {
     "value": "48",
-    "label": "hosted MCP servers in production, with 579 tools",
-    "url": "https://github.com/theluckystrike/mcp-servers"
+    "label": "of our 58 open-source MCP servers run hosted at mcp.zovo.one",
+    "url": "https://mcp.zovo.one/"
    },
    {
     "value": "48/48",
@@ -185,8 +185,8 @@
     "url": "https://registry.modelcontextprotocol.io/v0.1/servers?search=theluckystrike"
    },
    {
-    "value": "Done",
-    "label": "our own Google Connected Apps submission, 1 Nov 2026"
+    "value": "Sent",
+    "label": "our own Google Connected Apps (Gemini) waitlist application, 1 Nov 2026"
    }
   ],
   "lines": [
