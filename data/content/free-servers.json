@@ -1246,6 +1246,107 @@
     "What SAT score do I need to be in the top 10%?",
     "Which states have the highest average SAT score with at least 50% participation?"
    ]
+  },
+  {
+   "repo": "raw-to-cooked-weight-mcp",
+   "topic": "Raw to cooked weight",
+   "name": "Raw to Cooked Weight",
+   "tagline": "Raw and cooked weight of meat and poultry from the USDA Table of Cooking Yields.",
+   "knows": [
+    "The USDA measured cooking yield for each cut and cooking method, with the range across samples.",
+    "Cooked weight from raw, raw weight from cooked, and how much raw meat to buy for a number of servings.",
+    "Beef, pork, chicken, turkey, lamb, veal, game and sausage. Fish and seafood are not in the USDA table."
+   ],
+   "sources": "USDA ARS Table of Cooking Yields for Meat and Poultry (spreadsheet and documentation); NIST SP 811 for pounds and ounces.",
+   "hosted_url": "https://raw-to-cooked-weight-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/raw-to-cooked-weight-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-03",
+   "added": "2026-11-03",
+   "money_site": {
+    "name": "RecipeTool raw to cooked weight calculator",
+    "url": "https://recipetool.net/tools/raw-to-cooked-weight-calculator"
+   },
+   "prompts": [
+    "How much does 1 lb of raw 80/20 ground beef weigh after cooking?",
+    "I ate 150 g of roasted chicken thigh. What was the raw weight?",
+    "How much raw pork shoulder should I buy to serve 10 people?"
+   ],
+   "tools": [
+    {
+     "name": "convert_raw_to_cooked",
+     "title": "Convert raw to cooked weight",
+     "description": "Cooked weight of raw meat or poultry using the USDA measured cooking yield for that cut and cooking method (USDA Table of Cooking Yields for Meat and Poultry). Returns the expected cooked weight in g, oz, lb and kg, the range seen across USDA samples, the weight lost, and the USDA row used. Understands ground beef lean ratios such as 80/20 or 93% lean."
+    },
+    {
+     "name": "convert_cooked_to_raw",
+     "title": "Convert cooked to raw weight",
+     "description": "Raw weight that a cooked portion of meat or poultry came from, using the USDA measured cooking yield. Use it to log a cooked portion against raw nutrition data (labels and most databases list raw meat) or to scale a recipe written in cooked weight. Returns raw weight in g, oz, lb and kg, and the raw weight if the yield was at the USDA high or low end."
+    },
+    {
+     "name": "calculate_raw_weight_to_buy",
+     "title": "Calculate raw meat to buy",
+     "description": "How much raw meat or poultry to buy for a number of cooked servings, from the USDA cooking yield for that cut and method. Default cooked serving is 3 oz (85 g)."
+    },
+    {
+     "name": "find_cooking_yield",
+     "title": "Find USDA cooking yield",
+     "description": "Look up the USDA cooking yield percent for a cut of meat or poultry and a cooking method, with the yield range, sample count, moisture change and fat change measured by USDA, plus up to 4 close alternative rows with their yield_id."
+    },
+    {
+     "name": "list_cooking_yields",
+     "title": "List USDA cooking yields",
+     "description": "List rows of the USDA Table of Cooking Yields for Meat and Poultry, filtered by category (beef, pork, poultry, chicken, turkey, lamb, veal, game, sausage) and cooking method."
+    }
+   ]
+  },
+  {
+   "repo": "vegetable-yield-percentage-mcp",
+   "topic": "Vegetable yield percentage",
+   "name": "Vegetable Yield Percentage",
+   "tagline": "Edible yield of raw vegetables and fruit after peel, seeds and trim, from USDA data.",
+   "knows": [
+    "The USDA edible yield percent for 305 raw vegetables and fruits, and what the refuse is.",
+    "Edible weight from a purchased weight, and how much to buy for a recipe amount.",
+    "USDA household weights such as 1 medium onion or 1 cup chopped."
+   ],
+   "sources": "USDA National Nutrient Database for Standard Reference, Release 28 (refuse percent and household weights); NIST SP 811 for pounds and ounces.",
+   "hosted_url": "https://vegetable-yield-percentage-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/vegetable-yield-percentage-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-03",
+   "added": "2026-11-03",
+   "money_site": {
+    "name": "Ingredient Calculator vegetable yield calculator",
+    "url": "https://ingredientcalculator.com/vegetable-yield-percentage-calculator"
+   },
+   "prompts": [
+    "How much butternut squash is left after peeling 3 lb?",
+    "How many onions do I buy for 3 cups chopped?",
+    "Which vegetables have the lowest edible yield?"
+   ],
+   "tools": [
+    {
+     "name": "get_vegetable_yield",
+     "title": "Get vegetable yield percentage",
+     "description": "USDA edible yield percent for a raw vegetable or fruit (the share left after removing peel, seeds, core, stems and trimmings), the refuse percent and what the refuse is, plus USDA household weights (1 medium, 1 cup chopped, 1 clove) and the as-purchased weight of one whole item. From USDA SR28 refuse data."
+    },
+    {
+     "name": "calculate_edible_weight",
+     "title": "Calculate edible weight",
+     "description": "Edible weight and trim waste from a purchased (as purchased, untrimmed) weight of a raw vegetable or fruit, using the USDA edible yield percent."
+    },
+    {
+     "name": "calculate_amount_to_buy",
+     "title": "Calculate how much produce to buy",
+     "description": "How much of a raw vegetable or fruit to buy for a recipe amount. Give the prepared amount in g, kg, oz or lb, or as a USDA household measure such as \"cup chopped\", \"cup sliced\", \"medium\" or \"clove\". Returns the edible weight needed, the as-purchased weight to buy at the USDA edible yield, and the number of whole items (for example medium onions) to buy."
+    },
+    {
+     "name": "list_vegetable_yields",
+     "title": "List vegetable and fruit yields",
+     "description": "List raw vegetables and fruits with their USDA edible yield percent, filtered to fruit or vegetable and sorted by name, lowest yield or highest yield."
+    }
+   ]
   }
  ]
 }

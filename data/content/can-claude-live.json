@@ -3,7 +3,7 @@
   "s1103 stamp: /can-claude/<slug>/ pages backed by one free live-data server (data/content/free-servers.json).",
   "answer = first paragraph, an honest yes/no/partly about what Claude does without a tool. example = a real tools/call result.",
   "Generator: ~/mcp-servers/data/s1103/stamp/make_can_claude_live.py. Raw call responses: ~/mcp-servers/data/s1103/stamp/calls/.",
-  "s1103 canclaude2: 14 more pages (generator ~/mcp-servers/data/s1103/canclaude2/make_can_claude_live2.py, calls in canclaude2/calls/). Entries with server_id use a catalog server on mcp.zovo.one (free token)."
+  "s1103 canclaude2: 16 more pages (generator ~/mcp-servers/data/s1103/canclaude2/make_can_claude_live2.py, calls in canclaude2/calls/). Entries with server_id use a catalog server on mcp.zovo.one (free token)."
  ],
  "pages": [
   {
@@ -1157,6 +1157,114 @@
     {
      "q": "How far back does it go?",
      "a": "The free tier reads rates for the last 90 days. History back to January 1999 is in Pro."
+    }
+   ]
+  },
+  {
+   "slug": "convert-raw-to-cooked-weight",
+   "repo": "raw-to-cooked-weight-mcp",
+   "h1": "Can Claude convert raw to cooked weight?",
+   "title": "Can Claude convert raw to cooked meat weight? USDA yields",
+   "query": "can claude convert raw to cooked weight",
+   "answer": "Only roughly. Claude knows that meat loses water and fat as it cooks and often quotes a rule of thumb such as 25%, but the real loss depends on the cut, the fat level and the cooking method, and USDA measured it for each one. Connect the free Raw to Cooked Weight server and Claude uses the USDA cooking yield for that cut and method, with the range seen across USDA samples, in both directions.",
+   "native": [
+    "Explains why meat shrinks when it cooks.",
+    "Applies a percentage you give it."
+   ],
+   "needs": [
+    "The USDA measured yield for each cut and cooking method, with its range.",
+    "Cooked weight from raw, and raw weight from a cooked portion for food logging.",
+    "How much raw meat to buy for a number of cooked servings."
+   ],
+   "example": {
+    "prompt": "How much does 1 lb of raw 80/20 ground beef weigh after I pan-broil it into patties?",
+    "tool": "convert_raw_to_cooked",
+    "args": {
+     "food": "80/20 ground beef patty",
+     "method": "pan_broil",
+     "raw_weight": 1,
+     "unit": "lb"
+    },
+    "result": "1 pound raw beef, ground, medium fat (12%-22%), patty (pan-broiled) cooks down to about 0.73 pounds (331 g) at the USDA cooking yield of 73%; USDA samples ranged 0.71-0.76 pounds.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "example2": {
+    "prompt": "I ate 150 g of roasted chicken thigh. What did it weigh raw?",
+    "tool": "convert_cooked_to_raw",
+    "args": {
+     "food": "chicken thigh",
+     "method": "roast",
+     "cooked_weight": 150,
+     "unit": "g"
+    },
+    "result": "150 grams of cooked chicken, broiler-fryer, thigh, meat and skin (baked or roasted, unspecified) came from about 217.39 grams (217 g) raw, using the USDA cooking yield of 69%. Use the raw weight with raw nutrition data when you log food or scale a recipe.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Why log raw weight?",
+     "a": "Nutrition labels and most food databases list raw meat. Logging a cooked portion against raw values undercounts, so the server converts the cooked portion back to raw."
+    },
+    {
+     "q": "Does it cover fish or rice?",
+     "a": "No. The USDA table covers meat and poultry only, so the server refuses fish, seafood, duck, rice and pasta and says why."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-vegetable-yield",
+   "repo": "vegetable-yield-percentage-mcp",
+   "h1": "Can Claude calculate vegetable yield after peeling and trimming?",
+   "title": "Can Claude calculate vegetable yield? USDA trim data",
+   "query": "can claude calculate vegetable yield",
+   "answer": "It guesses. Claude knows that peel, seeds and cores are thrown away, but it doesn't have the edible share for each vegetable to hand, so it estimates, and the estimate changes from one answer to the next. Connect the free Vegetable Yield Percentage server and Claude uses the USDA edible yield for that vegetable or fruit to turn a purchased weight into edible weight, or a recipe amount into what to buy.",
+   "native": [
+    "Explains what trim waste is and why yield matters for costing.",
+    "Does the sum once you give it a yield percent."
+   ],
+   "needs": [
+    "The USDA edible yield percent and what the refuse is, for 305 raw vegetables and fruits.",
+    "Edible weight and waste from a weight as bought.",
+    "How much to buy for cups chopped, a weight or a number of whole items."
+   ],
+   "example": {
+    "prompt": "I bought a 3 lb butternut squash. How much will I have after peeling and seeding it?",
+    "tool": "calculate_edible_weight",
+    "args": {
+     "food": "butternut squash",
+     "purchased_weight": 3,
+     "unit": "lb"
+    },
+    "result": "3 pounds of squash, winter, butternut, raw as purchased gives about 2.52 pounds (1143 g) edible after removing seeds, rind and trimmings (USDA edible yield 84%). Waste: 218 g.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "example2": {
+    "prompt": "My recipe needs 3 cups of chopped onion. How much do I buy?",
+    "tool": "calculate_amount_to_buy",
+    "args": {
+     "food": "onion",
+     "amount": 3,
+     "measure": "cup chopped"
+    },
+    "result": "For 3 x cup, chopped (160 g each, USDA) of onions, raw you need 480 g edible, so buy about 533 g (1.18 lb) as purchased at the USDA edible yield of 90%, or about 4.4 x medium (2-1/2\" dia) (round up to 5).",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "How old is the USDA data?",
+     "a": "The refuse values come from USDA Standard Reference, Release 28 (2015). They are averages, so a single squash or onion can differ."
+    },
+    {
+     "q": "Does it cover herbs and nuts?",
+     "a": "No. Herbs such as parsley and basil, nuts and coconut are not in its data. It answers for raw vegetables and fruits."
     }
    ]
   }
