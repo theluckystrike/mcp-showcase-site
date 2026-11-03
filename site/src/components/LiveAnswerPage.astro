@@ -6,11 +6,15 @@ import CopyCode from './CopyCode.astro';
 import Faq from './Faq.astro';
 import { installLines, moneyHref } from '../data/freeServers';
 import { getLiveAnswers, type LiveAnswer, type LiveExample } from '../data/canClaudeLive';
+import { brand } from '../config/brand';
 
 interface Props { page: LiveAnswer }
 const { page: p } = Astro.props;
 const s = p.server;
 const lines = installLines(s);
+// s1103 canclaude2: catalog servers on mcp.zovo.one need a free token (30 days, 600 calls an hour, no account).
+const tok = p.tokenRequired;
+const tokenCmd = `curl -s -X POST ${brand.backend.tokenEndpoint}`;
 const url = new URL(p.path, Astro.site).href;
 const firstSentences = (t: string, max = 160) => {
   let out = '';
@@ -21,7 +25,9 @@ const description = firstSentences(p.answer);
 const faq = [
   { q: p.h1, a: p.answer },
   ...p.faq,
-  { q: 'Is the server free?', a: `Yes. The ${s.name} server is free at its hosted URL with no token, key or account. The source is open on GitHub.` },
+  tok
+    ? { q: 'Is the server free?', a: `The hosted ${s.name} server has a free tier. A free token lasts 30 days and allows 600 calls an hour, with no account. Some features are Pro; the server page lists what is free and what is not.` }
+    : { q: 'Is the server free?', a: `Yes. The ${s.name} server is free at its hosted URL with no token, key or account. The source is open on GitHub.` },
 ];
 const money = moneyHref(s, `can-claude-${p.slug}`);
 const examples: LiveExample[] = [p.example, ...(p.example2 ? [p.example2] : [])];
@@ -32,7 +38,7 @@ const jsonLd = [
     '@context': 'https://schema.org', '@type': 'HowTo', name: `${p.h1.replace(/\?$/, '')} with the ${s.name} MCP server`, url,
     tool: [{ '@type': 'HowToTool', name: `${s.name} MCP server` }],
     step: [
-      { '@type': 'HowToStep', name: 'Connect', text: `Add ${s.hostedUrl} as a custom connector in Claude, or with claude mcp add in Claude Code.` },
+      { '@type': 'HowToStep', name: 'Connect', text: tok ? `Get a free token from ${brand.backend.tokenEndpoint}, then add ${s.hostedUrl} with your token as a custom connector in Claude, or with claude mcp add in Claude Code.` : `Add ${s.hostedUrl} as a custom connector in Claude, or with claude mcp add in Claude Code.` },
       { '@type': 'HowToStep', name: 'Ask', text: p.example.prompt },
       { '@type': 'HowToStep', name: p.example.tool, text: p.example.result },
     ],
@@ -53,7 +59,7 @@ const crumbs = [{ name: 'Can Claude', path: '/can-claude/' }, { name: p.h1, path
         <h1 class="display mt-4 !text-[clamp(2.1rem,5vw,3.5rem)]">{p.h1}</h1>
         <p class="lead qas mt-5 !text-fg">{p.answer}</p>
         <div class="mt-7 flex flex-wrap gap-3">
-          <a href="#connect" class="btn btn-primary">Connect free, no token</a>
+          <a href="#connect" class="btn btn-primary">{tok ? 'Connect with a free token' : 'Connect free, no token'}</a>
           <a href={s.path} class="btn">{s.h1}</a>
         </div>
       </div>
@@ -96,14 +102,17 @@ const crumbs = [{ name: 'Can Claude', path: '/can-claude/' }, { name: p.h1, path
 
   <section id="connect" class="wrap py-12">
     <h2 class="h2">Connect it in 1 minute</h2>
-    <p class="muted mt-3 max-w-2xl">One URL, no token, no account. In Claude.ai or Claude Desktop open Settings, then Connectors, then Add custom connector, and paste the URL.</p>
+    {tok
+      ? <p class="muted mt-3 max-w-2xl">Get a free token first: no account, 30 days, 600 calls an hour. Put it in the URL in place of &lt;token&gt;. In Claude.ai or Claude Desktop open Settings, then Connectors, then Add custom connector, and paste the URL.</p>
+      : <p class="muted mt-3 max-w-2xl">One URL, no token, no account. In Claude.ai or Claude Desktop open Settings, then Connectors, then Add custom connector, and paste the URL.</p>}
+    {tok && <div class="mt-6 max-w-3xl"><CopyCode code={tokenCmd} label="1. Free token" /></div>}
     <div class="mt-6 grid gap-5 lg:grid-cols-2">
-      <CopyCode code={lines.claudeAi} label="Connector URL" />
+      <CopyCode code={lines.claudeAi} label={tok ? 'Connector URL (replace <token>)' : 'Connector URL'} />
       <CopyCode code={lines.claudeCode} label="Claude Code" />
       <CopyCode code={lines.cursor} label="Cursor (~/.cursor/mcp.json)" />
       <CopyCode code={lines.vscode} label="VS Code (.vscode/mcp.json)" />
     </div>
-    <p class="mt-6">All {s.tools.length} tools, sources and more prompts: <a class="link" href={s.path}>{s.h1}</a>{money && <> <span class="text-faint">·</span> <a class="link" href={money} rel="noopener">{s.moneySite!.name}</a></>}</p>
+    <p class="mt-6">All {s.tools.length} tools{tok ? ', free and Pro limits' : ', sources'} and more prompts: <a class="link" href={s.path}>{s.h1}</a>{money && <> <span class="text-faint">·</span> <a class="link" href={money} rel="noopener">{s.moneySite!.name}</a></>}</p>
   </section>
 
   <section class="wrap py-12">

@@ -15,6 +15,7 @@ import UpsellBand from '../../components/UpsellBand.astro';
 import JobCard from '../../components/JobCard.astro';
 import { seo, jobsForServer } from '../../data/pages';
 import { freeServerPathFor } from '../../data/freeServers';
+import { liveAnswersForServer } from '../../data/canClaudeLive';
 
 export function getStaticPaths() {
   return getServers().map((s) => ({ params: { id: s.id }, props: { server: s } }));
@@ -22,6 +23,8 @@ export function getStaticPaths() {
 const { server: s } = Astro.props as { server: Server };
 // s1103: a satellite has its canonical page at /free-servers/<repo>/ (same hosted server). This page stays for visitors.
 const freePath = freeServerPathFor(s);
+// s1103 canclaude2: /can-claude/ answers backed by this server.
+const answers = liveAnswersForServer(s.id);
 const cat = getCategory(s.category);
 const related = getServersByCategory(s.category).filter((x) => x.id !== s.id).slice(0, 3);
 const buy = (slot: string) => buyUrl(s.buyBase, 'server', slot);
@@ -196,6 +199,14 @@ const crumbs = [{ name: 'Servers', path: '/servers/' }, { name: cat.short, path:
       <section class="wrap py-14">
         <h2 class="h2">Jobs this server does</h2>
         <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{jobs.map((j) => <JobCard page={j} />)}</div>
+      </section>
+    )}
+
+    {answers.length > 0 && (
+      <section class="wrap py-10">
+        <h2 class="h2">Questions this server answers</h2>
+        <ul class="mt-4 grid gap-2">{answers.map((a) => <li><a class="link" href={a.path}>{a.h1}</a></li>)}</ul>
+        <p class="mt-4"><a class="link" href="/can-claude/">All Can Claude answers</a></p>
       </section>
     )}
 

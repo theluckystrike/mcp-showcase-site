@@ -2,7 +2,8 @@
  "_readme": [
   "s1103 stamp: /can-claude/<slug>/ pages backed by one free live-data server (data/content/free-servers.json).",
   "answer = first paragraph, an honest yes/no/partly about what Claude does without a tool. example = a real tools/call result.",
-  "Generator: ~/mcp-servers/data/s1103/stamp/make_can_claude_live.py. Raw call responses: ~/mcp-servers/data/s1103/stamp/calls/."
+  "Generator: ~/mcp-servers/data/s1103/stamp/make_can_claude_live.py. Raw call responses: ~/mcp-servers/data/s1103/stamp/calls/.",
+  "s1103 canclaude2: 14 more pages (generator ~/mcp-servers/data/s1103/canclaude2/make_can_claude_live2.py, calls in canclaude2/calls/). Entries with server_id use a catalog server on mcp.zovo.one (free token)."
  ],
  "pages": [
   {
@@ -521,6 +522,641 @@
     {
      "q": "Is this live data?",
      "a": "It is static data from the College Board class of 2026 report. It will be rebuilt when the class of 2027 report comes out."
+    }
+   ]
+  },
+  {
+   "slug": "convert-cups-to-grams",
+   "repo": "cups-to-grams-mcp",
+   "h1": "Can Claude convert cups to grams?",
+   "title": "Can Claude convert cups to grams? By ingredient",
+   "query": "can claude convert cups to grams",
+   "answer": "Partly. A cup measures volume and a gram measures weight, so the answer depends on the ingredient, and Claude gives a typical figure from memory that may not match the chart your recipe was written with. It also has to guess which cup you mean, since US, metric and UK cups differ. Connect the free Cups to Grams server and Claude reads the weight of each ingredient from a named chart, such as King Arthur Baking or USDA FoodData Central, and says which cup it used.",
+   "native": [
+    "Knows that flour, sugar and butter weigh different amounts per cup.",
+    "Converts mL, tablespoons and teaspoons, which are fixed volumes.",
+    "Scales a recipe up or down once it has the weights."
+   ],
+   "needs": [
+    "A gram weight per cup for each ingredient, with the chart it came from.",
+    "US, metric and imperial cups kept apart.",
+    "Whole recipes scaled to metric weights, and oven temperatures with a fan setting."
+   ],
+   "example": {
+    "prompt": "How many grams is 1 cup of all-purpose flour?",
+    "tool": "convert_ingredient",
+    "args": {
+     "amount": 1,
+     "from_unit": "cup",
+     "to_unit": "g",
+     "ingredient": "all-purpose flour"
+    },
+    "result": "1 us_cup of All-purpose flour = 120 g. Density 120 g per US cup from King Arthur Baking ingredient weight chart (1 cup = 120 g). Cup definition used: US cup (236.5882365 mL). Dry values assume spoon-and-level filling; scooping packs more in.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "example2": {
+    "prompt": "And 1 cup of brown sugar?",
+    "tool": "convert_ingredient",
+    "args": {
+     "amount": 1,
+     "from_unit": "cup",
+     "to_unit": "g",
+     "ingredient": "brown sugar"
+    },
+    "result": "1 us_cup of Brown sugar (packed) = 220 g. Density 220 g per US cup from USDA FoodData Central FDC 168833 (1 cup packed = 220 g). Cup definition used: US cup (236.5882365 mL). Dry values assume spoon-and-level filling; scooping packs more in.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Why is a cup of brown sugar heavier than a cup of flour?",
+     "a": "Brown sugar is packed into the cup and is denser. In the run above the server gave 220 g for packed brown sugar and 120 g for spooned and leveled flour."
+    },
+    {
+     "q": "Does it handle UK and Australian recipes?",
+     "a": "Yes. Set the cup system to metric (250 mL) or imperial (284.13 mL), or name the unit, such as metric_cup."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-dscr",
+   "repo": "dscr-loan-calculator-mcp",
+   "h1": "Can Claude calculate DSCR for a rental loan?",
+   "title": "Can Claude calculate DSCR for a rental property loan?",
+   "query": "can claude calculate dscr",
+   "answer": "Yes, if you give it every number, but the loan payment math is where long answers slip. DSCR is qualifying rent divided by the full monthly housing cost, and that cost needs an exact amortized payment plus tax, insurance and HOA. Claude also can't know which vacancy factor or ratio band your lender uses. Connect the free DSCR Loan Calculator server and Claude gets the exact payment, PITIA and ratio, the largest loan a target DSCR allows, and the rent you'd need.",
+   "native": [
+    "Explains DSCR, PITIA and why lenders want 1.0 or 1.25.",
+    "Gets a close answer when you supply the monthly payment yourself."
+   ],
+   "needs": [
+    "The exact principal and interest payment for any rate and term, or interest only.",
+    "The maximum loan for a target DSCR and LTV, and the rent needed to hit it.",
+    "Side by side scenarios for down payment and rate."
+   ],
+   "example": {
+    "prompt": "A rental rents for $2,400 a month. I buy it for $300,000 with 25% down at 7.25% for 30 years. Tax is $3,600 a year and insurance $1,500. What is the DSCR with 5% vacancy?",
+    "tool": "calculate_dscr",
+    "args": {
+     "monthly_rent": 2400,
+     "purchase_price": 300000,
+     "down_payment_pct": 25,
+     "annual_rate_pct": 7.25,
+     "term_years": 30,
+     "annual_property_tax": 3600,
+     "annual_insurance": 1500,
+     "vacancy_pct": 5
+    },
+    "result": "A $225,000.00 loan at 7.25% over 30 years has a monthly payment of $1,534.90 and PITIA of $1,959.90. Qualifying rent of $2,280.00 gives a DSCR of 1.16 (exact 1.163325), in the 1.00 to 1.24 band. Rent covers PITIA. Many DSCR programs accept 1.00 or more; lenders that want 1.25 will not.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Is 1.16 good enough for a DSCR loan?",
+     "a": "Many programs accept 1.00 or more, and some want 1.25. Minimums and pricing differ by lender, so the server labels the band and doesn't approve anything."
+    },
+    {
+     "q": "Does it use current mortgage rates?",
+     "a": "No. You give it the rate your lender quoted. It doesn't fetch market rates."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-take-home-pay",
+   "repo": "paycheck-calculator-mcp",
+   "h1": "Can Claude calculate my take-home pay?",
+   "title": "Can Claude calculate take-home pay for 2026?",
+   "query": "can claude calculate take home pay",
+   "answer": "It gets close, but the small numbers drift. A paycheck needs the 2026 federal brackets, the standard deduction, the Social Security wage base and the state schedule, and several of those changed after most models were trained. Over a long calculation Claude can also round or slip a digit. Connect the free Paycheck Calculator server and Claude runs the exact 2025 or 2026 tables for federal tax, FICA and all 50 states plus DC.",
+   "native": [
+    "Explains brackets, FICA and pre-tax deductions.",
+    "Gives a rough estimate from memory."
+   ],
+   "needs": [
+    "The 2026 IRS brackets, standard deduction and $184,500 wage base.",
+    "Exact 2026 state schedules for CA, NY, NJ, IL, PA, GA and NC, estimates for the rest.",
+    "Per-paycheck results for weekly, biweekly, semimonthly and monthly pay."
+   ],
+   "example": {
+    "prompt": "I got an offer of $92,000 a year, paid biweekly, single, in North Carolina, with 6% to a 401(k). What is my take-home per check in 2026?",
+    "tool": "calculate_take_home_pay",
+    "args": {
+     "state": "NC",
+     "filing_status": "single",
+     "tax_year": 2026,
+     "gross_annual": 92000,
+     "pay_frequency": "biweekly",
+     "pretax_401k_percent": 6
+    },
+    "result": "North Carolina, single, 2026: gross $92,000.00 a year ($3,538.46 biweekly). Federal income tax $10,195.60 on taxable income $70,380.00 after the $16,100.00 standard deduction (marginal 22%). Social Security $5,704.00 (6.2% up to the $184,500.00 wage base), Medicare $1,334.00. State income tax $2,941.83 (exact 2026 schedule). Take-home $66,304.57 a year, $2,550.18 per biweekly paycheck; effective tax rate 21.93%.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Is this my exact withholding?",
+     "a": "No. It estimates annual tax on wages with the standard deduction and no credits. Your employer withholds from your W-4, which can differ."
+    },
+    {
+     "q": "Are local taxes included?",
+     "a": "No. City and county taxes such as NYC, Ohio cities and Pennsylvania EIT, and state payroll taxes such as CA SDI, are left out and the answer says so."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-uk-take-home-pay",
+   "repo": "uk-income-tax-salary-mcp",
+   "h1": "Can Claude work out UK take-home pay for 2026/27?",
+   "title": "Can Claude work out UK take-home pay for 2026/27?",
+   "query": "can claude calculate uk take home pay",
+   "answer": "Roughly. Claude knows how PAYE, National Insurance and student loans work, but the figures move every April, the Scottish bands change on their own schedule, and 2026/27 began after many models were trained. Pension by salary sacrifice also changes the NI and student loan sums in a way that's easy to miss. Connect the free UK Income Tax and Salary server and Claude runs the 2025/26 or 2026/27 rules for your tax code, region, pension and loan plan.",
+   "native": [
+    "Explains tax codes, NI classes and student loan plans.",
+    "Gives a ballpark figure from older tax years."
+   ],
+   "needs": [
+    "2025/26 and 2026/27 bands for England, Wales, Northern Ireland and Scotland.",
+    "Tax codes including K, BR, D0 and emergency codes.",
+    "Salary sacrifice or relief at source pensions, and Plan 1, 2, 4, 5 and postgraduate loans.",
+    "Your marginal rate, including the 60% band above £100,000."
+   ],
+   "example": {
+    "prompt": "I earn £45,000 in England, put 5% into my pension by salary sacrifice and repay a Plan 2 student loan. What is my take-home in 2026/27?",
+    "tool": "calculate_uk_take_home",
+    "args": {
+     "gross_salary": 45000,
+     "tax_year": "2026/27",
+     "region": "england",
+     "pension_method": "salary_sacrifice",
+     "pension_percent": 5,
+     "student_loan_plans": [
+      "plan_2"
+     ]
+    },
+    "result": "On £45,000 in 2026/27 (England, Wales or NI, code 1257L) take-home pay is £33,096.75 a year, £2,758.06 a month or £636.48 a week. Income tax £6,036, National Insurance £2,414.40, student loan £1,202.85, pension £2,250 (salary sacrifice).",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Why can my payslip differ?",
+     "a": "Payroll works per pay period and the server works on annual figures, so a payslip can differ by a few pounds. The server says so in each answer."
+    },
+    {
+     "q": "Does it cover Scotland?",
+     "a": "Yes. Set the region to scotland, or use an S tax code, and it applies the six Scottish bands."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-aca-premium-tax-credit",
+   "repo": "aca-premium-tax-credit-calculator-mcp",
+   "h1": "Can Claude calculate my 2026 ACA premium tax credit?",
+   "title": "Can Claude calculate the 2026 ACA premium tax credit?",
+   "query": "can claude calculate aca subsidy",
+   "answer": "Not safely from memory. The enhanced credits that ran from 2021 to 2025 expired, so for 2026 the 400% of poverty limit is back and the share of income you're expected to pay went up. A model trained before that change can apply the old rules and overstate the credit. Connect the free ACA Premium Tax Credit server and Claude uses the 2025 or 2026 poverty lines and applicable percentages, checks the subsidy cliff and works out the repayment cap.",
+   "native": [
+    "Explains the benchmark silver plan and how the credit is set.",
+    "Does the sum once you give it the expected contribution."
+   ],
+   "needs": [
+    "The poverty line for your household size and state, including Alaska and Hawaii.",
+    "The 2026 applicable figure for your income, and the 400% cliff.",
+    "How much excess advance credit you may repay on Form 8962."
+   ],
+   "example": {
+    "prompt": "We are a household of 2 in Texas with $68,000 income. The benchmark silver plan is $1,150 a month. What is our 2026 premium tax credit?",
+    "tool": "calculate_premium_tax_credit",
+    "args": {
+     "household_income": 68000,
+     "household_size": 2,
+     "state": "TX",
+     "benchmark_premium": 1150,
+     "year": 2026,
+     "premium_period": "monthly"
+    },
+    "result": "2026 premium tax credit: income $68,000.00 is 321.51% of the $21,150.00 poverty line, applicable figure 9.96%, so the household is expected to pay $6,772.80 a year ($564.40 a month) toward the $13,800.00 benchmark plan. Credit: $7,027.20 a year ($585.60 a month). 2026 rules: enhanced credits expired, 400% FPL limit applies.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Where do I find my benchmark premium?",
+     "a": "HealthCare.gov or your state Marketplace shows the second lowest cost silver plan for your ZIP code and ages. After the year ends it is on Form 1095-A, column B."
+    },
+    {
+     "q": "Is the estimate official?",
+     "a": "No. The Marketplace and Form 8962 decide the official amounts. The server gives the same math with the published figures."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-recipe-nutrition",
+   "repo": "recipe-nutrition-calculator-mcp",
+   "h1": "Can Claude calculate calories and nutrition for a recipe?",
+   "title": "Can Claude calculate calories for a recipe? USDA data",
+   "query": "can claude calculate recipe nutrition",
+   "answer": "It estimates, and the estimate can be off. Claude has a rough idea of the calories in common foods, but it doesn't look each ingredient up, and adding a dozen remembered values per serving lets small errors stack. Connect the free Recipe Nutrition Calculator server and Claude matches every ingredient line to a USDA FoodData Central food, totals calories, fat, carbs, protein, fiber and sodium, divides by servings and rounds the way an FDA label does.",
+   "native": [
+    "Reads a recipe and lists the ingredients and amounts.",
+    "Gives ballpark calories for familiar foods."
+   ],
+   "needs": [
+    "A USDA FoodData Central match for each ingredient line, with grams.",
+    "Totals and per serving values for calories and the main nutrients.",
+    "FDA label rounding, and nutrition for a scaled recipe."
+   ],
+   "example": {
+    "prompt": "This cake makes 12 slices: 2 cups flour, 1/2 cup butter, 1 cup sugar, 2 large eggs, 1 cup milk, 2 tsp baking powder. How many calories per slice?",
+    "tool": "calculate_recipe_nutrition",
+    "args": {
+     "lines": [
+      "2 cups all-purpose flour",
+      "1/2 cup butter",
+      "1 cup sugar",
+      "2 large eggs",
+      "1 cup milk",
+      "2 tsp baking powder"
+     ],
+     "servings": 12
+    },
+    "result": "Recipe of 6 lines (916.7 g matched): 2799.5 kcal total, 233.3 kcal per serving over 12 servings. Per serving: 3.9 g protein, 9.4 g fat, 33.8 g carbohydrate, 0.6 g fiber, 162.2 mg sodium. FDA label rounding gives 230 calories per serving. Every line was matched to a USDA FoodData Central food. Values are for the raw ingredients as listed; cooking losses and water evaporation are not modeled.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Does it count cooking losses?",
+     "a": "No. Values are for the raw ingredients as listed. Water lost in baking or fat left in the pan is not modeled, and the answer says so."
+    },
+    {
+     "q": "Can I use it for a food label?",
+     "a": "It applies FDA rounding rules, but a label you sell under may need lab testing or a dietitian review. Treat it as a well-sourced estimate."
+    }
+   ]
+  },
+  {
+   "slug": "look-up-ap-score-distributions",
+   "repo": "ap-score-distributions-mcp",
+   "h1": "Can Claude look up 2026 AP score distributions?",
+   "title": "Can Claude look up 2026 AP score distributions?",
+   "query": "can claude look up ap score distributions",
+   "answer": "Not the 2026 ones from memory. College Board posts the score distributions each summer after the May exams, and most models were trained before the 2026 release, so Claude may quote an older year without saying so. Connect the free AP Score Distributions server and Claude reads the 2024, 2025 and 2026 figures for each exam, compares exams and estimates a percentile for a score.",
+   "native": [
+    "Explains how AP scores of 1 to 5 work and what colleges accept.",
+    "Recalls distributions from years before its training cutoff."
+   ],
+   "needs": [
+    "The share of 5s, 4s, 3s, 2s and 1s for each exam in 2024, 2025 and 2026.",
+    "A ranking of exams by pass rate or share of 5s.",
+    "A percentile estimate for your score, and a score estimate from a practice test."
+   ],
+   "example": {
+    "prompt": "What were the AP Calculus AB score distributions in 2026?",
+    "tool": "get_ap_score_distribution",
+    "args": {
+     "exam": "AP Calculus AB",
+     "year": 2026
+    },
+    "result": "AP Calculus AB, May 2026: 20% scored 5, 28% 4, 17% 3, 24% 2, 11% 1; 65% scored 3 or higher. 2026 figures are the whole-number percentages College Board posted on its 2026 AP Score Distributions page; College Board has not published 2026 student counts, means or standard deviations.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Are student counts included for 2026?",
+     "a": "Not yet. College Board posted whole-number percentages for 2026 and has not published the counts, means or standard deviations. The server says so."
+    },
+    {
+     "q": "Which exams does it cover?",
+     "a": "All AP exams in the College Board release. Ask it to list them, or use short names such as APUSH, Calc BC or APES."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-section-179-deduction",
+   "repo": "section-179-deduction-calculator-mcp",
+   "h1": "Can Claude calculate a Section 179 deduction?",
+   "title": "Can Claude calculate a 2026 Section 179 deduction?",
+   "query": "can claude calculate section 179",
+   "answer": "Not with current limits from memory. The July 2025 tax law (P.L. 119-21) doubled the Section 179 limit and restored 100% bonus depreciation, and the 2026 figures are indexed for inflation, so a model trained earlier quotes the old numbers. Connect the free Section 179 Deduction server and Claude applies the limit and phase-out for the tax year you name, the business income cap, bonus depreciation by date and the vehicle limits.",
+   "native": [
+    "Explains Section 179, bonus depreciation and the business income limit.",
+    "Does the math once you give it the right limit."
+   ],
+   "needs": [
+    "The Section 179 limit and phase-out threshold for each tax year.",
+    "Bonus depreciation by acquisition and in-service date.",
+    "Vehicle limits by gross vehicle weight, including the heavy SUV cap."
+   ],
+   "example": {
+    "prompt": "We are buying $180,000 of equipment in 2026 and the business has $250,000 of taxable income. How much can we deduct under Section 179?",
+    "tool": "calculate_section_179",
+    "args": {
+     "tax_year": 2026,
+     "total_section_179_property_cost": 180000,
+     "business_taxable_income": 250000
+    },
+    "result": "2026 Section 179 limit $2,560,000. Property cost $180,000 is under the $4,090,000 threshold, so the full limit applies. Elected $180,000. Deduction this year $180,000.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "What is the 2026 Section 179 limit?",
+     "a": "From the server: $2,560,000, reduced dollar for dollar once qualifying property tops $4,090,000."
+    },
+    {
+     "q": "Can the deduction create a loss?",
+     "a": "No. Section 179 is capped at business taxable income. Bonus depreciation has no such cap, which is why the server handles both."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-car-loan-interest-deduction",
+   "repo": "car-loan-interest-deduction-calculator-mcp",
+   "h1": "Can Claude calculate the car loan interest deduction?",
+   "title": "Can Claude calculate the new car loan interest deduction?",
+   "query": "can claude calculate car loan interest deduction",
+   "answer": "Only if it knows the 2025 law, and many Claude versions don't, or know it only in outline. The deduction runs from 2025 to 2028, is capped at $10,000 a year, phases out above $100,000 of MAGI ($200,000 joint) and only covers new vehicles with US final assembly bought on a loan made after 2024. Connect the free Car Loan Interest Deduction server and Claude checks each rule and works out the deduction and the phase-out.",
+   "native": [
+    "Explains in general terms that some car loan interest became deductible.",
+    "Adds numbers you give it."
+   ],
+   "needs": [
+    "The P.L. 119-21 rules: the cap, the MAGI phase-out and the vehicle tests.",
+    "A clear no when a used car, a lease or a business vehicle fails a test.",
+    "The 2025 and 2026 brackets, SALT cap and child tax credit for the rest of the return."
+   ],
+   "example": {
+    "prompt": "I am single with $85,000 MAGI. I bought a new US-assembled car on a loan made in March 2025 and paid $2,400 interest in 2025. What can I deduct?",
+    "tool": "calculate_car_loan_interest_deduction",
+    "args": {
+     "filing_status": "single",
+     "magi": 85000,
+     "tax_year": 2025,
+     "interest_paid": 2400,
+     "loan_origination_date": "2025-03-15",
+     "new_vehicle": true,
+     "us_final_assembly": true,
+     "personal_use": true
+    },
+    "result": "Interest counted $2,400, $2,400 after the $10,000 cap. MAGI $85,000 is not over the $100,000 threshold, so nothing is phased out. Car loan interest deduction for 2025: $2,400. Assumed: the gross vehicle weight rating is under 14,000 pounds; the loan is secured by a first lien on the vehicle; the vehicle is a car, minivan, van, SUV, pickup truck or motorcycle.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Do I have to itemize?",
+     "a": "No. It is a deduction you can take with the standard deduction, on Schedule 1-A."
+    },
+    {
+     "q": "How do I check final assembly?",
+     "a": "The vehicle label on the window shows it, or the NHTSA VIN decoder. The server asks for it as a yes or no."
+    }
+   ]
+  },
+  {
+   "slug": "find-subdomains",
+   "repo": "subdomain-finder-mcp",
+   "h1": "Can Claude find the subdomains of a website?",
+   "title": "Can Claude find subdomains of a domain? From CT logs",
+   "query": "can claude find subdomains",
+   "answer": "Not on its own. Claude can't send DNS queries or read certificate transparency logs, and web search only shows hosts that someone happened to link to. Connect the free Subdomain Finder server and Claude reads public certificate transparency logs (Cert Spotter, then crt.sh) for the domain, lists the hostnames with first and last seen dates, flags wildcard certificates and can resolve the names over DNS. Use it on domains you own or are allowed to test.",
+   "native": [
+    "Explains certificate transparency, DNS and what a subdomain is.",
+    "Suggests common names such as www, mail and api to check by hand."
+   ],
+   "needs": [
+    "Every hostname that appeared on a public TLS certificate for the domain.",
+    "Wildcard entries, which hide individual hosts.",
+    "DNS resolution and a short attack surface summary."
+   ],
+   "example": {
+    "prompt": "Which subdomains of zovo.one show up in certificate logs?",
+    "tool": "find_subdomains",
+    "args": {
+     "domain": "zovo.one",
+     "limit": 20
+    },
+    "result": "101 unique hostnames under zovo.one in 218 certificates from certspotter (first 3 pages only; raise max_pages for more). 100 wildcard entries (*.anon.zovo.one, *.ar-aging.zovo.one, *.avery-labels.zovo.one, ...), so some hosts will never appear in CT. Newest: ar-aging.zovo.one (2026-10-26), cap-table.zovo.one (2026-10-26), client-report.zovo.one (2026-10-26), depreciation.zovo.one (2026-10-26), gradebook.zovo.one (2026-10-26). Showing 20 of 101. certspotter lists unexpired certificates only.",
+    "note": "zovo.one is our own domain. The full answer lists each hostname with its dates and certificate issuer.",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Does it scan or brute force anything?",
+     "a": "No. It reads public certificate transparency logs and, if you ask, resolves names over DNS. It does not probe ports or guess names."
+    },
+    {
+     "q": "Why are some hosts missing?",
+     "a": "A host behind a wildcard certificate never appears by name in the logs, and certspotter lists unexpired certificates only. Use crt.sh with expired certificates for older names."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-ab-test-sample-size",
+   "repo": "ab-test-sample-size-calculator-mcp",
+   "h1": "Can Claude calculate A/B test sample size?",
+   "title": "Can Claude calculate A/B test sample size and duration?",
+   "query": "can claude calculate ab test sample size",
+   "answer": "It knows the formula, but the exact number is easy to get wrong. Sample size depends on z-scores, pooled or unpooled variance and one or two sided tests, and online calculators don't agree on those choices, so a figure from memory can be off by thousands of users. Connect the free A/B Test Sample Size Calculator server and Claude gets the exact count per arm, says which method it used, and turns traffic into days to run the test.",
+   "native": [
+    "Explains power, significance and minimum detectable effect.",
+    "Gives a rough sample size for a common case."
+   ],
+   "needs": [
+    "The exact sample size per arm for any baseline, lift, alpha, power and number of arms.",
+    "Test duration from daily traffic, rounded to full weeks.",
+    "Significance tests, Fisher exact test and the cost of peeking."
+   ],
+   "example": {
+    "prompt": "My checkout converts at 4%. How many users do I need to detect a 10% relative lift?",
+    "tool": "calculate_sample_size",
+    "args": {
+     "baseline_rate": 0.04,
+     "mde": 0.1
+    },
+    "result": "To detect a change from 4.00% to 4.40% (10.0% relative MDE) with 80% power at alpha 0.05 two-sided, you need 39,475 users in control and in each variant: 78,950 in total across 2 arms. Evan Miller's calculator gives 38,210 per arm for the same inputs (it uses the baseline variance in both terms and always two-sided alpha).",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "example2": {
+    "prompt": "We get 3,000 visitors a day into the test. How long will it take?",
+    "tool": "estimate_test_duration",
+    "args": {
+     "daily_visitors": 3000,
+     "baseline_rate": 0.04,
+     "mde": 0.1
+    },
+    "result": "39,475 users per arm x 2 arms = 78,950 users. At 3,000 test visitors a day that takes 27 days; run 4 full weeks (28 days) so every weekday is covered equally.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Why does Evan Miller's calculator give a different number?",
+     "a": "It uses the baseline variance in both terms. The server uses pooled variance under the null and unpooled under the alternative, and quotes both numbers so you can compare."
+    },
+    {
+     "q": "Can I stop the test early if it looks significant?",
+     "a": "Checking results again and again raises the false positive rate. The check_peeking_risk tool shows by how much."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-rap-student-loan-payment",
+   "repo": "student-loan-repayment-assistance-plan-calculator-mcp",
+   "h1": "Can Claude calculate a RAP student loan payment?",
+   "title": "Can Claude calculate a RAP student loan payment?",
+   "query": "can claude calculate rap student loan payment",
+   "answer": "Not reliably. The Repayment Assistance Plan comes from the July 2025 law and opened on July 1, 2026, which is after many models were trained, so Claude may not know its income tiers, the $50 a month credit per dependent or the new Tiered Standard plan. Connect the free Student Loan RAP Calculator server and Claude works out the RAP payment, compares it with the standard plans and shows the loan limits and plan dates that apply to you.",
+   "native": [
+    "Explains income-driven repayment in general terms.",
+    "Compares plans once it has the monthly payments."
+   ],
+   "needs": [
+    "The RAP payment from AGI and dependents, with the $10 minimum.",
+    "RAP against the Tiered Standard and 10-year Standard plans, monthly and in total.",
+    "Which plans close and when, and the new federal loan limits."
+   ],
+   "example": {
+    "prompt": "I owe $38,000 at 6.5%, my AGI is $52,000 and I have 1 dependent. What would I pay under RAP and under the standard plans?",
+    "tool": "compare_rap_vs_standard",
+    "args": {
+     "balance": 38000,
+     "rate": 6.5,
+     "agi": 52000,
+     "dependents": 1
+    },
+    "result": "For $38,000.00 at 6.5% and AGI $52,000.00: RAP $166.67 a month, $19,869.14 cancelled after 360 payments, total $60,001.20. Tiered Standard (15 years) $331.02 a month, total $59,583.79. 10-year Standard $431.48 a month, total $51,778.01.",
+    "note": "The first three sentences of the answer. The server also names a winner on each measure; compare the totals yourself, since the 10-year Standard plan has the lowest total here.",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Is this my official payment?",
+     "a": "No. Your servicer sets it from your certified income and loan records. Check it with the StudentAid.gov Loan Simulator."
+    },
+    {
+     "q": "Does RAP count for PSLF?",
+     "a": "Yes. RAP payments count toward Public Service Loan Forgiveness. The new Tiered Standard plan does not."
+    }
+   ]
+  },
+  {
+   "slug": "tell-the-time-in-another-time-zone",
+   "repo": "timezone",
+   "server_id": "timezone",
+   "h1": "Can Claude tell the time in another time zone?",
+   "title": "Can Claude tell the time in another time zone?",
+   "query": "can claude tell time",
+   "answer": "Not by itself. Claude has no clock, so it doesn't know the current time unless the app passes it in, and some apps only pass the date. Time zone math also trips on daylight saving: the US and Europe change clocks on different dates, so for a few weeks a year the gap between New York and London is 4 hours, not 5. Connect the Timezone server (free token) and Claude reads the current time from the server and converts times with the IANA rules for the exact date.",
+   "native": [
+    "Knows the usual UTC offsets for major cities.",
+    "Explains daylight saving time and what EST and EDT mean."
+   ],
+   "needs": [
+    "The current time in any city, from a real clock.",
+    "Conversions that apply daylight saving for the exact date.",
+    "Working hour overlap across cities, meeting slots and .ics invites."
+   ],
+   "example": {
+    "prompt": "What time is it right now in Tokyo, London and New York?",
+    "tool": "now",
+    "args": {
+     "zones": [
+      "Tokyo",
+      "London",
+      "New York"
+     ]
+    },
+    "result": "Now (2026-11-03T08:23:29.200Z UTC); Tokyo -> Asia/Tokyo: 2026-11-03 17:23 Tue (GMT+9, UTC+09:00); London -> Europe/London: 2026-11-03 08:23 Tue (GMT, UTC+00:00); New York -> America/New_York: 2026-11-03 03:23 Tue (EST, UTC-05:00)",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "example2": {
+    "prompt": "A call is set for 9:00 New York time on March 17, 2027. What time is that in London and Berlin?",
+    "tool": "convert_time",
+    "args": {
+     "time": "2027-03-17 09:00",
+     "from_zone": "New York",
+     "to_zones": [
+      "London",
+      "Berlin"
+     ]
+    },
+    "result": "New York -> America/New_York: 2027-03-17 09:00 Wed (EDT, UTC-04:00); London -> Europe/London: 2027-03-17 13:00 Wed (GMT, UTC+00:00); Berlin -> Europe/Berlin: 2027-03-17 14:00 Wed (GMT+1, UTC+01:00); UTC instant: 2027-03-17T13:00:00.000Z",
+    "note": "On March 17, 2027 New York is already on daylight time and London is not, so the gap is 4 hours.",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Does Claude know today's date?",
+     "a": "Many apps give Claude the date in the system prompt, but not always the exact time, and Claude can't check either one. The server reads the time when the tool runs."
+    },
+    {
+     "q": "What is free on the hosted server?",
+     "a": "Time conversion, overlap, daylight saving dates and business days are free. Meeting slots for more than 3 people, longer searches, more saved contacts and more .ics files are Pro."
+    }
+   ]
+  },
+  {
+   "slug": "convert-currency-at-todays-rate",
+   "repo": "currency",
+   "server_id": "currency",
+   "h1": "Can Claude convert currency at today's exchange rate?",
+   "title": "Can Claude convert currency at today's rate? ECB rates",
+   "query": "can claude convert currency",
+   "answer": "Not from memory. Exchange rates change every day and Claude only knows rates from before its training cutoff, so any conversion it does alone uses an old rate. With web search on, Claude.ai can find a quote on a web page, but it may not say which date or source the rate is from. Connect the Currency server (free token) and Claude converts with the European Central Bank reference rate, names the rate date and rounds to the currency's minor units.",
+   "native": [
+    "Does the multiplication once it has a rate you trust.",
+    "Explains reference rates, cross rates and why banks charge a spread."
+   ],
+   "needs": [
+    "The latest ECB reference rate for every currency the ECB quotes.",
+    "The rate date, so an invoice or expense report can cite it.",
+    "One amount in several currencies, and the rate on a past date within the last 90 days on the free tier."
+   ],
+   "example": {
+    "prompt": "Convert 250 euros to US dollars at today's rate.",
+    "tool": "convert",
+    "args": {
+     "amount": 250,
+     "from": "EUR",
+     "to": "USD"
+    },
+    "result": "{\"result\": \"USD 280.40\", \"rate_meaning\": \"1 EUR = 1.1216 USD\", \"rate_date\": \"2026-11-02\", \"source\": \"European Central Bank\"}",
+    "note": "The server answers in JSON. These are four of its fields, unchanged. The ECB publishes once per business day, around 16:00 CET, so the rate date can be the day before.",
+    "is_error": false,
+    "run": "2026-11-03"
+   },
+   "faq": [
+    {
+     "q": "Is the ECB rate what my bank will charge?",
+     "a": "No. The ECB reference rate is a mid-market rate for information. Banks and card networks add a spread or a fee."
+    },
+    {
+     "q": "How far back does it go?",
+     "a": "The free tier reads rates for the last 90 days. History back to January 1999 is in Pro."
     }
    ]
   }

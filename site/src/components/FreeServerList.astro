@@ -7,7 +7,7 @@ const { limit, headingLevel = 'h3' } = Astro.props;
 const list = getFreeServers().slice(0, limit ?? undefined);
 const H = headingLevel;
 // s1103: the questions these servers answer, linked from the home page and /free-servers/.
-const answers = getLiveAnswers();
+const answers = getLiveAnswers().filter((a) => !a.tokenRequired);
 ---
 <div class="fsl grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
   {list.map((s) => (

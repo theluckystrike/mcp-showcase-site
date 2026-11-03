@@ -20,7 +20,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'ItemList', itemLis
   </section>
   <section class="wrap pb-10">
     <h2 class="h2">Live data and new rules</h2>
-    <p class="muted mt-3 max-w-2xl">Things that change after a model is trained. Each page shows a real call to a free server, no token needed.</p>
+    <p class="muted mt-3 max-w-2xl">Things that change after a model is trained, and exact math a model tends to get wrong. Each page shows a real call to the server. Most need no token; the time zone and currency servers use a free token.</p>
     <ul class="cc-list mt-6">{live.map((a) => <li><a href={a.path}>{a.h1}</a><p class="muted mt-1 text-[.94rem]">{first(a.answer)}</p></li>)}</ul>
   </section>
   <section class="wrap pb-16">
