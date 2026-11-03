@@ -1,13 +1,19 @@
 ---
 // can-claude job pages from the t-angle sitemap (page_type "answer"). Template: components/JobPage.astro.
+// s1103: plus live-data answers (data/content/can-claude-live.json), template components/LiveAnswerPage.astro.
 import JobPage from '../../components/JobPage.astro';
+import LiveAnswerPage from '../../components/LiveAnswerPage.astro';
 import { pagesOfType, slugOf, type PageMeta } from '../../data/pages';
+import { getLiveAnswers, type LiveAnswer } from '../../data/canClaudeLive';
 
 export function getStaticPaths() {
-  return pagesOfType('answer')
+  const job = pagesOfType('answer')
     .filter((p) => p.path.startsWith('/can-claude/'))
-    .map((p) => ({ params: { slug: slugOf(p.path) }, props: { page: p } }));
+    .map((p) => ({ params: { slug: slugOf(p.path) }, props: { page: p, live: null } }));
+  const taken = new Set(job.map((j) => j.params.slug));
+  const live = getLiveAnswers().filter((a) => !taken.has(a.slug)).map((a) => ({ params: { slug: a.slug }, props: { page: null, live: a } }));
+  return [...job, ...live];
 }
-const { page } = Astro.props as { page: PageMeta };
+const { page, live } = Astro.props as { page: PageMeta | null; live: LiveAnswer | null };
 ---
-<JobPage page={page} kind="answer" />
+{live ? <LiveAnswerPage page={live} /> : <JobPage page={page!} kind="answer" />}

@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import CopyCode from '../../components/CopyCode.astro';
 import Faq from '../../components/Faq.astro';
 import { brand } from '../../config/brand';
+import { liveAnswersFor } from '../../data/canClaudeLive';
 import { getFreeServers, shortDescription, moneyHref, installLines, type FreeServer } from '../../data/freeServers';
 
 export function getStaticPaths() {
@@ -36,6 +37,7 @@ const jsonLd = [
 const crumbs = [{ name: 'Free servers', path: '/free-servers/' }, { name: s.h1, path: s.path }];
 const money = moneyHref(s, 'page');
 const moneyExternal = money && !money.startsWith('/');
+const answers = liveAnswersFor(s.repo);
 ---
 <Layout title={title} description={description} jsonLd={jsonLd} ogType="product" crumbs={crumbs}>
   <section class="relative isolate">
@@ -55,6 +57,7 @@ const moneyExternal = money && !money.startsWith('/');
             <a href={s.repoUrl} class="btn" rel="noopener">Source on GitHub</a>
           </div>
           <p class="mt-3 text-[.86rem] text-faint">Free. No key, no sign-in, no paid tier. {s.tools.length} tools.</p>
+          {answers.map((a) => <p class="mt-3 text-[.95rem]"><a class="underline underline-offset-2" href={a.path}>{a.h1}</a></p>)}
         </div>
         <div>
           <p class="fs-label">Connector URL</p>

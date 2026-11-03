@@ -1,0 +1,37 @@
+---
+// s1103: /can-claude/ index. Every "Can Claude ...?" answer page: live-data answers first, then file and document answers.
+import Layout from '../../layouts/Layout.astro';
+import { pagesOfType } from '../../data/pages';
+import { getLiveAnswers } from '../../data/canClaudeLive';
+
+const live = getLiveAnswers();
+const files = pagesOfType('answer').filter((p) => p.path.startsWith('/can-claude/'));
+const first = (t: string) => t.split(/(?<=[.!?])\s+/)[0];
+const all = [...live.map((a) => ({ path: a.path, name: a.h1 })), ...files.map((p) => ({ path: p.path, name: p.h1 }))];
+const jsonLd = [{ '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: all.map((x, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(x.path, Astro.site).href, name: x.name })) }];
+---
+<Layout title="Can Claude do it? Straight answers, live data" description={`${all.length} questions about what Claude can do on its own and what needs a tool: live prices, lake and river levels, wages, tax rules, files. Each answer names the free server that fills the gap.`} jsonLd={jsonLd} crumbs={[{ name: 'Can Claude', path: '/can-claude/' }]}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-12 sm:pt-16">
+      <h1 class="display max-w-4xl">Can Claude do it?</h1>
+      <p class="lead mt-5 max-w-2xl">Straight answers. What Claude does on its own, where its training data runs out, and the free server that fills the gap.</p>
+    </div>
+  </section>
+  <section class="wrap pb-10">
+    <h2 class="h2">Live data and new rules</h2>
+    <p class="muted mt-3 max-w-2xl">Things that change after a model is trained. Each page shows a real call to a free server, no token needed.</p>
+    <ul class="cc-list mt-6">{live.map((a) => <li><a href={a.path}>{a.h1}</a><p class="muted mt-1 text-[.94rem]">{first(a.answer)}</p></li>)}</ul>
+  </section>
+  <section class="wrap pb-16">
+    <h2 class="h2">Files and documents</h2>
+    <ul class="cc-list mt-6">{files.map((p) => <li><a href={p.path}>{p.h1}</a><p class="muted mt-1 text-[.94rem]">{p.meta_description}</p></li>)}</ul>
+    <p class="mt-8"><a href="/free-servers/" class="link">All free live-data servers</a> <span class="text-faint">·</span> <a href="/use-cases/" class="link">Use cases</a></p>
+  </section>
+</Layout>
+<style>
+  .cc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  @media (min-width: 900px) { .cc-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2.5rem; } }
+  .cc-list li { padding: .9rem 0; border-top: 1px solid var(--border); }
+  .cc-list a { font-weight: 640; font-size: 1.05rem; text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
+</style>

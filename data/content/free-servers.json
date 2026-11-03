@@ -996,6 +996,256 @@
    ],
    "added": "2026-11-02",
    "tools_checked": "2026-11-02"
+  },
+  {
+   "repo": "cpi-inflation-calculator-mcp",
+   "topic": "CPI inflation calculator",
+   "name": "CPI Inflation Calculator",
+   "tagline": "Adjust any dollar amount for US inflation with official BLS CPI data, 1913 to the latest month.",
+   "knows": [
+    "The latest monthly CPI-U, CPI-W and core CPI from the Bureau of Labor Statistics. A model only knows the months before its training cutoff.",
+    "Exact buying-power math between any two months or years, with the cumulative and yearly inflation rate.",
+    "Whether a pay raise beat inflation, and the Social Security cost-of-living adjustment for a given year."
+   ],
+   "sources": "US Bureau of Labor Statistics CPI series CUUR0000SA0, CWUR0000SA0 and CUUR0000SA0L1E; 42 U.S.C. 415(i) for the COLA rule.",
+   "hosted_url": "https://cpi-inflation-calculator-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/cpi-inflation-calculator-mcp",
+   "npm": null,
+   "money_site": {
+    "name": "StateWage pay raise calculator",
+    "url": "https://statewage.com/pay-raise-calculator/"
+   },
+   "prompts": [
+    "What is $50,000 from January 2015 worth today in buying power?",
+    "My pay went from $61,000 in 2023 to $66,500 now. Did my raise beat inflation?",
+    "What was the Social Security COLA for 2026, and how is it worked out?"
+   ],
+   "tools": [
+    {
+     "name": "calculate_inflation",
+     "title": "Inflation calculator (CPI, 1913 to latest month)",
+     "description": "Adjusts a dollar amount for inflation between any two periods from 1913 to the latest month the U.S. Bureau of Labor Statistics has published, using the official CPI-U (or CPI-W or core CPI). Checks the BLS Public Data API live for months newer than its bundled data (bundled through September 2026, fetched 2026-11-03), so it knows CPI figures newer than a model's training data. Handles the October 2025 gap: BLS published no October 2025 CPI because of the 2025 lapse in appropriations. Returns the adjusted amount, cumulative and average annual inflation, and the exact index values used."
+    },
+    {
+     "name": "get_latest_cpi",
+     "title": "Latest CPI release (live from BLS)",
+     "description": "Returns the most recent CPI index values published by the Bureau of Labor Statistics, checked live against the BLS Public Data API: the latest month, the 12-month inflation rate for headline CPI-U, CPI-W and core CPI (less food and energy), the not seasonally adjusted 1-month change, and the year-to-date change. Use it to answer 'what is inflation right now'. If the live check fails it says so and falls back to bundled BLS data (through September 2026)."
+    },
+    {
+     "name": "get_inflation_rate",
+     "title": "Annual inflation rate for a year",
+     "description": "Returns the official U.S. inflation rate for a calendar year from BLS CPI data: annual-average change (BLS annual averages, including the 2025 average published despite the missing October 2025 index), December-to-December change, and for the current year the latest 12-month rate. Years 1914 to the present for CPI-U and CPI-W, 1958 onward for core CPI."
+    },
+    {
+     "name": "compare_raise_to_inflation",
+     "title": "Did a pay raise beat inflation?",
+     "description": "Compares a pay change with CPI inflation over the same period using official BLS data through the latest published month (checked live). Returns the nominal raise, inflation, the real (inflation-adjusted) raise, the pay needed to keep pace, and the gain or shortfall. Works for salaries, hourly wages, rents or any recurring amount."
+    },
+    {
+     "name": "calculate_social_security_cola",
+     "title": "Social Security COLA from CPI-W",
+     "description": "Computes the Social Security cost-of-living adjustment for a year with the statutory formula: average CPI-W for July-September of the prior year over the same quarter a year earlier, rounded to 0.1%. Uses official BLS CPI-W values (live check). Reproduces the 3.6% COLA for 2027 that SSA announced in October 2026, and shows the Q3 index values behind it. Covers 1976 onward."
+    }
+   ],
+   "tools_checked": "2026-11-03",
+   "added": "2026-11-03"
+  },
+  {
+   "repo": "irs-mileage-rate-per-diem-mcp",
+   "topic": "IRS mileage rate and per diem",
+   "name": "IRS Mileage Rate and Per Diem",
+   "tagline": "IRS standard mileage rates for 2026, including the July change, and GSA per diem rates by city or ZIP.",
+   "knows": [
+    "The 2026 business mileage rate: 72.5 cents to June 30 and 76 cents from July 1, 2026 (IRS Notice 2026-10 and Announcement 2026-11).",
+    "GSA lodging and meals (M&IE) per diem rates for fiscal years 2026 and 2027, by city, county or ZIP code.",
+    "Trip totals with the 75% first and last day rule, and mileage deductions split by date and purpose."
+   ],
+   "sources": "IRS standard mileage rates page, Notice 2026-10, Announcement 2026-11, GSA per diem files and M&IE breakdowns.",
+   "hosted_url": "https://irs-mileage-rate-per-diem-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/irs-mileage-rate-per-diem-mcp",
+   "npm": null,
+   "money_site": {
+    "name": "TaxBreakCalc self-employed set-aside calculator",
+    "url": "https://taxbreakcalc.com/self-employed-set-aside-calculator/"
+   },
+   "prompts": [
+    "I drove 1,240 business miles in March 2026 and 900 in August. What is my mileage deduction?",
+    "What is the per diem for a 4-day trip to Chicago from November 16, 2026?",
+    "What are the GSA lodging and meals rates for ZIP 98101 right now?"
+   ],
+   "tools": [
+    {
+     "name": "get_mileage_rate",
+     "title": "IRS standard mileage rates (2011-2026, incl. the July 2026 increase)",
+     "description": "Returns the official IRS standard mileage rates in cents per mile for business, medical, charity and military moving use, for a year or a specific date. Knows the mid-year 2026 change: 72.5 cents for business from Jan. 1 to June 30, 2026 (Notice 2026-10) and 76 cents from July 1, 2026 (Announcement 2026-11, fuel price increase), medical/moving 20.5 then 23.5 cents, charity 14 cents. Also returns the depreciation (basis reduction) part of the business rate (35 cents for 2026) and the FAVR / employer-vehicle maximum value ($61,700 for 2026). 2027 rates are not announced yet and the tool says so."
+    },
+    {
+     "name": "calculate_mileage_deduction",
+     "title": "Mileage deduction or reimbursement calculator",
+     "description": "Calculates the deduction or tax-free reimbursement for driven miles at the IRS standard mileage rates, splitting by the date each trip was driven. Applies the 2026 mid-year increase automatically (72.5 cents before July 1, 76 cents from July 1). Supports business, medical, charity and military moving miles, returns the amount per rate period and purpose, and the depreciation basis reduction for business miles. Notes who can and cannot deduct (employees' unreimbursed mileage is not deductible after the One, Big, Beautiful Bill Act)."
+    },
+    {
+     "name": "get_per_diem_rates",
+     "title": "GSA per diem rates by ZIP or city (FY2026 and FY2027)",
+     "description": "Returns the official GSA federal per diem rates for a U.S. (CONUS) destination by ZIP code or city/state: maximum lodging per night by month and the meals and incidental expenses (M&IE) rate with its breakfast/lunch/dinner/incidentals breakdown and the 75% first/last-day amount. Covers FY2026 (Oct. 1, 2025 - Sept. 30, 2026) and FY2027 (from Oct. 1, 2026; standard rate $113 lodging and $68 M&IE). Data from GSA's FY2026 and FY2027 ZIP code files, so it knows rates newer than a model's training data."
+    },
+    {
+     "name": "calculate_trip_per_diem",
+     "title": "Trip per diem calculator (GSA rates)",
+     "description": "Calculates the maximum federal per diem for a business trip: lodging for each night at that month's GSA rate (crossing seasons and the Oct. 1 fiscal year change), M&IE for each day with 75% on the first and last day, minus meals provided at the GSA breakdown amounts. Uses the official FY2026 and FY2027 GSA rates for trips between Oct. 1, 2025 and Sept. 30, 2027."
+    },
+    {
+     "name": "get_high_low_per_diem",
+     "title": "IRS high-low per diem rates and high-cost localities",
+     "description": "Returns the IRS high-low substantiation method rates for a date and whether a city is a high-cost locality then: from Oct. 1, 2026 $329 high / $230 low with $86 / $74 treated as meals (Notice 2026-60); Oct. 1, 2025 - Sept. 30, 2026 $319 / $225 (Notice 2025-54). Also the transportation industry M&IE ($80 CONUS, $86 OCONUS) and the $5 incidental-expenses-only rate. Checks the 91 FY2027 high-cost localities and their seasonal portions (e.g. Tucson added, Panama City removed)."
+    }
+   ],
+   "tools_checked": "2026-11-03",
+   "added": "2026-11-03"
+  },
+  {
+   "repo": "silver-price-per-gram-mcp",
+   "topic": "Silver price per gram",
+   "name": "Silver Price per Gram",
+   "tagline": "Live silver price per gram by fineness, junk silver coin melt values and the gold to silver ratio.",
+   "knows": [
+    "The silver spot price right now, read from a live feed with a timestamp. A model cannot know it.",
+    "Price per gram for .999, Britannia, sterling 925, coin 900 and 800 silver, in about 160 currencies.",
+    "Melt value of pre-1965 90% US dimes, quarters and halves from face value."
+   ],
+   "sources": "gold-api.com spot feed, Frankfurter central-bank FX rates, 16 CFR 23.5 and the UK Hallmarking Act 1973 for fineness grades.",
+   "hosted_url": "https://silver-price-per-gram-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/silver-price-per-gram-mcp",
+   "npm": null,
+   "tools": [
+    {
+     "name": "get_silver_price_per_gram",
+     "title": "Get silver price per gram",
+     "description": "Today's silver price per gram, per troy ounce, per kilogram and per tola, read live from the silver spot market, for fine .999, Britannia .9584, sterling .925, coin .900 and 800 silver, in any of about 160 currencies (central-bank FX). Returns the spot time stamp, FX date and sources. Your training data cannot know today's silver price. Omit fineness to get every grade."
+    },
+    {
+     "name": "calculate_silver_value",
+     "title": "Calculate silver melt value",
+     "description": "Melt value of a silver item (sterling flatware, tea set, jewellery, bar, round, scrap) from its weight, unit and fineness at the live silver spot price, in any currency. Optional dealer_spread_percent returns the likely buyer offer. Sterling means at least 925/1000 silver under 16 CFR 23.5. Default fineness is sterling."
+    },
+    {
+     "name": "calculate_junk_silver_value",
+     "title": "Calculate junk silver coin value",
+     "description": "Melt value of US silver coins at the live silver spot: pre-1965 90% dimes, quarters and halves, 1965-1970 40% Kennedy halves (4.6 g silver, Coinage Act of 1965), 1942-1945 35% war nickels, Morgan and Peace dollars and American Silver Eagles. Pass coins with counts, or face_value_90 for a bag of mixed 90% coin (1 dollar face = 22.5 g silver). Returns silver ounces per coin, totals and melt per dollar face."
+    },
+    {
+     "name": "get_gold_silver_ratio",
+     "title": "Get gold to silver ratio",
+     "description": "Live gold to silver ratio (ounces of silver one ounce of gold buys), with both spot prices per troy ounce and per gram in any currency. Read now from the spot feed; the ratio moves every minute."
+    }
+   ],
+   "tools_checked": "2026-11-03",
+   "added": "2026-11-03",
+   "money_site": {
+    "name": "Gold Gram Price",
+    "url": "https://goldgramprice.com"
+   },
+   "prompts": [
+    "What is sterling silver worth per gram today in USD and GBP?",
+    "I have $5 face value of pre-1965 dimes and quarters. What is the melt value, and what would a dealer at 10% under melt pay?",
+    "What is the gold to silver ratio right now?"
+   ]
+  },
+  {
+   "repo": "river-level-mcp",
+   "topic": "River level",
+   "name": "River Level",
+   "tagline": "Live US river stage and streamflow from USGS gauges, with NWS flood stages and forecasts.",
+   "knows": [
+    "The current river stage and discharge at any active USGS stream gauge, read at call time.",
+    "How far the river is from the National Weather Service flood stage, and the forecast crest.",
+    "Up to a year of daily history for stage, flow or water temperature."
+   ],
+   "sources": "USGS Water Data OGC API (latest continuous and daily values) and the NOAA National Water Prediction Service. No key.",
+   "hosted_url": "https://river-level-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/river-level-mcp",
+   "npm": null,
+   "tools": [
+    {
+     "name": "find_river_gauges",
+     "title": "Find river gauges",
+     "description": "Search USGS stream gauges nationwide by river and place name (for example \"mississippi st louis\", \"potomac little falls\"), by state, or within a radius of a latitude and longitude. Returns site numbers with whether each is reporting now and its latest stage and flow, active gauges first."
+    },
+    {
+     "name": "get_river_level",
+     "title": "Get current river level",
+     "description": "Current river stage (gage height in feet), streamflow (discharge in cubic feet per second) and water temperature where measured, read now from a USGS stream gauge (readings every 5 to 60 minutes). Adds the NWS flood stages (action, minor, moderate, major), the current flood category, feet below flood stage and the record crest when the gauge is an NWS forecast point. Flags readings over 48 hours old. Your training data cannot know today's river level."
+    },
+    {
+     "name": "get_river_history",
+     "title": "Get river level history",
+     "description": "Daily mean streamflow (default) or stage for a USGS gauge over the last 2 to 366 days, with first, last, low, high, mean and change. Use it for trend, drought and \"is the river rising\" questions. Many gauges publish daily means for discharge only."
+    },
+    {
+     "name": "get_flood_forecast",
+     "title": "Get river flood forecast",
+     "description": "The current NOAA National Water Prediction Service river forecast for a gauge: the forecast stage and flow series, the forecast crest with its flood category, the latest observation, flood stages and the record crest. Works for NWS forecast points (accepts the NWS id or the USGS site number). Forecasts are reissued several times a day."
+    }
+   ],
+   "tools_checked": "2026-11-03",
+   "added": "2026-11-03",
+   "money_site": {
+    "name": "LakeLevelNow",
+    "url": "https://lakelevelnow.com"
+   },
+   "prompts": [
+    "What is the Mississippi River at St. Louis doing right now, and how far is it from flood stage?",
+    "Find river gauges near Austin, Texas and give me the flow on each.",
+    "Show the last 30 days of discharge for USGS gauge 07010000."
+   ]
+  },
+  {
+   "repo": "sat-score-percentiles-mcp",
+   "topic": "SAT score percentiles",
+   "name": "SAT Score Percentiles",
+   "tagline": "SAT percentiles and state averages from the College Board class of 2026 report.",
+   "knows": [
+    "Total, Math and Reading and Writing percentiles from the College Board, both user group and nationally representative.",
+    "The class of 2026 mean, test-taker counts and score bands, published in fall 2026, after most models were trained.",
+    "Average scores and participation for every state, and state rankings."
+   ],
+   "sources": "College Board SAT understanding scores page and the 2026 SAT Suite of Assessments Annual Reports (total group and by state).",
+   "hosted_url": "https://sat-score-percentiles-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/sat-score-percentiles-mcp",
+   "npm": null,
+   "tools": [
+    {
+     "name": "get_sat_percentile",
+     "title": "Get SAT percentile",
+     "description": "Percentile rank of a digital SAT total score (400-1600) or section score (200-800, Reading and Writing or Math), from the College Board percentile tables: the user group percentile (actual SAT takers, past three graduating classes) and the nationally representative percentile (all US 11th and 12th graders). Also compares the score with the class of 2026 national mean (1,954,833 test takers) and score band."
+    },
+    {
+     "name": "get_score_for_sat_percentile",
+     "title": "Get SAT score for a percentile",
+     "description": "The lowest SAT total or section score whose College Board percentile is at or above a target (for example the 75th or 90th percentile), for the user group (SAT takers) or the nationally representative group."
+    },
+    {
+     "name": "get_sat_scores_by_state",
+     "title": "Get SAT scores by state",
+     "description": "Class of 2026 SAT results for one state, DC, Puerto Rico or the US Virgin Islands from the College Board 2026 SAT Suite Annual Report state supplement: test takers, participation rate, mean total, Reading and Writing and Math scores, percent meeting college readiness benchmarks, 25th/50th/75th percentile scores, rank by mean, and the national comparison."
+    },
+    {
+     "name": "rank_states_by_sat",
+     "title": "Rank states by SAT",
+     "description": "Rank the 50 states and DC by class of 2026 SAT mean total, mean Math, mean Reading and Writing, participation rate, percent meeting both benchmarks, or number of test takers. Use min_participation_pct (for example 50) to compare only states where most students take the SAT, since low-participation states have higher means."
+    }
+   ],
+   "tools_checked": "2026-11-03",
+   "added": "2026-11-03",
+   "money_site": {
+    "name": "ExamScoreCalc",
+    "url": "https://examscorecalc.com"
+   },
+   "prompts": [
+    "What percentile is a 1350 on the SAT?",
+    "What SAT score do I need to be in the top 10%?",
+    "Which states have the highest average SAT score with at least 50% participation?"
+   ]
   }
  ]
 }

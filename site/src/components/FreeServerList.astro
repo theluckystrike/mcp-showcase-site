@@ -1,10 +1,13 @@
 ---
 // List of free live-data servers (home section and /free-servers/). Data: data/content/free-servers.json.
 import { getFreeServers } from '../data/freeServers';
+import { getLiveAnswers } from '../data/canClaudeLive';
 interface Props { limit?: number; headingLevel?: 'h2' | 'h3' }
 const { limit, headingLevel = 'h3' } = Astro.props;
 const list = getFreeServers().slice(0, limit ?? undefined);
 const H = headingLevel;
+// s1103: the questions these servers answer, linked from the home page and /free-servers/.
+const answers = getLiveAnswers();
 ---
 <div class="fsl grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
   {list.map((s) => (
@@ -15,6 +18,15 @@ const H = headingLevel;
     </a>
   ))}
 </div>
+{answers.length > 0 && (
+  <div class="fsl-q mt-8">
+    <p class="text-[.78rem] font-semibold uppercase tracking-[.08em] text-faint">Questions they answer</p>
+    <ul class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[.95rem]">
+      {answers.map((a) => <li><a class="underline underline-offset-2" href={a.path}>{a.h1}</a></li>)}
+      <li><a class="link" href="/can-claude/">All answers</a></li>
+    </ul>
+  </div>
+)}
 <style>
   .fsl-item { padding: 1.1rem 0 1.2rem; border-top: 1px solid var(--border); }
   .fsl-tag {

@@ -1,0 +1,138 @@
+---
+// s1103: /can-claude/<slug>/ page for a question a free live-data server answers. Data: src/data/canClaudeLive.ts.
+// Order: honest direct answer, what Claude does alone vs with the server, a real call result, connect, FAQ.
+import Layout from '../layouts/Layout.astro';
+import CopyCode from './CopyCode.astro';
+import Faq from './Faq.astro';
+import { installLines, moneyHref } from '../data/freeServers';
+import { getLiveAnswers, type LiveAnswer, type LiveExample } from '../data/canClaudeLive';
+
+interface Props { page: LiveAnswer }
+const { page: p } = Astro.props;
+const s = p.server;
+const lines = installLines(s);
+const url = new URL(p.path, Astro.site).href;
+const firstSentences = (t: string, max = 160) => {
+  let out = '';
+  for (const x of t.split(/(?<=[.!?])\s+/)) { if (out && `${out} ${x}`.length > max) break; out = out ? `${out} ${x}` : x; }
+  return out;
+};
+const description = firstSentences(p.answer);
+const faq = [
+  { q: p.h1, a: p.answer },
+  ...p.faq,
+  { q: 'Is the server free?', a: `Yes. The ${s.name} server is free at its hosted URL with no token, key or account. The source is open on GitHub.` },
+];
+const money = moneyHref(s, `can-claude-${p.slug}`);
+const examples: LiveExample[] = [p.example, ...(p.example2 ? [p.example2] : [])];
+const others = getLiveAnswers().filter((x) => x.slug !== p.slug);
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+  {
+    '@context': 'https://schema.org', '@type': 'HowTo', name: `${p.h1.replace(/\?$/, '')} with the ${s.name} MCP server`, url,
+    tool: [{ '@type': 'HowToTool', name: `${s.name} MCP server` }],
+    step: [
+      { '@type': 'HowToStep', name: 'Connect', text: `Add ${s.hostedUrl} as a custom connector in Claude, or with claude mcp add in Claude Code.` },
+      { '@type': 'HowToStep', name: 'Ask', text: p.example.prompt },
+      { '@type': 'HowToStep', name: p.example.tool, text: p.example.result },
+    ],
+  },
+];
+const crumbs = [{ name: 'Can Claude', path: '/can-claude/' }, { name: p.h1, path: p.path }];
+---
+<Layout title={p.title} description={description} jsonLd={jsonLd} ogType="article" crumbs={crumbs}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-10 pt-8 sm:pt-12">
+      <nav class="muted flex flex-wrap items-center gap-2 text-[.88rem]" aria-label="Breadcrumb">
+        <a href="/can-claude/" class="hover:text-fg">Can Claude</a><span class="text-faint">/</span>
+        <span class="text-fg">{p.h1}</span>
+      </nav>
+      <div class="mt-7 max-w-3xl">
+        <p class="la-kicker"><span class="la-tab">Answer</span><span class="la-tab la-tab-quiet">Live data</span></p>
+        <h1 class="display mt-4 !text-[clamp(2.1rem,5vw,3.5rem)]">{p.h1}</h1>
+        <p class="lead qas mt-5 !text-fg">{p.answer}</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="#connect" class="btn btn-primary">Connect free, no token</a>
+          <a href={s.path} class="btn">{s.h1}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap py-10">
+    <h2 class="h2">What Claude does alone, and what needs the server</h2>
+    <div class="mt-6 grid gap-6 md:grid-cols-2">
+      <div class="border-t-2 border-line-strong pt-4">
+        <h3 class="la-h3 muted">Claude on its own</h3>
+        <ul class="la-list mt-3">{p.native.map((x) => <li>{x}</li>)}</ul>
+      </div>
+      <div class="border-t-2 border-fg pt-4">
+        <h3 class="la-h3">With the {s.name} server</h3>
+        <ul class="la-list mt-3">{p.needs.map((x) => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="la-band py-12">
+    <div class="wrap">
+      <h2 class="h2">A real call to the live server</h2>
+      <p class="muted mt-3 max-w-2xl">We sent this to the hosted server on {p.example.run}. The answer below is the server's own text, not a mock-up. Live values will differ when you ask.</p>
+      <div class="mt-8 grid gap-8">
+        {examples.map((e) => (
+          <div class="la-turn">
+            <p class="la-label">You ask</p>
+            <p class="text-[1.02rem]">{e.prompt}</p>
+            <p class="la-label mt-5">Tool call</p>
+            <pre class="code !whitespace-pre-wrap [overflow-wrap:anywhere] text-[.82rem]">{`${e.tool} ${JSON.stringify(e.args)}`}</pre>
+            <p class="la-label mt-5">Server answer</p>
+            <p class="la-result">{e.result}</p>
+            {e.note && <p class="muted mt-3 text-[.9rem]">{e.note}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="connect" class="wrap py-12">
+    <h2 class="h2">Connect it in 1 minute</h2>
+    <p class="muted mt-3 max-w-2xl">One URL, no token, no account. In Claude.ai or Claude Desktop open Settings, then Connectors, then Add custom connector, and paste the URL.</p>
+    <div class="mt-6 grid gap-5 lg:grid-cols-2">
+      <CopyCode code={lines.claudeAi} label="Connector URL" />
+      <CopyCode code={lines.claudeCode} label="Claude Code" />
+      <CopyCode code={lines.cursor} label="Cursor (~/.cursor/mcp.json)" />
+      <CopyCode code={lines.vscode} label="VS Code (.vscode/mcp.json)" />
+    </div>
+    <p class="mt-6">All {s.tools.length} tools, sources and more prompts: <a class="link" href={s.path}>{s.h1}</a>{money && <> <span class="text-faint">·</span> <a class="link" href={money} rel="noopener">{s.moneySite!.name}</a></>}</p>
+  </section>
+
+  <section class="wrap py-12">
+    <h2 class="h2">Questions</h2>
+    <div class="mt-6 max-w-3xl"><Faq items={faq} /></div>
+  </section>
+
+  {others.length > 0 && (
+    <section class="wrap py-12">
+      <h2 class="h2">More questions people ask Claude</h2>
+      <ul class="la-others mt-6">{others.map((o) => <li><a href={o.path}>{o.h1}</a></li>)}</ul>
+      <p class="mt-6"><a href="/can-claude/" class="link">All answers</a> <span class="text-faint">·</span> <a href="/free-servers/" class="link">All free servers</a></p>
+    </section>
+  )}
+</Layout>
+
+<style>
+  .la-kicker { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; }
+  .la-tab { font-family: var(--font-mono); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--text); background: var(--surface-solid); border: 1px solid var(--border-strong); border-bottom-width: 2px; border-radius: 2px; padding: .22rem .5rem .18rem; }
+  .la-tab-quiet { color: var(--muted); background: transparent; border-color: var(--border); border-bottom-width: 1px; }
+  .la-h3 { font-size: .78rem; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
+  .la-list { list-style: disc; padding-left: 1.2rem; display: grid; gap: .5rem; }
+  .la-band { background: var(--bg-2); border-block: 1px solid var(--border); }
+  .la-turn { border-top: 2px solid var(--text); padding-top: 1rem; max-width: 52rem; }
+  .la-label { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: .5rem; }
+  .la-result { font-size: 1.02rem; line-height: 1.6; border-left: 3px solid var(--stamp); padding-left: 1rem; }
+  .la-others { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  @media (min-width: 768px) { .la-others { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; } }
+  .la-others li { padding: .7rem 0; border-top: 1px solid var(--border); }
+  .la-others a { font-weight: 600; text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
+</style>
