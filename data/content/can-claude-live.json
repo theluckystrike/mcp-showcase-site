@@ -1044,8 +1044,8 @@
      "agi": 52000,
      "dependents": 1
     },
-    "result": "For $38,000.00 at 6.5% and AGI $52,000.00: RAP $166.67 a month, $19,869.14 cancelled after 360 payments, total $60,001.20. Tiered Standard (15 years) $331.02 a month, total $59,583.79. 10-year Standard $431.48 a month, total $51,778.01.",
-    "note": "The first three sentences of the answer. The server also names a winner on each measure; compare the totals yourself, since the 10-year Standard plan has the lowest total here.",
+    "result": "For $38,000.00 at 6.5% and AGI $52,000.00: RAP $166.67 a month, $19,869.14 cancelled after 360 payments, total $60,001.20. Tiered Standard (15 years) $331.02 a month, total $59,583.79. 10-year Standard $431.48 a month, total $51,778.01. Lowest monthly payment: RAP. Lowest total paid: 10-year Standard. RAP and the 10-year Standard plan count toward PSLF; Tiered Standard does not.",
+    "note": "",
     "is_error": false,
     "run": "2026-11-03"
    },
@@ -1056,7 +1056,7 @@
     },
     {
      "q": "Does RAP count for PSLF?",
-     "a": "Yes. RAP payments count toward Public Service Loan Forgiveness. The new Tiered Standard plan does not."
+     "a": "Yes. On-time RAP payments count toward Public Service Loan Forgiveness, and so do payments under the 10-year Standard plan. Tiered Standard payments do not (20 U.S.C. 1087e(m)(1)(A), as amended by P.L. 119-21 sec. 82004)."
     }
    ]
   },
