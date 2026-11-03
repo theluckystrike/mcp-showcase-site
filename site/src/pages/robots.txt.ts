@@ -6,6 +6,8 @@ const AI_BOTS = ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude
 
 export const GET: APIRoute = ({ site }) => {
   // /api/ runs live checks against third-party servers: crawlers must not trigger them (s1102m QA P2-24).
-  const lines = ['User-agent: *', 'Allow: /', 'Disallow: /api/', '', ...AI_BOTS.flatMap((b) => [`User-agent: ${b}`, 'Allow: /', 'Disallow: /api/', '']), `Sitemap: ${new URL('/sitemap.xml', site).href}`, ''];
+  // s1103: /check/?url=... result URLs (600 linked from /readiness/) all canonicalize to /check/. Keep crawlers on real pages.
+  const rules = ['Allow: /', 'Disallow: /api/', 'Disallow: /check/?'];
+  const lines = ['User-agent: *', ...rules, '', ...AI_BOTS.flatMap((b) => [`User-agent: ${b}`, ...rules, '']), `Sitemap: ${new URL('/sitemap.xml', site).href}`, ''];
   return new Response(lines.join('\n'), { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 };

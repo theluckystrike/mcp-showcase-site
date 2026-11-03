@@ -10,6 +10,8 @@ export interface ExplorerItem {
   price?: string;
   free?: boolean;
   satellite?: boolean;
+  /** Page link; satellites point to their canonical /free-servers/<repo>/ page (s1103). */
+  href?: string;
   chips: string[];
   search: string;
 }
@@ -102,7 +104,7 @@ export default function ServerExplorer({ items, categories, initialCategory = 'a
         {shown.map((s) => {
           const c = hue[s.category];
           return (
-            <a key={s.id} href={`/servers/${s.id}/`} className="srv-row cat group" style={{ ['--hue' as string]: c?.hue ?? 285 }}>
+            <a key={s.id} href={s.href ?? `/servers/${s.id}/`} className="srv-row cat group" style={{ ['--hue' as string]: c?.hue ?? 285 }}>
               <span className="srv-row-out">{s.output}</span>
               <span className="srv-row-name">{s.name}</span>
               <span className="srv-row-tag">{s.tagline}</span>

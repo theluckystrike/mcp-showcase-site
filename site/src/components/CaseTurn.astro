@@ -2,6 +2,7 @@
 // A case example that looks like a real chat turn: user prompt, tool call chips, result card.
 import type { Server, ServerCase } from '../data/servers';
 import { getCategory } from '../data/categories';
+import { serverHref } from '../data/freeServers';
 interface Props { server: Server; case: ServerCase; compact?: boolean; showServer?: boolean }
 const { server: s, case: c, compact = false, showServer = false } = Astro.props;
 const cat = getCategory(s.category);
@@ -12,7 +13,7 @@ const cat = getCategory(s.category);
       <span class="text-[.78rem] text-faint"><span class="font-semibold text-muted">Example</span>{c.persona && ` · ${c.persona}`}</span>
       <h3 class="mt-0.5 line-clamp-2 text-[1.02rem] font-semibold">{c.title}</h3>
     </div>
-    {showServer && <a href={`/servers/${s.id}/`} class="chip shrink-0 hover:text-fg"><span class="dot"></span>{s.name}</a>}
+    {showServer && <a href={serverHref(s)} class="chip shrink-0 hover:text-fg"><span class="dot"></span>{s.name}</a>}
   </header>
   <div class="flex flex-1 flex-col gap-3.5 py-4">
     <div class="grid grid-cols-[3.4rem_minmax(0,1fr)] gap-2 text-[.95rem] leading-relaxed">

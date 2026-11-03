@@ -17,10 +17,12 @@ interface Props {
   noindex?: boolean;
   /** Breadcrumb trail (without Home). Adds BreadcrumbList JSON-LD (seo.json: all pages). */
   crumbs?: { name: string; path: string }[];
+  /** Canonical path when another page holds the same content (s1103: satellite /servers/<id>/ -> /free-servers/<repo>/). */
+  canonicalPath?: string;
 }
-const { title, description = brand.description, jsonLd = [], ogType = 'website', noindex = false, crumbs = [] } = Astro.props;
+const { title, description = brand.description, jsonLd = [], ogType = 'website', noindex = false, crumbs = [], canonicalPath } = Astro.props;
 const site = Astro.site ?? new URL(brand.siteUrl);
-const canonical = new URL(Astro.url.pathname, site).href;
+const canonical = new URL(canonicalPath ?? Astro.url.pathname, site).href;
 // QA (t-qa): titles <= 60 chars. Add the brand suffix only when it fits. Drop a sitemap suffix that makes the title too long.
 const suffix = ` | ${brand.name}`;
 const baseTitle = title.endsWith(suffix) && title.length > 60 ? title.slice(0, -suffix.length) : title;

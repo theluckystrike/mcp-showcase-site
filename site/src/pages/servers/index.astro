@@ -6,6 +6,7 @@ import { getServers, stats, bundleUrl, bundlePrice, buyUrl } from '../../data/se
 import { upsell } from '../../data/content';
 import UpsellBand from '../../components/UpsellBand.astro';
 import { seo } from '../../data/pages';
+import { serverHref } from '../../data/freeServers';
 import { buyerRank, outputType } from './_outputs';
 
 const st = stats();
@@ -19,6 +20,7 @@ const items = [...getServers()].sort((a, b) => buyerRank(a) - buyerRank(b) || a.
   price: s.satellite ? 'Free calculator' : !s.paid ? 'Free' : s.bundleOnly ? `Bundle $${bundlePrice()}` : `Free tier, Pro $${s.priceUsd}`,
   free: !s.paid,
   satellite: s.satellite,
+  href: serverHref(s),
   chips: (s.outcomeChips.length ? s.outcomeChips : []).slice(0, 3),
   search: [s.name, s.id, s.tagline, s.category, outputType(s), ...s.keywords, ...s.outcomeChips, ...s.topTools.map((t) => t.name)].join(' ').toLowerCase(),
 }));

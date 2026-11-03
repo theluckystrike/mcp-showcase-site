@@ -124,3 +124,15 @@ export const freeServerLastmod = (s?: FreeServer): string => {
   const list = s ? [s] : getFreeServers();
   return list.flatMap((x) => [x.added, x.toolsChecked]).filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort().pop() ?? '';
 };
+
+/**
+ * s1103: the 9 satellite servers in /servers/<id>/ are the same hosted Workers as /free-servers/<id>-mcp/.
+ * Two pages for one server split Google's signals. /free-servers/<repo>/ is the canonical page (H1 = query phrase).
+ * Returns the free-servers path for a satellite with a matching free-servers entry, else undefined.
+ */
+export function freeServerPathFor(s: { id: string; satellite?: boolean }): string | undefined {
+  if (!s.satellite) return undefined;
+  return getFreeServers().find((f) => f.repo === `${s.id}-mcp`)?.path;
+}
+/** The page a server link should point to: the canonical free-servers page for a satellite, else /servers/<id>/. */
+export const serverHref = (s: { id: string; satellite?: boolean }): string => freeServerPathFor(s) ?? `/servers/${s.id}/`;

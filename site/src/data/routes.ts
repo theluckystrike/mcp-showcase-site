@@ -3,7 +3,7 @@ import { CATEGORIES } from './categories';
 import { getServers } from './servers';
 import { pagesOfType, pageMeta } from './pages';
 import { COMPARISONS } from './compare';
-import { getFreeServers, freeServerLastmod } from './freeServers';
+import { getFreeServers, freeServerLastmod, freeServerPathFor } from './freeServers';
 import { getReadiness, readinessPublished } from './readiness';
 import { PAGE_MODIFIED } from './schema';
 
@@ -18,7 +18,8 @@ export function allRoutes(): { path: string; priority: number; lastmod?: string 
     ...BUILT_PAGE_TYPES.flatMap((t) => pagesOfType(t).map((p) => ({ path: p.path, priority: p.priority }))),
     ...COMPARISONS.map((c) => ({ path: `/compare/${c.slug}/`, priority: prio(`/compare/${c.slug}/`, 0.6) })),
     ...CATEGORIES.map((c) => ({ path: `/categories/${c.id}/`, priority: prio(`/categories/${c.id}/`, 0.6) })),
-    ...getServers().map((s) => ({ path: `/servers/${s.id}/`, priority: prio(`/servers/${s.id}/`, 0.4) })),
+    // s1103: satellites whose canonical page is /free-servers/<repo>/ are left out (a sitemap lists canonical URLs only).
+    ...getServers().filter((s) => !freeServerPathFor(s)).map((s) => ({ path: `/servers/${s.id}/`, priority: prio(`/servers/${s.id}/`, 0.4) })),
     // Free live-data servers (s1102): own lastmod = date added or tools re-checked (data/content/free-servers.json).
     ...(getFreeServers().length ? [{ path: '/free-servers/', priority: 0.7, lastmod: freeServerLastmod() || undefined }] : []),
     ...getFreeServers().map((s) => ({ path: s.path, priority: 0.6, lastmod: freeServerLastmod(s) || undefined })),

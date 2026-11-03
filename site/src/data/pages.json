@@ -382,7 +382,7 @@
  },
  {
   "path": "/use-cases/chase-overdue-invoices/",
-  "title": "Chase overdue invoices with AI reminders and statements | {brand}",
+  "title": "Chase overdue invoices automatically from chat | {brand}",
   "h1": "Chase overdue invoices from chat",
   "meta_description": "Reminder 1, reminder 2 and final notice, with aging buckets and a statement of account. Ask Claude who owes you. Uses the Dunning Letters server. 9 tools.",
   "primary_keyword": "payment reminder email template",
@@ -826,8 +826,8 @@
  },
  {
   "path": "/can-claude/read-zip-files/",
-  "title": "Can Claude read zip files? Inspect and extract | {brand}",
-  "h1": "Can Claude read zip files?",
+  "title": "Can Claude open zip files? Read and unzip them | {brand}",
+  "h1": "Can Claude open zip files?",
   "meta_description": "Not in most chat apps on its own. Here's what works out of the box, what needs a tool, and a 1-minute setup to inspect and extract zips in Claude.",
   "primary_keyword": "can claude read zip files",
   "intent": "informational",
@@ -1108,7 +1108,7 @@
  },
  {
   "path": "/servers/amortization/",
-  "title": "Amortization for Claude and Cursor | {brand}",
+  "title": "Amortization MCP server for Claude and Cursor | {brand}",
   "h1": "Amortization",
   "meta_description": "Loan and lease schedules: payment, interest, early settlement and the journal, to the minor. Free tier, $19 Pro once.",
   "primary_keyword": "amortization mcp",
@@ -1122,7 +1122,7 @@
  },
  {
   "path": "/servers/asset-register/",
-  "title": "Asset Register for Claude and Cursor | {brand}",
+  "title": "Asset Register MCP server for Claude and Cursor | {brand}",
   "h1": "Asset Register",
   "meta_description": "Fixed assets and depreciation on bundled Polish KST, HMRC and IRS MACRS. Free tier, $19 Pro once.",
   "primary_keyword": "asset register mcp",
@@ -1136,7 +1136,7 @@
  },
  {
   "path": "/servers/backlink-checker/",
-  "title": "Backlink Checker for Claude and Cursor | {brand}",
+  "title": "Backlink Checker MCP server for Claude and Cursor | {brand}",
   "h1": "Backlink Checker",
   "meta_description": "Check backlinks from Claude or Cursor: does a page link to your domain, dofollow or nofollow, with anchor text, HTTP. Free tier, $19 Pro once.",
   "primary_keyword": "backlink checker mcp",
@@ -1150,7 +1150,7 @@
  },
  {
   "path": "/servers/bank-statement/",
-  "title": "Bank Statement for Claude and Cursor | {brand}",
+  "title": "Bank Statement MCP server for Claude and Cursor | {brand}",
   "h1": "Bank Statement",
   "meta_description": "Import a bank CSV export, categorise it, summarise it per currency, find recurring charges and reconcile it against. Free tier, $19 Pro once.",
   "primary_keyword": "bank statement mcp",
@@ -1164,7 +1164,7 @@
  },
  {
   "path": "/servers/barcode/",
-  "title": "Barcode for Claude and Cursor | {brand}",
+  "title": "Barcode MCP server for Claude and Cursor | {brand}",
   "h1": "Barcode",
   "meta_description": "QR codes and barcodes from chat: URLs, WiFi joins, vCards, SEPA payment QR that a banking app can scan, Code 128 and. Free tier, $19 Pro once.",
   "primary_keyword": "barcode mcp",
@@ -1178,7 +1178,7 @@
  },
  {
   "path": "/servers/bill-of-sale/",
-  "title": "Bill of Sale for Claude and Cursor | {brand}",
+  "title": "Bill of Sale MCP server for Claude and Cursor | {brand}",
   "h1": "Bill of Sale",
   "meta_description": "Bills of sale for equipment, vehicles and stock: draft, finalize, print with signature. Free tier, $19 Pro once.",
   "primary_keyword": "bill of sale mcp",
@@ -1192,7 +1192,7 @@
  },
  {
   "path": "/servers/billing-docs/",
-  "title": "Billing Docs for Claude and Cursor | {brand}",
+  "title": "Billing Docs MCP server for Claude and Cursor | {brand}",
   "h1": "Billing Docs",
   "meta_description": "Credit notes against your invoices and purchase orders to your suppliers, on the invoice. Free tier, $19 Pro once.",
   "primary_keyword": "billing docs mcp",
@@ -1206,7 +1206,7 @@
  },
  {
   "path": "/servers/budget/",
-  "title": "Budget for Claude and Cursor | {brand}",
+  "title": "Budget MCP server for Claude and Cursor | {brand}",
   "h1": "Budget",
   "meta_description": "Budget for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
   "primary_keyword": "budget mcp",
@@ -1220,7 +1220,7 @@
  },
  {
   "path": "/servers/calendar/",
-  "title": "Calendar for Claude and Cursor | {brand}",
+  "title": "Calendar MCP server for Claude and Cursor | {brand}",
   "h1": "Calendar",
   "meta_description": "Read the .ics your calendar already exports: what is on this week, when you are actually free, what is double-booked,. Free tier, $19 Pro once.",
   "primary_keyword": "calendar mcp",
@@ -1234,7 +1234,7 @@
  },
  {
   "path": "/servers/cash-book/",
-  "title": "Cash Book for Claude and Cursor | {brand}",
+  "title": "Cash Book MCP server for Claude and Cursor | {brand}",
   "h1": "Cash Book",
   "meta_description": "One double-entry ledger derived from your invoices, bank, expenses, deposits and. Free tier, $19 Pro once.",
   "primary_keyword": "cash book mcp",
@@ -1248,7 +1248,7 @@
  },
  {
   "path": "/servers/catalogue/",
-  "title": "Catalogue for Claude and Cursor | {brand}",
+  "title": "Catalogue MCP server for Claude and Cursor | {brand}",
   "h1": "Catalogue",
   "meta_description": "A price list and rate card the quotes and invoice servers read by. Free tier, $19 Pro once.",
   "primary_keyword": "catalogue mcp",
@@ -1262,7 +1262,7 @@
  },
  {
   "path": "/servers/change-order/",
-  "title": "Change Order for Claude and Cursor | {brand}",
+  "title": "Change Order MCP server for Claude and Cursor | {brand}",
   "h1": "Change Order",
   "meta_description": "Change orders against a quote or work order: deltas, approval, running contract. Free tier, $19 Pro once.",
   "primary_keyword": "change order mcp",
@@ -1276,7 +1276,7 @@
  },
  {
   "path": "/servers/checklist/",
-  "title": "Checklist for Claude and Cursor | {brand}",
+  "title": "Checklist MCP server for Claude and Cursor | {brand}",
   "h1": "Checklist",
   "meta_description": "Reusable checklists and the dated runs of them: pass, fail, not applicable, and a. Free tier, $19 Pro once.",
   "primary_keyword": "checklist mcp",
@@ -1290,7 +1290,7 @@
  },
  {
   "path": "/servers/clauses/",
-  "title": "Clauses for Claude and Cursor | {brand}",
+  "title": "Clauses MCP server for Claude and Cursor | {brand}",
   "h1": "Clauses",
   "meta_description": "A personal library of reusable contract and proposal clauses: 25 generic freelance starters with {variables}, ranked. Free tier, $19 Pro once.",
   "primary_keyword": "clauses mcp",
@@ -1304,7 +1304,7 @@
  },
  {
   "path": "/servers/credit-note/",
-  "title": "Credit Note for Claude and Cursor | {brand}",
+  "title": "Credit Note MCP server for Claude and Cursor | {brand}",
   "h1": "Credit Note",
   "meta_description": "Credit notes against an invoice or standalone: drafts, finalization, rendering,. Free tier, $19 Pro once.",
   "primary_keyword": "credit note mcp",
@@ -1318,7 +1318,7 @@
  },
  {
   "path": "/servers/currency/",
-  "title": "Currency for Claude and Cursor | {brand}",
+  "title": "Currency MCP server for Claude and Cursor | {brand}",
   "h1": "Currency",
   "meta_description": "Live and historical exchange rates from the European Central Bank, in your AI chat. Convert amounts, read rate history,. Free tier, $19 Pro once.",
   "primary_keyword": "currency mcp",
@@ -1332,7 +1332,7 @@
  },
  {
   "path": "/servers/delivery-schedule/",
-  "title": "Delivery Schedule for Claude and Cursor | {brand}",
+  "title": "Delivery Schedule MCP server for Claude and Cursor | {brand}",
   "h1": "Delivery Schedule",
   "meta_description": "Dated deliverables against a quote or work order: due dates, sign-off, what is late,. Free tier, $19 Pro once.",
   "primary_keyword": "delivery schedule mcp",
@@ -1346,7 +1346,7 @@
  },
  {
   "path": "/servers/deposits/",
-  "title": "Deposits for Claude and Cursor | {brand}",
+  "title": "Deposits MCP server for Claude and Cursor | {brand}",
   "h1": "Deposits",
   "meta_description": "Security and retainer deposits per client: hold them, apply them to invoices, refund. Free tier, $19 Pro once.",
   "primary_keyword": "deposits mcp",
@@ -1360,7 +1360,7 @@
  },
  {
   "path": "/servers/docx/",
-  "title": "Docx for Claude and Cursor | {brand}",
+  "title": "Docx MCP server for Claude and Cursor | {brand}",
   "h1": "Docx",
   "meta_description": "Turn a chat into a real Word document: proposals, quotes, contracts, statements of work and letters as .docx files,. Free tier, $19 Pro once.",
   "primary_keyword": "docx mcp",
@@ -1374,7 +1374,7 @@
  },
  {
   "path": "/servers/dunning-letters/",
-  "title": "Dunning Letters for Claude and Cursor | {brand}",
+  "title": "Dunning Letters MCP server for Claude and Cursor | {brand}",
   "h1": "Dunning Letters",
   "meta_description": "Chase overdue invoices: reminder 1, reminder 2, final notice, escalation dates,. Free tier, $19 Pro once.",
   "primary_keyword": "dunning letters mcp",
@@ -1388,7 +1388,7 @@
  },
  {
   "path": "/servers/duplicate-invoice-check/",
-  "title": "Duplicate Invoice Check for Claude and Cursor | {brand}",
+  "title": "Duplicate Invoice Check MCP server for Claude and Cursor | {brand}",
   "h1": "Duplicate Invoice Check",
   "meta_description": "Review explainable duplicate supplier invoice candidates in a supplied local. Free tier, $19 Pro once.",
   "primary_keyword": "duplicate invoice check mcp",
@@ -1402,7 +1402,7 @@
  },
  {
   "path": "/servers/expense-tracker/",
-  "title": "Expense Tracker for Claude and Cursor | {brand}",
+  "title": "Expense Tracker MCP server for Claude and Cursor | {brand}",
   "h1": "Expense Tracker",
   "meta_description": "Local expenses, receipts and mileage ledger for freelancers: categorise, split VAT, summarise, export to CSV or xlsx. Free tier, $19 Pro once.",
   "primary_keyword": "expense tracker mcp",
@@ -1416,7 +1416,7 @@
  },
  {
   "path": "/servers/goods-receipt/",
-  "title": "Goods Receipt for Claude and Cursor | {brand}",
+  "title": "Goods Receipt MCP server for Claude and Cursor | {brand}",
   "h1": "Goods Receipt",
   "meta_description": "Goods receipt notes against purchase orders: over/under tolerances, damaged and short units, discrepancies, and CSV. Free tier, $19 Pro once.",
   "primary_keyword": "goods receipt mcp",
@@ -1430,7 +1430,7 @@
  },
  {
   "path": "/servers/hourly-rate/",
-  "title": "Hourly Rate for Claude and Cursor | {brand}",
+  "title": "Hourly Rate MCP server for Claude and Cursor | {brand}",
   "h1": "Hourly Rate",
   "meta_description": "Freelance hourly-rate calculator with break-even and what-if. Free tier, $19 Pro once.",
   "primary_keyword": "hourly rate mcp",
@@ -1444,7 +1444,7 @@
  },
  {
   "path": "/servers/image/",
-  "title": "Image tools for Claude and Cursor | {brand}",
+  "title": "Image MCP server for Claude and Cursor | {brand}",
   "h1": "Image",
   "meta_description": "Resize, convert, compress, crop, thumbnail and watermark images from chat: no account, no native dependency. Free tier, $19 Pro once.",
   "primary_keyword": "image mcp",
@@ -1458,7 +1458,7 @@
  },
  {
   "path": "/servers/invoice/",
-  "title": "Invoice for Claude and Cursor | {brand}",
+  "title": "Invoice MCP server for Claude and Cursor | {brand}",
   "h1": "Invoice",
   "meta_description": "Make real, sendable PDF invoices from a sentence. Clients, numbering that never repeats, VAT lines, discounts and. Free tier, $19 Pro once.",
   "primary_keyword": "invoice mcp",
@@ -1472,7 +1472,7 @@
  },
  {
   "path": "/servers/job-card/",
-  "title": "Job Card for Claude and Cursor | {brand}",
+  "title": "Job Card MCP server for Claude and Cursor | {brand}",
   "h1": "Job Card",
   "meta_description": "Job cards for trades and field service: hours and materials per job, open to. Free tier, $19 Pro once.",
   "primary_keyword": "job card mcp",
@@ -1486,7 +1486,7 @@
  },
  {
   "path": "/servers/kanban/",
-  "title": "Kanban for Claude and Cursor | {brand}",
+  "title": "Kanban MCP server for Claude and Cursor | {brand}",
   "h1": "Kanban",
   "meta_description": "A local task board per project: columns, due dates, estimates, priorities and a link into your time tracker. All data. Free tier, $19 Pro once.",
   "primary_keyword": "kanban mcp",
@@ -1500,7 +1500,7 @@
  },
  {
   "path": "/servers/leave/",
-  "title": "Leave for Claude and Cursor | {brand}",
+  "title": "Leave MCP server for Claude and Cursor | {brand}",
   "h1": "Leave",
   "meta_description": "Employee leave and PTO requests: balances, approvals, calendars, and who-is-out. Free tier, $19 Pro once.",
   "primary_keyword": "leave mcp",
@@ -1514,7 +1514,7 @@
  },
  {
   "path": "/servers/loan-calculator/",
-  "title": "Loan Calculator for Claude and Cursor | {brand}",
+  "title": "Loan Calculator MCP server for Claude and Cursor | {brand}",
   "h1": "Loan Calculator",
   "meta_description": "Loan Calculator for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
   "primary_keyword": "loan calculator mcp",
@@ -1528,7 +1528,7 @@
  },
  {
   "path": "/servers/maintenance-log/",
-  "title": "Maintenance Log for Claude and Cursor | {brand}",
+  "title": "Maintenance Log MCP server for Claude and Cursor | {brand}",
   "h1": "Maintenance Log",
   "meta_description": "Equipment maintenance log: assets, service entries with costs, and a due report from stored. Free tier, $19 Pro once.",
   "primary_keyword": "maintenance log mcp",
@@ -1542,7 +1542,7 @@
  },
  {
   "path": "/servers/mileage-log/",
-  "title": "Mileage Log for Claude and Cursor | {brand}",
+  "title": "Mileage Log MCP server for Claude and Cursor | {brand}",
   "h1": "Mileage Log",
   "meta_description": "Mileage log for deductible driving: trips, effective-dated rates, summaries and CSV. Free tier, $19 Pro once.",
   "primary_keyword": "mileage log mcp",
@@ -1556,7 +1556,7 @@
  },
  {
   "path": "/servers/office-suite/",
-  "title": "Office Suite for Claude and Cursor | {brand}",
+  "title": "Office Suite MCP server for Claude and Cursor | {brand}",
   "h1": "Office Suite",
   "meta_description": "One install for the whole freelancer office suite: time tracking, price watching, spreadsheets and PDF invoicing,. Free tier, $19 Pro once.",
   "primary_keyword": "office suite mcp",
@@ -1570,7 +1570,7 @@
  },
  {
   "path": "/servers/onboarding/",
-  "title": "Onboarding for Claude and Cursor | {brand}",
+  "title": "Onboarding MCP server for Claude and Cursor | {brand}",
   "h1": "Onboarding",
   "meta_description": "New-hire onboarding: task templates per role, day-one to day-ninety. Free tier, $19 Pro once.",
   "primary_keyword": "onboarding mcp",
@@ -1584,7 +1584,7 @@
  },
  {
   "path": "/servers/packing-list/",
-  "title": "Packing List for Claude and Cursor | {brand}",
+  "title": "Packing List MCP server for Claude and Cursor | {brand}",
   "h1": "Packing List",
   "meta_description": "Packing slips: cartons, contents, weights, chargeable weight and what is still to. Free tier, $19 Pro once.",
   "primary_keyword": "packing list mcp",
@@ -1598,7 +1598,7 @@
  },
  {
   "path": "/servers/payroll/",
-  "title": "Payroll for Claude and Cursor | {brand}",
+  "title": "Payroll MCP server for Claude and Cursor | {brand}",
   "h1": "Payroll",
   "meta_description": "Payroll for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
   "primary_keyword": "payroll mcp",
@@ -1612,7 +1612,7 @@
  },
  {
   "path": "/servers/pdf/",
-  "title": "Pdf for Claude and Cursor | {brand}",
+  "title": "PDF MCP server for Claude and Cursor | {brand}",
   "h1": "PDF",
   "meta_description": "Merge, split, extract, rotate, reorder and stamp PDF files from chat: mark an invoice PAID, pull pages out of a scan,. Free tier, $19 Pro once.",
   "primary_keyword": "pdf mcp",
@@ -1626,7 +1626,7 @@
  },
  {
   "path": "/servers/per-diem/",
-  "title": "Per Diem for Claude and Cursor | {brand}",
+  "title": "Per Diem MCP server for Claude and Cursor | {brand}",
   "h1": "Per Diem",
   "meta_description": "Daily travel allowances on bundled public rate tables: Poland, HMRC and. Free tier, $19 Pro once.",
   "primary_keyword": "per diem mcp",
@@ -1640,7 +1640,7 @@
  },
  {
   "path": "/servers/petty-cash/",
-  "title": "Petty Cash for Claude and Cursor | {brand}",
+  "title": "Petty Cash MCP server for Claude and Cursor | {brand}",
   "h1": "Petty Cash",
   "meta_description": "A petty cash float on the imprest system: vouchers, reconciliation and the. Free tier, $19 Pro once.",
   "primary_keyword": "petty cash mcp",
@@ -1654,7 +1654,7 @@
  },
  {
   "path": "/servers/pomodoro/",
-  "title": "Pomodoro for Claude and Cursor | {brand}",
+  "title": "Pomodoro MCP server for Claude and Cursor | {brand}",
   "h1": "Pomodoro",
   "meta_description": "Pomodoro for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
   "primary_keyword": "pomodoro mcp",
@@ -1668,7 +1668,7 @@
  },
  {
   "path": "/servers/price-tracker/",
-  "title": "Price Tracker for Claude and Cursor | {brand}",
+  "title": "Price Tracker MCP server for Claude and Cursor | {brand}",
   "h1": "Price Tracker",
   "meta_description": "Ask your AI what something costs right now, track price drops and get told when a target price is hit. All data stays. Free tier, $19 Pro once.",
   "primary_keyword": "price tracker mcp",
@@ -1682,7 +1682,7 @@
  },
  {
   "path": "/servers/purchase-requisition/",
-  "title": "Purchase Requisition for Claude and Cursor | {brand}",
+  "title": "Purchase Requisition MCP server for Claude and Cursor | {brand}",
   "h1": "Purchase Requisition",
   "meta_description": "Reusable purchase-requisitions and dated runs: pass, fail, n/a, and a. Free tier, $19 Pro once.",
   "primary_keyword": "purchase requisition mcp",
@@ -1696,7 +1696,7 @@
  },
  {
   "path": "/servers/quotes/",
-  "title": "Quotes for Claude and Cursor | {brand}",
+  "title": "Quotes MCP server for Claude and Cursor | {brand}",
   "h1": "Quotes",
   "meta_description": "Send a client a real quote in seconds: line items with VAT, a validity date, a plain-text version to paste into email. Free tier, $19 Pro once.",
   "primary_keyword": "quotes mcp",
@@ -1710,7 +1710,7 @@
  },
  {
   "path": "/servers/receipts/",
-  "title": "Receipts for Claude and Cursor | {brand}",
+  "title": "Receipts MCP server for Claude and Cursor | {brand}",
   "h1": "Receipts",
   "meta_description": "Receipts for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
   "primary_keyword": "receipts mcp",
@@ -1724,7 +1724,7 @@
  },
  {
   "path": "/servers/recurring/",
-  "title": "Recurring for Claude and Cursor | {brand}",
+  "title": "Recurring MCP server for Claude and Cursor | {brand}",
   "h1": "Recurring",
   "meta_description": "Bill the same clients every month without remembering to. Define a recurring invoice once, then generate the real PDFs. Free tier, $19 Pro once.",
   "primary_keyword": "recurring mcp",
@@ -1738,7 +1738,7 @@
  },
  {
   "path": "/servers/resume/",
-  "title": "Resume for Claude and Cursor | {brand}",
+  "title": "Resume MCP server for Claude and Cursor | {brand}",
   "h1": "Resume",
   "meta_description": "Turn your CV facts into a tailored Word resume and a cover letter that invents nothing: keyword matching against the. Free tier, $19 Pro once.",
   "primary_keyword": "resume mcp",
@@ -1752,7 +1752,7 @@
  },
  {
   "path": "/servers/service-agreement/",
-  "title": "Service Agreement for Claude and Cursor | {brand}",
+  "title": "Service Agreement MCP server for Claude and Cursor | {brand}",
   "h1": "Service Agreement",
   "meta_description": "Service agreements for freelancers: scope, deliverables, rate, termination and liability. Free tier, $19 Pro once.",
   "primary_keyword": "service agreement mcp",
@@ -1766,7 +1766,7 @@
  },
  {
   "path": "/servers/spreadsheet/",
-  "title": "Spreadsheet for Claude and Cursor | {brand}",
+  "title": "Spreadsheet MCP server for Claude and Cursor | {brand}",
   "h1": "Spreadsheet",
   "meta_description": "Open, inspect, query, edit and convert xlsx and csv files locally from your AI. Free tier, $19 Pro once.",
   "primary_keyword": "spreadsheet mcp",
@@ -1780,7 +1780,7 @@
  },
  {
   "path": "/servers/statement-of-account/",
-  "title": "Statement of Account for Claude and Cursor | {brand}",
+  "title": "Statement of Account MCP server for Claude and Cursor | {brand}",
   "h1": "Statement of Account",
   "meta_description": "Per-client statements of account, aging buckets and dunning letters from your own. Free tier, $19 Pro once.",
   "primary_keyword": "statement of account mcp",
@@ -1794,7 +1794,7 @@
  },
  {
   "path": "/servers/stripe-billing/",
-  "title": "Stripe Billing for Claude and Cursor | {brand}",
+  "title": "Stripe Billing MCP server for Claude and Cursor | {brand}",
   "h1": "Stripe Billing",
   "meta_description": "Stripe Billing for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
   "primary_keyword": "stripe billing mcp",
@@ -1808,7 +1808,7 @@
  },
  {
   "path": "/servers/supplier-list/",
-  "title": "Supplier List for Claude and Cursor | {brand}",
+  "title": "Supplier List MCP server for Claude and Cursor | {brand}",
   "h1": "Supplier List",
   "meta_description": "A supplier directory that does not rot: contacts, terms, lead times, review. Free tier, $19 Pro once.",
   "primary_keyword": "supplier list mcp",
@@ -1822,7 +1822,7 @@
  },
  {
   "path": "/servers/supplier-statement-check/",
-  "title": "Supplier Statement Check for Claude and Cursor | {brand}",
+  "title": "Supplier Statement Check MCP server for Claude and Cursor | {brand}",
   "h1": "Supplier Statement Check",
   "meta_description": "Compare supplied supplier statement and AP ledger open items by exact reference with complete discrepancy. Free tier, $19 Pro once.",
   "primary_keyword": "supplier statement check mcp",
@@ -1836,7 +1836,7 @@
  },
  {
   "path": "/servers/tax-calc/",
-  "title": "Tax Calc for Claude and Cursor | {brand}",
+  "title": "Tax Calc MCP server for Claude and Cursor | {brand}",
   "h1": "Tax Calc",
   "meta_description": "Tax Calc for Claude, ChatGPT and Cursor. Free tier, $19 Pro once.",
   "primary_keyword": "tax calc mcp",
@@ -1850,7 +1850,7 @@
  },
  {
   "path": "/servers/three-way-match/",
-  "title": "Three Way Match for Claude and Cursor | {brand}",
+  "title": "Three Way Match MCP server for Claude and Cursor | {brand}",
   "h1": "Three-Way Match",
   "meta_description": "Match supplier invoice lines to purchase orders and accepted receipts by SKU with local. Free tier, $19 Pro once.",
   "primary_keyword": "three way match mcp",
@@ -1864,7 +1864,7 @@
  },
  {
   "path": "/servers/time-tracker/",
-  "title": "Time Tracker for Claude and Cursor | {brand}",
+  "title": "Time Tracker MCP server for Claude and Cursor | {brand}",
   "h1": "Time Tracker",
   "meta_description": "Track billable time without leaving your AI chat. Timers, entries, reports, CSV export and invoice line items, all. Free tier, $19 Pro once.",
   "primary_keyword": "time tracker mcp",
@@ -1878,7 +1878,7 @@
  },
  {
   "path": "/servers/timezone/",
-  "title": "Timezone for Claude and Cursor | {brand}",
+  "title": "Timezone MCP server for Claude and Cursor | {brand}",
   "h1": "Timezone",
   "meta_description": "Time zones, meeting slots and calendar invites for people who work with clients abroad. Convert times, find hours that. Free tier, $19 Pro once.",
   "primary_keyword": "timezone mcp",
@@ -1892,7 +1892,7 @@
  },
  {
   "path": "/servers/work-order/",
-  "title": "Work Order for Claude and Cursor | {brand}",
+  "title": "Work Order MCP server for Claude and Cursor | {brand}",
   "h1": "Work Order",
   "meta_description": "Job orders for trades and field work: parts, labour, status, completion report, invoice. Free tier, $19 Pro once.",
   "primary_keyword": "work order mcp",
@@ -1906,7 +1906,7 @@
  },
  {
   "path": "/servers/zip/",
-  "title": "Zip for Claude and Cursor | {brand}",
+  "title": "Zip MCP server for Claude and Cursor | {brand}",
   "h1": "Zip",
   "meta_description": "Create, inspect and extract zip archives from chat: glob a directory into a zip, list what is inside with a bomb and. Free tier, $19 Pro once.",
   "primary_keyword": "zip mcp",

@@ -978,7 +978,7 @@
     "Ignoring a huge compression ratio, a sign of a zip bomb.",
     "Emailing a zip of invoices that misses half the month."
    ],
-   "answer": "Most chat apps can't open a zip. Claude.ai with code execution sometimes can. The Zip server lets Claude list entries, read one text file without unpacking, unpack safely with traversal and symlink entries refused, and create new archives with glob patterns. Check the list before you unpack."
+   "answer": "Claude.ai with code execution can sometimes open a zip. Claude Desktop, Cursor and VS Code can't unzip files without a tool. The Zip server lets Claude list entries, read one text file without unpacking, unpack safely with traversal and symlink entries refused, and create new archives with glob patterns. Check the list before you unpack."
   },
   "/can-chatgpt/create-an-invoice/": {
    "intro": "ChatGPT writes invoice text well and can make a file with its data analysis tool, but it keeps no numbering or client list. Below is what a connected MCP server adds. We haven't tested the ChatGPT setup, so that part stays unknown.",

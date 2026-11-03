@@ -2,13 +2,14 @@
 // Server card. The top tab says what the server hands back (from pages/servers/_outputs.ts), so a buyer scans by output.
 import type { Server } from '../data/servers';
 import { getCategory } from '../data/categories';
+import { serverHref } from '../data/freeServers';
 import { outputType } from '../pages/servers/_outputs';
 interface Props { server: Server }
 const { server: s } = Astro.props;
 const cat = getCategory(s.category);
 const price = s.satellite ? 'Free calculator' : !s.paid ? 'Free' : s.bundleOnly ? 'In the bundle' : `Free tier, Pro $${s.priceUsd}`;
 ---
-<a href={`/servers/${s.id}/`} class="sc cat group flex h-full flex-col" style={`--hue:${cat.hue}`}>
+<a href={serverHref(s)} class="sc cat group flex h-full flex-col" style={`--hue:${cat.hue}`}>
   <span class="sc-out">{outputType(s)}</span>
   <h3 class="mt-3 text-[1.18rem] font-semibold group-hover:text-accent">{s.name}</h3>
   <p class="muted mt-1.5 line-clamp-3 text-[.94rem] leading-relaxed">{s.tagline}</p>

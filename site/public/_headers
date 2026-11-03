@@ -1,0 +1,4 @@
+# s1103: the production pages.dev host serves the same pages as www.mcpstamp.com. Keep it out of the index.
+# (Preview deployments <hash>.mcp-showcase-preview.pages.dev already get X-Robots-Tag: noindex from Cloudflare.)
+https://mcp-showcase-preview.pages.dev/*
+  X-Robots-Tag: noindex
