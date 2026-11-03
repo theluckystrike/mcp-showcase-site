@@ -4,6 +4,7 @@
 import Layout from '../layouts/Layout.astro';
 import CopyCode from './CopyCode.astro';
 import Faq from './Faq.astro';
+import UpdatesSignup from './UpdatesSignup.astro';
 import { installLines, moneyHref } from '../data/freeServers';
 import { getLiveAnswers, type LiveAnswer, type LiveExample } from '../data/canClaudeLive';
 import { brand } from '../config/brand';
@@ -127,6 +128,7 @@ const crumbs = [{ name: 'Can Claude', path: '/can-claude/' }, { name: p.h1, path
       <p class="mt-6"><a href="/can-claude/" class="link">All answers</a> <span class="text-faint">·</span> <a href="/free-servers/" class="link">All free servers</a></p>
     </section>
   )}
+  <UpdatesSignup source={p.path} />
 </Layout>
 
 <style>

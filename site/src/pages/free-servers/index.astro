@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import FreeServerList from '../../components/FreeServerList.astro';
 import CopyCode from '../../components/CopyCode.astro';
+import UpdatesSignup from '../../components/UpdatesSignup.astro';
 import { brand } from '../../config/brand';
 import { getFreeServers } from '../../data/freeServers';
 
@@ -46,5 +47,6 @@ const jsonLd = [
   <section class="wrap pb-6">
     <p class="muted max-w-3xl">All servers are open source on GitHub and listed in the official MCP Registry. For invoices, quotes, PDFs and other back-office files, see the <a href="/servers/" class="link">{brand.name} servers</a>.</p>
   </section>
+  <UpdatesSignup source="/free-servers/" />
   <section class="wrap pb-12"><p class="muted text-[.95rem]">What these servers collect is on <a href="/free-servers/privacy/">the free servers privacy page</a>.</p></section>
 </Layout>

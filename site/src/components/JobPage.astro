@@ -10,6 +10,7 @@ import Faq from './Faq.astro';
 import JobCard from './JobCard.astro';
 import StickyCta from './StickyCta.astro';
 import UpsellBand from './UpsellBand.astro';
+import UpdatesSignup from './UpdatesSignup.astro';
 import { brand } from '../config/brand';
 import { getCategory } from '../data/categories';
 import { getServer, bundleUrl, bundlePrice, buyUrl, stats, type Server, type ServerCase } from '../data/servers';
@@ -222,6 +223,8 @@ const mainHasOutput = !!main && main.cases.length > 0;
         {aud && <p class="mt-6"><a class="link" href={aud.path}>{aud.h1}: all jobs</a></p>}
       </section>
     )}
+
+    {p.path.startsWith('/can-claude/') && <UpdatesSignup source={p.path} />}
 
     {single
       ? <StickyCta label={`${main!.name} Pro: $${main!.priceUsd} once`} sub={`Or all ${st.paid} paid servers for $${bundlePrice()}. No subscription.`} href={buy('sticky')} cta="Buy Pro" secondary={{ label: `All ${st.paid} for $${bundlePrice()}`, href: bundle('sticky') }} />

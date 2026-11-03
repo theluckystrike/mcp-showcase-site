@@ -4,10 +4,11 @@
 // Facts read from code, not new promises: token, document, OAuth and retention lifetimes from
 // ~/mcp-servers/remote/src/index.ts and oauth-refresh.ts; purchase, setup-tips and suppression records from
 // ~/mcp-servers/billing/src (5-year TTLs); analytics from src/layouts/Layout.astro and src/components/CookieConsent.astro.
+// s1103 optin (2026-11-03): update list on this website (functions/updates/*, lib/optin.js), section 7 #updates.
 // Keep in step with /terms/.
 import LegalPage from '../components/LegalPage.astro';
 import { brand } from '../config/brand';
-const updated = '2 November 2026';
+const updated = '3 November 2026';
 const repo = brand.links.github;
 const origin = brand.backend.origin;
 const email = 'support@zovo.one';
@@ -18,7 +19,7 @@ const sections = [
   { id: 'hosted', title: '4. Hosted endpoints and OAuth' },
   { id: 'ai-clients', title: '5. AI clients' },
   { id: 'licence', title: '6. Buying a licence' },
-  { id: 'tips', title: '7. Setup tips by email' },
+  { id: 'tips', title: '7. Setup tips and the update list' },
   { id: 'support', title: '8. Contacting support' },
   { id: 'traffic', title: '9. Logs and usage counts' },
   { id: 'cookies', title: '10. Website analytics and cookies' },
@@ -47,6 +48,7 @@ const retention: [string, string][] = [
   ['Hosted and OAuth tokens', 'As in the table in section 4 (30 days to 365 days)'],
   ['Purchase record (Stripe session id, licence key, product, receipt email)', 'For the life of the lifetime licence, so the key can be recovered, unless you ask us to delete it; Stripe keeps its own payment records'],
   ['Setup-tips subscription (email, signup time, source)', 'Up to 5 years, or until you unsubscribe'],
+  ['Update list on this website (email address, date you confirmed)', 'Until you unsubscribe; then it is deleted from the list'],
   ['Unsubscribe (suppression) record', '5 years, so we do not email you again'],
   ['Pseudonymous usage hashes and daily counters', 'At most 31 days'],
   ['Support emails', 'As long as needed to handle your request and any follow-up'],
@@ -72,6 +74,7 @@ const retention: [string, string][] = [
     <li>Servers you run on your own machine send us nothing.</li>
     <li>Hosted endpoints keep the documents you create, under an anonymous token, and delete them 35 days after you stop using it.</li>
     <li>AI clients such as Gemini, ChatGPT and Claude receive the tool results you ask for.</li>
+    <li>If you join the update list, we keep only your email address, with Resend, until you unsubscribe.</li>
     <li>Payments go through Stripe. We keep your receipt email so you can recover a lost key.</li>
     <li>This website uses Google Analytics. In the EEA, the UK and Switzerland it sets no cookies unless you click Accept.</li>
     <li>We don't sell your data, don't share it for advertising, and don't use it to train AI models.</li>
@@ -100,8 +103,17 @@ const retention: [string, string][] = [
   <p>Payment is taken by Stripe on Stripe's own checkout page. Your card details never reach {brand.name} or <code>mcp.zovo.one</code>. Stripe processes the payment as an independent controller under its own privacy policy.</p>
   <p>After a successful payment, <code>mcp.zovo.one</code> stores one record against the Stripe session id: the licence key it issued, the product, and the email address Stripe collected for the receipt. That email is kept so a buyer who loses the key can recover it at <code>mcp.zovo.one/recover?session_id=...</code>. We also try to send the key through Resend to the checkout email address. Email delivery is best-effort; the confirmation page is the direct key delivery path. A purchase does not subscribe you to setup tips. The licence key can carry a twelve-character hash prefix derived from the email; it does not contain the address.</p>
 
-  <h2 id="tips">7. If you subscribe to setup tips</h2>
-  <p>The setup-tips signup on <code>mcp.zovo.one</code> stores your email address, signup time and source label for up to five years. Resend sends the welcome message, an invoice setup tip after about two days and a bundle offer after about a week. Each message has an unsubscribe link; opting out stores a suppression record for five years and stops later messages. Licence delivery emails are separate. This website has no signup form.</p>
+  <h2 id="tips">7. Setup tips and the update list</h2>
+  <h3 id="setup-tips">Setup tips on mcp.zovo.one</h3>
+  <p>The setup-tips signup on <code>mcp.zovo.one</code> stores your email address, signup time and source label for up to five years. Resend sends the welcome message, an invoice setup tip after about two days and a bundle offer after about a week. Each message has an unsubscribe link; opting out stores a suppression record for five years and stops later messages. Licence delivery emails are separate.</p>
+  <h3 id="updates">The update list on this website</h3>
+  <p>The form on the free server pages and the Can Claude pages signs you up for one email about once a month. It lists the free MCP servers and Can Claude answers we added since the last one. We use your address for nothing else.</p>
+  <ul>
+    <li>When you send the form, we email you a confirmation link through Resend. At that point we store nothing. The link is signed, so it carries your address itself, and it expires after 3 days.</li>
+    <li>When you click the link and press the button, your email address goes into a Resend contact list called <code>mcpstamp-updates</code>. Resend records the date it was added. Nothing else is kept: no name, no IP address, no page history.</li>
+    <li>To stop the emails, use the unsubscribe link in any of them. It removes your address from the list. You can also email {email}.</li>
+    <li>To stop abuse, the form counts requests per IP address and per email address for up to one hour. Those counters are hashed and sit only in Cloudflare's short-term cache.</li>
+  </ul>
 
   <h2 id="support">8. If you contact support</h2>
   <p>If you email {email}, we receive your email address and what you write, and use it to answer you. Include a Stripe session id for a purchase question. Do not post licence keys, tokens or payment details in a public GitHub issue.</p>
@@ -137,6 +149,7 @@ const retention: [string, string][] = [
         <tr><td>Run the hosted endpoints and OAuth connections you use</td><td>Tokens, tool arguments, documents, uploads</td><td>(b) performance of a contract</td></tr>
         <tr><td>Sell and deliver a Pro Licence; let you recover a lost key</td><td>Stripe session id, licence key, product, receipt email</td><td>(b) contract; (c) legal obligations such as accounting</td></tr>
         <tr><td>Send setup tips</td><td>Email address, signup time, source</td><td>(a) consent, which you can withdraw by unsubscribing</td></tr>
+        <tr><td>Send the monthly update list</td><td>Email address, date you confirmed</td><td>(a) consent, which you can withdraw by unsubscribing</td></tr>
         <tr><td>Answer support requests</td><td>Email and message content</td><td>(b) contract or (f) legitimate interest in answering you</td></tr>
         <tr><td>Security, abuse prevention and rate limits</td><td>Request logs, rate-limit counters</td><td>(f) legitimate interest in keeping the service available and safe</td></tr>
         <tr><td>Count use of the hosted service in aggregate</td><td>Pseudonymous hashes, daily counters</td><td>(f) legitimate interest in understanding and improving the service</td></tr>
@@ -150,7 +163,7 @@ const retention: [string, string][] = [
   <ul>
     <li>Cloudflare, Inc. (processor) hosts this website, the hosted endpoints and the checkout pages, and stores data in Workers KV.</li>
     <li>Stripe (independent controller for payment data) processes payments and receipts.</li>
-    <li>Resend (processor) sends licence-key and setup-tip emails.</li>
+    <li>Resend (processor) sends licence-key, setup-tip and update-list emails and holds the update list.</li>
     <li>Google (processor for Google Analytics) runs website analytics on {brand.domain} only, with consent where required.</li>
     <li>The AI client you choose, such as Google Gemini, OpenAI ChatGPT or Anthropic Claude, receives the tool results you ask for (see section 5).</li>
     <li>Authorities receive data when the law requires us to disclose it.</li>
@@ -177,7 +190,7 @@ const retention: [string, string][] = [
     <li>delete your data;</li>
     <li>export data you gave us in a structured, machine-readable format (data portability);</li>
     <li>object to processing based on legitimate interests, and to restrict processing;</li>
-    <li>withdraw consent at any time, for analytics with Cookie settings and for setup tips with the unsubscribe link, without affecting earlier processing;</li>
+    <li>withdraw consent at any time, for analytics with Cookie settings and for setup tips and the update list with the unsubscribe link, without affecting earlier processing;</li>
     <li>complain to a supervisory authority, in particular in the country where you live or work, or in Armenia to the Personal Data Protection Agency.</li>
   </ul>
   <p>Email {email} to use these rights. We reply within one month. Hosted data is stored under an anonymous token, so to find it we need the token or, for a purchase, the Stripe session id. We will not ask for more information than we need to verify the request. Many tools also let you list, export and delete your records yourself, for example the <code>*_list</code>, <code>*_export</code> and <code>*_delete</code> tools.</p>
@@ -186,7 +199,7 @@ const retention: [string, string][] = [
   <ul>
     <li>For hosted data, delete individual records with the server's delete tools, or stop using the token; everything stored under it is deleted automatically 35 days after the last use. To delete everything sooner, email {email} from a private channel with the token, and we will delete the data under it.</li>
     <li>For an OAuth connection, remove or disconnect the connector in your AI client. Its tokens then expire (access token after 30 days, refresh token after at most 365 days) and the data under it is deleted 35 days after the last use, or sooner on request as above.</li>
-    <li>For a purchase record, a setup-tips record or anything else, email {email}. Include the Stripe session id for a purchase. Deleting a purchase record means we can no longer help you recover a lost key.</li>
+    <li>For a purchase record, a setup-tips record, the update list or anything else, email {email}. Include the Stripe session id for a purchase. Deleting a purchase record means we can no longer help you recover a lost key.</li>
   </ul>
 
   <h2 id="security">17. Security</h2>

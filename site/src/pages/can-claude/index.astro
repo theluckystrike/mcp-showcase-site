@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { pagesOfType } from '../../data/pages';
 import { getLiveAnswers } from '../../data/canClaudeLive';
+import UpdatesSignup from '../../components/UpdatesSignup.astro';
 
 const live = getLiveAnswers();
 const files = pagesOfType('answer').filter((p) => p.path.startsWith('/can-claude/'));
@@ -28,6 +29,7 @@ const jsonLd = [{ '@context': 'https://schema.org', '@type': 'ItemList', itemLis
     <ul class="cc-list mt-6">{files.map((p) => <li><a href={p.path}>{p.h1}</a><p class="muted mt-1 text-[.94rem]">{p.meta_description}</p></li>)}</ul>
     <p class="mt-8"><a href="/free-servers/" class="link">All free live-data servers</a> <span class="text-faint">·</span> <a href="/use-cases/" class="link">Use cases</a></p>
   </section>
+  <UpdatesSignup source="/can-claude/" />
 </Layout>
 <style>
   .cc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }

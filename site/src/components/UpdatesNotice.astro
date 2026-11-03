@@ -1,0 +1,17 @@
+---
+// s1103 optin: one short notice page for the update-list flow (/updates/*). Always noindex, never in the sitemap.
+// functions/updates/*.js serve some of these pages through env.ASSETS and fill [data-msg] or input[name=t] with HTMLRewriter.
+import Layout from '../layouts/Layout.astro';
+interface Props { title: string; heading: string }
+const { title, heading } = Astro.props;
+---
+<Layout title={title} noindex>
+  <section class="wrap pb-16 pt-12 sm:pt-16">
+    <h1 class="display max-w-3xl">{heading}</h1>
+    <div class="upd-body lead mt-5 max-w-2xl"><slot /></div>
+    <p class="mt-8"><a href="/free-servers/" class="link">Free servers</a> <span class="text-faint">·</span> <a href="/can-claude/" class="link">Can Claude answers</a> <span class="text-faint">·</span> <a href="/privacy/#updates" class="link">Privacy</a></p>
+  </section>
+</Layout>
+<style>
+  .upd-body :global(p + p) { margin-top: 1rem; }
+</style>

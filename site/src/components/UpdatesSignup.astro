@@ -1,0 +1,33 @@
+---
+// s1103 optin: double opt-in signup for the "new free MCP servers" update list.
+// Posts to functions/updates/subscribe.js. Nothing is stored until the person clicks the link in the confirmation email.
+// The "website" field is a honeypot: people never see it, form-filling bots do. No Turnstile site key exists for this domain.
+interface Props { source?: string; heading?: string }
+const { source = Astro.url.pathname, heading = 'Get an email when a new free server ships' } = Astro.props;
+const id = 'upd-' + source.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').slice(0, 40);
+---
+<section class="wrap py-10" aria-labelledby={id}>
+  <div class="upd border-y border-line py-7">
+    <h2 id={id} class="text-xl font-bold sm:text-2xl">{heading}</h2>
+    <p class="muted mt-2 max-w-2xl">About once a month, one short email lists the free MCP servers and Can Claude answers we added since the last one. Your address is used for nothing else. We first send a link to confirm, and you are not on the list until you click it. Every email has an unsubscribe link. Details are on the <a class="link" href="/privacy/#updates">privacy page</a>.</p>
+    <form class="upd-form mt-5" method="post" action="/updates/subscribe">
+      <label class="upd-label" for={id + '-email'}>Email address</label>
+      <div class="upd-row">
+        <input id={id + '-email'} class="upd-input" type="email" name="email" required maxlength="254" autocomplete="email" inputmode="email" placeholder="you@example.com" />
+        <button type="submit" class="btn btn-primary">Send me the link</button>
+      </div>
+      <input type="hidden" name="source" value={source} />
+      <div class="upd-hp" aria-hidden="true">
+        <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
+    </form>
+  </div>
+</section>
+<style>
+  .upd-label { display: block; font-size: .9rem; font-weight: 600; margin-bottom: .4rem; }
+  .upd-row { display: flex; flex-wrap: wrap; gap: .6rem; max-width: 36rem; }
+  .upd-input { flex: 1 1 16rem; min-width: 0; min-height: 2.9rem; padding: .55rem .75rem; font: inherit; color: var(--text);
+    background: var(--surface-solid); border: 1px solid var(--border-strong); border-radius: 2px; }
+  .upd-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .upd-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+</style>

@@ -1,0 +1,10 @@
+---
+import UpdatesNotice from '../../components/UpdatesNotice.astro';
+---
+<UpdatesNotice title="Unsubscribe" heading="Unsubscribe">
+  <p>Press the button to take your address off the McpStamp update list. We delete it from the list right away.</p>
+  <form method="post" action="/updates/unsubscribe" class="mt-6">
+    <input type="hidden" name="t" value="" />
+    <button type="submit" class="btn btn-primary">Unsubscribe me</button>
+  </form>
+</UpdatesNotice>
