@@ -658,7 +658,7 @@
   },
   "/use-cases/recurring-monthly-invoices/": {
    "intro": "Retainers and subscriptions should bill themselves. If you send the same invoice every month and sometimes forget, this is for you.",
-   "without_tool": "Claude can't act on a schedule. It doesn't run on the 1st of the month, it doesn't know which periods were billed, and it can't create invoices in a system that keeps numbers.",
+   "without_tool": "A chat in Claude.ai doesn't wake up on the 1st of the month (Claude Code routines can run on a schedule), and Claude doesn't know which periods were billed, and it can't create invoices in a system that keeps numbers.",
    "with_tool": "Recurring stores schedules (client, lines, cadence, start and end), creates real invoices in the Invoice server for every due occurrence when you ask, keeps an audit log per schedule, and forecasts recurring revenue per month.",
    "example": {
     "persona": "IT support company with 12 retainer clients",
@@ -684,7 +684,7 @@
     "Pausing a client and forgetting the missed periods are still due when you resume.",
     "Changing the price in the invoice instead of the schedule, so next month is wrong again."
    ],
-   "answer": "Claude can't run on a schedule by itself. With Recurring and Invoice connected, you ask once a week and Claude creates every invoice that's due, skips or pauses clients, keeps an audit log per schedule and forecasts your monthly recurring revenue."
+   "answer": "A Claude chat doesn't run on a schedule by itself. With Recurring and Invoice connected, you ask once a week and Claude creates every invoice that's due, skips or pauses clients, keeps an audit log per schedule and forecasts your monthly recurring revenue."
   },
   "/use-cases/sepa-payment-qr-code/": {
    "intro": "In much of Europe a client can pay an invoice by scanning a QR code in their banking app. Euro-zone freelancers and firms can put that code on every invoice without a separate generator.",
@@ -706,7 +706,7 @@
     "Leaving out the reference, so the payment can't be matched to the invoice.",
     "Using an EPC code for a non-euro payment. The standard is euro only."
    ],
-   "answer": "Claude can't draw a scannable QR code by itself. The Barcode server makes an EPC069-12 SEPA payment QR from IBAN, name, amount and reference as SVG or PNG, so the client pays from their banking app. Test-scan it before you send."
+   "answer": "Claude can write code that draws a QR, but a SEPA payment QR must follow the EPC069-12 format exactly. The Barcode server makes an EPC069-12 SEPA payment QR from IBAN, name, amount and reference as SVG or PNG, so the client pays from their banking app. Test-scan it before you send."
   },
   "/use-cases/schedule-across-time-zones/": {
    "intro": "Remote teams lose hours to 'what time is that for you?'. Ops staff and assistants need a meeting time inside everyone's working hours, and a calendar file to send.",
