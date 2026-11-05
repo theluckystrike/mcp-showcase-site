@@ -1472,6 +1472,156 @@
      "description": "Split a census GEOID (2 digits state, 5 county, 11 tract, 12 block group, 15 block, or with a 1400000US style prefix) into state and county FIPS, tract code, the tract number as Census displays it (012405 is 124.05), block group and block. No network call."
     }
    ]
+  },
+  {
+   "repo": "social-security-cola-2027-mcp",
+   "topic": "Social Security COLA 2027",
+   "name": "Social Security COLA 2027",
+   "tagline": "The 2027 Social Security COLA, wage base and earnings test from the Federal Register, plus full retirement age and claiming math for your birth date.",
+   "knows": [
+    "The COLA for 2027 (3.6 percent, paid from January 2027) and every year back to 1996, with the Federal Register notice and date.",
+    "Your full retirement age from your birth date, the earliest month you can claim, the cut at 62 and the credits to 70, by the CFR rules.",
+    "The 2027 taxable maximum, earnings test limits and what the earnings test withholds for your own earnings."
+   ],
+   "sources": "SSA \"Cost-of-Living Increase and Other Determinations\" notices in the Federal Register (2027 notice 2026-21796, published 2026-10-26), read through the Federal Register API; 20 CFR 404.102, 404.311, 404.409 and 404.410 through the eCFR API.",
+   "hosted_url": "https://social-security-cola-2027-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/social-security-cola-2027-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-05",
+   "money_site": null,
+   "prompts": [
+    "What is the Social Security COLA for 2027?",
+    "I was born on July 15, 1960. What is my full retirement age?",
+    "How much will my $2,008 benefit be after the 2027 COLA?"
+   ],
+   "tools": [
+    {
+     "name": "get_social_security_cola",
+     "title": "Get Social Security COLA",
+     "description": "Social Security cost-of-living adjustment (COLA) for a payable year, from the SSA \"Cost-of-Living Increase and Other Determinations\" notice in the Federal Register. The 2027 COLA is 3.6 percent (effective December 2026, paid January 2027, published 2026-10-26). Also returns the COLA history back to 1996. Without a year it checks the Federal Register API for a newer notice."
+    },
+    {
+     "name": "calculate_cola_increase",
+     "title": "Calculate COLA increase",
+     "description": "Apply a year's Social Security COLA to a monthly benefit. Rounds down to the next lower 10 cents and shows the whole-dollar payment, as SSA does. Default year 2027 (3.6 percent)."
+    },
+    {
+     "name": "get_full_retirement_age",
+     "title": "Get full retirement age",
+     "description": "Full retirement age for Social Security from a birth date (20 CFR 404.409, including the January 1 rule and the day-before-birthday rule), the exact date and month it is reached, the earliest month benefits can start at 62 and the percent cut, the spouse percent at 62, delayed retirement credits to age 70 and the survivor full retirement age."
+    },
+    {
+     "name": "calculate_claiming_age_benefit",
+     "title": "Calculate benefit by claiming age",
+     "description": "Monthly Social Security retirement benefit if claimed at a given age between 62 and 70, from the full-retirement-age amount (PIA). Uses 5/9 of 1 percent a month for the first 36 early months, 5/12 of 1 percent after that, and 2/3 of 1 percent a month of delayed credits for people born after 1942, with SSA dime rounding."
+    },
+    {
+     "name": "get_social_security_limits",
+     "title": "Get Social Security limits for a year",
+     "description": "Social Security program amounts for 2023 to 2027 from the Federal Register notices: maximum taxable earnings (2027: $192,300), retirement earnings test limits (2027: $25,560 and $67,920), earnings per work credit, substantial gainful activity, trial work month, maximum federal SSI and PIA bend points."
+    },
+    {
+     "name": "calculate_earnings_test",
+     "title": "Calculate earnings test withholding",
+     "description": "How much Social Security withholds under the retirement earnings test for a year and annual earnings: $1 for every $2 over the limit, or $1 for every $3 in the year you reach full retirement age."
+    }
+   ]
+  },
+  {
+   "repo": "i-bond-rate-mcp",
+   "topic": "I bond rate",
+   "name": "I Bond Rate",
+   "tagline": "The current Series I savings bond rate from TreasuryDirect, and the rate your own I bond earns by its issue month.",
+   "knows": [
+    "The composite, fixed and inflation rate for I bonds bought November 2026 to April 2027 (5.51 percent with a 1.40 percent fixed rate).",
+    "The rate an I bond you already own earns now, from its issue month, and every rate period since you bought it.",
+    "An estimate of what your I bonds are worth, before and after the 3-month penalty. It gives rates and math, not investment advice."
+   ],
+   "sources": "TreasuryDirect \"I bonds interest rates\" page, read at call time, and the TreasuryDirect I bond rate chart effective November 1, 2026 as the built-in fallback.",
+   "hosted_url": "https://i-bond-rate-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/i-bond-rate-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-05",
+   "money_site": null,
+   "prompts": [
+    "What is the I bond rate for November 2026?",
+    "What rate is my I bond from April 2022 earning now?",
+    "What is a $10,000 I bond bought in January 2023 worth today?"
+   ],
+   "tools": [
+    {
+     "name": "get_current_i_bond_rate",
+     "title": "Get current I bond rate",
+     "description": "Current Series I savings bond composite rate, fixed rate and semiannual inflation rate for new purchases, read at call time from the TreasuryDirect \"I bonds interest rates\" page with the built-in rate chart as fallback. November 2026 to April 2027: 5.51 percent with a 1.40 percent fixed rate. Also returns the next announcement date and the $10,000 limit, 12-month hold and 3-month penalty rules."
+    },
+    {
+     "name": "get_i_bond_rate_for_issue_date",
+     "title": "Get I bond rate for an issue date",
+     "description": "For an I bond bought in a given month: its fixed rate, the composite rate it earns in the current (or given) 6-month period, the months its rate changes, whether it can be cashed and the penalty, and every rate period since issue. Computed from the TreasuryDirect rate chart effective November 1, 2026."
+    },
+    {
+     "name": "estimate_i_bond_value",
+     "title": "Estimate I bond value",
+     "description": "Estimate what I bonds are worth for an issue month and purchase amount at the start of a month: value with all interest and the redemption value after the 3-month penalty for bonds under 5 years. Uses semiannual compounding per $25 with the TreasuryDirect rates. An estimate; Treasury values can differ by cents."
+    },
+    {
+     "name": "calculate_i_bond_composite_rate",
+     "title": "Calculate I bond composite rate",
+     "description": "Apply the Treasury formula fixed + 2 x semiannual inflation + fixed x semiannual inflation, rounded to 0.01 percent with a floor of zero. Use it for rate predictions."
+    },
+    {
+     "name": "get_i_bond_rate_history",
+     "title": "Get I bond rate history",
+     "description": "Fixed rate for new bonds, semiannual inflation rate and composite rate for every May and November announcement since September 1998, newest first, from the TreasuryDirect rate chart."
+    }
+   ]
+  },
+  {
+   "repo": "mortgage-rates-today-mcp",
+   "topic": "Mortgage rates today",
+   "name": "Mortgage Rates Today",
+   "tagline": "This week's Freddie Mac average 30-year and 15-year fixed mortgage rates, past weeks back to 1971 and the payment at today's average.",
+   "knows": [
+    "The latest Freddie Mac PMMS weekly average 30-year and 15-year fixed rates, with the week date, the change from last week and the rate a year ago.",
+    "The average in force on any date since 1971, and weekly, monthly or annual history between two dates.",
+    "Monthly principal and interest for your loan amount at this week's average. These are national averages, not a quote from a lender."
+   ],
+   "sources": "Freddie Mac Primary Mortgage Market Survey (PMMS) weekly history file (freddiemac.com/pmms), read at call time and used with attribution.",
+   "hosted_url": "https://mortgage-rates-today-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/mortgage-rates-today-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-05",
+   "money_site": null,
+   "prompts": [
+    "What are mortgage rates today?",
+    "What was the 30-year mortgage rate on January 7, 2021?",
+    "What is the payment on a $400,000 loan at today's 30-year rate?"
+   ],
+   "tools": [
+    {
+     "name": "get_mortgage_rates_today",
+     "title": "Get mortgage rates today",
+     "description": "Latest Freddie Mac PMMS weekly average 30-year and 15-year fixed mortgage rates, read at call time from freddiemac.com: rate, week-over-week change, rate a year ago, 52-week high, low and average, the week date and the next expected release. National averages for well-qualified conventional purchase borrowers."
+    },
+    {
+     "name": "get_mortgage_rate_on_date",
+     "title": "Get mortgage rate on a date",
+     "description": "The Freddie Mac PMMS weekly average 30-year and 15-year fixed rates (plus 5/1 ARM and points where published) in force on a date, from 1971-04-02 to today."
+    },
+    {
+     "name": "get_mortgage_rate_history",
+     "title": "Get mortgage rate history",
+     "description": "Freddie Mac PMMS 30-year or 15-year fixed averages between two dates as weekly rows or monthly or annual averages, with the high, low and change over the range. Default is the last 52 weeks of the 30-year rate."
+    },
+    {
+     "name": "calculate_mortgage_payment",
+     "title": "Calculate mortgage payment",
+     "description": "Monthly principal and interest and total interest for a fixed-rate loan. Without a rate it uses this week's Freddie Mac average for 30-year or 15-year terms, and compares it with the average a year earlier. Taxes, insurance and PMI are not included."
+    }
+   ]
   }
  ]
 }

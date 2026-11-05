@@ -4,7 +4,8 @@
   "answer = first paragraph, an honest yes/no/partly about what Claude does without a tool. example = a real tools/call result.",
   "Generator: ~/mcp-servers/data/s1103/stamp/make_can_claude_live.py. Raw call responses: ~/mcp-servers/data/s1103/stamp/calls/.",
   "s1103 canclaude2: 16 more pages (generator ~/mcp-servers/data/s1103/canclaude2/make_can_claude_live2.py, calls in canclaude2/calls/). Entries with server_id use a catalog server on mcp.zovo.one (free token).",
-  "s1105 satellites: 3 pages (UV index, drug shortage list, census tract). Raw call responses: ~/mcp-servers/data/s1105/calls/sat/."
+  "s1105 satellites: 3 pages (UV index, drug shortage list, census tract). Raw call responses: ~/mcp-servers/data/s1105/calls/sat/.",
+  "s1105 sat2: 3 pages (Social Security COLA 2027, I bond rate, mortgage rates today). Raw call responses and generator: ~/mcp-servers/data/s1105/calls/sat2/."
  ],
  "pages": [
   {
@@ -3207,6 +3208,149 @@
     {
      "q": "What is free, and what does Pro add?",
      "a": "Three checklists with unlimited runs, and the run report as text, are free. Pro is $19 once for the Checklist server, or $39 once for all 49 servers. It also returns the run report as a .txt download file."
+    }
+   ]
+  },
+  {
+   "slug": "check-the-social-security-cola-2027",
+   "repo": "social-security-cola-2027-mcp",
+   "h1": "Can Claude tell me the Social Security COLA for 2027?",
+   "title": "Can Claude find the 2027 Social Security COLA? 3.6% with source",
+   "query": "social security cola 2027",
+   "answer": "Yes with web search, and the official notice makes it exact. SSA announced a 3.6 percent COLA for 2027 on October 14, 2026, after many models were trained, so from memory alone Claude may give a forecast instead. With web search on, Claude can find the number, though news pages mix it with forecasts and with other years. Connect the free Social Security COLA 2027 server and Claude reads the SSA notice in the Federal Register, with the document number and date, applies it to your own benefit with SSA rounding, and works out your full retirement age and earnings test from the CFR rules, the same way every time. It gives numbers, not advice on when to claim.",
+   "native": [
+    "Explains how the COLA is based on the CPI-W and when it is paid.",
+    "Finds the announced COLA on a web page when web search is on."
+   ],
+   "needs": [
+    "The 2027 COLA and past COLAs from the SSA Federal Register notice, with the document number and date.",
+    "Your new monthly payment after the COLA, rounded the way SSA rounds it.",
+    "Your full retirement age, the 2027 wage base and earnings test limits, and what the test withholds."
+   ],
+   "example": {
+    "prompt": "What is the Social Security COLA for 2027?",
+    "tool": "get_social_security_cola",
+    "args": {
+     "history_years": 3
+    },
+    "result": "The Social Security cost-of-living adjustment paid from January 2027 is 3.6 percent. It applies to December 2026 benefits and to SSI payments for January 2027. SSA published it in the Federal Register on 2026-10-26 (document 2026-21796).",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "How much will my $2,008 benefit be after the 2027 COLA?",
+    "tool": "calculate_cola_increase",
+    "args": {
+     "monthly_benefit": 2008
+    },
+    "result": "A $2,008 monthly benefit with the 3.6 percent COLA paid from January 2027 becomes about $2,080.20 before any Medicare premium, or $2,080 after SSA rounds the payment down to the whole dollar. That is about $72.20 more a month.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "What else changes in 2027?",
+     "a": "The taxable maximum rises to $192,300. The earnings test limits are $25,560 a year before the year you reach full retirement age and $67,920 in that year. The server returns these from the same Federal Register notice."
+    },
+    {
+     "q": "Does the COLA show up in my January check?",
+     "a": "Yes. The 3.6 percent applies to December 2026 benefits, which are paid in January 2027. A Medicare Part B premium change can make the net change smaller. Your my Social Security account shows your own notice."
+    }
+   ]
+  },
+  {
+   "slug": "check-the-i-bond-rate",
+   "repo": "i-bond-rate-mcp",
+   "h1": "Can Claude tell me the current I bond rate?",
+   "title": "Can Claude find the I bond rate? November 2026 rate by issue month",
+   "query": "i bond rate november 2026",
+   "answer": "Yes with web search, and a tool makes it exact for your own bond. The rate changes every May 1 and November 1, so from memory alone Claude may quote an old period. With web search on, Claude can find the new rate of 5.51 percent for November 2026 to April 2027, but the rate an older bond earns depends on its own fixed rate and the month it was bought, and news pages rarely show that. Connect the free I Bond Rate server and Claude reads the TreasuryDirect rate, works out the rate your bond earns now from its issue month, and estimates its value with the 3-month penalty. It gives rates and math, not investment advice. TreasuryDirect is the official place to check and buy.",
+   "native": [
+    "Explains the composite rate formula, fixed rate and inflation rate.",
+    "Finds the newly announced rate on a web page when web search is on."
+   ],
+   "needs": [
+    "The current composite, fixed and inflation rate from TreasuryDirect, with the issue months it covers.",
+    "The rate an I bond you own earns now, from its issue month.",
+    "An estimate of its value before and after the 3-month penalty."
+   ],
+   "example": {
+    "prompt": "What is the I bond rate for November 2026?",
+    "tool": "get_current_i_bond_rate",
+    "args": {},
+    "result": "I bonds bought from November 2026 through April 2027 earn 5.51% a year for their first 6 months: a 1.40% fixed rate that lasts for the life of the bond plus 2.04% semiannual inflation rate. Treasury sets the next rates on May 1, 2027. Limit $10,000 in electronic I bonds per Social Security number per calendar year, $25 minimum, held at least 12 months, last 3 months of interest lost if cashed before 5 years.",
+    "note": "The hosted server got no answer from TreasuryDirect within 4 seconds on this run, so it answered from its built-in copy of the TreasuryDirect rate chart effective November 1, 2026, and its rate_source field says so.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "What rate is my I bond from April 2022 earning now?",
+    "tool": "get_i_bond_rate_for_issue_date",
+    "args": {
+     "issue_month": "2022-04"
+    },
+    "result": "An I bond issued in April 2022 has a fixed rate of 0.00%. For October 2026 through March 2027 it earns 3.34% a year (semiannual inflation 1.67% from the May 2026 announcement). Its rate changes every April and October.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Should I buy I bonds now?",
+     "a": "The server does not say. It gives the official rates and the math for your bond. Compare them with your own plans, and check TreasuryDirect before you buy."
+    },
+    {
+     "q": "Why does my old bond earn less than 5.51 percent?",
+     "a": "Each bond keeps the fixed rate from the month it was bought, and its inflation rate changes every 6 months from its issue month. A bond with a 0 percent fixed rate earns only the inflation part."
+    }
+   ]
+  },
+  {
+   "slug": "check-mortgage-rates-today",
+   "repo": "mortgage-rates-today-mcp",
+   "h1": "Can Claude check mortgage rates today?",
+   "title": "Can Claude check mortgage rates today? Freddie Mac weekly average",
+   "query": "mortgage rates today",
+   "answer": "Yes with web search, with one caution. Rates change every week, so from memory alone Claude cannot know this week's number. With web search on, Claude can find a rate, but sites mix lender ads, daily indexes and the weekly survey, often without the date. Connect the free Mortgage Rates Today server and Claude reads the Freddie Mac Primary Mortgage Market Survey file when you ask, with the week date, the change from last week and the rate a year ago, and works out the payment on your loan amount. These are national averages, not a quote and not advice. A lender quotes your own rate from your credit, down payment and points.",
+   "native": [
+    "Explains fixed and adjustable loans, points and how payments are figured.",
+    "Finds a rate on a web page when web search is on."
+   ],
+   "needs": [
+    "This week's Freddie Mac 30-year and 15-year fixed averages with the week date.",
+    "The average on any past date since 1971 and the history between two dates.",
+    "The monthly payment on your loan amount at this week's average."
+   ],
+   "example": {
+    "prompt": "What are mortgage rates today?",
+    "tool": "get_mortgage_rates_today",
+    "args": {},
+    "result": "The Freddie Mac average 30-year fixed mortgage rate is 7.24% for the week of 2026-10-29 (down 0.08 points from the week before, 6.17% a year ago). The 15-year fixed average is 6.60%. These are national averages for well-qualified borrowers, released on Thursdays; the next release is due 2026-11-05. Source: Freddie Mac Primary Mortgage Market Survey (PMMS), U.S. weekly averages.",
+    "note": "Run on 2026-11-05 before that day's Thursday release, so the newest week was 2026-10-29. The server reads the newest week each time you ask.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "What is the payment on a $400,000 loan at today's 30-year rate?",
+    "tool": "calculate_mortgage_payment",
+    "args": {
+     "loan_amount": 400000
+    },
+    "result": "A $400,000.00 30-year fixed loan at 7.24% (Freddie Mac PMMS 30-year average, week of 2026-10-29) costs $2,725.99 a month in principal and interest, $581,357.32 of interest over the full term. At 6.17% (the average a year earlier) it would be $2,442.09, a difference of $283.90 a month. Taxes, insurance and PMI are not included.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Is this the rate I will get?",
+     "a": "No. PMMS is a national average for well-qualified borrowers with 20 percent down. Your rate depends on credit, down payment, points, loan type and lender. Ask several lenders for a Loan Estimate."
+    },
+    {
+     "q": "When does the number update?",
+     "a": "Freddie Mac publishes PMMS on Thursdays, or on Wednesday when a holiday falls on Thursday. The server reads the file at call time."
     }
    ]
   }
