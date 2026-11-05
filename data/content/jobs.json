@@ -216,8 +216,8 @@
   },
   "/use-cases/merge-pdf-in-claude/": {
    "intro": "You need one PDF out of several, or three PDFs out of one. And you don't want client documents on a random website. Below is what Claude can and can't do with PDFs, and how the PDF server writes the new file.",
-   "without_tool": "Claude can read the text of a PDF you attach and summarize it. In Claude.ai with code execution and file creation turned on, it can sometimes merge files in its sandbox. In Claude Desktop, Cursor or a plain chat, it can't write a new PDF.",
-   "with_tool": "The PDF server merges, splits, pulls pages, reorders, rotates, stamps words like PAID, and adds your business footer, each time writing a new PDF and returning the path. With the local install (npx or .mcpb) the files stay in your folders. On the hosted URL the files pass through the server for a short time.",
+   "without_tool": "Claude reads the text of a PDF you attach. With code execution and file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), it can also merge and split uploaded PDFs in its sandbox and hand back a download. It can't reach files on your disk, and a Team or Enterprise admin can turn code execution off. In Cursor the agent needs a script and a PDF library.",
+   "with_tool": "The PDF server merges, splits, pulls pages, rotates and stamps PAID or DRAFT, each time writing a new PDF and returning the path. Reordering every page and the business footer are Pro. The local install (npx or .mcpb) works on files in your own folders with no upload and runs in Cursor and in apps where code execution is off. On the hosted URL the files pass through the server for a short time.",
    "example": {
     "persona": "Tenant applying for a flat",
     "prompt": "Make one PDF from payslip-aug.pdf, payslip-sep.pdf, reference.pdf and id-scan.pdf in that order, but only page 1 of reference.pdf. Tell me the page count.",
@@ -242,12 +242,12 @@
     "Merging in the wrong order and sending a pack that starts with page 3.",
     "Rotating a scan in a viewer, which doesn't save the rotation in the file."
    ],
-   "answer": "Claude can read PDFs, but in most chat apps it can't write a new one. Connect the PDF server and Claude merges, splits, reorders, rotates and stamps PDFs, then hands back the new file. Need the files to stay on your machine? Run it locally with npx."
+   "answer": "Yes. Claude merges and splits uploaded PDFs with code execution, on by default on Free, Pro and Max. For files on your disk without uploading, or in Cursor, the PDF server merges, splits, rotates and stamps them as named tools."
   },
   "/use-cases/create-word-document-in-claude/": {
-   "intro": "Clients still want a .docx they can edit and track changes in. If you draft in Claude and then spend 20 minutes pasting into Word and fixing headings, read on.",
-   "without_tool": "Claude writes the content well. In Claude.ai with file creation turned on it can generate a .docx in its sandbox. In Claude Desktop, Cursor or apps without that feature, you get text to copy and format by hand, and it can't fill your own .docx template.",
-   "with_tool": "The DOCX server writes real .docx files from sections or markdown, fills {{placeholders}} in your own template, reads existing .docx files, and makes proposals and service agreements with your stored sender details.",
+   "intro": "Clients still want a .docx they can edit and track changes in. Claude can write one itself with file creation on. Below is when the DOCX server still helps.",
+   "without_tool": "Claude writes the content well. With file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), it generates a .docx in its sandbox and can work from a template you upload in that chat. It can't read a template on your disk, and a Team or Enterprise admin can turn file creation off. In Cursor or VS Code the agent needs a script and a library.",
+   "with_tool": "The DOCX server writes real .docx files from sections or markdown, fills {{placeholders}} in your own template, reads existing .docx files, and makes proposals and service agreements with your stored sender details. Installed locally it reads templates on your disk with no upload and works in Cursor and other MCP clients. Free covers 3 proposals or contracts a month.",
    "example": {
     "persona": "Charity volunteer coordinator",
     "prompt": "Turn these meeting notes into a Word document with the heading 'Volunteer Day Plan', a section per team and a table of shift times.",
@@ -264,12 +264,12 @@
     "Retyping a standard letter instead of filling a template.",
     "Sending a .docx with leftover {{placeholders}} because nobody checked."
    ],
-   "answer": "Yes. Claude.ai can make a .docx when file creation is on. Other chat apps give you text only. The DOCX server works in any MCP client: it writes .docx files from markdown, fills your own templates and reads existing documents. Free tier first."
+   "answer": "Yes. Claude writes a .docx with file creation on, the default on Free, Pro and Max. The DOCX server fills your own templates on disk, keeps your sender details across chats and works in Cursor and other MCP clients. Free tier first."
   },
   "/use-cases/edit-excel-files-in-claude/": {
    "intro": "Most small business data lives in .xlsx and .csv files. You want answers from a spreadsheet in plain words, and a new file with the change made. No formulas.",
-   "without_tool": "In Claude.ai with code execution, Claude can analyze an uploaded spreadsheet and create a new one. In Claude Desktop or Cursor without a tool, it can't open a file path on your disk, and large files may not fit in the chat.",
-   "with_tool": "The Spreadsheet server reads, queries, searches and summarizes .xlsx and .csv files by path, adds computed columns and converts between xlsx, csv and json. Every change is written to a new file. The source file isn't changed.",
+   "without_tool": "With code execution on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can analyze an uploaded spreadsheet and create a new .xlsx for you to download. It can't open a file path on your disk, and a Team or Enterprise admin can turn code execution off. In Cursor the agent needs a script and a library on your machine.",
+   "with_tool": "The Spreadsheet server reads, queries, searches and summarizes .xlsx and .csv files by path, adds computed columns and converts between xlsx, csv and json. Every change is written to a new file and the source isn't changed. Installed locally it opens files on your disk with no upload and runs in Cursor and VS Code. The free tier writes up to 500 rows per file.",
    "example": {
     "persona": "Shop owner on Shopify",
     "prompt": "Open ~/Downloads/orders_export.csv. Which 10 products sold the most units in October? Save that list as top-products.xlsx.",
@@ -294,7 +294,7 @@
     "Treating dates stored as text as real dates, so filters miss rows.",
     "Asking for totals on a column that mixes currencies."
    ],
-   "answer": "Claude.ai can analyze spreadsheets with code execution. To work with .xlsx and .csv files by path in Claude Desktop, Cursor or VS Code, connect the Spreadsheet server: it reads, queries, adds columns and converts, and writes each result to a new file."
+   "answer": "Yes. Claude analyzes and edits an uploaded spreadsheet with code execution, on by default on Free, Pro and Max. For files on your disk, or in Cursor, the Spreadsheet server queries, adds columns and converts, writing each result to a new file."
   },
   "/use-cases/three-way-match-invoices/": {
    "intro": "Paying for goods that never arrived is expensive. AP clerks and controllers check each invoice line against the purchase order and the goods receipt before payment. A server can do that check line by line.",
@@ -598,8 +598,8 @@
   },
   "/use-cases/tailored-resume-and-cover-letter/": {
    "intro": "Stop rewriting the same CV for every posting. Keep one profile, see the gaps against a specific job, and get a Word resume and cover letter out of chat.",
-   "without_tool": "Claude is good at rewriting a CV for a job post you paste. It doesn't keep your profile between chats, so you paste the CV every time, and in most chat apps it gives you text, not a .docx you can send.",
-   "with_tool": "Resume stores one CV profile, reads an existing .docx resume into it, runs a read-only gap analysis against a job posting, and writes the resume and cover letter as .docx files, or as HTML and markdown.",
+   "without_tool": "Claude is good at rewriting a CV for a job post you paste. With code execution and file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), it can also write a .docx resume or cover letter for you to download. Projects and memory can keep your details, but the layout changes from file to file and nothing checks a posting against a fixed profile.",
+   "with_tool": "Resume stores one CV profile, reads an existing .docx resume into it, runs a read-only gap analysis against a job posting, and writes the resume and cover letter as .docx files, or as HTML and markdown. The profile is saved between chats and works in Cursor and other MCP clients. Free covers 3 cover letters a month and postings up to 2,000 characters.",
    "example": {
     "persona": "Nurse moving into health tech",
     "prompt": "Here is a posting for Clinical Product Specialist. What in my profile matches, what's missing? Then write a cover letter .docx for it.",
@@ -624,7 +624,7 @@
     "Adding skills you don't have to match keywords. Interviews expose it.",
     "Fancy layouts with tables and columns that some applicant tracking systems read badly."
    ],
-   "answer": "Claude rewrites CVs well, but it forgets your profile between chats. With the Resume server, Claude stores your profile once, shows the gaps against each job post and writes the resume and cover letter as Word files. The gap analysis changes nothing."
+   "answer": "Yes. Claude writes a tailored resume or cover letter as a .docx with code execution, on by default on Free, Pro and Max. The Resume server keeps one saved profile across chats and shows the gaps against each posting, changing nothing."
   },
   "/use-cases/freelance-service-agreement/": {
    "intro": "Most freelance payment disputes start with no written scope. Freelancers and small agencies need a service agreement with scope, rate, deliverables and the right clauses before work starts.",
@@ -830,8 +830,8 @@
   },
   "/use-cases/resize-and-compress-images/": {
    "intro": "Your photos are too big for the website or the email. Shop owners and bloggers can resize, compress and convert a batch of images just by asking in chat.",
-   "without_tool": "Claude can look at an image and describe it. In Claude.ai with code execution it can sometimes resize a file in its sandbox. In Claude Desktop or Cursor without a tool, it can't write a new image file.",
-   "with_tool": "The Image server resizes single images or batches, compresses and reports bytes before and after, converts formats, crops, makes thumbnails, adds a text watermark and strips metadata. Each result is a new file.",
+   "without_tool": "Claude can look at an image and describe it. With code execution on (the default on Free, Pro and Max, on web, Desktop and mobile), it can also resize, compress or convert images you upload in its sandbox. It can't reach a folder on your disk, so a batch means uploading every file, and a Team or Enterprise admin can turn code execution off. In Cursor the agent needs a script and an image library.",
+   "with_tool": "The Image server resizes single images or batches, compresses and reports bytes before and after, converts formats, crops, makes thumbnails, adds a text watermark and strips metadata. Each result is a new file. Installed locally it works on a folder on your disk with no upload and runs in Cursor. Free covers outputs up to 4 megapixels and 5 files per call.",
    "example": {
     "persona": "Etsy seller of ceramics",
     "prompt": "Make 400 px thumbnails of every photo in ~/shop/new-mugs into ~/shop/thumbs, then tell me the size of the largest original.",
@@ -852,7 +852,7 @@
     "Compressing a JPEG again and again, which adds visible artifacts.",
     "Posting photos with GPS location still in the metadata."
    ],
-   "answer": "In most chat apps Claude can see an image but not write a new one. The Image server resizes, compresses, converts, crops, watermarks and strips metadata, in batches, and writes each result as a new file. Run it locally to keep photos on your machine."
+   "answer": "Yes. Claude resizes and compresses images you upload with code execution, on by default on Free, Pro and Max. For a folder on your disk, or in Cursor, the Image server resizes, compresses, converts, crops and strips metadata, writing each result as a new file."
   },
   "/use-cases/convert-currency-ecb-rates/": {
    "intro": "Accountants and freelancers who invoice abroad need the official rate for a specific date, not a rate a chatbot remembers. If you must convert at the ECB reference rate and show where the number came from, start here.",

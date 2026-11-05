@@ -1067,15 +1067,16 @@
    "h1": "Can Claude tell the time in another time zone?",
    "title": "Can Claude tell the time in another time zone?",
    "query": "can claude tell time",
-   "answer": "Not by itself. Claude has no clock, so it doesn't know the current time unless the app passes it in, and some apps only pass the date. Time zone math also trips on daylight saving: the US and Europe change clocks on different dates, so for a few weeks a year the gap between New York and London is 4 hours, not 5. Connect the Timezone server (free token) and Claude reads the current time from the server and converts times with the IANA rules for the exact date.",
+   "answer": "Yes. With code execution on (the default on Free, Pro and Max), Claude can read the real clock in its sandbox and convert between zones with code. Without it, Claude knows the date only if the app passes it in, and a time stated from memory can be wrong around daylight saving. The Timezone server (free token) adds daylight saving tables by year, ranked meeting slots inside everyone's working hours and .ics files, as named tools instead of a new script each time.",
    "native": [
-    "Knows the usual UTC offsets for major cities.",
+    "Reads the real clock and converts zones with code, when code execution is on.",
     "Explains daylight saving time and what EST and EDT mean."
    ],
    "needs": [
-    "The current time in any city, from a real clock.",
-    "Conversions that apply daylight saving for the exact date.",
-    "Working hour overlap across cities, meeting slots and .ics invites."
+    "The current time in several cities in one call, with the zone each one resolved to.",
+    "Daylight saving change dates for a year, with the exact UTC instant and the offset before and after.",
+    "Working hour overlap across cities, ranked meeting slots and .ics invites.",
+    "Saved contacts with their zone and working hours, kept for later chats."
    ],
    "example": {
     "prompt": "What time is it right now in Tokyo, London and New York?",
@@ -1111,7 +1112,7 @@
    "faq": [
     {
      "q": "Does Claude know today's date?",
-     "a": "Many apps give Claude the date in the system prompt, but not always the exact time, and Claude can't check either one. The server reads the time when the tool runs."
+     "a": "Many apps give Claude the date in the system prompt, but not always the exact time. With code execution on, Claude can read the clock in its sandbox. The server reads the time itself when the tool runs, and it works in clients where code execution is off."
     },
     {
      "q": "What is free on the hosted server?",
