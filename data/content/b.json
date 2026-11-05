@@ -901,7 +901,7 @@
     {
      "title": "Stamp an invoice PAID",
      "persona": "Zofia Nowicka, freelance translator in Lodz, Poland",
-     "prompt": "Stamp PAID across invoices/FV-2026-031.pdf and save it as FV-2026-031-paid.pdf.",
+     "prompt": "Here is FV-2026-031.pdf (uploaded). Stamp PAID across it and save it as FV-2026-031-paid.pdf.",
      "steps": [
       {
        "tool": "pdf_info",
@@ -2069,7 +2069,7 @@
     {
      "title": "Move an old CV into a clean profile",
      "persona": "James O'Neill, project manager in Dublin",
-     "prompt": "Read my old CV at ~/Documents/CV_2023.docx and show me what you found before saving.",
+     "prompt": "Here is my old CV, CV_2023.docx (uploaded). Show me what you found before saving.",
      "steps": [
       {
        "tool": "resume_read",
@@ -2323,7 +2323,7 @@
     {
      "title": "Sales by region from a raw export",
      "persona": "Ewa Dabrowska, sales coordinator at a furniture maker in Bydgoszcz",
-     "prompt": "Open ~/Downloads/orders_q3.xlsx and give me total net sales in PLN by region, largest first.",
+     "prompt": "Here is orders_q3.xlsx (uploaded). Give me total net sales in PLN by region, largest first.",
      "steps": [
       {
        "tool": "sheet_info",
@@ -2401,7 +2401,8 @@
     "free": [
      "Read files up to 5 MB and 5,000 rows (larger files return the first 5,000 rows with a note)",
      "Write up to 500 rows per file",
-     "All sheets, formats and expressions"
+     "All sheets, formats and expressions",
+     "Hosted, up to 2 MB of loaded sheets per token"
     ],
     "pro": [
      "No read limit up to the 50 MB file ceiling",
@@ -3623,11 +3624,11 @@
     {
      "title": "Send October's paperwork to the accountant",
      "persona": "Katarzyna Dabrowska, freelance architect in Warsaw, Poland",
-     "prompt": "Zip all my October invoices, quotes and exports into one file for my accountant.",
+     "prompt": "Here are my October invoices, quotes and exports (uploaded). Zip them into one file for my accountant.",
      "steps": [
       {
-       "tool": "zip_bundle_month",
-       "does": "Collects 2026-10 files from the sibling servers' output folders and names each folder it checked"
+       "tool": "zip_create",
+       "does": "Packs the uploaded files into october-2026.zip and returns a download link valid for one hour"
       },
       {
        "tool": "zip_list",
@@ -3636,7 +3637,7 @@
      ],
      "result": "One zip with 23 documents (14 invoices, 6 quotes, 3 CSV exports), 4.1 MB, ready to attach to the email to her biuro rachunkowe.",
      "minutes_saved": 10,
-     "minutes_basis": "INFERRED: finding a month of files in several folders and zipping them by hand takes 10-15 min"
+     "minutes_basis": "INFERRED: collecting a month of files and zipping them by hand takes 10-15 min"
     },
     {
      "title": "Check a zip from an unknown sender",

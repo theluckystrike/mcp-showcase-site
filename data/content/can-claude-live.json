@@ -1280,6 +1280,7 @@
    "answer": "Partly. Claude reads PDFs well, and with code execution on (the default on Free, Pro and Max) it can run a script on an uploaded PDF and hand back a new file. Claude Code can do the same on your disk. Each time it is a fresh script. Connect the PDF server (free token) and Claude merges, splits, pulls page ranges, rotates and stamps pages as named tools, and every tool writes a new file. Rewriting the words inside a PDF is a different job. Edit the source document and export it again.",
    "native": [
     "Reads the text of a PDF you attach and summarizes it.",
+    "Writes a new PDF in its sandbox when code execution is on.",
     "Tells you which pages to pull out or reorder."
    ],
    "needs": [
@@ -1318,7 +1319,7 @@
    "faq": [
     {
      "q": "Can it change the text inside a PDF?",
-     "a": "No. The PDF server works on whole pages. It merges, splits, reorders, rotates and stamps. To change wording, edit the Word or source file and export a new PDF."
+     "a": "No. The PDF server works on whole pages. It merges, splits, rotates and stamps, and reorders on Pro. To change wording, edit the Word or source file and export a new PDF."
     },
     {
      "q": "What is free?",
@@ -1332,6 +1333,7 @@
    "server_id": "docx",
    "h1": "Can Claude edit Word documents?",
    "title": "Can Claude edit Word documents? Fill a .docx template",
+   "meta_description": "Partly. Claude reads and rewrites a Word file you attach. The Word server fills {{placeholders}} in your own .docx template and lists any it left empty.",
    "query": "can claude edit word documents",
    "answer": "Partly. Claude reads a Word file you attach and can rewrite it. With code execution on (the default on Free, Pro and Max) it can write a changed .docx for you to download, and Claude Code can run a script on your disk. Neither one checks which fields of your template were left empty. Connect the Word server (free token) and Claude reads a .docx and fills {{placeholders}} in your own template, so your fonts and layout stay as they were. It also tells you which placeholders it left empty.",
    "native": [
@@ -1392,10 +1394,10 @@
    "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude.ai reads an uploaded .xlsx or CSV and can analyze it in its sandbox, and Claude Code can read a file on your disk with a script. Apps without code execution only see what you paste. Connect the Spreadsheet server (free token) and any MCP app can list the sheets and columns of a workbook, filter and sort rows with a query, search every cell and get per-column stats.",
    "native": [
     "Explains formulas and what a table means.",
-    "Reads a small table you paste into the chat."
+    "Reads an uploaded .xlsx or CSV and analyzes it in its sandbox when code execution is on."
    ],
    "needs": [
-    "Every sheet, column and type in an .xlsx, without pasting.",
+    "The same sheet, column and type listing in any MCP app, with no sandbox needed.",
     "Filters and sorts that run on the real rows.",
     "The same query again next month on the new file."
    ],
@@ -1447,6 +1449,7 @@
    "answer": "Yes, in the Claude apps with code execution on (the default on Free, Pro and Max). Claude can install a QR library in its sandbox and hand you an image, and Claude Code can do the same on your disk. Without code execution it can only describe one. Connect the Barcode server (free token) and Claude writes QR codes for a link, a WiFi login, a contact card or a euro payment, and keeps a list of every code it made.",
    "native": [
     "Writes the text or URL the code should carry.",
+    "Makes a QR image in its sandbox when code execution is on.",
     "Explains error correction and print size."
    ],
    "needs": [
@@ -1496,10 +1499,12 @@
    "server_id": "barcode",
    "h1": "Can Claude make barcodes?",
    "title": "Can Claude make barcodes? EAN-13 and Code 128",
+   "meta_description": "Often yes. With code execution on, Claude can draw a barcode in its sandbox. The Barcode server draws EAN-13, UPC-A and Code 128 as SVG and checks digits.",
    "query": "can claude make barcodes",
    "answer": "Often yes. With code execution on (the default on Free, Pro and Max) Claude can install a barcode library in its sandbox and draw one, and Claude Code can do it on your disk. Without code execution it can only tell you which type to use. Connect the Barcode server (free token) and Claude draws EAN-13, EAN-8, UPC-A and Code 128 barcodes as SVG and checks the digits. Making many at once from a list is Pro.",
    "native": [
     "Explains EAN, UPC and Code 128 and when to use each.",
+    "Draws a barcode image in its sandbox when code execution is on.",
     "Works out a check digit by hand, with some risk of error."
    ],
    "needs": [
@@ -1551,9 +1556,10 @@
    "h1": "Can Claude edit images?",
    "title": "Can Claude edit images? Resize, crop and compress",
    "query": "can claude edit images",
-   "answer": "Not with AI retouching. Claude can look at an image and describe it, but it does not repaint or retouch photos. With code execution on (the default on Free, Pro and Max) Claude can resize or crop an uploaded image in its sandbox, and Claude Code can run an image script on your disk. Connect the Image server (free token) and Claude resizes, crops, compresses, converts and watermarks image files as named tools, and every tool writes a new copy.",
+   "answer": "Not with AI retouching. Claude can look at an image and describe it, but it does not repaint or retouch photos. With code execution on (the default on Free, Pro and Max) Claude can resize or crop an uploaded image in its sandbox, and Claude Code can run an image script on your disk. Connect the Image server (free token) and Claude resizes, crops, compresses and converts image files as named tools, and every tool writes a new copy. A local install can also add a text watermark.",
    "native": [
     "Describes what is in an image and suggests a crop.",
+    "Resizes or crops an uploaded image in its sandbox when code execution is on.",
     "Tells you which size and format a site needs."
    ],
    "needs": [
@@ -1592,7 +1598,7 @@
    "faq": [
     {
      "q": "Can it remove objects or fix faces?",
-     "a": "No. It does file edits only. Resize, crop, compress, convert, thumbnails and text watermarks."
+     "a": "No. It does file edits only. Resize, crop, compress, convert and thumbnails, plus text watermarks on a local install."
     },
     {
      "q": "What is free?",
@@ -1718,6 +1724,7 @@
    "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude can zip files you upload, and Claude Code can run the zip command on your disk. Connect the Zip server (free token) and Claude packs uploaded files into a new archive and adds files to an existing one, with entry names kept safe to unpack. A local install can also bundle a month of invoices.",
    "native": [
     "Tells you which files to include.",
+    "Zips files you upload in its sandbox when code execution is on.",
     "Explains zip, tar and compression ratios."
    ],
    "needs": [
@@ -1867,9 +1874,10 @@
    "h1": "Can Claude find free time in my calendar?",
    "title": "Can Claude find free time in my calendar? From .ics",
    "query": "can claude find free time in my calendar",
-   "answer": "Partly. Claude.ai has Google Calendar and Microsoft 365 connectors that read your events (Microsoft 365 needs a work or school account). For iCloud, a personal Outlook account or any .ics export, Claude reads the file you upload in that chat only, and it starts again in the next chat. Connect the Calendar server (free token) and Claude imports .ics files under a name, merges them, lists free gaps inside your working hours and finds double bookings.",
+   "answer": "Partly. Claude.ai has Google Calendar and Microsoft 365 connectors that read your events (Microsoft 365 needs a work or school account). For iCloud, a personal Outlook account or any .ics export, Claude reads the file you upload, and you upload it again when the calendar changes. Connect the Calendar server (free token) and Claude imports .ics files under a name, merges them, lists free gaps inside your working hours and finds double bookings.",
    "native": [
     "Reads events you paste as text.",
+    "Reads an .ics file you upload, in that chat.",
     "Suggests how to block focus time."
    ],
    "needs": [
@@ -2054,7 +2062,7 @@
    "h1": "Can Claude find my subscriptions?",
    "title": "Can Claude find my subscriptions? From a bank CSV",
    "query": "can claude find my subscriptions",
-   "answer": "Partly. Claude can spot repeat charges in a statement you paste or upload, but it can miss ones with small date shifts. Connect the Bank Statement server (free token) and Claude groups debits by who was paid, checks for a steady amount and cadence, and gives the next expected date and a yearly figure for each recurring charge.",
+   "answer": "Partly. Claude can spot repeat charges in a statement you upload, but it keeps no ledger to check again next month. Connect the Bank Statement server (free token) and Claude groups debits by who was paid, checks for a steady amount and cadence, and gives the next expected date and a yearly figure for each recurring charge.",
    "native": [
     "Spots repeat names in a pasted list.",
     "Suggests which subscriptions to cancel."
@@ -2161,7 +2169,7 @@
    "needs": [
     "A stored price history for each item.",
     "A target price and a list of items that reached it.",
-    "One refresh of the whole list in a single call."
+    "One refresh of the whole list in a single call (Pro)."
    ],
    "example": {
     "prompt": "What does this book cost right now?",
@@ -2264,6 +2272,7 @@
    "repo": "uv-index-today-mcp",
    "h1": "Can Claude check the UV index today?",
    "title": "Can Claude check the UV index today? EPA forecast by ZIP",
+   "meta_description": "Yes with web search, but not always from the official forecast. The UV Index Today server reads the EPA forecast for a US ZIP code or city, with the peak hour.",
    "query": "can claude check the uv index",
    "answer": "Yes with web search, but not always from the official forecast. Claude cannot know today's UV Index from memory, because it changes every day with season, clouds and ozone. With web search on, Claude can find a weather page, but the number may come from any site, without the date or the hour it peaks. Connect the free UV Index Today server and Claude reads the EPA forecast for your ZIP code or city at the moment you ask, with the hourly peak, the hours when protection is needed and the time it was read.",
    "native": [
@@ -2315,7 +2324,7 @@
    "h1": "Can Claude check if a drug is on the FDA shortage list?",
    "title": "Can Claude check the FDA drug shortage list? Live openFDA",
    "query": "is adderall on the fda shortage list",
-   "answer": "Partly. Claude cannot know today's list from memory, because FDA adds and resolves shortages every week. With web search on, Claude can find news stories or the FDA page, but a story may be months old and may not say which strengths or packages are affected. Connect the free Drug Shortage List server and Claude reads the FDA Drug Shortages database through openFDA when you ask, with status, availability by package, the reason and the date FDA last updated it. It reports FDA data only. Ask your pharmacist or prescriber what a listing means for your prescription.",
+   "answer": "Partly. Claude cannot know today's list from memory, because FDA adds, updates and resolves listings all the time. With web search on, Claude can find news stories or the FDA page, but a story may be months old and may not say which strengths or packages are affected. Connect the free Drug Shortage List server and Claude reads the FDA Drug Shortages database through openFDA when you ask, with status, availability by package, the reason and the date FDA last updated it. It reports FDA data only. Ask your pharmacist or prescriber what a listing means for your prescription.",
    "native": [
     "Explains what an FDA shortage listing means and the status labels Current, Resolved and To Be Discontinued.",
     "Finds news about shortages when web search is on."
@@ -2352,7 +2361,7 @@
    "faq": [
     {
      "q": "Should I change my medicine if it is listed?",
-     "a": "No. A listing means FDA reports supply problems for some packages, and many listed packages are still available. Talk to your pharmacist or prescriber before you change anything. The server gives no medical advice."
+     "a": "Do not decide that from the list. A listing means FDA reports supply problems for some packages, and many listed packages are still available. Your pharmacist or prescriber can tell you what it means for your prescription. The server gives no medical advice."
     },
     {
      "q": "How current is the list?",
@@ -2364,9 +2373,9 @@
    "slug": "find-the-census-tract-for-an-address",
    "repo": "address-to-census-tract-mcp",
    "h1": "Can Claude find the census tract for an address?",
-   "title": "Can Claude find a census tract for an address? Census Geocoder",
+   "title": "Can Claude find an address's census tract? Census Geocoder",
    "query": "can claude find a census tract for an address",
-   "answer": "Not exactly on its own. Claude can explain what a census tract is, but tract lines follow streets, rivers and rail lines, so a guess from the city or ZIP code is often wrong, and the two sides of one street can be in different tracts. With web search on, Claude may find the Census Geocoder page but does not get the lookup result from it. Connect the free Address to Census Tract server and Claude asks the US Census Bureau Geocoder directly and returns the tract number, the 11-digit GEOID, block group and districts, the same every time.",
+   "answer": "Not exactly on its own. Claude can explain what a census tract is, but tract lines follow streets, rivers and rail lines, so a guess from the city or ZIP code is often wrong, and the two sides of one street can be in different tracts. With web search on, Claude may find the Census Geocoder page, but a search result does not run the lookup for your address. Connect the free Address to Census Tract server and Claude asks the US Census Bureau Geocoder directly and returns the tract number, the 11-digit GEOID, block group and districts, the same every time.",
    "native": [
     "Explains tracts, block groups and how a GEOID is built from FIPS codes.",
     "Splits a GEOID you paste into its parts."

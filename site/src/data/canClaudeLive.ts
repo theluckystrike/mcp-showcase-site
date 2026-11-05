@@ -11,6 +11,8 @@ export interface LiveExample { prompt: string; tool: string; args: Record<string
 export interface LiveAnswer {
   slug: string; path: string; repo: string; server: FreeServer;
   h1: string; title: string; query: string; answer: string;
+  /** Optional hand-written meta description; default is the answer's first sentences. */
+  meta_description?: string;
   native: string[]; needs: string[];
   example: LiveExample; example2?: LiveExample;
   faq: { q: string; a: string }[];

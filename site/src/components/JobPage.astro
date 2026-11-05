@@ -126,7 +126,7 @@ const mainHasOutput = !!main && main.cases.length > 0;
             </div>
           ) : main && (
             <div class="card p-5 lg:mt-4">
-              <p class="text-sm font-semibold">{single ? `Free to start. ${main.name} Pro: $${main.priceUsd} once.` : main.bundleOnly ? `Sold as the $${bundlePrice()} bundle.` : `${main.name} is free.`}</p>
+              <p class="text-sm font-semibold">{single ? `Free to start. ${main.name} Pro, $${main.priceUsd} once.` : main.bundleOnly ? `Sold as the $${bundlePrice()} bundle.` : `${main.name} is free.`}</p>
               <div class="mt-4 grid gap-2.5">
                 {single
                   ? <a href={buy('main')} rel="nofollow" class="btn btn-primary w-full">Buy {main.name} Pro, ${main.priceUsd}</a>
@@ -160,7 +160,7 @@ const mainHasOutput = !!main && main.cases.length > 0;
         <h2 class="text-2xl font-semibold sm:text-3xl">An example, from prompt to finished file</h2>
         <p class="muted mt-2">Example scenarios built on the real tools of {servers.map((s) => s.name).join(' and ')}. Names and amounts are invented.</p>
         <div class:list={['mt-8 grid gap-4', cases.length > 1 && 'lg:grid-cols-3']}>{cases.map((x) => <CaseTurn server={x.server} case={x.case} showServer={servers.length > 1} />)}</div>
-        <p class="muted mt-6 text-[.95rem]">{after.copy} <a href="/pricing/" class="link">Pricing</a></p>
+        {servers.some((s) => s.paid) && <p class="muted mt-6 text-[.95rem]">{after.copy} <a href="/pricing/" class="link">Pricing</a></p>}
       </section>
     )}
 
@@ -220,14 +220,14 @@ const mainHasOutput = !!main && main.cases.length > 0;
       <section class="wrap py-12">
         <h2 class="text-2xl font-semibold sm:text-3xl">Related jobs</h2>
         <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{related.map((r) => <JobCard page={r} />)}</div>
-        {aud && <p class="mt-6"><a class="link" href={aud.path}>{aud.h1}: all jobs</a></p>}
+        {aud && <p class="mt-6"><a class="link" href={aud.path}>All jobs on the {aud.h1} page</a></p>}
       </section>
     )}
 
     {p.path.startsWith('/can-claude/') && <UpdatesSignup source={p.path} />}
 
     {single
-      ? <StickyCta label={`${main!.name} Pro: $${main!.priceUsd} once`} sub={`Or all ${st.paid} paid servers for $${bundlePrice()}. No subscription.`} href={buy('sticky')} cta="Buy Pro" secondary={{ label: `All ${st.paid} for $${bundlePrice()}`, href: bundle('sticky') }} />
-      : <StickyCta label={`All ${st.paid} paid servers: $${bundlePrice()} once`} sub="Free tier stays free. No subscription." href={bundle('sticky')} cta="Get bundle" />}
+      ? <StickyCta label={`${main!.name} Pro, $${main!.priceUsd} once`} sub={`Or all ${st.paid} paid servers for $${bundlePrice()}. No subscription.`} href={buy('sticky')} cta="Buy Pro" secondary={{ label: `All ${st.paid} for $${bundlePrice()}`, href: bundle('sticky') }} />
+      : <StickyCta label={`All ${st.paid} paid servers, $${bundlePrice()} once`} sub="Free tier stays free. No subscription." href={bundle('sticky')} cta="Get bundle" />}
   </div>
 </Layout>

@@ -2595,10 +2595,6 @@
       {
        "tool": "expense_add",
        "does": "Logs GBP 84 with VAT split and project"
-      },
-      {
-       "tool": "receipt_attach",
-       "does": "Attaches the receipt photo"
       }
      ],
      "result": "GBP 70.00 net plus GBP 14.00 VAT, marked billable to the Harper project.",
@@ -2662,7 +2658,7 @@
    ],
    "free_vs_pro": {
     "free": [
-     "Unlimited logging of expenses, mileage and receipts",
+     "Unlimited logging of expenses and mileage, and receipts on a local install",
      "List and summary for the last 30 days",
      "3 projects, 5 category rules",
      "CSV and JSON export up to 200 rows",
@@ -2690,7 +2686,7 @@
     },
     {
      "q": "Can it read the receipt photo?",
-     "a": "It attaches the file to the expense. You give the amount and merchant."
+     "a": "On a local install it attaches the file to the expense. On the hosted URL put the receipt reference in the note. You give the amount and merchant."
     }
    ]
   },
@@ -2929,18 +2925,18 @@
     {
      "title": "Product photos for the shop",
      "persona": "Etsy seller of jewellery in Gdansk",
-     "prompt": "Resize these 5 photos to 1200 px wide and add my shop name as a watermark.",
+     "prompt": "Resize these 5 photos to 1200 px wide and remove the location data before I list them.",
      "steps": [
       {
        "tool": "image_batch_resize",
        "does": "Resizes the 5 photos"
       },
       {
-       "tool": "image_watermark",
-       "does": "Adds the business name"
+       "tool": "image_strip_metadata",
+       "does": "Removes GPS and camera data from each copy"
       }
      ],
-     "result": "5 web-ready photos with your shop name in the corner.",
+     "result": "5 web-ready photos with no location data, and the originals unchanged.",
      "minutes_saved": 15,
      "minutes_basis": "INFERRED: 5 photos in an editor at 3 min each"
     },
@@ -3011,14 +3007,14 @@
     "free": [
      "Outputs up to 4 MP",
      "Batch and thumbnails up to 5 files per call",
-     "Watermark with your business name",
+     "Watermark with your business name (local install)",
      "Top 3 dominant colours",
      "image_info and strip metadata at any size"
     ],
     "pro": [
      "Any output size",
      "Any number of files per call",
-     "Any watermark text",
+     "Any watermark text (local install)",
      "Up to 16 dominant colours"
     ],
     "source": "servers/image/src/index.ts:24-28 (FREE_MAX_PIXELS = 4_000_000, FREE_MAX_BATCH = 5, FREE_MAX_COLORS = 3), :509 (custom watermark)"

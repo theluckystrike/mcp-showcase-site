@@ -2,7 +2,7 @@
  "jobs": {
   "/use-cases/create-invoice-in-claude/": {
    "intro": "You want an invoice you can send today, not a table to copy into Word. Claude on its own stops short of that. The Invoice server gives you a numbered A4 PDF that keeps counting from the last one.",
-   "without_tool": "Claude can lay out an invoice as text or a table and do the VAT math correctly. In Claude.ai with file creation turned on, it can also make a one-off PDF in its sandbox. It can't remember your last invoice number between chats, so numbering repeats or skips, and it keeps no list of what is paid or overdue.",
+   "without_tool": "Claude can lay out an invoice as text or a table and do the VAT math correctly. In Claude.ai with file creation turned on, it can also make a one-off PDF in its sandbox. Memory can keep your details, but Claude keeps no invoice counter, so numbering can repeat or skip, and it keeps no list of what is paid or overdue.",
    "with_tool": "The Invoice server stores your business profile and clients, gives each invoice the next number that's never reused, and writes an A4 PDF with the VAT breakdown. It also records payments and lists what's overdue. With the local install the PDF is saved in a folder on your machine. On the hosted URL you get a short-lived download link.",
    "example": {
     "persona": "Wedding photographer",
@@ -130,7 +130,7 @@
   },
   "/use-cases/track-billable-time-in-claude/": {
    "intro": "If you bill by the hour, lost minutes are lost income. Freelancers and consultants can start and stop a timer in the same chat where they work, then get invoice lines at the end of the week.",
-   "without_tool": "Claude can't run a clock. It has no memory of when you started, and it can't keep a timesheet between chats. It can only add up hours you type in yourself.",
+   "without_tool": "Claude can't run a clock. It does not record when you started, and it keeps no timesheet to total later. It can only add up hours you type in yourself.",
    "with_tool": "Time Tracker runs one stopwatch, logs entries with project, task and rate, and reports hours and money per period. It turns billable time into invoice lines, marks hours as billed so they aren't billed twice, and exports the timesheet to CSV.",
    "example": {
     "persona": "Freelance translator",
@@ -217,7 +217,7 @@
   "/use-cases/merge-pdf-in-claude/": {
    "intro": "You need one PDF out of several, or three PDFs out of one. And you don't want client documents on a random website. Below is what Claude can and can't do with PDFs, and how the PDF server writes the new file.",
    "without_tool": "Claude reads the text of a PDF you attach. With code execution and file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), it can also merge and split uploaded PDFs in its sandbox and hand back a download. It can't reach files on your disk, and a Team or Enterprise admin can turn code execution off. In Cursor the agent needs a script and a PDF library.",
-   "with_tool": "The PDF server merges, splits, pulls pages, rotates and stamps PAID or DRAFT, each time writing a new PDF and returning the path. Reordering every page and the business footer are Pro. The local install (npx or .mcpb) works on files in your own folders with no upload and runs in Cursor and in apps where code execution is off. On the hosted URL the files pass through the server for a short time.",
+   "with_tool": "The PDF server merges, splits, pulls pages, rotates and stamps PAID or DRAFT, each time writing a new PDF and returning its path locally, or a one-hour download link on the hosted URL. Reordering every page and the business footer are Pro. The local install (npx or .mcpb) works on files in your own folders with no upload and runs in Cursor and in apps where code execution is off. On the hosted URL the files pass through the server for a short time.",
    "example": {
     "persona": "Tenant applying for a flat",
     "prompt": "Make one PDF from payslip-aug.pdf, payslip-sep.pdf, reference.pdf and id-scan.pdf in that order, but only page 1 of reference.pdf. Tell me the page count.",
@@ -831,7 +831,7 @@
   "/use-cases/resize-and-compress-images/": {
    "intro": "Your photos are too big for the website or the email. Shop owners and bloggers can resize, compress and convert a batch of images just by asking in chat.",
    "without_tool": "Claude can look at an image and describe it. With code execution on (the default on Free, Pro and Max, on web, Desktop and mobile), it can also resize, compress or convert images you upload in its sandbox. It can't reach a folder on your disk, so a batch means uploading every file, and a Team or Enterprise admin can turn code execution off. In Cursor the agent needs a script and an image library.",
-   "with_tool": "The Image server resizes single images or batches, compresses and reports bytes before and after, converts formats, crops, makes thumbnails, adds a text watermark and strips metadata. Each result is a new file. Installed locally it works on a folder on your disk with no upload and runs in Cursor. Free covers outputs up to 4 megapixels and 5 files per call.",
+   "with_tool": "The Image server resizes single images or batches, compresses and reports bytes before and after, converts formats, crops, makes thumbnails, adds a text watermark on a local install and strips metadata. Each result is a new file. Installed locally it works on a folder on your disk with no upload and runs in Cursor. Free covers outputs up to 4 megapixels and 5 files per call.",
    "example": {
     "persona": "Etsy seller of ceramics",
     "prompt": "Make 400 px thumbnails of every photo in ~/shop/new-mugs into ~/shop/thumbs, then tell me the size of the largest original.",
@@ -930,22 +930,22 @@
   },
   "/can-claude/make-a-pdf/": {
    "intro": "Yes. Claude makes a PDF in its sandbox when code execution is on, which is the default on Free, Pro and Max in Claude.ai, Claude Desktop and the mobile apps. The three PDF jobs people search for most are an invoice PDF, a business document PDF and edits to an existing PDF.",
-   "without_tool": "With code execution and file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can generate a PDF in its sandbox. A Team or Enterprise admin can turn it off, and in Cursor or VS Code the agent needs a script and a PDF library on your machine. Claude never remembers invoice numbers or your business details between chats.",
-   "with_tool": "Invoice writes numbered A4 invoice PDFs. Billing Docs writes purchase order and credit note PDFs in the same layout, and the PDF server merges, splits, stamps and watermarks the PDFs you already have. Each tool returns the path of the new file.",
+   "without_tool": "With code execution and file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can generate a PDF in its sandbox. A Team or Enterprise admin can turn it off, and in Cursor or VS Code the agent needs a script and a PDF library on your machine. Memory and Projects can keep your details, but Claude keeps no invoice counter, so numbers can repeat or skip.",
+   "with_tool": "Invoice writes numbered A4 invoice PDFs. Billing Docs writes purchase order and credit note PDFs in the same layout, and the PDF server merges, splits, stamps and watermarks the PDFs you already have. Each tool returns the new file's path locally, or a one-hour download link on the hosted URL.",
    "example": {
     "persona": "Freelance bookkeeper",
-    "prompt": "Stamp PAID in green across invoices/INV-0091.pdf, then add my business name and VAT id to the footer of every page.",
+    "prompt": "Stamp PAID across INV-0091.pdf and tell me how many pages it has.",
     "steps": [
      {
       "tool": "pdf_stamp",
-      "does": "Draws PAID across the pages and writes a new PDF"
+      "does": "Draws the PAID preset across the pages and writes a new PDF"
      },
      {
-      "tool": "pdf_watermark_business",
-      "does": "Adds the business name and VAT id from the shared profile to each footer"
+      "tool": "pdf_count",
+      "does": "Reports the page count of the stamped copy"
      }
     ],
-    "result": "A new copy of INV-0091 stamped PAID with your business footer on every page. The original file is unchanged."
+    "result": "A new copy of INV-0091 stamped PAID, with its page count. The original file is unchanged."
    },
    "pitfalls": [
     "Printing a chat answer to PDF and sending it as an invoice, with no number or VAT id.",
@@ -957,7 +957,7 @@
   "/can-claude/read-zip-files/": {
    "intro": "Yes. Claude.ai, Claude Desktop and the mobile apps unzip an upload with code execution, on by default on Free, Pro and Max. Here is how to list, read and safely unpack a zip from chat, and why you should check what is inside first.",
    "without_tool": "With code execution on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can unpack an uploaded zip in its sandbox and read the files. It won't check for traversal paths or a zip bomb unless you ask, and it can't open a zip on your disk. Cursor and VS Code need a script or a tool.",
-   "with_tool": "The Zip server lists entries with sizes and ratios, reads one text file from an archive without unpacking, unpacks safely (traversal, absolute-path and symlink entries are refused), creates archives with glob patterns and bundles a month of invoices for your accountant.",
+   "with_tool": "The Zip server lists entries with sizes and ratios, reads one text file from an archive without unpacking, unpacks safely (traversal, absolute-path and symlink entries are refused), creates archives with glob patterns, and on a local install bundles a month of invoices for your accountant.",
    "example": {
     "persona": "Accountant receiving client files",
     "prompt": "List what's inside ~/Downloads/client-records-q3.zip, then show me notes.txt from it without unpacking the rest.",
@@ -1011,8 +1011,8 @@
    "answer": "ChatGPT can draft an invoice and make a file, but it keeps no numbering or client list. The Invoice server adds numbered A4 PDFs, stored clients and payment tracking. It works in Claude and Cursor. ChatGPT connector setup is plan-dependent and not tested by us."
   },
   "/can-chatgpt/open-zip-files/": {
-   "intro": "Sometimes. ChatGPT can unpack an uploaded zip with its code tool. A Zip server lets you look inside first and pull out one file at a time.",
-   "without_tool": "With its code tool, ChatGPT can often unpack a zip you upload and read the files inside its sandbox. It won't check for traversal paths or a suspicious compression ratio unless you ask, and the files stay in that one chat.",
+   "intro": "Usually. ChatGPT can unpack an uploaded zip with its code tool. A Zip server lets you look inside first and pull out one file at a time.",
+   "without_tool": "With its code tool, ChatGPT can usually unpack a zip you upload and read the files inside its sandbox. It won't check for traversal paths or a suspicious compression ratio unless you ask, and the files stay in that one chat.",
    "with_tool": "The Zip server lists every entry with sizes and ratios, reads one text file without unpacking the rest, and unpacks safely with traversal, absolute-path and symlink entries refused. The hosted server can't see files on your computer. It takes a file from a public link or a small upload (up to 1 MB), and new files come back as one-hour download links. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/zip/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Accountant receiving client files",
@@ -1034,7 +1034,7 @@
     "Ignoring a huge compression ratio, a sign of a zip bomb.",
     "Assuming every ChatGPT plan can add a custom MCP server. Check your plan first."
    ],
-   "answer": "ChatGPT can often unpack an uploaded zip with its code tool. The Zip server lists entries, reads one file without unpacking and refuses unsafe paths. It runs hosted or locally in Claude and Cursor."
+   "answer": "Usually. ChatGPT can unpack an uploaded zip with its code tool. The Zip server lists entries, reads one file without unpacking and refuses unsafe paths. It runs hosted or locally in Claude and Cursor."
   },
   "/can-chatgpt/zip-files/": {
    "intro": "Yes, for files it already has. ChatGPT's code tool can pack files you upload into a .zip. A Zip server does the same with patterns and keeps a history of what it made.",
@@ -1042,11 +1042,11 @@
    "with_tool": "The Zip server packs files or a whole folder into a new .zip with glob patterns, adds files to an existing archive and lists the archives it made. Locally it reads your folders. The hosted server can't see files on your computer. It takes a file from a public link or a small upload, and the archive comes back as a one-hour download link. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/zip/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Designer sending final files",
-    "prompt": "Pack every .png and .pdf in the client-final folder into handoff.zip, then list what went in.",
+    "prompt": "Pack every .png and .pdf I uploaded into handoff.zip, then list what went in.",
     "steps": [
      {
       "tool": "zip_create",
-      "does": "Packs the matching files into handoff.zip"
+      "does": "Packs the matching uploads into handoff.zip with a one-hour download link"
      },
      {
       "tool": "zip_list",
@@ -1108,7 +1108,7 @@
     "Testing the code on one phone only.",
     "Printing it too small to scan from a table."
    ],
-   "answer": "ChatGPT's image tool draws fake QR codes. Its code tool can sometimes make real ones. The Barcode server makes scannable QR, WiFi, contact and payment codes. It runs hosted or locally in Claude and Cursor."
+   "answer": "ChatGPT's image tool draws fake QR codes. Its code tool can often make real ones. The Barcode server makes scannable QR, WiFi, contact and payment codes. It runs hosted or locally in Claude and Cursor."
   },
   "/can-chatgpt/edit-pdfs/": {
    "intro": "Partly. ChatGPT can rework a PDF you upload with its code tool. A PDF server handles page work like merge, split, rotate and stamp. Neither rewrites the original text in place.",
@@ -1369,7 +1369,7 @@
   "/can-chatgpt/edit-photos/": {
    "intro": "Yes, by redrawing them. ChatGPT's image tool changes a photo by generating a new one. For exact edits like resize, crop and compress, an Image server keeps the real pixels.",
    "without_tool": "ChatGPT's image tool makes a new picture from your photo, so faces and small details can change. Its code tool can resize or crop an upload, one chat at a time.",
-   "with_tool": "The Image server resizes, crops, compresses, converts format, makes thumbnails, adds a text watermark and strips metadata, always writing a new copy. Free sources go up to 4 MP. The hosted server can't see files on your computer. It takes a file from a public link or a small upload (up to 2 MB). To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/image/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
+   "with_tool": "The Image server resizes, crops, compresses, converts format, makes thumbnails and strips metadata, always writing a new copy. Watermarks need a local install, which ChatGPT can't reach. Free sources go up to 4 MP. The hosted server can't see files on your computer. It takes a file from a public link or a small upload (up to 2 MB). To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/image/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Online seller",
     "prompt": "Resize product.jpg to 1200 pixels wide, then compress it for the web.",
@@ -1419,8 +1419,8 @@
    "answer": "Cursor can't read .xlsx with its file reader. Its agent can write a parsing script. The Spreadsheet server reads, filters and summarizes Excel files by path in one call."
   },
   "/can-cursor/edit-word-documents/": {
-   "intro": "Not directly. A .docx is a zipped XML package, and Cursor edits text files. A DOCX server reads the document and writes a new one for you.",
-   "without_tool": "Cursor can't open a .docx in its editor as text. The agent can unzip and patch the XML with a script, which breaks formatting easily.",
+   "intro": "Yes, two ways. A .docx is a zipped XML package, and Cursor's editor works on text files. The agent can script an edit, and a DOCX server reads the document and writes a new one for you.",
+   "without_tool": "Cursor can't open a .docx in its editor as text. The agent can patch the XML or use python-docx in a script, which can lose formatting.",
    "with_tool": "The DOCX server reads the text and heading outline of a .docx, fills {{placeholders}} in a template, writes a .docx from markdown and converts a .docx to HTML. It runs over stdio in Cursor and writes a new file each time.",
    "example": {
     "persona": "Developer updating release notes",
@@ -1438,11 +1438,11 @@
     "Placeholders split across two text runs by Word.",
     "Overwriting the template instead of writing a new file."
    ],
-   "answer": "Cursor can't edit a .docx as text. The DOCX server reads Word files, fills templates and writes new .docx files from markdown inside Cursor."
+   "answer": "Cursor's editor can't open a .docx as text, but its agent can script an edit. The DOCX server reads Word files, fills templates and writes new .docx files from markdown inside Cursor."
   },
   "/can-cursor/read-pdf/": {
-   "intro": "Not reliably on its own. Cursor's file reader is made for text and code. A PDF server gives it page counts, text and new files from page ranges.",
-   "without_tool": "Cursor's agent can try a terminal command or script to pull text out of a PDF, which depends on what you have installed. Its editor doesn't read PDF text.",
+   "intro": "Yes, two ways. Cursor chat reads the text of a PDF you attach, and the agent can run a script for more. A PDF server gives it page counts, text and new files from page ranges as named tools.",
+   "without_tool": "Cursor chat reads a PDF you attach with the attach button. An @-mention of a PDF can come through as raw bytes, and the agent then falls back to a script.",
    "with_tool": "The PDF server reports page count, sizes and metadata, extracts text from standard-font PDFs (no OCR for scans), and merges and splits pages into new files (reordering is Pro). It runs over stdio in Cursor.",
    "example": {
     "persona": "Developer reading a vendor spec",
@@ -1464,7 +1464,7 @@
     "Pasting a long PDF into chat by hand.",
     "Committing large PDFs to the repo to read them."
    ],
-   "answer": "Cursor's file reader is made for text. The PDF server reads page counts and text from standard PDFs and writes new files from page ranges inside Cursor."
+   "answer": "Yes. Attach a PDF in Cursor chat and it reads the text, and the agent can run a script for more. A PDF server adds page counts, page ranges and new files as named tools."
   }
  }
 }
