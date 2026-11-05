@@ -2435,7 +2435,7 @@
    "needs": [
     "A ledger rebuilt from saved invoices, payments, deposits and expenses.",
     "Every line traced to the document and server it came from.",
-    "A trial balance proved to the cent, free and unlimited."
+    "A trial balance proved to the cent, free with no monthly cap."
    ],
    "example": {
     "prompt": "Build the November books from my invoices and expenses.",
@@ -2475,7 +2475,7 @@
     },
     {
      "q": "What is free, and what does Pro add?",
-     "a": "Building a ledger is free for 3 periods a month, and the trial balance and ledger lines are free and unlimited. Pro is $19 once for the Cash Book server, or $39 once for all 49 servers. It adds the month close with a stored snapshot, the account by account ledger report and the CSV export of ledger lines."
+     "a": "Building a ledger is free for 3 periods a month, and the trial balance and ledger lines are free with no monthly cap. Pro is $19 once for the Cash Book server, or $39 once for all 49 servers. It adds the month close with a stored snapshot, the account by account ledger report and the CSV export of ledger lines."
     }
    ]
   },
@@ -2527,7 +2527,7 @@
    "faq": [
     {
      "q": "Can it close the month on the free tier?",
-     "a": "No. month_close is Pro. On the free tier trial_balance and ledger_lines are free and unlimited, and ledger_build covers 3 periods a month, so you can check the numbers before you buy."
+     "a": "No. month_close is Pro. On the free tier trial_balance and ledger_lines are free with no monthly cap, and ledger_build covers 3 periods a month, so you can check the numbers before you buy."
     },
     {
      "q": "What does Pro cost and add?",
@@ -3010,7 +3010,7 @@
    "faq": [
     {
      "q": "Which date does it count lateness from?",
-     "a": "The as_of date on the call. A report for a past date gives the same answer every time, and a deliverable due on that date is not late yet."
+     "a": "The as_of date on the call. A report for a past date counts only the status moves dated on or before it, and a deliverable due on that date is not late yet."
     },
     {
      "q": "What is free, and what does Pro add?",
@@ -3059,7 +3059,7 @@
     },
     {
      "q": "What is free, and what does Pro add?",
-     "a": "Single-URL link checks and robots checks are free and unlimited, and link_audit takes 3 URLs per call. Nothing is stored, so every check is a fresh fetch. Pro is $19 once for the Backlink Checker server, or $39 once for all 49 servers. It removes the 3 URL limit on link_audit."
+     "a": "Single-URL link checks and robots checks are free with no monthly cap, and link_audit takes 3 URLs per call. Nothing is stored, so every check is a fresh fetch. Pro is $19 once for the Backlink Checker server, or $39 once for all 49 servers. It removes the 3 URL limit on link_audit."
     }
    ]
   },
@@ -3100,7 +3100,7 @@
     },
     {
      "q": "What is free, and what does Pro add?",
-     "a": "Single-URL link checks and robots checks are free and unlimited, and link_audit takes 3 URLs per call. Nothing is stored, so every check is a fresh fetch. Pro is $19 once for the Backlink Checker server, or $39 once for all 49 servers. It removes the 3 URL limit on link_audit."
+     "a": "Single-URL link checks and robots checks are free with no monthly cap, and link_audit takes 3 URLs per call. Nothing is stored, so every check is a fresh fetch. Pro is $19 once for the Backlink Checker server, or $39 once for all 49 servers. It removes the 3 URL limit on link_audit."
     }
    ]
   },
@@ -3151,7 +3151,7 @@
     },
     {
      "q": "What is free, and what does Pro add?",
-     "a": "Single-URL link checks and robots checks are free and unlimited, and link_audit takes 3 URLs per call. Nothing is stored, so every check is a fresh fetch. Pro is $19 once for the Backlink Checker server, or $39 once for all 49 servers. It removes the 3 URL limit on link_audit."
+     "a": "Single-URL link checks and robots checks are free with no monthly cap, and link_audit takes 3 URLs per call. Nothing is stored, so every check is a fresh fetch. Pro is $19 once for the Backlink Checker server, or $39 once for all 49 servers. It removes the 3 URL limit on link_audit."
     }
    ]
   },
