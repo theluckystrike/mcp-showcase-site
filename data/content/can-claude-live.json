@@ -3353,6 +3353,689 @@
      "a": "Freddie Mac publishes PMMS on Thursdays, or on Wednesday when a holiday falls on Thursday. The server reads the file at call time."
     }
    ]
+  },
+  {
+   "slug": "create-invoices",
+   "repo": "invoice",
+   "server_id": "invoice",
+   "h1": "Can Claude create invoices?",
+   "title": "Can Claude create invoices? Numbered, saved and tracked",
+   "query": "can claude create invoices",
+   "meta_description": "Yes, as a document. The Invoice server also numbers each invoice, keeps it for later chats and records what each client has paid.",
+   "answer": "Yes, as a document. Claude can lay out an invoice from what you tell it, and with code execution on (the default on Free, Pro and Max) it can write it as a PDF or Word file. Projects and memory can keep your business details. What a chat does not keep is a number series that never repeats, or a record of what each client has paid. Connect the Invoice server (free token) and Claude creates invoices with the next number, saves them, records full or part payments and lists what is overdue.",
+   "native": [
+    "Lays out an invoice from a list of items.",
+    "Writes it as a PDF or Word file when code execution is on."
+   ],
+   "needs": [
+    "Invoice numbers that are never reused.",
+    "Full and part payments recorded against each invoice.",
+    "An overdue list across every client."
+   ],
+   "example": {
+    "prompt": "Invoice Maple Street Bakery for the cooler door job on work order WO-2026-0001.",
+    "tool": "invoice_create",
+    "args": {
+     "client": "Maple Street Bakery",
+     "items": [
+      {
+       "description": "Walk-in cooler door gasket, fitted",
+       "quantity": 1,
+       "unit_price": 103.2
+      },
+      {
+       "description": "Hinge shim kit",
+       "quantity": 2,
+       "unit_price": 15
+      },
+      {
+       "description": "Labour, fit gasket and test seal (hours)",
+       "quantity": 1.5,
+       "unit_price": 95
+      }
+     ],
+     "issue_date": "2026-11-05",
+     "notes": "Work order WO-2026-0001"
+    },
+    "result": "{\"number\": \"INV-2026-0001\", \"client\": \"Maple Street Bakery\", \"issue_date\": \"2026-11-05\", \"due_date\": \"2026-11-19\", \"total\": \"USD 275.70\", \"status\": \"unpaid\", \"lines\": [{\"description\": \"Walk-in cooler door gasket, fitted\", \"quantity\": 1, \"unit_price\": \"USD 103.20\", \"tax_rate\": \"0%\", \"amount\": \"USD 103.20\"}, {\"description\": \"Hinge shim kit\", \"quantity\": 2, \"unit_price\": \"USD 15.00\", \"tax_rate\": \"0%\", \"amount\": \"USD 30.00\"}, {\"description\": \"Labour, fit gasket and test seal (hours)\", \"quantity\": 1.5, \"unit_price\": \"USD 95.00\", \"tax_rate\": \"0%\", \"amount\": \"USD 142.50\"}]}",
+    "note": "The client was saved with client_add first. The server answers with one line and then JSON. This is a shortened copy of the JSON, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it create invoices in QuickBooks or Xero?",
+     "a": "No. It keeps its own invoices and numbers under your token, and it writes nothing to QuickBooks or Xero."
+    },
+    {
+     "q": "Do I get a PDF?",
+     "a": "On the hosted server invoice_pdf returns a one-hour link to an HTML invoice that you print to PDF from the browser. A local install writes the PDF file."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Three invoices a calendar month, payments and the overdue report are free, and the free invoice page carries a small credit line. Pro is $19 once for the Invoice server, or $39 once for all 49 servers. It adds unlimited invoices, your logo with no credit line, and a custom number prefix."
+    }
+   ]
+  },
+  {
+   "slug": "find-overdue-invoices",
+   "repo": "invoice",
+   "server_id": "invoice",
+   "h1": "Can Claude find overdue invoices?",
+   "title": "Can Claude find overdue invoices? Days late and totals",
+   "query": "claude overdue invoice",
+   "meta_description": "Partly. Claude can sort an invoice list you upload. The Invoice server keeps every invoice and lists the unpaid ones past due, worst first.",
+   "answer": "Partly. With code execution on (the default on Free, Pro and Max) Claude can read an invoice export you upload and sort out what is past due. A chat does not hold your invoices and payments, so its list is only as current as the file you gave it. Connect the Invoice server (free token) and Claude lists every invoice not paid in full whose due date has passed, worst first, with days overdue, the amount still open and a total per currency. Part payments you recorded are taken off.",
+   "native": [
+    "Sorts an invoice export you upload by due date.",
+    "Drafts a reminder email for a late client."
+   ],
+   "needs": [
+    "Every unpaid invoice past its due date, worst first.",
+    "Part payments taken off the amount still open.",
+    "A total per currency, never added across currencies."
+   ],
+   "example": {
+    "prompt": "Which invoices are overdue?",
+    "tool": "overdue_report",
+    "args": {
+     "as_of": "2026-11-06"
+    },
+    "result": "{\"as_of\": \"2026-11-06\", \"count\": 2, \"invoices\": [{\"number\": \"INV-2026-0001\", \"client\": \"Bayline Logistics\", \"due_date\": \"2026-09-29\", \"days_overdue\": 38, \"outstanding\": \"USD 1350.00\"}, {\"number\": \"INV-2026-0002\", \"client\": \"Harbor Dental\", \"due_date\": \"2026-10-20\", \"days_overdue\": 17, \"outstanding\": \"USD 2700.00\"}], \"totals_per_currency\": [\"USD 4050.00\"]}",
+    "note": "Three invoices were created and USD 500.00 was paid on INV-2026-0001 first. The server answers in JSON. This is a shortened copy, and every field shown is unchanged. INV-2026-0002 also has a USD 150.00 credit note in the Billing Docs server, and this report shows the invoice before that credit.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Which invoices are part paid?",
+    "tool": "invoice_list",
+    "args": {
+     "status": "partial"
+    },
+    "result": "{\"count\": 1, \"invoices\": [{\"number\": \"INV-2026-0001\", \"client\": \"Bayline Logistics\", \"due_date\": \"2026-09-29\", \"total\": \"USD 1850.00\", \"status\": \"partial\", \"paid\": \"USD 500.00\", \"balance_due\": \"USD 1350.00\"}]}",
+    "note": "The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it send reminders?",
+     "a": "No. It lists what is late. The Dunning Letters server writes reminder letters for each stage, and you send them."
+    },
+    {
+     "q": "Does the report take off credit notes?",
+     "a": "No. It works from invoices and payments in the Invoice server. The Statement of Account server ages each client balance with credit notes taken off."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "The overdue report, payments and the invoice list are free on every tier, and creating invoices is free for 3 a month. Pro is $19 once for the Invoice server, or $39 once for all 49 servers. It adds unlimited invoices, your logo on the invoice page and a custom number prefix."
+    }
+   ]
+  },
+  {
+   "slug": "make-a-credit-note",
+   "repo": "billing-docs",
+   "server_id": "billing-docs",
+   "h1": "Can Claude make a credit note?",
+   "title": "Can Claude make a credit note? Against the original invoice",
+   "query": "claude credit note",
+   "meta_description": "Yes, as a document. The Billing Docs server issues a numbered credit note against a saved invoice, line by line, and writes the text to send.",
+   "answer": "Yes, as a document. Claude can draft a credit note or credit memo from what you tell it, and with code execution on (the default on Free, Pro and Max) it can save it as a file. What a chat does not do is tie the note to the invoice it reverses, with its own number and the invoice's own prices. Connect the Billing Docs server (free token) and Claude credits a whole invoice, a gross amount or named lines of an invoice saved in the Invoice server, gives the note a CN number, and writes a plain-text version to paste into an email.",
+   "native": [
+    "Drafts the wording of a credit note or credit memo.",
+    "Saves it as a file when code execution is on."
+   ],
+   "needs": [
+    "A CN number and the invoice it reverses on every note.",
+    "Credited lines priced from the invoice's own lines.",
+    "A plain-text note ready to paste into an email."
+   ],
+   "example": {
+    "prompt": "Credit Harbor Dental one hosting setup on INV-2026-0002. We billed it twice.",
+    "tool": "credit_note_create",
+    "args": {
+     "invoice": "INV-2026-0002",
+     "reason": "Hosting setup billed twice",
+     "lines": [
+      {
+       "line": 2,
+       "quantity": 1
+      }
+     ],
+     "issue_date": "2026-11-06"
+    },
+    "result": "{\"created\": {\"id\": \"CN-2026-0001\", \"invoice_number\": \"INV-2026-0002\", \"client\": \"Harbor Dental\", \"issue_date\": \"2026-11-06\", \"total\": \"USD -150.00\", \"reason\": \"Hosting setup billed twice\", \"lines\": [{\"description\": \"Hosting setup\", \"quantity\": 1, \"unit_price\": \"USD -150.00\", \"amount\": \"USD -150.00\"}]}, \"invoice\": {\"number\": \"INV-2026-0002\", \"total\": \"USD 2700.00\", \"credited_total\": \"USD 150.00\", \"still_creditable\": \"USD 2550.00\"}}",
+    "note": "Invoice INV-2026-0002 for USD 2,700.00, with two hosting setup lines at USD 150.00, was created in the Invoice server first. The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Write it up so I can email it to them.",
+    "tool": "credit_note_text",
+    "args": {
+     "id": "CN-2026-0001"
+    },
+    "result": "Hello Harbor Dental,\n\nHere is credit note CN-2026-0001, dated 2026-11-06, against invoice INV-2026-0002 of 2026-10-06.\n\n  Hosting setup       1 x    USD -150.00     USD -150.00\n\n                                Subtotal     USD -150.00\n                          TOTAL CREDITED     USD -150.00\n\nReason: Hosting setup billed twice\n\nUSD 150.00 comes off what is owed on INV-2026-0002.\n\nBest regards,\nReyes Studio\n\n---\nDownload (.txt, valid 1 hour): <download link>",
+    "note": "Download links last one hour, so they are shown here as <download link>.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it change the invoice?",
+     "a": "No. The credit note is stored in Billing Docs with the number of the invoice it reverses, and the invoice record keeps its total. The Statement of Account server takes the credit off the client balance."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Five documents a calendar month, credit notes and purchase orders counted together, are free, and so are the plain-text versions and the lists. Pro is $19 once for the Billing Docs server, or $39 once for all 49 servers. It adds unlimited documents, the A4 credit note and purchase order pages, and the billing report of credits and late orders."
+    }
+   ]
+  },
+  {
+   "slug": "create-purchase-orders",
+   "repo": "billing-docs",
+   "server_id": "billing-docs",
+   "h1": "Can Claude create purchase orders?",
+   "title": "Can Claude create purchase orders? Numbered POs to send",
+   "query": "claude purchase order",
+   "meta_description": "Yes, as a document. The Billing Docs server raises numbered purchase orders, writes the text to email the supplier and records what arrived.",
+   "answer": "Yes, as a document. Claude can draft a purchase order from a list of items, and with code execution on (the default on Free, Pro and Max) it can save it as a PDF or spreadsheet. Projects and memory can keep your supplier details. What a chat does not keep is a PO number series and the status of each order until the goods arrive. Connect the Billing Docs server (free token) and Claude raises a numbered purchase order with totals, writes a plain-text order to email the supplier, and records full or partial deliveries against it.",
+   "native": [
+    "Drafts a purchase order from a list of items.",
+    "Saves it as a file when code execution is on."
+   ],
+   "needs": [
+    "A PO number on every order that is never reissued.",
+    "Open, partly received or received status per order.",
+    "Each delivery kept with its date and note."
+   ],
+   "example": {
+    "prompt": "Order 4 packs of business cards at USD 42 and one trade show banner at USD 185 from Mile High Print Co, delivered by 13 November.",
+    "tool": "purchase_order_create",
+    "args": {
+     "supplier": "Mile High Print Co",
+     "items": [
+      {
+       "description": "Business cards, 350gsm, 500 pack",
+       "quantity": 4,
+       "unit_price_minor": 4200
+      },
+      {
+       "description": "Trade show banner, 2 x 1 m",
+       "quantity": 1,
+       "unit_price_minor": 18500
+      }
+     ],
+     "expected_delivery_date": "2026-11-13",
+     "issue_date": "2026-11-06",
+     "notes": "Deliver to 210 Pine St, Denver"
+    },
+    "result": "{\"created\": {\"id\": \"PO-2026-0001\", \"supplier\": {\"name\": \"Mile High Print Co\"}, \"issue_date\": \"2026-11-06\", \"expected_delivery_date\": \"2026-11-13\", \"status\": \"open\", \"total\": \"USD 353.00\", \"lines\": [{\"description\": \"Business cards, 350gsm, 500 pack\", \"quantity\": 4, \"unit_price\": \"USD 42.00\", \"amount\": \"USD 168.00\"}, {\"description\": \"Trade show banner, 2 x 1 m\", \"quantity\": 1, \"unit_price\": \"USD 185.00\", \"amount\": \"USD 185.00\"}]}}",
+    "note": "The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Write the order so I can email it.",
+    "tool": "purchase_order_text",
+    "args": {
+     "id": "PO-2026-0001"
+    },
+    "result": "Hello Mile High Print Co,\n\nPlease treat this as purchase order PO-2026-0001, dated 2026-11-06.\n\n  Business cards, 350gsm, 500 pack       4 x      USD 42.00      USD 168.00\n  Trade show banner, 2 x 1 m             1 x     USD 185.00      USD 185.00\n\n                                                   Subtotal      USD 353.00\n                                                      TOTAL      USD 353.00\n\nPlease deliver by 2026-11-13 and quote PO-2026-0001 on the delivery note and your invoice.\n\nDeliver to 210 Pine St, Denver\n\nBest regards,\nReyes Studio\n\n---\nDownload (.txt, valid 1 hour): <download link>",
+    "note": "Download links last one hour, so they are shown here as <download link>.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it send the order to the supplier?",
+     "a": "No. It writes the order text, and you send it. purchase_order_receive then records what arrived, and a partial delivery keeps the order open."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Five documents a calendar month, credit notes and purchase orders counted together, are free, and so are the plain-text versions and the lists. Pro is $19 once for the Billing Docs server, or $39 once for all 49 servers. It adds unlimited documents, the A4 credit note and purchase order pages, and the billing report of credits and late orders."
+    }
+   ]
+  },
+  {
+   "slug": "write-a-payment-reminder",
+   "repo": "dunning-letters",
+   "server_id": "dunning-letters",
+   "h1": "Can Claude write a payment reminder?",
+   "title": "Can Claude write a payment reminder? Letters that escalate",
+   "query": "claude invoice chaser",
+   "meta_description": "Yes, it writes them well. The Dunning Letters server also tracks which reminder each late invoice is on, adds agreed late fees and lists what to send today.",
+   "answer": "Yes. Claude writes a polite or firm payment reminder well, and Projects and memory can keep your usual wording. What a chat does not keep is which letter each late invoice has had, when the next one is due, or the interest your terms allow to date. Connect the Dunning Letters server (free token) and Claude registers each unpaid invoice, works out when reminder 1, reminder 2 and the final notice fall due, writes the letter for the current stage with any late fee, and lists what to send today. It sends nothing itself.",
+   "native": [
+    "Writes a reminder in the tone you ask for.",
+    "Softens the wording for a client you want to keep."
+   ],
+   "needs": [
+    "Three letters on a schedule counted from the due date.",
+    "Late payment interest at the rate your terms allow.",
+    "Today's list of letters to send."
+   ],
+   "example": {
+    "prompt": "Bayline still has not paid INV-2026-0001. Write the next reminder.",
+    "tool": "letter_render",
+    "args": {
+     "invoice": "INV-2026-0001",
+     "on": "2026-11-06"
+    },
+    "result": "# Second reminder: invoice INV-2026-0001 is 38 days overdue\n\nDear Bayline Logistics,\n\nDespite my reminder of 2026-10-07, invoice INV-2026-0001 for USD 1,350.00, due 2026-09-29, remains unpaid. Payment is now 38 days overdue.\n\nPlease arrange payment of USD 1,350.00 immediately.\n\nUnder our agreed terms, late payment interest accrues at 1% per month (simple, pro-rata). Accrued to 2026-11-06, that adds USD 17.10, bringing the total now due to USD 1,367.10.\n\nIf there is a problem with the invoice, please tell me today so it can be resolved. Otherwise I expect payment within 7 days.\n\nFor reference: invoice INV-2026-0001, due 2026-09-29, issued 2026-09-15, amount USD 1,350.00.\n\nYours sincerely,\n\nReyes Studio",
+    "note": "The invoice was registered with its open balance of USD 1,350.00 and terms of 1% a month, and reminder 1 was recorded as sent on 7 October first. This is the letter field of the answer. 1% a month on USD 1,350.00 for 38 days comes to USD 17.10.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Who do I need to chase today?",
+    "tool": "chase_today",
+    "args": {
+     "on": "2026-11-06"
+    },
+    "result": "{\"on\": \"2026-11-06\", \"send_now\": [{\"client\": \"Bayline Logistics\", \"reference\": \"INV-2026-0001\", \"outstanding\": \"USD 1,350.00\", \"days_late\": 38, \"send\": \"reminder 2\", \"threshold_date\": \"2026-10-13\"}], \"counts\": {\"unpaid\": 1, \"send_now\": 1, \"crossing_today\": 0, \"coming_up\": 0, \"exhausted\": 0}}",
+    "note": "Each invoice to chase is shown with six of its fields. The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it email the client?",
+     "a": "No. It writes the letter as Markdown or a printable HTML page, and you send it. letter_sent then records the date so the next stage can follow."
+    },
+    {
+     "q": "Can I charge a late fee?",
+     "a": "Only if your terms allow one. Pass the monthly rate when you register the invoice, and reminder 2 and the final notice state the amount accrued to the letter date."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "All three letters in both formats, late fees, payments, the aging summary and the daily chase list are free, with up to 3 unpaid invoices chased at once. Pro is $19 once for the Dunning Letters server, or $39 once for all 49 servers. It removes the limit of 3 invoices chased at once."
+    }
+   ]
+  },
+  {
+   "slug": "track-accounts-receivable",
+   "repo": "statement-of-account",
+   "server_id": "statement-of-account",
+   "h1": "Can Claude track accounts receivable?",
+   "title": "Can Claude track accounts receivable? Aging by client",
+   "query": "claude accounts receivable",
+   "meta_description": "Partly. Claude can age an export you upload. The Statement of Account server ages saved invoices by client, nets payments and credits, and writes statements.",
+   "answer": "Partly. With code execution on (the default on Free, Pro and Max) Claude can sort an invoice export you upload into 30, 60 and 90 day buckets in its sandbox. It works from that file each time, so payments and credit notes made since are missing. Connect the Statement of Account server (free token) and Claude ages the invoices saved in the Invoice server by client and currency, with payments, applied deposits and credit notes taken off, and writes a statement of account to email each client.",
+   "native": [
+    "Ages an invoice export you upload in its sandbox.",
+    "Explains what an aging report shows."
+   ],
+   "needs": [
+    "Aging per client from the invoices you already saved.",
+    "Payments and credit notes taken off each balance.",
+    "A statement of account to paste into an email."
+   ],
+   "example": {
+    "prompt": "Who owes me money, and how late is it?",
+    "tool": "statement_aging",
+    "args": {
+     "as_of": "2026-11-06"
+    },
+    "result": "{\"as_of\": \"2026-11-06\", \"clients\": 3, \"aging\": [{\"client\": \"Bayline Logistics\", \"not_yet_due\": \"USD 0.00\", \"overdue\": \"USD 1350.00\", \"outstanding\": \"USD 1350.00\"}, {\"client\": \"Harbor Dental\", \"not_yet_due\": \"USD 0.00\", \"overdue\": \"USD 2550.00\", \"outstanding\": \"USD 2550.00\"}, {\"client\": \"Northwind Cafe\", \"not_yet_due\": \"USD 950.00\", \"overdue\": \"USD 0.00\", \"outstanding\": \"USD 950.00\"}]}",
+    "note": "Three invoices were saved in the Invoice server first, with a USD 500.00 part payment from Bayline and a USD 150.00 credit note for Harbor Dental. The server answers in JSON. This is a shortened copy that shows each client with four of its fields, unchanged. In the full answer Bayline sits in the 31 to 60 day bucket and Harbor Dental in the 0 to 30 day bucket.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Write Harbor Dental a statement for October to today.",
+    "tool": "statement_text",
+    "args": {
+     "client": "Harbor Dental",
+     "from": "2026-10-01",
+     "to": "2026-11-06",
+     "as_of": "2026-11-06"
+    },
+    "result": "Hello Harbor Dental,\n\nStatement of account 2026-10-01 to 2026-11-06, in USD, as at 2026-11-06.\n\n              Opening balance                                                     USD 0.00\n  2026-10-06  Invoice INV-2026-0002 issued, due 2026-10-20                     USD 2700.00\n  2026-11-06  Credit note CN-2026-0001 against INV-2026-0002: Hosting se       USD -150.00\n\n                                                         Opening balance          USD 0.00\n                                                         Invoices issued       USD 2700.00\n                                                       Payments received          USD 0.00\n                                                            Credit notes       USD -150.00\n                                                         CLOSING BALANCE       USD 2550.00\n\nUSD 2550.00 is outstanding on this account.\n\nBest regards,\nReyes Studio\n\n---\nDownload (.txt, valid 1 hour): <download link>",
+    "note": "Download links last one hour, so they are shown here as <download link>.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it chase late payers?",
+     "a": "It writes a friendly or firm chaser with dunning_text, listing every overdue invoice with your bank details, and you send it. The final demand letter is Pro."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Aging is free with no cap, and statements are free for 5 a calendar month, with rebuilds free. Pro is $19 once for the Statement of Account server, or $39 once for all 49 servers. It adds unlimited statements, the A4 statement page, the final demand letter and the receivables report across every client."
+    }
+   ]
+  },
+  {
+   "slug": "read-bank-statements",
+   "repo": "bank-statement",
+   "server_id": "bank-statement",
+   "h1": "Can Claude read bank statements?",
+   "title": "Can Claude read bank statements? Yes, and keep the history",
+   "query": "can claude read bank statements",
+   "meta_description": "Yes. Claude reads a PDF or CSV statement you upload. The Bank Statement server keeps imported months in a ledger you can total and search later.",
+   "answer": "Yes. Claude reads a bank statement you upload as a PDF or CSV and answers questions about it, and with code execution on (the default on Free, Pro and Max) it can total and chart the rows in its sandbox. Projects can keep the files. What a chat does not keep is one ledger that grows month by month with repeated rows skipped. Connect the Bank Statement server (free token) and Claude imports each CSV export into a saved ledger per account, totals money in and out by category, month or counterparty, and searches every stored line.",
+   "native": [
+    "Reads an uploaded PDF or CSV statement and answers questions about it.",
+    "Totals and charts the rows in its sandbox when code execution is on."
+   ],
+   "needs": [
+    "One saved ledger per account that later months add to.",
+    "Rows already imported skipped on the next import.",
+    "Totals by category, month or counterparty across months."
+   ],
+   "example": {
+    "prompt": "Where did the money in my checking account go in October?",
+    "tool": "statement_summary",
+    "args": {
+     "from": "2026-10-01",
+     "to": "2026-10-31",
+     "group_by": "counterparty"
+    },
+    "result": "{\"from\": \"2026-10-01\", \"to\": \"2026-10-31\", \"group_by\": \"counterparty\", \"count\": 10, \"by_currency\": {\"USD\": {\"count\": 10, \"money_in\": \"USD 2500.00\", \"money_out\": \"USD 397.63\", \"net\": \"USD 2102.37\", \"groups\": [{\"group\": \"OPENING DEPOSIT TRANSFER FROM SAVINGS\", \"count\": 1, \"net\": \"USD 2000.00\"}, {\"group\": \"CLIENT PAYMENT BAYLINE LOGISTICS BL-7731\", \"count\": 1, \"net\": \"USD 500.00\"}, {\"group\": \"SHELL OIL 5544\", \"count\": 2, \"net\": \"USD -100.05\"}, {\"group\": \"COMCAST BUSINESS\", \"count\": 1, \"net\": \"USD -89.99\"}, {\"group\": \"XCEL ENERGY\", \"count\": 1, \"net\": \"USD -84.12\"}, {\"group\": \"ADOBE CREATIVE CLOUD\", \"count\": 1, \"net\": \"USD -59.99\"}, {\"group\": \"OFFICE DEPOT 1183\", \"count\": 1, \"net\": \"USD -37.48\"}, {\"group\": \"GOOGLE WORKSPACE\", \"count\": 1, \"net\": \"USD -14.00\"}, {\"group\": \"BANK SERVICE FEE\", \"count\": 1, \"net\": \"USD -12.00\"}]}}}",
+    "note": "A ten-line October CSV was uploaded with bank_upload and imported with statement_import first. The server answers in JSON. This is a shortened copy, and each group is shown with three of its fields, unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "How much did I spend at Shell in October?",
+    "tool": "transactions_search",
+    "args": {
+     "query": "shell",
+     "from": "2026-10-01",
+     "to": "2026-10-31"
+    },
+    "result": "{\"query\": \"shell\", \"matches\": 2, \"transactions\": [{\"date\": \"2026-10-08\", \"amount\": \"USD -48.30\", \"description\": \"SHELL OIL 5544\"}, {\"date\": \"2026-10-19\", \"amount\": \"USD -51.75\", \"description\": \"SHELL OIL 5544\"}]}",
+    "note": "Each match is shown with three of its fields. The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Can it read a PDF statement?",
+     "a": "No. The server imports delimited text such as a CSV export. A PDF sent by link is refused, and one sent as bytes fails at import. Claude can still read the PDF itself in the chat."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Two accounts, import, search and summaries are free, and the free tier reads back the last 12 months. Pro is $19 once for the Bank Statement server, or $39 once for all 49 servers. It adds unlimited accounts, the full history, unlimited category rules and the statement export."
+    },
+    {
+     "q": "Where is my data kept?",
+     "a": "On the hosted server your records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
+    }
+   ]
+  },
+  {
+   "slug": "calculate-depreciation",
+   "repo": "asset-register",
+   "server_id": "asset-register",
+   "h1": "Can Claude calculate depreciation?",
+   "title": "Can Claude calculate depreciation? MACRS schedules by year",
+   "query": "claude depreciation schedule",
+   "meta_description": "Yes, the math is simple. The Asset Register server keeps each asset and builds its schedule from bundled tax tables such as IRS MACRS, year by year.",
+   "answer": "Yes. Claude can explain straight-line and declining-balance depreciation and work out a schedule, and with code execution on (the default on Free, Pro and Max) it can build one in a spreadsheet. The risk is in the inputs, such as the wrong class life or convention, and a register that lives in one file. Connect the Asset Register server (free token) and Claude adds each fixed asset with its rate and life from a bundled table, IRS MACRS, HMRC pools or the Polish annex, builds the schedule per year or month, and values the register at any date.",
+   "native": [
+    "Explains depreciation methods and works out a schedule.",
+    "Builds a schedule in a spreadsheet when code execution is on."
+   ],
+   "needs": [
+    "Rate, life and convention from a bundled tax table.",
+    "A register of fixed assets kept between chats.",
+    "Net book value of the register at any date."
+   ],
+   "example": {
+    "prompt": "Show the depreciation schedule for the MacBook Pro I bought in March.",
+    "tool": "asset_schedule",
+    "args": {
+     "asset": "MacBook Pro 16"
+    },
+    "result": "{\"asset\": {\"id\": \"ASSET-2026-0001\", \"name\": \"MacBook Pro 16\", \"cost\": \"USD 3,499.00\", \"in_service_date\": \"2026-03-10\"}, \"convention\": \"us-half-year\", \"periods\": [{\"year\": 2026, \"amount\": \"USD 699.80\", \"basis\": \"IRS Pub 946 Table A-1, 5-year half-year, year 1: 20 percent of cost\"}, {\"year\": 2027, \"amount\": \"USD 1,119.68\", \"basis\": \"IRS Pub 946 Table A-1, 5-year half-year, year 2: 32 percent of cost\"}, {\"year\": 2028, \"amount\": \"USD 671.81\", \"basis\": \"IRS Pub 946 Table A-1, 5-year half-year, year 3: 19.2 percent of cost\"}, {\"year\": 2029, \"amount\": \"USD 403.08\", \"basis\": \"IRS Pub 946 Table A-1, 5-year half-year, year 4: 11.52 percent of cost\"}, {\"year\": 2030, \"amount\": \"USD 403.09\", \"basis\": \"IRS Pub 946 Table A-1, 5-year half-year, year 5: 11.52 percent of cost\"}, {\"year\": 2031, \"amount\": \"USD 201.54\", \"basis\": \"IRS Pub 946 Table A-1, 5-year half-year, year 6: 5.76 percent of cost\"}]}",
+    "note": "The laptop was added with asset_add first as 5-year property for USD 3,499.00. The server answers in JSON. This is a shortened copy, and every field shown is unchanged. The six years add up to the full cost.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "What would USD 12,000 of 7-year equipment bought in June 2026 depreciate by each year?",
+    "tool": "asset_schedule",
+    "args": {
+     "scheme": "us",
+     "category": "7-year",
+     "cost_minor": 1200000,
+     "currency": "USD",
+     "purchase_date": "2026-06-01"
+    },
+    "result": "{\"category\": {\"code\": \"7-year\", \"name\": \"7-year property\"}, \"convention\": \"us-half-year\", \"periods\": [{\"year\": 2026, \"amount\": \"USD 1,714.80\"}, {\"year\": 2027, \"amount\": \"USD 2,938.80\"}, {\"year\": 2028, \"amount\": \"USD 2,098.80\"}, {\"year\": 2029, \"amount\": \"USD 1,498.80\"}, {\"year\": 2030, \"amount\": \"USD 1,071.60\"}, {\"year\": 2031, \"amount\": \"USD 1,070.40\"}, {\"year\": 2032, \"amount\": \"USD 1,071.60\"}, {\"year\": 2033, \"amount\": \"USD 535.20\"}]}",
+    "note": "This asset is not in the register. asset_schedule prices it without saving it. The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it apply bonus depreciation or section 179?",
+     "a": "No. The US table is the GDS schedule under the half-year convention from IRS Publication 946 Table A-1. Ask your accountant whether bonus depreciation, section 179 or the mid-quarter convention applies to you."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Ten assets, schedules, the register listing and disposals are free. Pro is $19 once for the Asset Register server, or $39 once for all 49 servers. It adds unlimited assets, the monthly depreciation journal and the yearly asset report."
+    }
+   ]
+  },
+  {
+   "slug": "make-an-onboarding-plan",
+   "repo": "onboarding",
+   "server_id": "onboarding",
+   "h1": "Can Claude make an onboarding plan?",
+   "title": "Can Claude make an onboarding plan? Tasks for each new hire",
+   "query": "claude employee onboarding",
+   "meta_description": "Yes, as a checklist. The Onboarding server copies a role template to each new hire, with due dates from the start day, and lists overdue tasks.",
+   "answer": "Yes, as a checklist. Claude can write an onboarding plan for a role, and Projects and memory can keep it for the next hire. What a chat does not keep is each hire's own copy with due dates and a record of what is done. Connect the Onboarding server (free token) and Claude adds a hire with a start date, applies a role template so every task gets an owner and a due date, marks tasks done, and lists what is overdue across all hires.",
+   "native": [
+    "Writes an onboarding checklist for a role.",
+    "Keeps it in a Project for the next hire."
+   ],
+   "needs": [
+    "A dated copy of the plan for each hire.",
+    "HR, manager and IT tasks, each with an owner.",
+    "Overdue tasks across every hire in one list."
+   ],
+   "example": {
+    "prompt": "How is Priya's onboarding going?",
+    "tool": "onboarding_progress",
+    "args": {
+     "hire": "H-0001"
+    },
+    "result": "{\"hire\": {\"name\": \"Priya Shah\", \"role\": \"designer\", \"start_date\": \"2026-10-26\", \"percent_complete\": 50, \"overdue\": 1, \"tasks_detail\": [{\"id\": \"K01\", \"text\": \"Laptop ready and accounts set up\", \"owner\": \"it\", \"due\": \"2026-10-26\", \"status\": \"done\"}, {\"id\": \"K02\", \"text\": \"First-day welcome and studio tour\", \"owner\": \"manager\", \"due\": \"2026-10-26\", \"status\": \"done\"}, {\"id\": \"K03\", \"text\": \"Payroll and tax forms filed\", \"owner\": \"hr\", \"due\": \"2026-10-28\", \"status\": \"todo\"}, {\"id\": \"K04\", \"text\": \"Shadow a client call\", \"owner\": \"manager\", \"due\": \"2026-10-31\", \"status\": \"done\"}, {\"id\": \"K05\", \"text\": \"First design review\", \"owner\": \"manager\", \"due\": \"2026-11-09\", \"status\": \"todo\"}, {\"id\": \"K06\", \"text\": \"30-day check-in\", \"owner\": \"manager\", \"due\": \"2026-11-25\", \"status\": \"todo\"}]}}",
+    "note": "Priya was added with a start date of 26 October, a six-task designer template was applied, and three tasks were marked done first. The server answers in JSON. This is a shortened copy, and each task is shown with five of its fields, unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Is anything overdue for new hires?",
+    "tool": "onboarding_overdue",
+    "args": {},
+    "result": "{\"overdue\": [{\"hire\": \"Priya Shah\", \"hire_id\": \"H-0001\", \"task\": \"K03\", \"text\": \"Payroll and tax forms filed\", \"owner\": \"hr\", \"due\": \"2026-10-28\", \"days_late\": 8}], \"total\": 1}",
+    "note": "Days late are counted from the day of the call, here 5 November. The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "If I edit the template, do current hires change?",
+     "a": "No. Each hire copies the template when it is applied, so a plan already under way stays as it was."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Hires, templates, tasks, progress and the overdue list are free, with a template applied to one hire per call. Pro is $19 once for the Onboarding server, or $39 once for all 49 servers. It applies a template to many hires in one call and exports a plan as CSV."
+    }
+   ]
+  },
+  {
+   "slug": "create-work-orders",
+   "repo": "work-order",
+   "server_id": "work-order",
+   "h1": "Can Claude create work orders?",
+   "title": "Can Claude create work orders? Jobs, parts and labour",
+   "query": "can claude create work orders",
+   "meta_description": "Yes, as a document. The Work Order server numbers each job, logs parts and labour, moves it from scheduled to done and writes a completion report.",
+   "answer": "Yes, as a document. Claude can draft a work order or job sheet, and with code execution on (the default on Free, Pro and Max) it can save it as a file. What a chat does not keep is a numbered job with its status, the parts and hours logged against it, and totals worked out from those lines. Connect the Work Order server (free token) and Claude raises a WO-numbered job with the site and priority, logs parts with markup and labour hours, moves the job from draft to done, and writes a completion report with a sign-off block.",
+   "native": [
+    "Drafts a work order or job sheet.",
+    "Saves it as a file when code execution is on."
+   ],
+   "needs": [
+    "A WO number and site address on every job.",
+    "Parts with markup and labour hours totaled from the lines.",
+    "A completion report for the client to sign."
+   ],
+   "example": {
+    "prompt": "Maple Street Bakery's walk-in cooler door does not seal. Open a high priority job for the back kitchen.",
+    "tool": "work_order_create",
+    "args": {
+     "client": "Maple Street Bakery",
+     "client_address": "18 Maple St, Boulder, CO 80302",
+     "site_address": "18 Maple St, Boulder, CO 80302, back kitchen",
+     "requested_date": "2026-11-02",
+     "description": "Walk-in cooler door does not seal. Replace gasket and adjust hinge",
+     "priority": "high",
+     "currency": "USD"
+    },
+    "result": "{\"created\": {\"id\": \"WO-2026-0001\", \"status\": \"draft\", \"priority\": \"high\", \"client\": \"Maple Street Bakery\", \"site_address\": \"18 Maple St, Boulder, CO 80302, back kitchen\", \"requested_date\": \"2026-11-02\", \"description\": \"Walk-in cooler door does not seal. Replace gasket and adjust hinge\"}}",
+    "note": "The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "The job is done. Write the completion report.",
+    "tool": "completion_report_text",
+    "args": {
+     "work_order": "WO-2026-0001"
+    },
+    "result": "COMPLETION REPORT\nWO-2026-0001\n\nOrtiz Refrigeration\n900 Walnut St, Boulder, CO 80302\n\nClient        Maple Street Bakery\nSite          18 Maple St, Boulder, CO 80302, back kitchen\nRequested     2026-11-02\nCompleted     2026-11-04\nStatus        done\nPriority      high\n\nWORK CARRIED OUT\n  Walk-in cooler door does not seal. Replace gasket and adjust hinge\n\nLABOUR\n  2026-11-04  Fit gasket, adjust hinge, test seal  1.5 h at USD 95.00/h  USD 142.50\n  Hours 1.5, labour USD 142.50\n\nMATERIALS\n  2026-11-04  Door gasket, 30 x 78 in  1 x USD 103.20  USD 103.20\n  2026-11-04  Hinge shim kit  2 x USD 15.00  USD 30.00\n  Materials USD 133.20\n\n  Net    USD 275.70\n  Total  USD 275.70\n\nSIGN-OFF\n  Work completed by ......................................  Date ..................\n  Received and accepted by ...............................  Date ..................\n\nDownload (.txt, valid 1 hour): <download link>\n\n{\n  \"work_order\": \"WO-2026-0001\",\n  \"hours\": 1.5,\n  \"materials_minor\": 13320,\n  \"net_minor\": 27570\n}",
+    "note": "Two parts lines with a 20% markup and 1.5 hours of labour were added, and the job was moved to done first. Download links last one hour, so they are shown here as <download link>.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it create the invoice?",
+     "a": "Not on the free tier. work_order_invoice_payload builds invoice-ready lines on Pro, and you raise the invoice in the Invoice server."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Five open work orders, lines, status moves and the text completion report are free. Pro is $19 once for the Work Order server, or $39 once for all 49 servers. It adds unlimited open orders, the completion report PDF, the invoice payload and the board report."
+    }
+   ]
+  },
+  {
+   "slug": "track-employee-leave",
+   "repo": "leave",
+   "server_id": "leave",
+   "h1": "Can Claude track employee leave?",
+   "title": "Can Claude track employee leave? Balances and who is out",
+   "query": "can claude track employee leave",
+   "meta_description": "Partly. Claude can add up days and build a tracker file. The Leave server keeps each request and approval, and shows balances and who is out on any day.",
+   "answer": "Partly. Claude can count days off from a list you paste, draft a leave policy and, with code execution on (the default on Free, Pro and Max), build a leave tracker spreadsheet. That file changes only when you ask for a new version, so requests, approvals and balances live in whichever copy you saved last. Connect the Leave server (free token) and Claude adds employees with their yearly allowance and carry-over, records vacation, sick, unpaid and parental requests, approves or rejects them, and shows balances and who is out in any date range.",
+   "native": [
+    "Counts days off from a list you paste and drafts a leave policy.",
+    "Builds a leave tracker spreadsheet when code execution is on."
+   ],
+   "needs": [
+    "Each request with its type, dates and approval.",
+    "A balance from allowance and carry-over, minus booked days.",
+    "Who is out on each day of a range."
+   ],
+   "example": {
+    "prompt": "How much vacation does Sam have left?",
+    "tool": "leave_balance",
+    "args": {
+     "employee": "Sam Lee"
+    },
+    "result": "{\n  \"employee\": \"Sam Lee\",\n  \"id\": \"EMP-0001\",\n  \"allowanceDays\": 15,\n  \"carriedOver\": 2,\n  \"approvedDays\": 4,\n  \"pendingDays\": 0,\n  \"committedDays\": 4,\n  \"remainingDays\": 13,\n  \"remainingHalves\": 26,\n  \"committedItems\": [\n    \"LV-0001 approved vacation 2026-12-21..2026-12-24 = 4 days\"\n  ]\n}",
+    "note": "Sam was added with 15 days a year and 2 carried over, and a four-day December vacation was requested and approved first. The answer is shown in full.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Who is out the week of 21 December?",
+    "tool": "leave_out_range",
+    "args": {
+     "start": "2026-12-21",
+     "end": "2026-12-24"
+    },
+    "result": "{\n  \"start\": \"2026-12-21\",\n  \"end\": \"2026-12-24\",\n  \"days\": 4,\n  \"personDays\": 5,\n  \"calendar\": [\n    {\n      \"date\": \"2026-12-21\",\n      \"out\": 1,\n      \"names\": \"Sam Lee\"\n    },\n    {\n      \"date\": \"2026-12-22\",\n      \"out\": 1,\n      \"names\": \"Sam Lee\"\n    },\n    {\n      \"date\": \"2026-12-23\",\n      \"out\": 2,\n      \"names\": \"Priya Shah, Sam Lee\"\n    },\n    {\n      \"date\": \"2026-12-24\",\n      \"out\": 1,\n      \"names\": \"Sam Lee\"\n    }\n  ]\n}",
+    "note": "Priya also asked for a half day on 23 December, still pending. Pending requests count as planned absence. The answer is shown in full.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it skip weekends and holidays?",
+     "a": "No. It counts every day in the range you give, so book a week off as Monday to Friday."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Employees, requests, approvals, balances and the who is out view are free with no request limit. Pro is $19 once for the Leave server, or $39 once for all 49 servers. It adds bulk import of requests from CSV and an .ics calendar export of approved leave."
+    }
+   ]
+  },
+  {
+   "slug": "keep-a-mileage-log",
+   "repo": "mileage-log",
+   "server_id": "mileage-log",
+   "h1": "Can Claude keep a mileage log?",
+   "title": "Can Claude keep a mileage log? Trips priced by date",
+   "query": "can claude keep a mileage log",
+   "meta_description": "Partly. Claude can total trips and build a log file. The Mileage Log server keeps every drive with its purpose and prices it at the rate in force that day.",
+   "answer": "Partly. Claude can total the miles in a list you paste and multiply by a rate, and with code execution on (the default on Free, Pro and Max) it can build a mileage log spreadsheet. That file grows only when you upload it again and ask for a new version. Connect the Mileage Log server (free token) and Claude logs each drive as business, medical, moving, charitable or personal, prices it at the rate you set for the day it was driven, and totals the deductible amount for any period. No rate ships with it, so you enter the one you use.",
+   "native": [
+    "Totals the miles in a list you paste.",
+    "Builds a mileage log spreadsheet when code execution is on."
+   ],
+   "needs": [
+    "A dated log of every drive with its purpose.",
+    "Each trip priced at the rate in force on its day.",
+    "Personal trips kept on record and left out of the total."
+   ],
+   "example": {
+    "prompt": "What is my mileage deduction for October?",
+    "tool": "mileage_summary",
+    "args": {
+     "from_date": "2026-10-01",
+     "to_date": "2026-10-31"
+    },
+    "result": "{\"from\": \"2026-10-01\", \"to\": \"2026-10-31\", \"trips_in_window\": 3, \"trips_priced\": 2, \"categories\": [{\"category\": \"business\", \"trips\": 2, \"distance\": [{\"unit\": \"miles\", \"distance\": 24}], \"totals\": [{\"currency\": \"USD\", \"amount_cents\": 1824, \"amount\": \"USD 18.24\"}], \"lines\": [{\"date\": \"2026-10-06\", \"to\": \"Harbor Dental, Aurora\", \"distance\": 14.2, \"rate\": \"USD 0.760/mile\", \"amount\": \"USD 10.79\"}, {\"date\": \"2026-10-20\", \"to\": \"Mile High Print Co, Lakewood\", \"distance\": 9.8, \"rate\": \"USD 0.760/mile\", \"amount\": \"USD 7.45\"}]}], \"personal_unpriced\": [{\"id\": \"TR-2026-0003\", \"date\": \"2026-10-24\"}]}",
+    "note": "A business rate of USD 0.76 a mile from 1 July 2026 was entered with rate_set, and three October trips were logged first. The rate is a figure you enter, so check it against what your tax authority publishes. The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Log 14.2 miles from the studio to Harbor Dental in Aurora on 6 October for the kickoff meeting.",
+    "tool": "trip_add",
+    "args": {
+     "date": "2026-10-06",
+     "from": "Studio, 210 Pine St, Denver",
+     "to": "Harbor Dental, Aurora",
+     "distance": 14.2,
+     "unit": "miles",
+     "purpose": "Kickoff meeting for website redesign",
+     "category": "business"
+    },
+    "result": "{\"logged\": {\"id\": \"TR-2026-0001\", \"date\": \"2026-10-06\", \"from\": \"Studio, 210 Pine St, Denver\", \"to\": \"Harbor Dental, Aurora\", \"distance\": 14.2, \"unit\": \"miles\", \"purpose\": \"Kickoff meeting for website redesign\", \"category\": \"business\"}, \"notes\": [\"Free tier: 1 of 20 trips dated in 2026-10.\", \"Rounding rule: distance x rate, rounded half-up to the cent per trip; totals are the sums of the rounded per-trip amounts.\"]}",
+    "note": "The server answers in JSON. This is a shortened copy, and every field shown is unchanged.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it know the IRS rate?",
+     "a": "No. No rate ships with this server. You set the rate per category and the date it starts, and each trip is priced at the rate in force on its day."
+    },
+    {
+     "q": "What is free, and what does Pro add?",
+     "a": "Twenty trips a calendar month, one rate per jurisdiction and category, the trip list and the summary are free. Pro is $19 once for the Mileage Log server, or $39 once for all 49 servers. It adds unlimited trips, a dated series of rates and the CSV export for your accountant."
+    }
+   ]
   }
  ]
 }
