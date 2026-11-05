@@ -1275,14 +1275,14 @@
    "h1": "Can Claude edit PDFs?",
    "title": "Can Claude edit PDFs? Merge, split and stamp pages",
    "query": "can claude edit pdfs",
-   "answer": "Partly. Claude reads PDFs well, but in most apps it cannot hand back a changed PDF on its own. Claude.ai with code execution on can run a script on an uploaded PDF in its sandbox, and Claude Code can run one on your disk. Connect the PDF server (free token) and Claude merges, splits, reorders, rotates and stamps pages as named tools, and every tool writes a new file. Rewriting the words inside a PDF is a different job. Edit the source document and export it again.",
+   "answer": "Partly. Claude reads PDFs well, and with code execution on (the default on Free, Pro and Max) it can run a script on an uploaded PDF and hand back a new file. Claude Code can do the same on your disk. Each time it is a fresh script. Connect the PDF server (free token) and Claude merges, splits, pulls page ranges, rotates and stamps pages as named tools, and every tool writes a new file. Rewriting the words inside a PDF is a different job. Edit the source document and export it again.",
    "native": [
     "Reads the text of a PDF you attach and summarizes it.",
     "Tells you which pages to pull out or reorder."
    ],
    "needs": [
     "Merging several PDFs into one in a set order.",
-    "Pulling page ranges into a new file, splitting, rotating and reordering.",
+    "Pulling page ranges into a new file, splitting and rotating, and reordering on Pro.",
     "Stamping PAID or DRAFT, with the original left unchanged."
    ],
    "example": {
@@ -1320,7 +1320,7 @@
     },
     {
      "q": "What is free?",
-     "a": "Page tools run on the free tier. A merge takes up to 5 files on the free tier. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
+     "a": "Merge, split, page ranges and rotate are free for files up to 30 pages, and a merge takes up to 5 files. The PAID and DRAFT stamps are free. Reordering every page, other stamp text and the business footer are Pro. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
     }
    ]
   },
@@ -1331,10 +1331,10 @@
    "h1": "Can Claude edit Word documents?",
    "title": "Can Claude edit Word documents? Fill a .docx template",
    "query": "can claude edit word documents",
-   "answer": "Partly. Claude reads a Word file you attach and can rewrite its text, but in most apps you paste the new text back into Word yourself. Claude.ai with code execution on can write a changed .docx in its sandbox, and Claude Code can run a script on your disk. Connect the Word server (free token) and Claude reads a .docx and fills {{placeholders}} in your own template, so your fonts and layout stay as they were. It also tells you which placeholders it left empty.",
+   "answer": "Partly. Claude reads a Word file you attach and can rewrite it. With code execution on (the default on Free, Pro and Max) it can write a changed .docx for you to download, and Claude Code can run a script on your disk. Neither one checks which fields of your template were left empty. Connect the Word server (free token) and Claude reads a .docx and fills {{placeholders}} in your own template, so your fonts and layout stay as they were. It also tells you which placeholders it left empty.",
    "native": [
     "Reads and rewrites the text of a document you attach.",
-    "Drafts letters, clauses and summaries as plain text."
+    "Drafts letters and clauses, and writes them as a .docx when code execution is on."
    ],
    "needs": [
     "A real .docx written in your own template layout.",
@@ -1387,7 +1387,7 @@
    "h1": "Can Claude read Excel files?",
    "title": "Can Claude read Excel files? Yes, and query them",
    "query": "can claude read excel files",
-   "answer": "Yes in the Claude app with code execution on. Claude.ai reads an uploaded .xlsx or CSV and can analyze it in its sandbox, and Claude Code can read a file on your disk with a script. Apps without code execution only see what you paste. Connect the Spreadsheet server (free token) and any MCP app can list the sheets and columns of a workbook, filter and sort rows with a query, search every cell and get per-column stats.",
+   "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude.ai reads an uploaded .xlsx or CSV and can analyze it in its sandbox, and Claude Code can read a file on your disk with a script. Apps without code execution only see what you paste. Connect the Spreadsheet server (free token) and any MCP app can list the sheets and columns of a workbook, filter and sort rows with a query, search every cell and get per-column stats.",
    "native": [
     "Explains formulas and what a table means.",
     "Reads a small table you paste into the chat."
@@ -1404,7 +1404,7 @@
      "path": "sales-2026"
     },
     "result": "{\"file\": \"sales-2026.xlsx\", \"format\": \"xlsx\", \"sheets\": [{\"name\": \"Orders\", \"dimensions\": \"7 rows x 4 cols\", \"columns\": [\"Date (date)\", \"Customer (text)\", \"Region (text)\", \"Amount (number)\"]}, {\"name\": \"Notes\", \"dimensions\": \"1 rows x 1 cols\", \"columns\": [\"Exported from the shop system (empty)\"]}]}",
-    "note": "The workbook was loaded with sheet_load first. The server answers in JSON. These fields are unchanged. Each column is shown with its name and type, and the sample values are left out.",
+    "note": "The workbook was loaded with sheet_load first. The server answers in JSON. This is a shortened copy that shows each column as name and type, without the sample values and row counts.",
     "is_error": false,
     "run": "2026-11-05"
    },
@@ -1427,66 +1427,11 @@
    "faq": [
     {
      "q": "Which files does it read?",
-     "a": "xlsx, xlsm, xlsb, ods, csv and tsv."
+     "a": "Locally xlsx, xlsm, xlsb, ods, csv and tsv. The hosted server loads .xlsx and CSV."
     },
     {
      "q": "What is free?",
      "a": "Reading, querying and stats. The hosted server holds up to 2 MB of loaded sheets per token. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
-    }
-   ]
-  },
-  {
-   "slug": "edit-excel-files",
-   "repo": "spreadsheet",
-   "server_id": "spreadsheet",
-   "h1": "Can Claude edit Excel files?",
-   "title": "Can Claude edit Excel files? Yes, as a new copy",
-   "query": "can claude edit excel files",
-   "answer": "Partly. Claude.ai with code execution on can change an uploaded spreadsheet in its sandbox and give you a download, and Claude Code can run a script on your disk. Each time it is a new script. Connect the Spreadsheet server (free token) and Claude adds a computed column, writes rows and converts between xlsx, CSV and JSON as named tools. The result is always a new file, so the original workbook stays as it was.",
-   "native": [
-    "Writes the formula you need and explains it.",
-    "Plans the columns of a new sheet."
-   ],
-   "needs": [
-    "A computed column added to the real rows.",
-    "Conversion between xlsx, CSV and JSON.",
-    "A new file every time, never an overwrite of the source."
-   ],
-   "example": {
-    "prompt": "Add a VAT column at 20 percent of Net to acme-q3.xlsx.",
-    "tool": "sheet_add_column",
-    "args": {
-     "path": "acme-q3",
-     "name": "VAT",
-     "formula": "[Net] * 0.2",
-     "decimals": 2,
-     "out_path": "acme-q3-vat"
-    },
-    "result": "Added column \"VAT\" and wrote 3 rows to <download link> (valid 1 hour). The original file was not changed.\n\n| Invoice  | Net  | VAT |\n|----------|------|-----|\n| INV-0091 | 1200 | 240 |\n| INV-0092 | 450  | 90  |\n| INV-0093 | 2310 | 462 |",
-    "note": "The workbook was loaded with sheet_load first. Download links last one hour, so they are shown here as <download link>.",
-    "is_error": false,
-    "run": "2026-11-05"
-   },
-   "example2": {
-    "prompt": "Save that as a CSV for the import.",
-    "tool": "sheet_convert",
-    "args": {
-     "path": "acme-q3-vat",
-     "to": "csv"
-    },
-    "result": "Converted acme-q3-vat.csv [acme-q3-vat.csv] to <download link> (valid 1 hour) (3 rows, 3 columns).",
-    "note": "Download links last one hour, so they are shown here as <download link>.",
-    "is_error": false,
-    "run": "2026-11-05"
-   },
-   "faq": [
-    {
-     "q": "Does it keep my other sheets?",
-     "a": "sheet_write keeps the other sheets of a workbook. A CSV export holds one sheet only."
-    },
-    {
-     "q": "What is free?",
-     "a": "Adding columns and converting. sheet_write writes up to 500 rows per file on the free tier. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
     }
    ]
   },
@@ -1497,15 +1442,15 @@
    "h1": "Can Claude generate QR codes?",
    "title": "Can Claude generate QR codes? WiFi, links, contacts",
    "query": "can claude generate qr codes",
-   "answer": "Not in most apps on its own. Without code execution Claude can only describe a QR code. Claude.ai with code execution on can sometimes draw one in its sandbox if a QR library is available, and Claude Code can install one. Connect the Barcode server (free token) and Claude writes QR codes for a link, a WiFi login, a contact card or a euro payment, and keeps a list of every code it made.",
+   "answer": "Yes, in the Claude apps with code execution on (the default on Free, Pro and Max). Claude can install a QR library in its sandbox and hand you an image, and Claude Code can do the same on your disk. Without code execution it can only describe one. Connect the Barcode server (free token) and Claude writes QR codes for a link, a WiFi login, a contact card or a euro payment, and keeps a list of every code it made.",
    "native": [
     "Writes the text or URL the code should carry.",
     "Explains error correction and print size."
    ],
    "needs": [
-    "A real QR image a phone camera can scan.",
+    "A scannable QR image in apps where code execution is off.",
     "WiFi, vCard and SEPA payment formats built to the standard.",
-    "Many codes at once from a list."
+    "Many codes at once from a list (Pro)."
    ],
    "example": {
     "prompt": "Make a QR code that joins the HarborCafe-Guest WiFi with password latte2026.",
@@ -1535,7 +1480,7 @@
    "faq": [
     {
      "q": "Is SVG or PNG free?",
-     "a": "SVG is free and scales to any print size. PNG output is Pro."
+     "a": "SVG is free for 20 codes a month and scales to any print size. PNG output and batches are Pro."
     },
     {
      "q": "Do these codes expire?",
@@ -1550,7 +1495,7 @@
    "h1": "Can Claude make barcodes?",
    "title": "Can Claude make barcodes? EAN-13 and Code 128",
    "query": "can claude make barcodes",
-   "answer": "Not in most apps on its own. Claude can tell you which barcode type to use, but without code execution it cannot draw one. Claude.ai with code execution on may draw one in its sandbox if a library is there. Connect the Barcode server (free token) and Claude draws EAN-13, EAN-8, UPC-A and Code 128 barcodes as SVG, checks the digits, and can make many at once from a list.",
+   "answer": "Often yes. With code execution on (the default on Free, Pro and Max) Claude can install a barcode library in its sandbox and draw one, and Claude Code can do it on your disk. Without code execution it can only tell you which type to use. Connect the Barcode server (free token) and Claude draws EAN-13, EAN-8, UPC-A and Code 128 barcodes as SVG and checks the digits. Making many at once from a list is Pro.",
    "native": [
     "Explains EAN, UPC and Code 128 and when to use each.",
     "Works out a check digit by hand, with some risk of error."
@@ -1558,7 +1503,7 @@
    "needs": [
     "A scannable barcode image with the right quiet zone.",
     "A digit check before anything is printed.",
-    "Labels for a whole product list in one call."
+    "Labels for a whole product list in one call (Pro)."
    ],
    "example": {
     "prompt": "Draw an EAN-13 barcode for 4006381333931.",
@@ -1593,7 +1538,7 @@
     },
     {
      "q": "Is it free?",
-     "a": "SVG barcodes are free. PNG output is Pro."
+     "a": "SVG barcodes are free for 20 codes a month, one per call. PNG output and batches are Pro."
     }
    ]
   },
@@ -1604,7 +1549,7 @@
    "h1": "Can Claude edit images?",
    "title": "Can Claude edit images? Resize, crop and compress",
    "query": "can claude edit images",
-   "answer": "Not with AI retouching. Claude can look at an image and describe it, but it does not repaint or retouch photos. Claude.ai with code execution on can resize or crop an uploaded image in its sandbox, and Claude Code can run an image script on your disk. Connect the Image server (free token) and Claude resizes, crops, compresses, converts and watermarks image files as named tools, and every tool writes a new copy.",
+   "answer": "Not with AI retouching. Claude can look at an image and describe it, but it does not repaint or retouch photos. With code execution on (the default on Free, Pro and Max) Claude can resize or crop an uploaded image in its sandbox, and Claude Code can run an image script on your disk. Connect the Image server (free token) and Claude resizes, crops, compresses, converts and watermarks image files as named tools, and every tool writes a new copy.",
    "native": [
     "Describes what is in an image and suggests a crop.",
     "Tells you which size and format a site needs."
@@ -1660,7 +1605,7 @@
    "h1": "Can Claude remove metadata from photos?",
    "title": "Can Claude remove metadata from photos? EXIF and GPS",
    "query": "can claude remove metadata from photos",
-   "answer": "Not on its own in most apps. A phone photo can carry the camera, the time and the GPS position where it was taken. Claude.ai with code execution on can re-save an uploaded photo in its sandbox, and Claude Code can run exiftool if you have it. Connect the Image server (free token) and Claude writes a copy that carries the pixels and nothing else, then shows you the clean file's details.",
+   "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude can re-save an uploaded photo without its metadata in the sandbox, and Claude Code can run exiftool if you have it. A phone photo can carry the camera, the time and the GPS position where it was taken. Connect the Image server (free token) and Claude writes a copy that carries the pixels and nothing else, then shows you the clean file's details.",
    "native": [
     "Explains what EXIF and GPS data are.",
     "Tells you which apps strip metadata when you share."
@@ -1711,7 +1656,7 @@
    "h1": "Can Claude keep track of time?",
    "title": "Can Claude keep track of time? Timers and timesheets",
    "query": "can claude keep track of time",
-   "answer": "Not by itself. Claude does not run a clock between your messages, so it cannot tell you how long you worked unless you give it the times. Claude.ai memory can recall context, but it is not a timesheet you can total. Connect the Time Tracker server (free token) and Claude starts and stops a timer, logs past work as entries, sets an hourly rate per project and totals hours and money for any period.",
+   "answer": "Not in a chat. Claude does not run a clock between your messages, so it cannot tell you how long you worked unless you give it the times. Claude Code can log times to a file, but that is a script you maintain. Claude.ai memory can recall context, but it is not a timesheet you can total. Connect the Time Tracker server (free token) and Claude starts and stops a timer, logs past work as entries, sets an hourly rate per project and totals hours and money for the last 7 days on the free tier, or any period on Pro.",
    "native": [
     "Adds up hours you type in.",
     "Plans your week in time blocks."
@@ -1719,7 +1664,7 @@
    "needs": [
     "A real timer that keeps running between messages.",
     "Saved entries with rate and amount.",
-    "A weekly or monthly total per project, ready for an invoice."
+    "A weekly total per project, ready for an invoice."
    ],
    "example": {
     "prompt": "Log 2.5 hours of logo sketches for Harbor Dental yesterday from 9 am, at 85 USD an hour.",
@@ -1768,13 +1713,13 @@
    "h1": "Can Claude zip files?",
    "title": "Can Claude zip files? Pack an archive in chat",
    "query": "can claude zip files",
-   "answer": "Not in most apps on its own. A chat app without code execution cannot write a .zip file. Claude.ai with code execution on can zip files you upload, and Claude Code can run the zip command on your disk. Connect the Zip server (free token) and Claude packs files into a new archive, adds files to an existing one and bundles a month of invoices, with entry names kept safe to unpack.",
+   "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude can zip files you upload, and Claude Code can run the zip command on your disk. Connect the Zip server (free token) and Claude packs uploaded files into a new archive and adds files to an existing one, with entry names kept safe to unpack. A local install can also bundle a month of invoices.",
    "native": [
     "Tells you which files to include.",
     "Explains zip, tar and compression ratios."
    ],
    "needs": [
-    "A real .zip with a download link.",
+    "A real .zip with a download link in apps where code execution is off.",
     "Adding files to an archive you already have.",
     "A history of the archives it made."
    ],
@@ -1801,7 +1746,7 @@
     },
     {
      "q": "Is it free?",
-     "a": "Creating and listing archives is free. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
+     "a": "Creating archives is free for 20 a month, and listing is free. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
     }
    ]
   },
@@ -1812,7 +1757,7 @@
    "h1": "Can Claude make a resume?",
    "title": "Can Claude make a resume? Yes, as a real .docx",
    "query": "can claude make a resume",
-   "answer": "Yes for the text. Claude writes and improves resume wording in any app. Claude.ai with code execution on can also save a .docx in its sandbox. What a chat does not keep is your profile, so every new version starts from pasted text. Connect the Resume server (free token) and Claude stores one profile and writes it as a Word .docx, HTML or markdown, ordered for the role you name.",
+   "answer": "Yes for the text. Claude writes and improves resume wording in any app. With code execution on (the default on Free, Pro and Max) it can also save a .docx. Projects and memory can keep your details, but a chat does not keep a structured profile that every resume and cover letter is built from. Connect the Resume server (free token) and Claude stores one profile and writes it as a Word .docx, HTML or markdown, ordered for the role you name.",
    "native": [
     "Rewrites bullets and summaries.",
     "Suggests what to cut for a one-page resume."
@@ -1868,7 +1813,7 @@
    "h1": "Can Claude write a cover letter?",
    "title": "Can Claude write a cover letter? Checked against the job",
    "query": "can claude write a cover letter",
-   "answer": "Yes for the text. Claude writes a good cover letter from a job post you paste. It also tends to fill gaps with claims you never made. Connect the Resume server (free token) and Claude first checks the posting against your saved profile, then writes a one-page Word letter that states only facts from that profile and leaves a bracketed prompt where it needs more.",
+   "answer": "Yes for the text. Claude writes a good cover letter from a job post you paste. It can also fill gaps with claims you never made, so check every line. Connect the Resume server (free token) and Claude first checks the posting against your saved profile, then writes a one-page Word letter that states only facts from that profile and leaves a bracketed prompt where it needs more.",
    "native": [
     "Writes a cover letter from a pasted job post.",
     "Suggests a tone and an opening line."
@@ -1885,7 +1830,7 @@
      "job_description": "<the posting, 240 characters>"
     },
     "result": "{\"matched\": [\"coordinator\", \"events\", \"run\"], \"missing\": [\"salesforce\", \"excel\", \"coordination\", \"operations\", \"northwind\", \"schedules\", \"budgets\", \"freight\", \"reports\", \"updates\", \"vendor\", \"clear\", \"track\", \"write\", \"plan\", \"two\"], \"coverage\": 16, \"advice\": \"16 of the posting's 19 keywords are absent from your profile. Add them only if they are true: run profile_set with the real skill or bullet. This tool will not write a fact you have not stated.\"}",
-    "note": "The server answers in JSON. These fields are unchanged. The profile and posting are invented examples.",
+    "note": "The server answers in JSON. These fields are unchanged. The profile and posting are invented examples. coverage is the percent of the posting's keywords found in the profile, here 3 of 19.",
     "is_error": false,
     "run": "2026-11-05"
    },
@@ -1920,7 +1865,7 @@
    "h1": "Can Claude find free time in my calendar?",
    "title": "Can Claude find free time in my calendar? From .ics",
    "query": "can claude find free time in my calendar",
-   "answer": "Partly. Claude.ai has a Google Calendar connector that can read your events. For an Outlook or iCloud export, or any .ics file, Claude needs code execution to parse it, and it starts again in the next chat. Connect the Calendar server (free token) and Claude imports .ics files under a name, merges them, lists free gaps inside your working hours and finds double bookings.",
+   "answer": "Partly. Claude.ai has Google Calendar and Microsoft 365 connectors that read your events (Microsoft 365 needs a work or school account). For iCloud, a personal Outlook account or any .ics export, Claude reads the file you upload in that chat only, and it starts again in the next chat. Connect the Calendar server (free token) and Claude imports .ics files under a name, merges them, lists free gaps inside your working hours and finds double bookings.",
    "native": [
     "Reads events you paste as text.",
     "Suggests how to block focus time."
@@ -1975,7 +1920,7 @@
    "h1": "Can Claude track expenses?",
    "title": "Can Claude track expenses? A saved ledger with VAT",
    "query": "can claude track expenses",
-   "answer": "Not on its own. Claude can sort a list of expenses you paste, but it keeps no ledger you can total next month. Claude.ai with code execution on can total an uploaded sheet, and Claude Code can append to a file. Connect the Expense Tracker server (free token) and Claude records each expense with its net and VAT split, category and project, attaches receipts and totals any date range.",
+   "answer": "Not on its own. Claude can sort a list of expenses you paste, but it keeps no ledger you can total next month. With code execution on (the default on Free, Pro and Max) Claude can total an uploaded sheet, and Claude Code can append to a file. Connect the Expense Tracker server (free token) and Claude records each expense with its net and VAT split, category and project, and totals any date range. A local install can also attach receipt files.",
    "native": [
     "Sorts a pasted list into categories.",
     "Explains which costs are usually deductible."
@@ -2011,14 +1956,14 @@
      "group_by": "category"
     },
     "result": "{\n  \"from\": \"2026-11-01\",\n  \"to\": \"2026-11-30\",\n  \"group_by\": \"category\",\n  \"by_currency\": [\n    {\n      \"currency\": \"EUR\",\n      \"count\": 3,\n      \"groups\": [\n        {\n          \"key\": \"office\",\n          \"count\": 1,\n          \"gross\": \"EUR 86.40\",\n          \"net\": \"EUR 72.00\",\n          \"vat\": \"EUR 14.40\"\n        },\n        {\n          \"key\": \"travel\",\n          \"count\": 1,\n          \"gross\": \"EUR 38.50\",\n          \"net\": \"EUR 35.98\",\n          \"vat\": \"EUR 2.52\"\n        },\n        {\n          \"key\": \"software\",\n          \"count\": 1,\n          \"gross\": \"EUR 24.00\",\n          \"net\": \"EUR 20.00\",\n          \"vat\": \"EUR 4.00\"\n        }\n      ],\n      \"total_gross\": \"EUR 148.90\",\n      \"total_net\": \"EUR 127.98\",\n      \"total_vat\": \"EUR 20.92\"\n    }\n  ]\n}",
-    "note": "Two more expenses were logged before this summary.",
+    "note": "Two more expenses (travel and software) were logged before this summary.",
     "is_error": false,
     "run": "2026-11-05"
    },
    "faq": [
     {
      "q": "Can it read my receipts?",
-     "a": "receipt_attach stores the receipt file with the expense. You give the amount yourself, and Claude can read it from a receipt photo first."
+     "a": "On a local install, receipt_attach stores the receipt file with the expense. The hosted server has no file store, so put the receipt reference in the note. You give the amount yourself, and Claude can read it from a receipt photo first."
     },
     {
      "q": "Can I export it?",
@@ -2033,7 +1978,7 @@
    "h1": "Can Claude categorize bank transactions?",
    "title": "Can Claude categorize bank transactions? Rules that stick",
    "query": "can claude categorize bank transactions",
-   "answer": "Partly. Claude.ai with code execution on can read an uploaded bank CSV and label the rows. The rules live in that chat, so next month you start again. Connect the Bank Statement server (free token) and Claude imports the CSV into a ledger, applies your saved category rules and totals spending by category or month.",
+   "answer": "Partly. With code execution on (the default on Free, Pro and Max) Claude can read an uploaded bank CSV and label the rows. The rules live in that chat or in a Project's instructions, and they are not applied to a stored ledger, so next month you run it again. Connect the Bank Statement server (free token) and Claude imports the CSV into a ledger, applies your saved category rules and totals spending by category or month.",
    "native": [
     "Labels transactions you paste.",
     "Suggests a set of budget categories."
@@ -2092,7 +2037,7 @@
    "faq": [
     {
      "q": "Which banks work?",
-     "a": "Any bank CSV. The import reads the headers to find the date, description and amount columns."
+     "a": "Most bank CSV exports. The import reads the headers to find the date, description and amount columns, and a PDF statement is refused."
     },
     {
      "q": "What is free?",
@@ -2147,7 +2092,7 @@
    "h1": "Can Claude calculate loan payments?",
    "title": "Can Claude calculate loan payments? Full schedule",
    "query": "can claude calculate loan payments",
-   "answer": "Yes, with care. Claude knows the payment formula, but long text math can slip by a few cents or worse. Claude.ai with code execution on can run the numbers in its sandbox. Connect the Amortization server (free token) and Claude stores the loan, returns the exact level payment and effective annual rate, and builds the period by period schedule of interest and principal.",
+   "answer": "Yes, with care. Claude knows the payment formula, but long text math can slip by a few cents or worse. With code execution on (the default on Free, Pro and Max) it can run the numbers in its sandbox. Connect the Amortization server (free token) and Claude stores the loan, returns the exact level payment and effective annual rate, and builds the period by period schedule of interest and principal.",
    "native": [
     "Explains how an amortizing loan works.",
     "Gives a rough payment for a quick check."
@@ -2258,7 +2203,7 @@
    "h1": "Can Claude schedule recurring invoices?",
    "title": "Can Claude schedule recurring invoices? Yes, with a tool",
    "query": "can claude schedule recurring invoices",
-   "answer": "Not alone. Claude does not wake up on the first of the month, and it keeps no billing schedule or invoice numbers between chats. Connect the Recurring server (free token) and Claude stores a client, line items and cadence for each repeating invoice, lists what falls due, and creates a numbered invoice in the Invoice server for each due period when you ask.",
+   "answer": "Not in a chat. A chat does not wake up on the first of the month, and it keeps no billing schedule or invoice numbers between chats. Claude Code routines can run on a schedule, but they still need somewhere to keep the schedule and the numbering. Connect the Recurring server (free token) and Claude stores a client, line items and cadence for each repeating invoice, lists what falls due, and creates a numbered invoice in the Invoice server for each due period when you ask.",
    "native": [
     "Drafts an invoice when you ask.",
     "Works out billing dates by hand."
@@ -2308,7 +2253,7 @@
     },
     {
      "q": "What is free?",
-     "a": "Three active schedules. Billing on a fixed day of the month is Pro."
+     "a": "Three active schedules, and the next 3 due dates in a list. Billing on a different day than the start date, or on the last day of each month, is Pro."
     }
    ]
   }

@@ -881,8 +881,8 @@
    "answer": "Without a tool, Claude may quote an old rate from memory. The Currency server uses European Central Bank daily reference rates: it converts on any date, converts into many currencies at once and gives rate history, with the rate date stated."
   },
   "/can-claude/create-excel-files/": {
-   "intro": "Sometimes. It depends on where you use Claude. Some Claude apps can make an .xlsx today, and Claude Desktop, Cursor and VS Code can get the same result with a server.",
-   "without_tool": "In Claude.ai with code execution and file creation turned on, Claude can create .xlsx files in a sandbox and give you a download. In Claude Desktop, Cursor and VS Code without a tool, it gives you CSV or table text to paste, and it can't open a spreadsheet on your disk.",
+   "intro": "Yes in most cases. Claude.ai, Claude Desktop and the mobile apps make an .xlsx with code execution, which is on by default on Free, Pro and Max. Cursor and VS Code can get the same result with a server.",
+   "without_tool": "With code execution and file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can create .xlsx files in a sandbox and give you a download. It can't open a spreadsheet on your disk, and a Team or Enterprise admin can turn code execution off. In Cursor and VS Code the agent needs a script and a library on your machine.",
    "with_tool": "The Spreadsheet server writes rows to .xlsx, .csv, .tsv or .json, reads and queries existing spreadsheets by path, adds computed columns and converts formats. Each change is a new file. The source isn't changed.",
    "example": {
     "persona": "Volunteer treasurer of a sports club",
@@ -904,11 +904,11 @@
     "Numbers saved as text, so totals don't work.",
     "Expecting formulas to be kept when converting to CSV."
    ],
-   "answer": "Claude.ai can create Excel files when code execution and file creation are on. In Claude Desktop, Cursor or VS Code, connect the Spreadsheet server: Claude then writes .xlsx and .csv files, reads existing spreadsheets by path, adds columns and converts formats."
+   "answer": "Yes. Claude creates Excel files with code execution, on by default on Free, Pro and Max. For files on your disk or in Cursor, the Spreadsheet server writes .xlsx and .csv, reads sheets by path, adds columns and converts formats."
   },
   "/can-claude/create-word-documents/": {
-   "intro": "Yes in Claude.ai with file creation on, and with a connected server everywhere else. Below is the difference, and what you can do with your own Word templates.",
-   "without_tool": "In Claude.ai with file creation turned on, Claude can generate a .docx in its sandbox. In Claude Desktop, Cursor or VS Code without a tool, you get text to paste into Word, and Claude can't fill or read a .docx template on your disk.",
+   "intro": "Yes. Claude writes a .docx with code execution and file creation, on by default on Free, Pro and Max in Claude.ai, Claude Desktop and mobile. Below is when a server still helps, and what you can do with your own Word templates.",
+   "without_tool": "With file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can generate a .docx in its sandbox and can work from a template you upload in that chat. It can't read a .docx template on your disk, and a Team or Enterprise admin can turn file creation off. In Cursor or VS Code the agent needs a script and a library on your machine.",
    "with_tool": "The DOCX server writes .docx files from sections or markdown, fills {{placeholders}} in your own template, reads existing .docx files, converts .docx to HTML and makes proposals and service agreements.",
    "example": {
     "persona": "School administrator",
@@ -926,11 +926,11 @@
     "Placeholders that differ by one character, so they aren't replaced.",
     "Starting from a blank document when the organization has a letterhead template."
    ],
-   "answer": "Claude.ai can create Word files when file creation is on. Claude Desktop, Cursor and VS Code can't without a tool. The DOCX server works in any MCP client: it writes .docx files, fills your own templates and reads existing documents."
+   "answer": "Yes. Claude creates Word files with file creation on, the default on Free, Pro and Max. The DOCX server works in any MCP client. It writes .docx files, fills your own templates and reads existing documents."
   },
   "/can-claude/make-a-pdf/": {
-   "intro": "Claude.ai can make a PDF with file creation on. Other chat apps need a tool. The three PDF jobs people search for most are an invoice PDF, a business document PDF and edits to an existing PDF.",
-   "without_tool": "In Claude.ai with code execution and file creation turned on, Claude can generate a PDF in its sandbox. In Claude Desktop, Cursor or VS Code without a tool, you get text only. And it never remembers invoice numbers or your business details between chats.",
+   "intro": "Yes. Claude makes a PDF in its sandbox when code execution is on, which is the default on Free, Pro and Max in Claude.ai, Claude Desktop and the mobile apps. The three PDF jobs people search for most are an invoice PDF, a business document PDF and edits to an existing PDF.",
+   "without_tool": "With code execution and file creation on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can generate a PDF in its sandbox. A Team or Enterprise admin can turn it off, and in Cursor or VS Code the agent needs a script and a PDF library on your machine. Claude never remembers invoice numbers or your business details between chats.",
    "with_tool": "Invoice writes numbered A4 invoice PDFs. Billing Docs writes purchase order and credit note PDFs in the same layout, and the PDF server merges, splits, stamps and watermarks the PDFs you already have. Each tool returns the path of the new file.",
    "example": {
     "persona": "Freelance bookkeeper",
@@ -952,11 +952,11 @@
     "Editing a signed PDF in place instead of writing a new copy.",
     "Uploading client PDFs to free online editors."
    ],
-   "answer": "Claude.ai can make a PDF when file creation is on. In other apps, or for numbered invoices and edits to existing PDFs, connect a server: Invoice writes invoice PDFs, Billing Docs writes order and credit note PDFs, and PDF merges, splits and stamps."
+   "answer": "Yes. Claude makes a PDF with code execution, on by default on Free, Pro and Max. For numbered invoices, edits to existing PDFs or apps without it, the Invoice, Billing Docs and PDF servers write the files."
   },
   "/can-claude/read-zip-files/": {
-   "intro": "Yes in Claude.ai with code execution. Not in Claude Desktop or Cursor without a tool. Here is how to list, read and safely unpack a zip from chat, and why you should check what is inside first.",
-   "without_tool": "Claude.ai with code execution can sometimes unpack an uploaded zip in its sandbox. Claude Desktop, Cursor and VS Code can't open a .zip without a tool.",
+   "intro": "Yes. Claude.ai, Claude Desktop and the mobile apps unzip an upload with code execution, on by default on Free, Pro and Max. Here is how to list, read and safely unpack a zip from chat, and why you should check what is inside first.",
+   "without_tool": "With code execution on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can unpack an uploaded zip in its sandbox and read the files. It won't check for traversal paths or a zip bomb unless you ask, and it can't open a zip on your disk. Cursor and VS Code need a script or a tool.",
    "with_tool": "The Zip server lists entries with sizes and ratios, reads one text file from an archive without unpacking, unpacks safely (traversal, absolute-path and symlink entries are refused), creates archives with glob patterns and bundles a month of invoices for your accountant.",
    "example": {
     "persona": "Accountant receiving client files",
@@ -978,7 +978,7 @@
     "Ignoring a huge compression ratio, a sign of a zip bomb.",
     "Emailing a zip of invoices that misses half the month."
    ],
-   "answer": "Yes in Claude.ai, which can unzip an upload when code execution is on. Claude Desktop and Cursor need a tool. The Zip server lists entries, reads one file without unpacking and unzips safely, refusing traversal and symlink entries."
+   "answer": "Yes. Claude unzips an upload when code execution is on, the default on Free, Pro and Max. The Zip server lists entries, reads one file without unpacking and unzips safely, refusing traversal and symlink entries."
   },
   "/can-chatgpt/create-an-invoice/": {
    "intro": "ChatGPT writes invoice text well and can make a file with its data analysis tool, but it keeps no numbering or client list. Below is what a connected MCP server adds. We haven't tested the ChatGPT setup, so that part stays unknown.",
@@ -1012,7 +1012,7 @@
   },
   "/can-chatgpt/open-zip-files/": {
    "intro": "Sometimes. ChatGPT can unpack an uploaded zip with its code tool. A Zip server lets you look inside first and pull out one file at a time.",
-   "without_tool": "With its code tool, ChatGPT can often unpack a zip you upload and read the files inside its sandbox. It doesn't warn you about traversal paths or a suspicious compression ratio, and the files stay in that one chat.",
+   "without_tool": "With its code tool, ChatGPT can often unpack a zip you upload and read the files inside its sandbox. It won't check for traversal paths or a suspicious compression ratio unless you ask, and the files stay in that one chat.",
    "with_tool": "The Zip server lists every entry with sizes and ratios, reads one text file without unpacking the rest, and unpacks safely with traversal, absolute-path and symlink entries refused. The hosted server can't see files on your computer. It takes a file from a public link or a small upload (up to 1 MB), and new files come back as one-hour download links. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/zip/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Accountant receiving client files",
@@ -1113,7 +1113,7 @@
   "/can-chatgpt/edit-pdfs/": {
    "intro": "Partly. ChatGPT can rework a PDF you upload with its code tool. A PDF server handles page work like merge, split, rotate and stamp. Neither rewrites the original text in place.",
    "without_tool": "With its code tool, ChatGPT can often merge, split or rotate an uploaded PDF and give you a new file. Changing the words inside a PDF usually means rebuilding the document, and the layout can shift.",
-   "with_tool": "The PDF server merges, splits, pulls out pages, reorders, rotates, stamps a word such as PAID, and adds your business name to every footer. It doesn't edit the existing text and doesn't fill forms. The hosted server can't see files on your computer. It takes a file from a public link or a small upload (up to 2 MB), and each new PDF comes back as a download link. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/pdf/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
+   "with_tool": "The PDF server merges, splits, pulls out pages, rotates and stamps PAID or DRAFT, and reorders and adds your business name to every footer on Pro. Free files go up to 30 pages. It doesn't edit the existing text and doesn't fill forms. The hosted server can't see files on your computer. It takes a file from a public link or a small upload (up to 2 MB), and each new PDF comes back as a download link. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/pdf/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Freelance bookkeeper",
     "prompt": "Take pages 1 to 3 of contract.pdf, rotate page 2 the right way up, and stamp DRAFT across them.",
@@ -1138,7 +1138,7 @@
     "Editing a signed PDF instead of writing a new copy.",
     "Uploading client PDFs to free online editors."
    ],
-   "answer": "ChatGPT can rework an uploaded PDF with its code tool. The PDF server merges, splits, rotates, reorders and stamps PDFs as new files. It doesn't edit text or fill forms."
+   "answer": "ChatGPT can rework an uploaded PDF with its code tool. The PDF server merges, splits, rotates and stamps PDFs as new files, and reorders pages on Pro. It doesn't edit text or fill forms."
   },
   "/can-chatgpt/open-pdfs/": {
    "intro": "Yes. You can upload a PDF to ChatGPT and ask about it. A PDF server helps when you need page counts, exact page ranges or a new file out of it.",
@@ -1168,7 +1168,7 @@
   },
   "/can-chatgpt/format-a-word-document/": {
    "intro": "Yes, as a new file. ChatGPT's code tool can write a formatted .docx. A DOCX server turns markdown into real Word headings and fills your own template.",
-   "without_tool": "Without its code tool, ChatGPT gives you text to paste, and Word headings and tables get lost on the way. With the code tool it can write a .docx, but it doesn't know your house template.",
+   "without_tool": "Without its code tool, ChatGPT gives you text to paste, and Word headings and tables get lost on the way. With the code tool it can write a .docx, and it can work from your template if you upload it in that chat.",
    "with_tool": "The DOCX server turns markdown into a .docx with real headings, lists and tables, writes a .docx from sections, fills {{placeholders}} in your own template and reads an existing .docx. The hosted server can't see files on your computer. It takes a file from a public link or a small upload (up to 2 MB). To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/docx/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Office manager",
@@ -1190,7 +1190,7 @@
   },
   "/can-chatgpt/make-a-resume/": {
    "intro": "Yes. ChatGPT writes resume text well. A Resume server keeps one profile and builds the .docx, the cover letter and the plain text for job forms from it.",
-   "without_tool": "ChatGPT drafts resume wording and can make a file with its code tool. Each new chat starts over unless you paste your details again, and the layout changes from file to file.",
+   "without_tool": "ChatGPT drafts resume wording and can make a file with its code tool. Memory and Projects can keep your details, but the layout changes from file to file and nothing checks a posting against a fixed profile.",
    "with_tool": "The Resume server stores one profile, writes it to a Word .docx, writes a one-page cover letter, gives you markdown to paste into an applicant tracking form and checks a job posting for missing keywords. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/resume/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Nurse changing hospitals",
@@ -1271,8 +1271,8 @@
    "answer": "ChatGPT has no timer or timesheet of its own. The Time Tracker server starts and stops timers, logs hours and reports billable totals. It runs hosted or locally in Claude and Cursor."
   },
   "/can-chatgpt/know-the-time/": {
-   "intro": "Not reliably. ChatGPT may know today's date but has no clock it can read for your city. A Timezone server answers with the real current time anywhere.",
-   "without_tool": "ChatGPT has no clock for your location. It may get the date right and can search the web, but a time it states from memory can be wrong, and daylight saving changes trip it up.",
+   "intro": "Yes, when it checks. ChatGPT's code tool can read the real clock and convert it to your city, and web search works too. A time it states from memory can be wrong. A Timezone server answers with the real current time anywhere as one tool call.",
+   "without_tool": "ChatGPT's code tool can read the real clock, and web search can find the current time. A time it states from memory can be wrong, and daylight saving changes trip it up.",
    "with_tool": "The Timezone server gives the current time in one or more places, converts a time between zones with day changes marked, lists daylight saving changes and finds meeting slots inside everyone's working hours. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/timezone/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Remote team lead",
@@ -1286,16 +1286,16 @@
     "result": "The current time in all three cities under one UTC instant."
    },
    "pitfalls": [
-    "Trusting a time ChatGPT states without a clock behind it.",
+    "Trusting a time ChatGPT states from memory, without checking a clock.",
     "Forgetting that daylight saving starts on different dates in Europe and the US.",
     "Writing EST in winter and summer alike."
    ],
-   "answer": "ChatGPT has no clock for your city, so its stated time can be wrong. The Timezone server returns the real current time in any place. It runs hosted or locally in Claude and Cursor."
+   "answer": "ChatGPT can read the time with its code tool or web search, but a time it states from memory can be wrong. The Timezone server returns the current time in any place as one tool call."
   },
   "/can-chatgpt/do-my-taxes/": {
    "intro": "No. ChatGPT can't file a return. It can explain rules and do math. The Tax Calculator server gives a quick US federal estimate for a single filer, and nothing more.",
    "without_tool": "ChatGPT can explain tax terms and walk through a calculation, but it can't file for you and can get bracket numbers wrong. Treat any figure it gives as a draft to check.",
-   "with_tool": "The Tax Calculator server has one tool. It takes gross income, subtracts the $15,750 standard deduction, which is the 2025 tax-year figure, applies the single-filer federal brackets and returns taxable income, federal tax, effective rate and after-tax income. No state tax, credits or other filing status. It runs locally in Claude Desktop or Cursor and isn't hosted, so it doesn't work in ChatGPT.",
+   "with_tool": "The Tax Calculator server has one tool. It takes gross income, subtracts the $15,750 standard deduction, which is the 2025 tax-year figure, applies the single-filer federal brackets and returns taxable income, federal tax, effective rate and after-tax income. No state tax, credits or other filing status. It runs locally (Claude Desktop, Claude Code, Cursor) and isn't hosted, so ChatGPT can't reach it without a tunnel.",
    "example": {
     "persona": "Single filer comparing a job offer",
     "prompt": "Estimate federal income tax on 95,000 gross, single filer.",
@@ -1312,12 +1312,12 @@
     "Forgetting state and payroll taxes.",
     "Using a single-filer estimate when you file jointly."
    ],
-   "answer": "No. ChatGPT can't file taxes. The Tax Calculator server gives a US federal estimate for a single filer. It runs locally in Claude Desktop or Cursor, not ChatGPT. Use tax software or a preparer to file."
+   "answer": "No. ChatGPT can't file taxes. The Tax Calculator server gives a US federal estimate for a single filer. It runs locally, so ChatGPT can't reach it without a tunnel. Use tax software or a preparer to file."
   },
   "/can-chatgpt/help-with-finances/": {
    "intro": "Yes, with limits. ChatGPT explains money topics well but keeps no ledger. Two servers add a record of what you spent and a reading of your bank CSV.",
    "without_tool": "ChatGPT can explain budgeting and analyze a statement you upload in one chat. It keeps no running record of expenses, and it can misread a bank CSV's amount format.",
-   "with_tool": "Expense Tracker records each expense with its category and VAT split and gives totals by category, project or month. Bank Statement imports a bank CSV, groups spending by category and finds charges that come back every month. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/expense-tracker/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
+   "with_tool": "Expense Tracker records each expense with its category and VAT split and gives totals by category, project or month. Bank Statement imports a bank CSV, groups spending by category and finds charges that come back every month. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/expense-tracker/t/<token> and mcp.zovo.one/mcp/bank-statement/t/<token> as two servers with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
     "persona": "Household planner",
     "prompt": "Add 62.40 at Lidl as groceries today, then show this month's spending by category.",
@@ -1341,7 +1341,7 @@
    "answer": "ChatGPT explains money topics but keeps no ledger. Expense Tracker records spending and Bank Statement reads your bank CSV and finds recurring charges. Both run hosted or locally in Claude and Cursor."
   },
   "/can-chatgpt/integrate-with-outlook/": {
-   "intro": "Partly. OpenAI offers Outlook Email and Outlook Calendar apps for ChatGPT, and the calendar app is read-only. A Calendar server works from an .ics export instead, with no account link.",
+   "intro": "Partly. OpenAI offers Outlook Email and Outlook Calendar apps for ChatGPT. Calendar events are read-only, and email actions depend on what your admin turns on. A Calendar server works from an .ics export instead, with no account link.",
    "without_tool": "OpenAI's Outlook Calendar app lets ChatGPT read events and availability, and some actions need your Microsoft admin to approve them. It can't change events.",
    "with_tool": "The Calendar server doesn't connect to Outlook. It reads an .ics file you export from Outlook (File, Save Calendar), finds double bookings across calendars, shows free gaps and writes chosen events to a new .ics you can import back into Outlook. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/calendar/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
@@ -1364,7 +1364,7 @@
     "Exporting only one calendar and missing clashes.",
     "Assuming your workspace allows the Outlook app without admin approval."
    ],
-   "answer": "ChatGPT has read-only Outlook apps, some needing admin approval. The Calendar server works from an Outlook .ics export, finds clashes and writes .ics files to import. It never connects to Outlook itself."
+   "answer": "ChatGPT's Outlook apps read mail and calendars, and admins can turn on some email actions. Calendar events stay read-only. The Calendar server works from an Outlook .ics export, finds clashes and writes .ics files to import."
   },
   "/can-chatgpt/edit-photos/": {
    "intro": "Yes, by redrawing them. ChatGPT's image tool changes a photo by generating a new one. For exact edits like resize, crop and compress, an Image server keeps the real pixels.",
@@ -1443,7 +1443,7 @@
   "/can-cursor/read-pdf/": {
    "intro": "Not reliably on its own. Cursor's file reader is made for text and code. A PDF server gives it page counts, text and new files from page ranges.",
    "without_tool": "Cursor's agent can try a terminal command or script to pull text out of a PDF, which depends on what you have installed. Its editor doesn't read PDF text.",
-   "with_tool": "The PDF server reports page count, sizes and metadata, extracts text from standard-font PDFs (no OCR for scans), and merges, splits and reorders pages into new files. It runs over stdio in Cursor.",
+   "with_tool": "The PDF server reports page count, sizes and metadata, extracts text from standard-font PDFs (no OCR for scans), and merges and splits pages into new files (reordering is Pro). It runs over stdio in Cursor.",
    "example": {
     "persona": "Developer reading a vendor spec",
     "prompt": "Read the text of docs/api-spec.pdf and tell me how many pages it has.",
