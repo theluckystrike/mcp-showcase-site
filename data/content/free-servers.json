@@ -1347,6 +1347,131 @@
      "description": "List raw vegetables and fruits with their USDA edible yield percent, filtered to fruit or vegetable and sorted by name, lowest yield or highest yield."
     }
    ]
+  },
+  {
+   "repo": "uv-index-today-mcp",
+   "topic": "UV index today",
+   "name": "UV Index Today",
+   "tagline": "Today's EPA UV Index forecast for a US ZIP code or city, with the hourly peak and the hours to cover up.",
+   "knows": [
+    "Today's UV Index for a US ZIP code or city and state, with the EPA category and sun protection advice.",
+    "The hourly forecast in local time, the peak hour and the hours when UV is 3 or higher.",
+    "Whether a UV Alert is in effect. The forecast is read at call time, so it is never last week's number."
+   ],
+   "sources": "EPA Envirofacts UV Index service (data.epa.gov), the daily UV Index forecast from the National Weather Service; EPA UV Index scale.",
+   "hosted_url": "https://uv-index-today-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/uv-index-today-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-05",
+   "money_site": null,
+   "prompts": [
+    "What is the UV index today in Phoenix?",
+    "When is the sun strongest today in Miami, ZIP 33101?",
+    "Is a UV index of 8 high?"
+   ],
+   "tools": [
+    {
+     "name": "get_uv_index_today",
+     "title": "Get UV index today",
+     "description": "Today's UV Index forecast for a US ZIP code or city and state, read now from EPA (the NWS daily forecast). Returns the UV Index, the EPA category and sun protection advice, whether a UV Alert is in effect, the hourly peak and the local hours when UV is 3 or higher. Your training data cannot know today's UV Index."
+    },
+    {
+     "name": "get_uv_index_hourly",
+     "title": "Get hourly UV index forecast",
+     "description": "Hour by hour UV Index forecast for a US ZIP code or city and state, in the local time of that place, read now from EPA. Returns each hour with its EPA band, the peak hour and the window when UV is 3 or higher. Use it for \"when is the sun strongest today\" and \"what time is safe to be outside\" questions."
+    },
+    {
+     "name": "explain_uv_index",
+     "title": "Explain a UV index value",
+     "description": "What a UV Index number means on the EPA scale (0 to 2 Low, 3 to 7 Moderate to High, 8 and above Very High to Extreme) and the EPA sun protection advice for it, plus the NWS UV Alert rule. No network call."
+    }
+   ]
+  },
+  {
+   "repo": "drug-shortage-list-mcp",
+   "topic": "Drug shortage list",
+   "name": "Drug Shortage List",
+   "tagline": "The FDA drug shortage list, read live through openFDA, by generic name, brand name or NDC.",
+   "knows": [
+    "Whether FDA lists a drug as in shortage now, with status, availability, reason and the date FDA last updated it.",
+    "Package level listings by NDC, company and presentation.",
+    "Recent listings and counts by therapeutic category or reason. It reports FDA data only and gives no medical advice."
+   ],
+   "sources": "FDA Drug Shortages database through the openFDA drug shortages API (api.fda.gov/drug/shortages.json), updated daily.",
+   "hosted_url": "https://drug-shortage-list-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/drug-shortage-list-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-05",
+   "money_site": null,
+   "prompts": [
+    "Is Adderall on the FDA shortage list?",
+    "Is amoxicillin in shortage right now?",
+    "Which therapeutic categories have the most drug shortages?"
+   ],
+   "tools": [
+    {
+     "name": "search_drug_shortages",
+     "title": "Search drug shortages",
+     "description": "Is a drug in shortage now? Searches the FDA Drug Shortages database (via openFDA, updated daily) by generic name, brand name or active ingredient, for example \"amoxicillin\", \"Adderall\", \"semaglutide\", \"lidocaine\". Returns listings grouped by product with counts by status (Current, To Be Discontinued, Resolved) and availability (Available, Limited, Unavailable), shortage reasons, companies, presentations and dates. Your training data cannot know today's shortage list."
+    },
+    {
+     "name": "get_drug_shortage_by_ndc",
+     "title": "Get drug shortage by NDC",
+     "description": "FDA shortage status for one National Drug Code, either a package NDC (0641-6059-01) or a product NDC (0641-6059), in the dashed form printed on the label. Returns the exact listing and related packages of the same product."
+    },
+    {
+     "name": "list_recent_drug_shortages",
+     "title": "List recent drug shortages",
+     "description": "The FDA drug shortage list, most recently updated listings first. Defaults to status Current. Filter by therapeutic category, for example Anesthesia, Oncology, Pediatric, Psychiatry, Cardiovascular, Infectious Disease."
+    },
+    {
+     "name": "count_drug_shortages",
+     "title": "Count drug shortages",
+     "description": "How many FDA drug shortage listings there are now, grouped by status, therapeutic_category, shortage_reason or drug (distinct products). Defaults to Current listings by therapeutic category."
+    }
+   ]
+  },
+  {
+   "repo": "address-to-census-tract-mcp",
+   "topic": "Address to census tract",
+   "name": "Address to Census Tract",
+   "tagline": "The census tract, block group and GEOID for a US address or point, from the US Census Bureau Geocoder.",
+   "knows": [
+    "The census tract number and 11-digit GEOID for a US street address or a latitude and longitude.",
+    "Block group, block, county FIPS, place, and congressional and state legislative districts.",
+    "Today's geographies by default, or the 2020 Census or a matching ACS release."
+   ],
+   "sources": "US Census Bureau Geocoder (geocoding.geo.census.gov), geographies lookup by address and by coordinates.",
+   "hosted_url": "https://address-to-census-tract-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/address-to-census-tract-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-05",
+   "money_site": null,
+   "prompts": [
+    "What census tract is 1600 Pennsylvania Ave NW, Washington, DC in?",
+    "Find the census tract and block group for 41.8827, -87.6237.",
+    "What does GEOID 06075012405 mean?"
+   ],
+   "tools": [
+    {
+     "name": "get_census_tract_for_address",
+     "title": "Get census tract for an address",
+     "description": "Look up the census tract for a US street address with the official US Census Bureau Geocoder. Returns the matched address, latitude and longitude, the 11-digit tract GEOID and tract number, block group and block GEOIDs, state and county FIPS, incorporated place, county subdivision, congressional district, state senate and house districts, urban area and combined statistical area. Use it for CRA, LIHTC, opportunity zone, grant eligibility and demographic lookups that start from an address."
+    },
+    {
+     "name": "get_census_tract_for_coordinates",
+     "title": "Get census tract for coordinates",
+     "description": "Census tract, block group, block, county, place and congressional and state legislative districts for a latitude and longitude, from the US Census Bureau Geocoder."
+    },
+    {
+     "name": "explain_census_geoid",
+     "title": "Explain a census GEOID",
+     "description": "Split a census GEOID (2 digits state, 5 county, 11 tract, 12 block group, 15 block, or with a 1400000US style prefix) into state and county FIPS, tract code, the tract number as Census displays it (012405 is 124.05), block group and block. No network call."
+    }
+   ]
   }
  ]
 }

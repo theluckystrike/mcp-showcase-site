@@ -3,7 +3,8 @@
   "s1103 stamp: /can-claude/<slug>/ pages backed by one free live-data server (data/content/free-servers.json).",
   "answer = first paragraph, an honest yes/no/partly about what Claude does without a tool. example = a real tools/call result.",
   "Generator: ~/mcp-servers/data/s1103/stamp/make_can_claude_live.py. Raw call responses: ~/mcp-servers/data/s1103/stamp/calls/.",
-  "s1103 canclaude2: 16 more pages (generator ~/mcp-servers/data/s1103/canclaude2/make_can_claude_live2.py, calls in canclaude2/calls/). Entries with server_id use a catalog server on mcp.zovo.one (free token)."
+  "s1103 canclaude2: 16 more pages (generator ~/mcp-servers/data/s1103/canclaude2/make_can_claude_live2.py, calls in canclaude2/calls/). Entries with server_id use a catalog server on mcp.zovo.one (free token).",
+  "s1105 satellites: 3 pages (UV index, drug shortage list, census tract). Raw call responses: ~/mcp-servers/data/s1105/calls/sat/."
  ],
  "pages": [
   {
@@ -2255,6 +2256,157 @@
     {
      "q": "What is free?",
      "a": "Three active schedules, and the next 3 due dates in a list. Billing on a different day than the start date, or on the last day of each month, is Pro."
+    }
+   ]
+  },
+  {
+   "slug": "check-the-uv-index-today",
+   "repo": "uv-index-today-mcp",
+   "h1": "Can Claude check the UV index today?",
+   "title": "Can Claude check the UV index today? EPA forecast by ZIP",
+   "query": "can claude check the uv index",
+   "answer": "Yes with web search, but not always from the official forecast. Claude cannot know today's UV Index from memory, because it changes every day with season, clouds and ozone. With web search on, Claude can find a weather page, but the number may come from any site, without the date or the hour it peaks. Connect the free UV Index Today server and Claude reads the EPA forecast for your ZIP code or city at the moment you ask, with the hourly peak, the hours when protection is needed and the time it was read.",
+   "native": [
+    "Explains the UV Index scale and what each level means for sun protection.",
+    "Finds a forecast on a web page when web search is on."
+   ],
+   "needs": [
+    "Today's EPA UV Index forecast for a US ZIP code or city, with a timestamp.",
+    "The hourly forecast in local time and the hours when UV is 3 or higher.",
+    "Whether a UV Alert is in effect today."
+   ],
+   "example": {
+    "prompt": "What is the UV index today in Phoenix?",
+    "tool": "get_uv_index_today",
+    "args": {
+     "city": "Phoenix",
+     "state": "AZ"
+    },
+    "result": "EPA UV Index forecast for Phoenix, AZ on 2026-11-05 is 4, Moderate to High (3 to 7). Protection needed. The hourly forecast peaks at 4 at 11 AM local time, and is 3 or higher from 11 AM to 2 PM. No UV Alert is in effect.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "When is the sun strongest today in Miami, ZIP 33101?",
+    "tool": "get_uv_index_hourly",
+    "args": {
+     "zip": "33101"
+    },
+    "result": "Hourly EPA UV Index forecast for Miami, FL (ZIP 33101) on 2026-11-05, 12 hours in local time. Peak 6 at 1 PM. UV is 3 or higher, where EPA says protection is needed, from 10 AM to 3 PM.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Where does the forecast come from?",
+     "a": "The National Weather Service computes the UV Index forecast each day and EPA publishes it. The server reads it from EPA Envirofacts each time you ask."
+    },
+    {
+     "q": "Does it work outside the US?",
+     "a": "No. The EPA forecast covers US ZIP codes and cities only."
+    }
+   ]
+  },
+  {
+   "slug": "check-the-fda-drug-shortage-list",
+   "repo": "drug-shortage-list-mcp",
+   "h1": "Can Claude check if a drug is on the FDA shortage list?",
+   "title": "Can Claude check the FDA drug shortage list? Live openFDA",
+   "query": "is adderall on the fda shortage list",
+   "answer": "Partly. Claude cannot know today's list from memory, because FDA adds and resolves shortages every week. With web search on, Claude can find news stories or the FDA page, but a story may be months old and may not say which strengths or packages are affected. Connect the free Drug Shortage List server and Claude reads the FDA Drug Shortages database through openFDA when you ask, with status, availability by package, the reason and the date FDA last updated it. It reports FDA data only. Ask your pharmacist or prescriber what a listing means for your prescription.",
+   "native": [
+    "Explains what an FDA shortage listing means and the status labels Current, Resolved and To Be Discontinued.",
+    "Finds news about shortages when web search is on."
+   ],
+   "needs": [
+    "The FDA shortage status for a generic name, brand name or NDC, read at call time.",
+    "Availability for each package, the shortage reason and the date FDA updated the listing.",
+    "Counts of current listings by therapeutic category or reason."
+   ],
+   "example": {
+    "prompt": "Is Adderall on the FDA shortage list right now?",
+    "tool": "search_drug_shortages",
+    "args": {
+     "drug": "Adderall",
+     "status": "current",
+     "max_presentations": 3
+    },
+    "result": "FDA lists 73 shortage listings matching \"Adderall\" across 1 product, 73 with status Current. Amphetamine Aspartate Monohydrate, Amphetamine Sulfate, Dextroamphetamine Saccharate, Dextroamphetamine Sulfate Tablet: 73 Current; availability 10 Limited Availability, 44 Available, 19 Unavailable; reason Shortage of an active ingredient, Other, Demand increase for the drug; last updated 2026-11-03.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Which therapeutic categories have the most current drug shortages?",
+    "tool": "count_drug_shortages",
+    "args": {
+     "by": "therapeutic_category"
+    },
+    "result": "Current FDA drug shortage listings by therapeutic category (a listing can carry several categories): Anesthesia 359, Pediatric 227, Psychiatry 220, Gastroenterology 134, Analgesia/Addiction 126.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Should I change my medicine if it is listed?",
+     "a": "No. A listing means FDA reports supply problems for some packages, and many listed packages are still available. Talk to your pharmacist or prescriber before you change anything. The server gives no medical advice."
+    },
+    {
+     "q": "How current is the list?",
+     "a": "openFDA refreshes the FDA list daily. Each result shows when it was read and the date FDA last updated each listing."
+    }
+   ]
+  },
+  {
+   "slug": "find-the-census-tract-for-an-address",
+   "repo": "address-to-census-tract-mcp",
+   "h1": "Can Claude find the census tract for an address?",
+   "title": "Can Claude find a census tract for an address? Census Geocoder",
+   "query": "can claude find a census tract for an address",
+   "answer": "Not exactly on its own. Claude can explain what a census tract is, but tract lines follow streets, rivers and rail lines, so a guess from the city or ZIP code is often wrong, and the two sides of one street can be in different tracts. With web search on, Claude may find the Census Geocoder page but does not get the lookup result from it. Connect the free Address to Census Tract server and Claude asks the US Census Bureau Geocoder directly and returns the tract number, the 11-digit GEOID, block group and districts, the same every time.",
+   "native": [
+    "Explains tracts, block groups and how a GEOID is built from FIPS codes.",
+    "Splits a GEOID you paste into its parts."
+   ],
+   "needs": [
+    "The official tract and GEOID for a US street address or a latitude and longitude.",
+    "Block group, block, county FIPS, place and congressional and state legislative districts.",
+    "A choice of today's geographies, the 2020 Census or an ACS release."
+   ],
+   "example": {
+    "prompt": "What census tract is 1600 Pennsylvania Ave NW, Washington, DC 20500 in?",
+    "tool": "get_census_tract_for_address",
+    "args": {
+     "address": "1600 Pennsylvania Ave NW, Washington, DC 20500"
+    },
+    "result": "1600 PENNSYLVANIA AVE NW, WASHINGTON, DC, 20500 is in Census Tract 9800 (GEOID 11001980000), block group 1 (110019800001), District of Columbia, District of Columbia. Delegate District (at Large) (120th Congressional Districts). Census vintage Current_Current.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "Which census tract and block group is the point 41.8827, -87.6237 in?",
+    "tool": "get_census_tract_for_coordinates",
+    "args": {
+     "latitude": 41.8827,
+     "longitude": -87.6237
+    },
+    "result": "The point 41.8827, -87.6237 is in Census Tract 3201.02 (GEOID 17031320102), block group 2 (170313201022), Cook County, Illinois. Congressional District 7 (120th Congressional Districts). Census vintage Current_Current.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Does it check opportunity zone or LIHTC eligibility?",
+     "a": "Not directly. It returns the tract GEOID that those lists are keyed on, so you or Claude can check the GEOID against the official list."
+    },
+    {
+     "q": "Which census vintage does it use?",
+     "a": "Today's geographies by default. You can ask for the 2020 Census geographies or a matching ACS release instead."
     }
    ]
   }
