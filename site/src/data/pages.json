@@ -826,7 +826,7 @@
  },
  {
   "path": "/can-claude/read-zip-files/",
-  "title": "Can Claude open zip files? Read and unzip them | {brand}",
+  "title": "Can Claude open zip files? Yes, unzip and read them | {brand}",
   "h1": "Can Claude open zip files?",
   "meta_description": "Not in most chat apps on its own. Here's what works out of the box, what needs a tool, and a 1-minute setup to inspect and extract zips in Claude.",
   "primary_keyword": "can claude read zip files",
