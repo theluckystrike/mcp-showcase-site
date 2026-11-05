@@ -4,7 +4,7 @@
    "id": "loan-calculator",
    "name": "Loan Calculator",
    "category": "calculators",
-   "tagline": "Monthly payment, total interest and a yearly schedule in one ask.",
+   "tagline": "Loan calculator for Claude and Cursor. Get the monthly payment, total interest and a year-by-year schedule in one ask.",
    "plain": "Ask for the monthly payment on any loan and get the payment, the total you'll pay and the total interest. Ask again and get a year-by-year schedule of principal, interest and balance. It's a local install only, so the math runs on your machine. No lead forms, no ads.",
    "for_who": [
     "Home buyers",
@@ -2565,7 +2565,7 @@
    "id": "stripe-billing",
    "name": "Stripe Billing",
    "category": "invoicing",
-   "tagline": "Check your Stripe balance from chat with your own API key.",
+   "tagline": "Stripe MCP server that shows your available and pending balance in chat, using your own secret key.",
    "plain": "A small two-tool server for people who sell through Stripe. It reads your available and pending Stripe balance with your own secret key, and it writes out the two exact API calls that create a payment link for a product and price. It's a local install only. There's no hosted URL.",
    "for_who": [
     "Solo founders on Stripe",
@@ -2665,7 +2665,7 @@
    "id": "supplier-list",
    "name": "Supplier List",
    "category": "purchasing",
-   "tagline": "A supplier directory with terms, lead times and review dates.",
+   "tagline": "Keep every supplier in one list you can ask in chat, with terms, lead times and review dates.",
    "plain": "Keep every supplier in one list you can ask questions of: who to call, what they supply, payment terms and lead time in days. Each record carries the date you last checked it, so you can see which details are going stale. With the local install, the data stays on your machine.",
    "for_who": [
     "Small shop owners",
@@ -2800,7 +2800,7 @@
    "id": "supplier-statement-check",
    "name": "Supplier Statement Check",
    "category": "payables",
-   "tagline": "Match a supplier statement to your ledger, line by line.",
+   "tagline": "Reconcile a supplier statement against your ledger by exact reference. See what matches, differs or is missing.",
    "plain": "Give it the open items from a supplier's statement and the open items in your accounts payable ledger. It pairs them by exact reference and shows what matches, what differs in amount or date, and what's on only one side. Every original row stays in the report, so you can show the supplier the evidence.",
    "for_who": [
     "Bookkeepers",
@@ -3450,7 +3450,7 @@
    "id": "work-order",
    "name": "Work Order",
    "category": "operations",
-   "tagline": "Work orders with parts, hours, status and a signed report.",
+   "tagline": "Raise numbered work orders, add parts and labour hours, and end with a completion report to sign.",
    "plain": "Raise a numbered work order for each job, add the parts and labour hours as you go, and move it from scheduled to done. At the end you get a completion report for the customer to sign and the lines ready for an invoice. Totals are always worked out from the lines, so they never drift.",
    "for_who": [
     "Plumbers and electricians",
