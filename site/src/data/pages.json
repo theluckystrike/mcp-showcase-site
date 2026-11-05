@@ -1917,5 +1917,258 @@
   ],
   "us_volume": null,
   "page_type": "server"
+ },
+ {
+  "path": "/can-chatgpt/open-zip-files/",
+  "title": "Can ChatGPT open zip files? Sometimes, here is how | {brand}",
+  "h1": "Can ChatGPT open zip files?",
+  "meta_description": "ChatGPT can often unpack an uploaded zip with its code tool. The Zip server lists entries, reads one file without unpacking and refuses unsafe paths.",
+  "primary_keyword": "can chatgpt open zip files",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "zip"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/zip-files/",
+  "title": "Can ChatGPT zip files? Yes, with a download link | {brand}",
+  "h1": "Can ChatGPT zip files?",
+  "meta_description": "ChatGPT's code tool can zip files you upload. The Zip server packs files with glob patterns, adds to archives and keeps a history.",
+  "primary_keyword": "can chatgpt zip files",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "zip"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/create-xlsx-files/",
+  "title": "Can ChatGPT create xlsx files? Yes, two ways | {brand}",
+  "h1": "Can ChatGPT create xlsx files?",
+  "meta_description": "ChatGPT can create an .xlsx with its code tool. The Spreadsheet server writes .xlsx and .csv files as tool calls, adds columns and converts formats.",
+  "primary_keyword": "can chatgpt create xlsx files",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "spreadsheet"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/create-qr-codes/",
+  "title": "Can ChatGPT create QR codes? Yes, scannable ones | {brand}",
+  "h1": "Can ChatGPT create QR codes?",
+  "meta_description": "ChatGPT's image tool draws fake QR codes. Its code tool can sometimes make real ones. The Barcode server makes scannable QR, WiFi, contact and payment codes.",
+  "primary_keyword": "can chatgpt create qr codes",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "barcode"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/edit-pdfs/",
+  "title": "Can ChatGPT edit PDFs? Pages yes, text no | {brand}",
+  "h1": "Can ChatGPT edit PDFs?",
+  "meta_description": "ChatGPT can rework an uploaded PDF with its code tool. The PDF server merges, splits, rotates, reorders and stamps PDFs as new files.",
+  "primary_keyword": "can chatgpt edit pdfs",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "pdf"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/open-pdfs/",
+  "title": "Can ChatGPT open PDFs? Yes, and what it misses | {brand}",
+  "h1": "Can ChatGPT open PDFs?",
+  "meta_description": "ChatGPT can open a PDF you upload and answer questions about it.",
+  "primary_keyword": "can chatgpt open pdfs",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "pdf"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/format-a-word-document/",
+  "title": "Can ChatGPT format a Word document? Yes, as .docx | {brand}",
+  "h1": "Can ChatGPT format a Word document?",
+  "meta_description": "ChatGPT can write a .docx with its code tool. The DOCX server turns markdown into real Word headings and tables and fills your own template.",
+  "primary_keyword": "can chatgpt format a word document",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "docx"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/make-a-resume/",
+  "title": "Can ChatGPT make a resume? Yes, as a Word file | {brand}",
+  "h1": "Can ChatGPT make a resume?",
+  "meta_description": "ChatGPT can write a resume and make a file. The Resume server keeps one profile and builds the .docx, a cover letter and form-ready text from it.",
+  "primary_keyword": "can chatgpt make a resume",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "resume"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/update-my-resume/",
+  "title": "Can ChatGPT update my resume? Yes, from your .docx | {brand}",
+  "h1": "Can ChatGPT update my resume?",
+  "meta_description": "ChatGPT can rewrite an uploaded resume. The Resume server reads your .docx, checks it against a posting without changing facts and writes the updated file.",
+  "primary_keyword": "can chatgpt update my resume",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "resume"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/keep-track-of-time/",
+  "title": "Can ChatGPT keep track of time? Not alone | {brand}",
+  "h1": "Can ChatGPT keep track of time?",
+  "meta_description": "ChatGPT has no timer or timesheet of its own. The Time Tracker server starts and stops timers, logs hours and reports billable totals.",
+  "primary_keyword": "can chatgpt keep track of time",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "time-tracker"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/know-the-time/",
+  "title": "Can ChatGPT know the time? Not reliably | {brand}",
+  "h1": "Can ChatGPT know the time?",
+  "meta_description": "ChatGPT has no clock for your city, so its stated time can be wrong. The Timezone server returns the real current time in any place.",
+  "primary_keyword": "can chatgpt know the time",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "timezone"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/do-my-taxes/",
+  "title": "Can ChatGPT do my taxes? No, but it can estimate | {brand}",
+  "h1": "Can ChatGPT do my taxes?",
+  "meta_description": "No. ChatGPT can't file taxes. The Tax Calculator server gives a US federal estimate for a single filer.",
+  "primary_keyword": "can chatgpt do my taxes",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "tax-calc"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/help-with-finances/",
+  "title": "Can ChatGPT help with finances? With your data, yes | {brand}",
+  "h1": "Can ChatGPT help with finances?",
+  "meta_description": "ChatGPT explains money topics but keeps no ledger. Expense Tracker records spending and Bank Statement reads your bank CSV and finds recurring charges.",
+  "primary_keyword": "can chatgpt help with finances",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "expense-tracker",
+   "bank-statement"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/integrate-with-outlook/",
+  "title": "Can ChatGPT integrate with Outlook? Yes, partly | {brand}",
+  "h1": "Can ChatGPT integrate with Outlook?",
+  "meta_description": "ChatGPT has read-only Outlook apps, some needing admin approval.",
+  "primary_keyword": "can chatgpt integrate with outlook",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "calendar"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-chatgpt/edit-photos/",
+  "title": "Can ChatGPT edit photos? Yes, but not exactly | {brand}",
+  "h1": "Can ChatGPT edit photos?",
+  "meta_description": "ChatGPT edits photos by redrawing them. The Image server makes exact edits on the real pixels, resize, crop, compress, convert and strip metadata.",
+  "primary_keyword": "can chatgpt edit photos",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "image"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-cursor/read-excel-files/",
+  "title": "Can Cursor read Excel files? With one server, yes | {brand}",
+  "h1": "Can Cursor read Excel files?",
+  "meta_description": "Cursor can't read .xlsx with its file reader. Its agent can write a parsing script.",
+  "primary_keyword": "can cursor read excel files",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "spreadsheet"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-cursor/edit-word-documents/",
+  "title": "Can Cursor edit Word documents? With one server | {brand}",
+  "h1": "Can Cursor edit Word documents?",
+  "meta_description": "Cursor can't edit a .docx as text. The DOCX server reads Word files, fills templates and writes new .docx files from markdown inside Cursor.",
+  "primary_keyword": "can cursor edit word document",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "docx"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
+ },
+ {
+  "path": "/can-cursor/read-pdf/",
+  "title": "Can Cursor read PDF files? With one server | {brand}",
+  "h1": "Can Cursor read PDF files?",
+  "meta_description": "Cursor's file reader is made for text. The PDF server reads page counts and text from standard PDFs and writes new files from page ranges inside Cursor.",
+  "primary_keyword": "can cursor read pdf",
+  "intent": "informational",
+  "priority": 0.7,
+  "servers": [
+   "pdf"
+  ],
+  "us_volume": null,
+  "page_type": "answer"
  }
 ]
