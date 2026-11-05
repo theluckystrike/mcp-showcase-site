@@ -5,7 +5,8 @@
   "Generator: ~/mcp-servers/data/s1103/stamp/make_can_claude_live.py. Raw call responses: ~/mcp-servers/data/s1103/stamp/calls/.",
   "s1103 canclaude2: 16 more pages (generator ~/mcp-servers/data/s1103/canclaude2/make_can_claude_live2.py, calls in canclaude2/calls/). Entries with server_id use a catalog server on mcp.zovo.one (free token).",
   "s1105 satellites: 3 pages (UV index, drug shortage list, census tract). Raw call responses: ~/mcp-servers/data/s1105/calls/sat/.",
-  "s1105 sat2: 3 pages (Social Security COLA 2027, I bond rate, mortgage rates today). Raw call responses and generator: ~/mcp-servers/data/s1105/calls/sat2/."
+  "s1105 sat2: 3 pages (Social Security COLA 2027, I bond rate, mortgage rates today). Raw call responses and generator: ~/mcp-servers/data/s1105/calls/sat2/.",
+  "s1106 sat3: 3 pages (USPS holiday shipping deadlines, heating oil and propane prices, postage stamp price). Raw call responses ~/mcp-servers/data/s1106/reports/sat-evidence-1106/<repo>-remote.json, generator ~/mcp-servers/data/s1106/content/make_sat3_live.py."
  ],
  "pages": [
   {
@@ -4034,6 +4035,154 @@
     {
      "q": "What is free, and what does Pro add?",
      "a": "Twenty trips a calendar month, one rate per jurisdiction and category, the trip list and the summary are free. Pro is $19 once for the Mileage Log server, or $39 once for all 49 servers. It adds unlimited trips, a dated series of rates and the CSV export for your accountant."
+    }
+   ]
+  },
+  {
+   "slug": "check-usps-holiday-shipping-deadlines",
+   "repo": "usps-holiday-shipping-deadlines-mcp",
+   "h1": "Can Claude check USPS holiday shipping deadlines?",
+   "title": "Can Claude check USPS holiday shipping deadlines? 2026 send-by dates",
+   "query": "usps holiday shipping deadlines",
+   "answer": "Yes with web search, with one caution. USPS posts new send-by dates every fall, so from training data alone Claude may give last year's dates. With web search on, Claude can find the USPS page, but you still have to check that it read the 2026 table and the right row for your destination. Connect the free USPS Holiday Shipping Deadlines server and Claude reads the USPS holiday shipping dates page when you ask. It gives the send-by date for each mail class to the lower 48, Alaska, Hawaii, other countries and APO/FPO/DPO ZIP codes, counts the days left in US Eastern time and names the slowest service that still makes December 25. These are USPS recommendations, not guarantees. UPS and FedEx are not covered.",
+   "native": [
+    "Explains the USPS mail classes and how long each one usually takes.",
+    "Finds the USPS holiday dates page when web search is on."
+   ],
+   "needs": [
+    "This year's USPS send-by date for each mail class, read from usps.com at call time.",
+    "The days left from today in US Eastern time for your destination.",
+    "The slowest service that still arrives by December 25, including APO/FPO/DPO mail."
+   ],
+   "example": {
+    "prompt": "When is the last day to ship with USPS for Christmas?",
+    "tool": "get_usps_holiday_shipping_deadlines",
+    "args": {},
+    "result": "USPS 2026 recommended send-by dates for delivery by December 25 in the lower 48 states: USPS Ground Advantage Thursday, December 17, First-Class Mail Thursday, December 17, Priority Mail Friday, December 18, Priority Mail Express Saturday, December 19. International mail is Wednesday, December 9 for First-Class Package International and Priority Mail International. Today (2026-11-05, Eastern) there are 42 days left for USPS Ground Advantage. These are USPS recommendations, not guarantees.",
+    "note": "Run on 2026-11-05 in US Eastern time. The days left change every day, and the server counts them again each time you ask.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "If I mail a gift to Germany on December 10, will it arrive by Christmas?",
+    "tool": "check_holiday_ship_by_date",
+    "args": {
+     "destination": "Germany",
+     "ship_date": "2026-12-10"
+    },
+    "result": "Shipping on Thursday, December 10 to Germany (USPS region Europe), Priority Mail Express International is still within the USPS recommended send-by date for December 25. The slowest service still on time is Priority Mail Express International (send by Wednesday, December 16, 6 days left). USPS 2026 recommendations, not guarantees.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Is the send-by date a guarantee?",
+     "a": "No. USPS calls these dates recommendations. Weather, volume and customs can delay a package. Ship a few days early when you can."
+    },
+    {
+     "q": "Does it cover UPS and FedEx?",
+     "a": "No. It covers USPS only. UPS and FedEx publish their own holiday dates on their sites."
+    }
+   ]
+  },
+  {
+   "slug": "check-heating-oil-and-propane-prices",
+   "repo": "heating-oil-propane-prices-mcp",
+   "h1": "Can Claude check heating oil and propane prices?",
+   "title": "Can Claude check heating oil and propane prices? EIA weekly state averages",
+   "query": "heating oil prices",
+   "answer": "Yes with web search, with one caution. Prices change every week in the heating season, so from training data alone Claude does not have this week's number. With web search on, Claude can find a price, but news stories and dealer pages often show a different number from the official state average, sometimes without the date. Connect the free Heating Oil and Propane Prices server and Claude reads the U.S. Energy Information Administration (EIA) weekly survey when you ask. It gives the price per gallon for the US or a surveyed state, the change from last week and a year ago, and the cost of a delivery, and it compares heating oil and propane per million Btu. These are state averages, not a quote from your dealer. For a state EIA does not survey, it says so.",
+   "native": [
+    "Explains how heating oil, propane, gas and electric heat compare.",
+    "Finds a price on a web page when web search is on."
+   ],
+   "needs": [
+    "This week's EIA residential heating oil and propane price for your state, with the week date.",
+    "The change from last week and from a year ago, and weekly history between two dates.",
+    "The cost of a fill at the state average and the cost per million Btu."
+   ],
+   "example": {
+    "prompt": "What are heating oil and propane prices in Maine this week?",
+    "tool": "get_heating_oil_propane_prices",
+    "args": {
+     "state": "Maine"
+    },
+    "result": "Residential heating oil in Maine averaged $5.984 a gallon in the week of 2026-11-02 (down $0.056 from the week before, $3.292 a year ago). Residential propane in Maine averaged $3.691 a gallon in the week of 2026-11-02 (up $0.012 from the week before, $3.145 a year ago). Source: U.S. Energy Information Administration weekly heating oil and propane survey, released 2026-11-04; next release 2026-11-12.",
+    "note": "Run on 2026-11-05 with the EIA release of 2026-11-04. EIA publishes new prices on Wednesdays from October to March, and the server reads the newest week each time you ask.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "What does 200 gallons of heating oil cost in Connecticut right now?",
+    "tool": "estimate_heating_fuel_cost",
+    "args": {
+     "fuel": "heating_oil",
+     "gallons": 200,
+     "state": "CT"
+    },
+    "result": "200 gallons of heating oil at $5.991 a gallon (EIA residential heating oil average, Connecticut, week of 2026-11-02) costs $1,198.20. Per million Btu of fuel that is $43.26. At Connecticut averages, heating oil is $43.26 and propane $48.64 per million Btu.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Is this the price my dealer will charge?",
+     "a": "No. EIA reports a state average of residential prices with taxes. Your dealer price depends on the company, the amount you buy and any contract. Give the server your own price to work out a delivery."
+    },
+    {
+     "q": "Why is there no price in summer?",
+     "a": "EIA runs the residential heating oil and propane survey from October to March. Outside those months the server returns the last week EIA published."
+    }
+   ]
+  },
+  {
+   "slug": "tell-me-how-much-a-stamp-costs",
+   "repo": "postage-stamp-price-mcp",
+   "h1": "Can Claude tell me how much a stamp costs?",
+   "title": "Can Claude tell me how much a stamp costs? USPS price list today",
+   "query": "how much is a stamp",
+   "answer": "Yes with web search, with one caution. USPS changes prices once or twice a year, so from training data alone Claude may give an older stamp price. With web search on, Claude can look it up, but articles about past price changes rank well and are easy to repeat. Connect the free Postage Stamp Price server and Claude reads USPS Notice 123, the official retail price list, when you ask, with its effective date. It gives the Forever stamp price, the extra ounce, postcards, large envelopes, the surcharge for square cards and the Global Forever price, works out postage for a stack of holiday cards and lists flat rate prices.",
+   "native": [
+    "Explains Forever stamps, ounces and the surcharge for square cards.",
+    "Finds a stamp price on a web page when web search is on."
+   ],
+   "needs": [
+    "The Forever stamp price from the USPS price list in force today, with its effective date.",
+    "Postage for a letter, postcard or large envelope by weight, to the US or another country.",
+    "The total for a stack of cards and how many Forever stamps each one needs."
+   ],
+   "example": {
+    "prompt": "How much is a stamp right now?",
+    "tool": "get_stamp_price",
+    "args": {},
+    "result": "A Forever stamp (First-Class Mail, 1 oz letter) costs $0.82 under the USPS price list effective October 4, 2026. Each extra ounce adds $0.29 (2 oz $1.11, 3 oz $1.40, 3.5 oz $1.69). A postcard stamp is $0.65, a 1 oz large envelope $1.69, and an international 1 oz letter or Global Forever stamp $1.75. Square or rigid letters add a $0.49 nonmachinable surcharge.",
+    "note": "Run on 2026-11-05. The server reads Notice 123 each time you ask, so a new USPS price shows up with its new effective date.",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "example2": {
+    "prompt": "What postage do 40 square holiday cards weighing 1.2 oz each need?",
+    "tool": "calculate_letter_postage",
+    "args": {
+     "weight_oz": 1.2,
+     "nonmachinable": true,
+     "quantity": 40
+    },
+    "result": "A 1.2 oz First-Class Mail stamped letter in the US costs $1.60 ($1.11 plus the $0.49 nonmachinable surcharge), so 40 of them cost $64.00. With Forever stamps only ($0.82 each) that is 2 stamps per piece, overpaying $0.04. Prices effective October 4, 2026.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-05"
+   },
+   "faq": [
+    {
+     "q": "Is a Forever stamp still good after a price increase?",
+     "a": "Yes. A Forever stamp is always worth the current 1 oz First-Class Mail letter price, whatever you paid for it."
+    },
+    {
+     "q": "Why do square cards cost more?",
+     "a": "Square, rigid or lumpy letters cannot go through the sorting machines, so USPS adds a nonmachinable surcharge to each one."
     }
    ]
   }

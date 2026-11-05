@@ -1622,6 +1622,126 @@
      "description": "Monthly principal and interest and total interest for a fixed-rate loan. Without a rate it uses this week's Freddie Mac average for 30-year or 15-year terms, and compares it with the average a year earlier. Taxes, insurance and PMI are not included."
     }
    ]
+  },
+  {
+   "repo": "usps-holiday-shipping-deadlines-mcp",
+   "topic": "USPS holiday shipping deadlines",
+   "name": "USPS Holiday Shipping Deadlines",
+   "tagline": "The USPS send-by dates for Christmas delivery this year by mail class and destination, with the days left from today.",
+   "knows": [
+    "The 2026 USPS recommended send-by dates for delivery by December 25 for Ground Advantage, First-Class Mail, Priority Mail and Priority Mail Express to the lower 48, Alaska, Hawaii, Puerto Rico and territories.",
+    "International send-by dates by USPS world region and APO/FPO/DPO military dates by ZIP group.",
+    "The days left from today in US Eastern time and the slowest service still on time. USPS calls these recommendations, not guarantees. UPS and FedEx are not covered."
+   ],
+   "sources": "USPS holiday shipping dates page (usps.com/holiday/holiday-shipping-dates.htm), read at call time, with a built-in copy of the 2026 table as the fallback.",
+   "hosted_url": "https://usps-holiday-shipping-deadlines-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/usps-holiday-shipping-deadlines-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-06",
+   "money_site": null,
+   "prompts": [
+    "When is the last day to ship with USPS for Christmas?",
+    "If I mail a gift to Germany on December 10, will it arrive by Christmas?",
+    "What is the holiday mailing deadline for APO 09021?"
+   ],
+   "tools": [
+    {
+     "name": "get_usps_holiday_shipping_deadlines",
+     "title": "Get USPS holiday shipping deadlines",
+     "description": "The USPS recommended send-by dates for delivery before December 25 for the current holiday season, read at call time from usps.com: Ground Advantage, First-Class Mail, Priority Mail and Priority Mail Express to the lower 48 and to Alaska, Hawaii, Puerto Rico and territories; First-Class Package International, Priority Mail International and Priority Mail Express International by world region; and APO/FPO/DPO military mail by ZIP group. Includes days left from today."
+    },
+    {
+     "name": "check_holiday_ship_by_date",
+     "title": "Check if a package still makes Christmas",
+     "description": "For a ship date (default today, US Eastern) and a destination, lists each USPS service with its send-by date, days left and whether it is still on time for December 25, and names the slowest (usually cheapest) service still on time. Destination can be \"lower48\", a state or territory (\"Alaska\", \"Hawaii\", \"Puerto Rico\", \"Guam\"), a country (\"Canada\", \"Germany\", \"Japan\"), a USPS region (\"Europe\") or an APO/FPO/DPO ZIP (\"APO 09021\")."
+    },
+    {
+     "name": "get_military_mail_deadline",
+     "title": "Get military mail holiday deadline",
+     "description": "USPS holiday send-by dates for December 25 delivery to one APO/FPO/DPO ZIP code (090-099 AE, 340 AA, 962-966 AP): Ground Advantage, First-Class Mail, Priority Mail and Priority Mail Express Military Service."
+    }
+   ]
+  },
+  {
+   "repo": "heating-oil-propane-prices-mcp",
+   "topic": "Heating oil and propane prices",
+   "name": "Heating Oil and Propane Prices",
+   "tagline": "This week's EIA average residential heating oil and propane price per gallon for the US or your state, and what a delivery costs.",
+   "knows": [
+    "The latest EIA weekly residential heating oil and propane price per gallon for the US, an EIA region or a surveyed state, with the week date, the change from last week and the price a year ago.",
+    "Weekly price history between two dates, with the high, low and average.",
+    "The cost of a delivery at the state average or your own price, and heating oil against propane per million Btu. These are state averages, not a dealer quote."
+   ],
+   "sources": "U.S. Energy Information Administration (EIA) weekly heating oil and propane survey tables and weekly history pages (eia.gov), read at call time, and EIA heat contents for the Btu comparison.",
+   "hosted_url": "https://heating-oil-propane-prices-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/heating-oil-propane-prices-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-06",
+   "money_site": null,
+   "prompts": [
+    "What are heating oil and propane prices in Maine this week?",
+    "How have propane prices in Minnesota changed over the last year?",
+    "What does 200 gallons of heating oil cost in Connecticut right now?"
+   ],
+   "tools": [
+    {
+     "name": "get_heating_oil_propane_prices",
+     "title": "Get heating oil and propane prices",
+     "description": "Latest EIA weekly average residential price per gallon (taxes included) of heating oil and propane for the US, an EIA region or a surveyed state, read at call time from eia.gov: price, change from last week, the last five survey weeks, the price a year ago and the next release date. Heating oil is surveyed in Northeast and Midwest states; propane in about 40 states. Uncovered states return the covered list."
+    },
+    {
+     "name": "get_heating_fuel_price_history",
+     "title": "Get heating fuel price history",
+     "description": "EIA weekly residential heating oil or propane prices per gallon for the US or a surveyed state between two dates (series since 1990 for most areas), with high, low and average. Default is the last 52 weeks."
+    },
+    {
+     "name": "estimate_heating_fuel_cost",
+     "title": "Estimate heating fuel cost",
+     "description": "Cost of a heating oil or propane delivery (gallons times this week's EIA average for the state, or a given price), the cost per million Btu, and a comparison of heating oil and propane per million Btu at the same area's averages. Optionally add your electricity rate (cents per kWh) or natural gas rate (dollars per therm) to compare. Uses EIA heat contents."
+    }
+   ]
+  },
+  {
+   "repo": "postage-stamp-price-mcp",
+   "topic": "Postage stamp price",
+   "name": "Postage Stamp Price",
+   "tagline": "The current USPS Forever stamp price and letter, postcard and flat rate postage from the official USPS price list.",
+   "knows": [
+    "The Forever stamp price from USPS Notice 123 with its effective date ($0.82 from October 4, 2026), plus the extra ounce, postcard, large envelope and Global Forever prices.",
+    "Postage for a letter, postcard or large envelope by weight to the US or another country, with the surcharge for square cards and the total for a quantity.",
+    "Retail Priority Mail and Priority Mail Express flat rate envelope and box prices."
+   ],
+   "sources": "USPS Notice 123, the official retail price list on Postal Explorer (pe.usps.com/text/dmm300/Notice123.htm), read at call time with its effective date.",
+   "hosted_url": "https://postage-stamp-price-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/postage-stamp-price-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-05",
+   "added": "2026-11-06",
+   "money_site": null,
+   "prompts": [
+    "How much is a stamp right now?",
+    "What postage do 40 square holiday cards weighing 1.2 oz each need?",
+    "What does a Large Flat Rate Box cost?"
+   ],
+   "tools": [
+    {
+     "name": "get_stamp_price",
+     "title": "Get stamp price",
+     "description": "The current USPS Forever stamp price (First-Class Mail 1 oz stamped letter), the 2, 3 and 3.5 oz prices, metered letter prices, postcard, 1 oz large envelope, the nonmachinable surcharge and the 1 oz international letter (Global Forever) price, read at call time from USPS Notice 123 with its effective date."
+    },
+    {
+     "name": "calculate_letter_postage",
+     "title": "Calculate letter postage",
+     "description": "Retail postage for one letter, postcard or large envelope (flat) by weight, to the US, Canada, Mexico or any other country, with the nonmachinable surcharge for square or rigid cards, the total for a quantity, and the number of Forever stamps per piece. Letters up to 3.5 oz, US large envelopes up to 13 oz."
+    },
+    {
+     "name": "get_flat_rate_prices",
+     "title": "Get flat rate box prices",
+     "description": "Current USPS retail prices for Priority Mail Flat Rate envelopes and Small, Medium, Large and APO/FPO/DPO Flat Rate Boxes, and Priority Mail Express Flat Rate envelopes, from Notice 123."
+    }
+   ]
   }
  ]
 }
