@@ -1742,6 +1742,91 @@
      "description": "Current USPS retail prices for Priority Mail Flat Rate envelopes and Small, Medium, Large and APO/FPO/DPO Flat Rate Boxes, and Priority Mail Express Flat Rate envelopes, from Notice 123."
     }
    ]
+  },
+  {
+   "repo": "tax-brackets-standard-deduction-2027-mcp",
+   "topic": "2027 tax brackets",
+   "name": "2027 Tax Brackets and Standard Deduction",
+   "tagline": "The 2027 federal income tax brackets, standard deduction and inflation-adjusted amounts from IRS Revenue Procedure 2026-35, with the 2026 figures beside them.",
+   "knows": [
+    "The 2027 brackets for single, married filing jointly, married filing separately and head of household, with the 37 percent bracket starting at $661,375 for single filers and $793,650 for joint filers.",
+    "The 2027 standard deduction ($16,600 single, $33,200 joint, $24,925 head of household) with the extra amount for age 65 or older or blindness and the dependent rule.",
+    "Federal income tax on an income under 2027 and 2026 rules, plus the capital gains thresholds, child tax credit, earned income credit and other adjusted amounts."
+   ],
+   "sources": "IRS Revenue Procedure 2026-35 (irs.gov/pub/irs-drop/rp-26-35.pdf) and news release IR-2026-133 of November 5, 2026, with the 2026 figures from Revenue Procedure 2025-32. A dated table in code, and the tests check every number against the IRS text.",
+   "hosted_url": "https://tax-brackets-standard-deduction-2027-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/tax-brackets-standard-deduction-2027-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-07",
+   "added": "2026-11-07",
+   "money_site": null,
+   "prompts": [
+    "What are the 2027 tax brackets for a married couple filing jointly?",
+    "What is the 2027 standard deduction if I am single and over 65?",
+    "How much federal tax do I owe on $100,000 in 2027 compared with 2026?"
+   ],
+   "tools": [
+    {
+     "name": "get_tax_brackets",
+     "title": "Get 2027 tax brackets",
+     "description": "The federal income tax rate schedule for tax year 2027 (or 2026) from IRS Rev. Proc. 2026-35: the seven brackets (10, 12, 22, 24, 32, 35, 37 percent) for single, married filing jointly, married filing separately and head of household, or estates and trusts, with the tax at the bottom of each bracket and the change in each threshold from the other year. A model cannot know the 2027 numbers from training. Thresholds apply to taxable income after the deduction."
+    },
+    {
+     "name": "get_standard_deduction",
+     "title": "Get 2027 standard deduction",
+     "description": "The standard deduction for tax year 2027 (or 2026) for a filing status from IRS Rev. Proc. 2026-35, with the additional amount for each filer who is 65 or older or blind, the dependent rule (greater of a floor or earned income plus a fixed amount), and the change from the other year."
+    },
+    {
+     "name": "calculate_federal_income_tax",
+     "title": "Calculate federal income tax",
+     "description": "Federal income tax for tax year 2027 (or 2026) on an income, using the IRS rate schedule: subtracts the standard or itemized deduction (with the age and blindness extra), applies the brackets, returns the bracket-by-bracket breakdown, marginal and average rate, optional long-term capital gains taxed at 0, 15 or 20 percent, and the tax on the same facts under the other year. Federal income tax only; no credits, self-employment tax, NIIT, AMT or state tax."
+    },
+    {
+     "name": "get_tax_amounts",
+     "title": "Get 2027 tax amounts",
+     "description": "Other 2027 inflation-adjusted tax amounts beside 2026 from IRS Rev. Proc. 2026-35: long-term capital gains 0 and 15 percent thresholds, child tax credit, adoption credit, earned income credit table, alternative minimum tax exemptions, estate and gift tax exclusions, section 179, qualified business income thresholds, health FSA, kiddie tax and the foreign earned income exclusion."
+    }
+   ]
+  },
+  {
+   "repo": "gas-prices-today-mcp",
+   "topic": "Gas prices today",
+   "name": "Gas Prices Today",
+   "tagline": "This week's average price of regular, midgrade, premium and diesel for the US, regions, states and cities from the EIA weekly survey.",
+   "knows": [
+    "This week's average price per gallon with the change from last week, four weeks ago and a year ago, read from the EIA weekly retail price survey.",
+    "Which places EIA prices itself. That is the US, five regions, nine states and ten cities, and any other state gets its region with a plain note saying so.",
+    "The cost of a fill-up at the area average or your own price, and the fuel cost of a trip from miles and miles per gallon."
+   ],
+   "sources": "EIA weekly retail gasoline and diesel price tables (eia.gov/petroleum/gasdiesel/) and the EIA weekly history pages, read at call time. EIA publishes new averages on Mondays.",
+   "hosted_url": "https://gas-prices-today-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/gas-prices-today-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-07",
+   "added": "2026-11-07",
+   "money_site": null,
+   "prompts": [
+    "What are gas prices today?",
+    "How much is a gallon of regular in Texas right now, and what was it a year ago?",
+    "What will a 300 mile trip cost at 30 miles per gallon in California?"
+   ],
+   "tools": [
+    {
+     "name": "get_gas_prices",
+     "title": "Get gas prices today",
+     "description": "Latest EIA weekly average retail price per gallon (taxes included) of regular, midgrade or premium gasoline, all grades or diesel for the US, an EIA region, one of nine surveyed states, one of ten surveyed cities, or the region of any other state, read at call time from eia.gov: price, change from last week and four weeks ago, the price a year ago, the last six survey weeks and the next release date."
+    },
+    {
+     "name": "compare_gas_prices",
+     "title": "Compare gas prices by place",
+     "description": "Ranks the areas EIA prices (states, cities, regions) from cheapest to most expensive for a grade this week, with the US average, the cheapest and the most expensive area."
+    },
+    {
+     "name": "estimate_fill_up_cost",
+     "title": "Estimate fill-up and trip cost",
+     "description": "Cost of filling a tank (gallons times this week's EIA average for the area, or your price per gallon), and optionally the fuel cost of a trip from miles and miles per gallon, including cents per mile."
+    }
+   ]
   }
  ]
 }

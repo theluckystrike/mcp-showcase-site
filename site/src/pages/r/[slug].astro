@@ -1,0 +1,224 @@
+---
+// s1107: one public report per registry MCP server (data/readiness-servers.json, scan of 2 Nov 2026, engine 1.2.0).
+// Every number on the page is that server's own measured result. Servers with 0 tools and no detected sign-in are noindex (thin).
+import Layout from '../../layouts/Layout.astro';
+import CopyCode from '../../components/CopyCode.astro';
+import { STORES } from '../../data/readiness';
+import { getRData, rowsOfGrade, gradePath, R_PAGE_SIZE, AUTH_LABEL, STATUS_LABEL, type RServer } from '../../data/readinessServers';
+
+export function getStaticPaths() {
+  const d = getRData();
+  if (!d) return [];
+  const out: { params: { slug: string }; props: { r: RServer; near: { slug: string; title: string; score: number }[]; page: number } }[] = [];
+  for (const g of ['A', 'B', 'C', 'D', 'F']) {
+    const rows = rowsOfGrade(g);
+    rows.forEach((r, i) => {
+      const lo = Math.max(0, Math.min(i - 3, rows.length - 7));
+      const near = rows.slice(lo, lo + 7).filter((x) => x.slug !== r.slug).slice(0, 6).map((x) => ({ slug: x.slug, title: x.title, score: x.score }));
+      out.push({ params: { slug: r.slug }, props: { r, near, page: Math.floor(i / R_PAGE_SIZE) + 1 } });
+    });
+  }
+  return out;
+}
+
+const { r, near, page } = Astro.props as { r: RServer; near: { slug: string; title: string; score: number }[]; page: number };
+const D = getRData()!;
+const n = (v: number) => v.toLocaleString('en-US');
+const pct = (a: number, b: number) => (100 * a / b).toFixed(1);
+const dateText = new Date(r.date + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const site = Astro.site!;
+const pageUrl = new URL(`/r/${r.slug}/`, site).href;
+const checkUrl = `/check/?url=${encodeURIComponent(r.url)}`;
+const badgeUrl = new URL(`/badge?url=${encodeURIComponent(r.url)}`, site).href;
+const md = `[![McpStamp score](${badgeUrl})](${pageUrl})`;
+const html = `<a href="${pageUrl}"><img src="${badgeUrl}" alt="McpStamp score" height="20"></a>`;
+const ink = (g: string) => (g === 'A' || g === 'B' ? 'var(--ink-blue)' : g === 'C' ? 'var(--ink-violet)' : 'var(--ink-red)');
+const t = (id: string) => D.checkTitle[id] ?? id;
+const join = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+
+const ready = STORES.filter((s) => r.stores[s.key].status === 'ready').map((s) => s.name);
+const notReady = STORES.filter((s) => r.stores[s.key].status === 'not_ready').map((s) => s.name);
+const unver = STORES.filter((s) => r.stores[s.key].status === 'unverified').map((s) => s.name);
+const storeSentence = [
+  ready.length ? `Ready for ${join(ready)}.` : '',
+  notReady.length ? `Not ready for ${join(notReady)}.` : '',
+  unver.length ? `Unverified for ${join(unver)}.` : '',
+].filter(Boolean).join(' ');
+const fails = r.bad.filter((c) => c.status === 'fail');
+const warns = r.bad.filter((c) => c.status === 'warn');
+const authSkipped = r.skipped.filter((id) => id.startsWith('auth_'));
+const otherSkipped = r.skipped.filter((id) => !id.startsWith('auth_'));
+const repoUrl = /^https?:\/\//.test(r.repo) ? r.repo : '';
+const webUrl = /^https?:\/\//.test(r.web) ? r.web : '';
+const higher = pct(r.below, D.population);
+
+const title = `${r.title} MCP server readiness for Claude, ChatGPT and Gemini`;
+const description = `${r.title} MCP server (${r.name}) scored ${r.score} of 100, grade ${r.grade}, on ${dateText}. ${storeSentence} ${r.tools ? `${r.tools} tools listed.` : ''}`;
+const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other' ? 'Behind sign-in' : '0';
+---
+<Layout title={title} description={description} noindex={r.noindex}
+  crumbs={[{ name: 'Server reports', path: '/r/' }, { name: `Grade ${r.grade}`, path: gradePath(r.grade, page) }, { name: r.title, path: `/r/${r.slug}/` }]}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-10 sm:pt-14">
+      <span class="eyebrow">MCP server report</span>
+      <h1 class="display mt-5 max-w-4xl !text-[clamp(2rem,5vw,3.6rem)] [overflow-wrap:anywhere]">{r.title} MCP server</h1>
+      <p class="mt-3"><code class="rs-name">{r.name}</code></p>
+      <p class="lead mt-5 max-w-3xl">
+        We checked this server on {dateText} with McpStamp Check engine {D.engine}. It scored {r.score} of 100 (grade {r.grade}), higher than {higher}% of the {n(D.population)} registry servers that responded over HTTPS that day. {storeSentence}
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap pb-10" aria-labelledby="rs-facts-h">
+    <h2 id="rs-facts-h" class="sr-only">Measured facts</h2>
+    <dl class="rs-stats">
+      <div><dt>Score</dt><dd class="tnum">{r.score}<span class="rs-grade" style={`color:${ink(r.grade)}`}>{r.grade}</span></dd></div>
+      <div><dt>Sign-in</dt><dd class="rs-small">{AUTH_LABEL[r.auth] ?? r.auth}</dd></div>
+      <div><dt>Tools listed</dt><dd class="rs-small tnum">{toolText}</dd></div>
+      <div><dt>Protocol version</dt><dd class="rs-small">{r.proto || 'None returned'}</dd></div>
+    </dl>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="rs-stores-h">
+    <span class="eyebrow">Stores</span>
+    <h2 id="rs-stores-h" class="h2 mt-3">Store readiness</h2>
+    <div class="rs-scroll mt-6">
+      <table class="table rs-table">
+        <thead><tr><th scope="col">Store</th><th scope="col">Status</th><th scope="col">Reason</th></tr></thead>
+        <tbody>
+          {STORES.map((s) => {
+            const st = r.stores[s.key];
+            return (
+              <tr>
+                <th scope="row">{s.long}</th>
+                <td><span class:list={['rs-status', `is-${st.status}`]}>{STATUS_LABEL[st.status]}</span></td>
+                <td class="rs-why">
+                  {st.status === 'ready' && 'No blocking check failed.'}
+                  {st.status === 'not_ready' && <>Blocked by {join(st.blockers.map(t))}.</>}
+                  {st.status === 'unverified' && <>Nothing failed, but {join(st.unverified.map(t))} could not run in a check without credentials.</>}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+    <p class="rs-key mt-3">MCP Registry ready means a valid public remote for the registry, not that the server is listed in a store.</p>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="rs-fix-h">
+    <span class="eyebrow">Fixes</span>
+    <h2 id="rs-fix-h" class="h2 mt-3">{r.bad.length ? `${r.bad.length === 1 ? 'One check' : `${r.bad.length} checks`} to fix` : 'Every check that ran passed'}</h2>
+    {r.bad.length > 0 ? (
+      <ol class="rs-checks mt-6">
+        {[...fails, ...warns].map((c) => (
+          <li>
+            <div class="rs-check-head">
+              <span class:list={['rs-tag', c.status === 'fail' ? 'is-fail' : 'is-warn']}>{c.status === 'fail' ? 'Fails' : 'Warning'}</span>
+              <h3 class="rs-check-t">{c.title}</h3>
+              <code class="rs-id">{c.id}</code>
+            </div>
+            {c.blocks.length > 0 && <p class="rs-blocks">Blocks {join(c.blocks.map((k) => STORES.find((s) => s.key === k)!.name))}.</p>}
+            {c.detail && <p class="rs-detail">Measured <code>{c.detail}</code></p>}
+            {c.fix && <p class="rs-fixtext">{c.fix}</p>}
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="muted mt-4 max-w-2xl">No check failed or warned on {dateText}.</p>
+    )}
+    <details class="rs-more mt-6">
+      <summary>{r.ok.length} checks passed{r.skipped.length > 0 && <>, {r.skipped.length} did not run</>}</summary>
+      <p class="mt-3 text-[.92rem]">Passed. {r.ok.map(t).join(', ')}.</p>
+      {authSkipped.length > 0 && <p class="mt-2 text-[.92rem] muted">Not run. {authSkipped.map(t).join(', ')}. {r.auth === 'none' ? 'The server asks for no sign-in, so the OAuth checks do not apply.' : 'These need an OAuth sign-in flow the check could not reach.'}</p>}
+      {otherSkipped.length > 0 && <p class="mt-2 text-[.92rem] muted">Not run. {otherSkipped.map(t).join(', ')}. {r.auth === 'oauth' || r.auth === 'other' ? 'The tools sit behind sign-in, and the check runs without credentials.' : 'An earlier step did not return what these checks need.'}</p>}
+    </details>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="rs-re-h">
+    <div class="rs-cta">
+      <div>
+        <h2 id="rs-re-h" class="text-2xl font-bold sm:text-3xl">Run a fresh check</h2>
+        <p class="muted mt-2 max-w-xl">This page is the {dateText} snapshot. If you maintain this server and have shipped fixes since then, re-check it. The live check and the badge show the current result, and the next snapshot will pick up the change.</p>
+      </div>
+      <p><a class="btn btn-primary" rel="nofollow" href={checkUrl} data-cta="r_recheck">Re-check now</a></p>
+    </div>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="rs-badge-h">
+    <span class="eyebrow">Badge</span>
+    <h2 id="rs-badge-h" class="h2 mt-3">README badge</h2>
+    <p class="muted mt-3 max-w-2xl">The badge shows the latest score for this URL and links to this report.</p>
+    <p class="mt-4"><img src={badgeUrl} alt={`McpStamp score for ${r.title}`} height="20" loading="lazy" decoding="async" /></p>
+    <div class="mt-4 grid gap-4 lg:grid-cols-2">
+      <CopyCode code={md} label="Markdown" />
+      <CopyCode code={html} label="HTML" />
+    </div>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="rs-about-h">
+    <span class="eyebrow">Registry entry</span>
+    <h2 id="rs-about-h" class="h2 mt-3">About this server</h2>
+    {r.desc && <blockquote class="rs-quote mt-5">{r.desc}</blockquote>}
+    <dl class="rs-meta mt-5">
+      <div><dt>Registry name</dt><dd><code>{r.name}</code></dd></div>
+      <div><dt>Remote URL</dt><dd><code>{r.url}</code></dd></div>
+      {r.ver && <div><dt>Version</dt><dd>{r.ver}</dd></div>}
+      {repoUrl && <div><dt>Source</dt><dd><a class="link" href={repoUrl} rel="nofollow noopener">{repoUrl.replace(/^https?:\/\//, '')}</a></dd></div>}
+      {webUrl && <div><dt>Website</dt><dd><a class="link" href={webUrl} rel="nofollow noopener">{webUrl.replace(/^https?:\/\//, '')}</a></dd></div>}
+      <div><dt>Checked</dt><dd>{dateText}, engine {D.engine}, no credentials</dd></div>
+    </dl>
+    <p class="muted mt-5 max-w-2xl text-[.92rem]">The description above is the server's own text from the official MCP Registry. If a result looks wrong, run a fresh check and email support@zovo.one with the report link.</p>
+  </section>
+
+  <section class="wrap pb-16" aria-labelledby="rs-near-h">
+    <h2 id="rs-near-h" class="h2">More grade {r.grade} servers</h2>
+    <ul class="rs-near mt-5">
+      {near.map((x) => <li><a href={`/r/${x.slug}/`}>{x.title}</a> <span class="tnum text-faint">{x.score}</span></li>)}
+    </ul>
+    <p class="mt-6"><a href={gradePath(r.grade, page)} class="link">All grade {r.grade} servers</a> <span class="text-faint">·</span> <a href="/r/" class="link">All server reports</a> <span class="text-faint">·</span> <a href="/state-of-mcp-2026-11/" class="link">State of MCP readiness, November 2026</a></p>
+  </section>
+</Layout>
+
+<style is:global>
+  .rs-name { font-family: var(--font-mono); font-size: .85rem; color: var(--faint); overflow-wrap: anywhere; }
+  .rs-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-left: 2px solid var(--text); border-top: 2px solid var(--text); }
+  @media (min-width: 768px) { .rs-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .rs-stats > div { border-right: 2px solid var(--text); border-bottom: 2px solid var(--text); padding: .9rem 1rem; display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: .3rem; }
+  .rs-stats dt { font-size: .8rem; color: var(--muted); }
+  .rs-stats dd { font-family: var(--font-mono); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 600; line-height: 1; }
+  .rs-stats dd.rs-small { font-size: 1.1rem; line-height: 1.3; }
+  .rs-grade { margin-left: .5rem; font-family: var(--font-display); font-weight: 850; font-stretch: 80%; }
+  .rs-scroll { overflow-x: auto; }
+  .rs-table { min-width: 36rem; }
+  .rs-table th[scope='row'] { font-weight: 600; text-align: left; }
+  .rs-why { font-size: .92rem; color: var(--muted); }
+  .rs-status { font-family: var(--font-mono); font-size: .75rem; font-weight: 600; padding: .15rem .4rem; border: 1px dashed var(--border-strong); border-radius: 2px; white-space: nowrap; }
+  .rs-status.is-ready { border-style: solid; border-color: var(--text); background: var(--text); color: var(--bg); }
+  .rs-status.is-not_ready { border-style: solid; color: var(--ink-red); border-color: var(--ink-red); }
+  .rs-key { font-family: var(--font-mono); font-size: .74rem; color: var(--faint); }
+  .rs-checks { list-style: none; margin: 0; padding: 0; }
+  .rs-checks > li { padding: 1rem 0; border-top: 1px solid var(--border); }
+  .rs-check-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .6rem; }
+  .rs-check-t { font-weight: 650; font-size: 1.05rem; }
+  .rs-id { font-family: var(--font-mono); font-size: .75rem; color: var(--faint); }
+  .rs-tag { font-family: var(--font-mono); font-size: .68rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .1rem .35rem; border: 1px solid; border-radius: 2px; }
+  .rs-tag.is-fail { color: var(--ink-red); }
+  .rs-tag.is-warn { color: var(--ink-violet); }
+  .rs-blocks { margin-top: .35rem; font-size: .88rem; font-weight: 600; }
+  .rs-detail { margin-top: .35rem; font-size: .88rem; color: var(--muted); overflow-wrap: anywhere; }
+  .rs-detail code { font-family: var(--font-mono); font-size: .82rem; }
+  .rs-fixtext { margin-top: .45rem; max-width: 48rem; }
+  .rs-more summary { cursor: pointer; font-family: var(--font-mono); font-size: .8rem; color: var(--accent); }
+  .rs-cta { display: grid; gap: 1.25rem; padding: 1.5rem; border: 1px solid var(--manila-2); background: var(--manila); border-radius: 3px; }
+  @media (min-width: 900px) { .rs-cta { grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: 2rem; } }
+  .rs-quote { border-left: 3px solid var(--border-strong); padding-left: 1rem; color: var(--muted); max-width: 48rem; overflow-wrap: anywhere; }
+  .rs-meta > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: .75rem; padding: .5rem 0; border-bottom: 1px solid var(--rule); }
+  .rs-meta dt { font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); padding-top: .2rem; }
+  .rs-meta dd { overflow-wrap: anywhere; }
+  .rs-near { list-style: none; margin: 0; padding: 0; display: grid; gap: .1rem; }
+  @media (min-width: 768px) { .rs-near { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; } }
+  .rs-near li { padding: .5rem 0; border-top: 1px solid var(--border); }
+  .rs-near a { font-weight: 600; text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; overflow-wrap: anywhere; }
+</style>

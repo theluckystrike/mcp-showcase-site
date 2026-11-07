@@ -1,0 +1,158 @@
+---
+// s1107: /r/ index of the per-server Readiness reports. Grade summary + links to the grade lists (250 rows a page),
+// plus a search box that loads /r/search.json on first use, so this page stays small.
+import Layout from '../../layouts/Layout.astro';
+import { STORES } from '../../data/readiness';
+import { getRData, rowsOfGrade, gradePath, gradePages, R_GRADES } from '../../data/readinessServers';
+
+const D = getRData();
+const rows = D?.rows ?? [];
+const n = (v: number) => v.toLocaleString('en-US');
+const pct = (a: number, b: number) => (b ? (100 * a / b).toFixed(1) : '0');
+const ink = (g: string) => (g === 'A' || g === 'B' ? 'var(--ink-blue)' : g === 'C' ? 'var(--ink-violet)' : 'var(--ink-red)');
+const readyAll = rows.filter((r) => STORES.every((s) => r.stores[s.key].status === 'ready')).length;
+const top = (g: string) => rowsOfGrade(g).slice(0, 8);
+const title = 'MCP server readiness reports for Claude, ChatGPT and Gemini';
+const description = `${n(rows.length)} public MCP server reports from the official MCP Registry, checked on 2 November 2026. Score, grade, store readiness and the fix for every failed check.`;
+const jsonLd = rows.length ? [{
+  '@context': 'https://schema.org', '@type': 'Dataset', name: 'McpStamp MCP server readiness reports', description,
+  url: new URL('/r/', Astro.site).href, isAccessibleForFree: true, dateModified: D!.generated, temporalCoverage: '2026-11-02',
+  creator: { '@type': 'Organization', name: 'McpStamp', url: new URL('/', Astro.site).href },
+  variableMeasured: ['score', 'grade', 'auth', 'tools', ...STORES.map((s) => `${s.name} ready`)],
+}] : [];
+---
+<Layout title={title} description={description} jsonLd={jsonLd} noindex={!rows.length} crumbs={[{ name: 'Server reports', path: '/r/' }]}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-10 sm:pt-14">
+      <span class="eyebrow">Server reports</span>
+      <h1 class="display mt-5 max-w-4xl !text-[clamp(2.2rem,5.4vw,4rem)]">MCP server readiness reports</h1>
+      {rows.length > 0 && D && (
+        <p class="lead mt-5 max-w-3xl">
+          {n(rows.length)} remote MCP servers from the official registry, each with its own report from the 2 November 2026 scan (engine {D.engine}). You get the score, the four store calls and the plain fix for every check that failed. {n(readyAll)} of them are ready for all four stores.
+        </p>
+      )}
+    </div>
+  </section>
+
+  {rows.length > 0 && D && (
+    <>
+      <section class="wrap pb-10" aria-labelledby="ri-search-h">
+        <h2 id="ri-search-h" class="h2">Find a server</h2>
+        <form class="ri-search mt-5" role="search" onsubmit="return false">
+          <label for="ri-q" class="sr-only">Server name or registry name</label>
+          <input id="ri-q" type="search" class="ri-in" placeholder="Company, product or registry name" autocomplete="off" spellcheck="false" />
+        </form>
+        <p id="ri-count" class="ri-count" role="status" aria-live="polite"></p>
+        <ul id="ri-results" class="ri-results"></ul>
+      </section>
+
+      <section class="wrap pb-12" aria-labelledby="ri-grades-h">
+        <span class="eyebrow">By grade</span>
+        <h2 id="ri-grades-h" class="h2 mt-3">Browse by grade</h2>
+        <div class="ri-grades mt-8">
+          {R_GRADES.map((g) => {
+            const list = rowsOfGrade(g);
+            if (!list.length) return null;
+            const pages = gradePages(g);
+            return (
+              <section class="ri-grade" aria-labelledby={`ri-g-${g}`}>
+                <h3 id={`ri-g-${g}`} class="ri-g-h"><span style={`color:${ink(g)}`}>{g}</span> <span class="tnum">{n(list.length)}</span> <span class="ri-g-sub">servers</span></h3>
+                <ul class="ri-top">
+                  {top(g).map((r) => <li><a href={`/r/${r.slug}/`}>{r.title}</a> <span class="tnum text-faint">{r.score}</span></li>)}
+                </ul>
+                <p class="ri-pages">
+                  {Array.from({ length: pages }, (_, i) => (
+                    <a href={gradePath(g, i + 1)} class="link">{pages === 1 ? `All grade ${g} servers` : `Page ${i + 1}`}</a>
+                  ))}
+                </p>
+              </section>
+            );
+          })}
+        </div>
+      </section>
+
+      <section class="wrap pb-12" aria-labelledby="ri-how-h">
+        <div class="grid gap-8 border-t-2 border-fg pt-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-12">
+          <div>
+            <span class="eyebrow">Method</span>
+            <h2 id="ri-how-h" class="h2 mt-3">Which servers get a page</h2>
+          </div>
+          <div class="prose-site">
+            <p>The scan checked every Streamable HTTP remote in the official MCP Registry once, without credentials, and {n(D.population)} answered over HTTPS. This list holds {n(rows.length)} of them. We took servers published under a company namespace (com, ai and io names other than io.github), {n(D.companyGroup)} in all, and kept each grade at its share of that group. Inside a grade, servers with more tools come first.</p>
+            <p>So the grade mix here matches the company group, not the best or worst servers. Grade A is {pct(D.gradeCompany.A ?? 0, D.companyGroup)}% of the group and {pct(rows.filter((r) => r.grade === 'A').length, rows.length)}% of this list. Grade F is {pct(D.gradeCompany.F ?? 0, D.companyGroup)}% and {pct(rows.filter((r) => r.grade === 'F').length, rows.length)}%.</p>
+            <p>Every report is a snapshot from 2 November 2026. A maintainer can re-check at any time from the report page, and the live check shows the current result. The full numbers are in the <a href="/state-of-mcp-2026-11/" class="link">State of MCP readiness, November 2026</a> study and the <a href="/readiness/" class="link">Readiness Index</a>.</p>
+          </div>
+        </div>
+      </section>
+    </>
+  )}
+
+  <section class="wrap pb-16" aria-labelledby="ri-cta-h">
+    <div class="ri-cta">
+      <div>
+        <h2 id="ri-cta-h" class="text-2xl font-bold sm:text-3xl">Check a server that isn't listed</h2>
+        <p class="muted mt-2 max-w-xl">Paste any remote MCP URL. It's free and needs no sign-up.</p>
+      </div>
+      <form action="/check/" method="get" class="ri-cta-form">
+        <label for="ri-cta-url" class="sr-only">Remote MCP server URL</label>
+        <input id="ri-cta-url" name="url" type="url" inputmode="url" required placeholder="https://example.com/mcp" class="ri-in" autocomplete="url" spellcheck="false" />
+        <button type="submit" class="btn btn-primary">Check</button>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Search: fetch /r/search.json once, on first input. Rows are [registry name, display name, grade, score].
+  const q = document.getElementById('ri-q') as HTMLInputElement | null;
+  const out = document.getElementById('ri-results');
+  const count = document.getElementById('ri-count');
+  let data: [string, string, string, number][] | null = null;
+  let loading: Promise<void> | null = null;
+  const slug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const load = () => (loading ??= fetch('/r/search.json').then((r) => r.json()).then((j) => { data = j; }).catch(() => { data = []; }));
+  const render = () => {
+    if (!q || !out || !count || !data) return;
+    const term = q.value.trim().toLowerCase();
+    out.replaceChildren();
+    if (term.length < 2) { count.textContent = ''; return; }
+    const hits = data.filter((r) => r[0].toLowerCase().includes(term) || r[1].toLowerCase().includes(term));
+    count.textContent = hits.length ? `${hits.length.toLocaleString('en-US')} match${hits.length === 1 ? '' : 'es'}${hits.length > 50 ? ', first 50 shown' : ''}` : 'No match in this list. You can still check the server.';
+    for (const r of hits.slice(0, 50)) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `/r/${slug(r[0])}/`;
+      a.textContent = r[1];
+      const meta = document.createElement('span');
+      meta.className = 'ri-meta';
+      meta.textContent = ` ${r[0]} · ${r[3]} ${r[2]}`;
+      li.append(a, meta);
+      out.append(li);
+    }
+  };
+  q?.addEventListener('focus', load, { once: true });
+  q?.addEventListener('input', () => { load().then(render); });
+</script>
+
+<style is:global>
+  .ri-in { width: 100%; min-height: 3rem; padding: .5rem .8rem; border: 1px solid var(--border-strong); border-bottom-width: 2px; border-radius: 3px; background: var(--surface-solid); color: var(--text); font-size: 1rem; }
+  .ri-in:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ri-search { max-width: 40rem; }
+  .ri-count { margin-top: .8rem; font-family: var(--font-mono); font-size: .8rem; color: var(--faint); }
+  .ri-results { list-style: none; margin: .5rem 0 0; padding: 0; max-width: 48rem; }
+  .ri-results li { padding: .45rem 0; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
+  .ri-results a { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .ri-results .ri-meta, .ri-g-sub { font-family: var(--font-mono); font-size: .76rem; color: var(--faint); }
+  .ri-grades { display: grid; gap: 2rem; }
+  @media (min-width: 900px) { .ri-grades { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .ri-g-h { font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; padding-bottom: .4rem; border-bottom: 2px solid var(--text); }
+  .ri-top { list-style: none; margin: 0; padding: 0; }
+  .ri-top li { padding: .4rem 0; border-bottom: 1px solid var(--rule); overflow-wrap: anywhere; }
+  .ri-top a { font-weight: 600; text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
+  .ri-pages { display: flex; flex-wrap: wrap; gap: .4rem 1rem; margin-top: .8rem; font-size: .92rem; }
+  .ri-cta { display: grid; gap: 1.25rem; padding: 1.5rem; border: 1px solid var(--manila-2); background: var(--manila); border-radius: 3px; }
+  @media (min-width: 900px) { .ri-cta { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; padding: 2rem; } }
+  .ri-cta-form { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .ri-cta-form .ri-in { flex: 1 1 14rem; width: auto; font-family: var(--font-mono); }
+</style>

@@ -47,6 +47,7 @@ const jsonLd = hasRows && !R!.sample ? [{
           ? <>{n(T!.scanned)} remote servers from the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>{dateText && <> on {dateText}</>}. Each one gets a score from 0 to 100 and its top fixes, plus a ready or not-ready call for four stores.</>
           : <>Every remote server in the official MCP Registry, checked with <a href="/check/" class="link">McpStamp Check</a>. Each one gets a score from 0 to 100 and its top fixes, plus a ready or not-ready call for four stores.</>}
       </p>
+      {hasRows && !R?.sample && <p class="mt-4 max-w-2xl">Read the findings in the <a href="/state-of-mcp-2026-11/" class="link">State of MCP readiness, November 2026</a> study, or look up one server in the <a href="/r/" class="link">server reports</a>.</p>}
       {R?.sample && <p class="rx-note mt-5" role="note">Sample data for layout testing. The full scan replaces it.</p>}
       {hasRows && R && !R.partial.complete && <p class="rx-note mt-5" role="note">Partial scan. {n(T!.scanned)}{R.partial.registry_urls > 0 && <> of {n(R.partial.registry_urls)}</>} remote URLs in the registry are scored so far. {R.partial.sampling} We'll publish a new snapshot when more results are in. The date above is this snapshot's date.</p>}
     </div>

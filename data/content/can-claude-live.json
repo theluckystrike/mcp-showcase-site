@@ -4185,6 +4185,106 @@
      "a": "Square, rigid or lumpy letters cannot go through the sorting machines, so USPS adds a nonmachinable surcharge to each one."
     }
    ]
+  },
+  {
+   "slug": "look-up-2027-tax-brackets-and-standard-deduction",
+   "repo": "tax-brackets-standard-deduction-2027-mcp",
+   "h1": "Can Claude look up the 2027 tax brackets?",
+   "title": "Can Claude look up the 2027 tax brackets? IRS rates and standard deduction",
+   "query": "2027 tax brackets",
+   "answer": "Yes with web search, with one caution. The IRS announced the 2027 tax brackets and standard deduction on November 5, 2026, so from training data alone Claude may give the 2026 numbers. With web search on, Claude can find the IRS page, but articles written before the announcement may show projected figures. Connect the free 2027 Tax Brackets and Standard Deduction server and Claude reads a table copied from IRS Revenue Procedure 2026-35 when you ask. It gives the brackets for your filing status, the standard deduction with the extra for age 65 or blindness, and the federal income tax on an income under 2027 and 2026 rules, so you can see what the change saves. It also covers the capital gains thresholds, the child tax credit and the earned income credit. It leaves out state tax, credits and self-employment tax.",
+   "native": [
+    "Explains how marginal brackets work and does the arithmetic once it has the thresholds.",
+    "Finds the IRS announcement when web search is on."
+   ],
+   "needs": [
+    "The 2027 thresholds for each bracket and filing status from IRS Revenue Procedure 2026-35.",
+    "The 2027 standard deduction, with the extra for age 65 or older or blindness, beside the 2026 figure.",
+    "The tax on a given income under 2027 and 2026 rules, with the bracket by bracket breakdown."
+   ],
+   "example": {
+    "prompt": "What are the 2027 tax brackets for a married couple filing jointly?",
+    "tool": "get_tax_brackets",
+    "args": {
+     "filing_status": "married_filing_jointly"
+    },
+    "result": "2027 federal income tax brackets (Rev. Proc. 2026-35, announced 2026-11-05, for taxable years beginning in 2027 (returns filed in 2028)). Married filing jointly: 10% $0 to $25,600, 12% $25,600 to $104,050, 22% $104,050 to $218,250, 24% $218,250 to $416,650, 32% $416,650 to $529,100, 35% $529,100 to $793,650, 37% over $793,650. These are taxable income thresholds, after the standard or itemized deduction.",
+    "note": "Run on 2026-11-07. The thresholds are a dated table copied from the IRS revenue procedure, so they do not change unless the IRS or Congress changes them.",
+    "is_error": false,
+    "run": "2026-11-07"
+   },
+   "example2": {
+    "prompt": "How much federal income tax do I owe in 2027 on $100,000 as a single filer, and how does that compare with 2026?",
+    "tool": "calculate_federal_income_tax",
+    "args": {
+     "filing_status": "single",
+     "income": 100000
+    },
+    "result": "2027 federal income tax for single on $100,000 of income less a $16,600 deduction (taxable income $83,400) is $12,889.50. The marginal rate is 22% and the average rate is 12.89% of income. Under 2026 rules the same facts give $13,170, so the 2027 tax is $280.50 lower. This is federal income tax only. It leaves out credits, self-employment tax, net investment income tax, the alternative minimum tax and state tax.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-07"
+   },
+   "faq": [
+    {
+     "q": "Do these numbers apply to my 2026 tax return?",
+     "a": "No. The 2027 brackets apply to income earned in 2027 and to returns filed in 2028. A return filed in 2027 for 2026 uses the 2026 brackets, which the server also holds."
+    },
+    {
+     "q": "Can Congress change the numbers?",
+     "a": "Yes. The revenue procedure says that if Congress amends the Code after its release, taxpayers should look for further IRS guidance. The server holds the figures as the IRS announced them on November 5, 2026."
+    }
+   ]
+  },
+  {
+   "slug": "check-gas-prices-today",
+   "repo": "gas-prices-today-mcp",
+   "h1": "Can Claude check gas prices today?",
+   "title": "Can Claude check gas prices today? EIA weekly average by state and city",
+   "query": "gas prices today",
+   "answer": "Yes with web search, with one caution. Gas prices change every week, so from training data alone Claude does not have this week's number. With web search on, Claude can find a price, but news stories and app pages often show a different figure from the official average, sometimes without the date. Connect the free Gas Prices Today server and Claude reads the U.S. Energy Information Administration (EIA) weekly retail price survey when you ask. It gives the average per gallon of regular, midgrade, premium or diesel for the US, a region, one of nine surveyed states or ten cities, the change from last week and a year ago, and a ranking of the places EIA prices. It also works out a fill-up or a trip. These are averages, not the price at your station. For a state EIA does not price, it gives the region and says so.",
+   "native": [
+    "Explains what moves gas prices and works out fuel cost once it has a price.",
+    "Finds a price on a web page when web search is on."
+   ],
+   "needs": [
+    "This week's EIA average for your state, city or region, with the week date.",
+    "The change from last week, four weeks ago and a year ago.",
+    "A ranking of the cheapest and most expensive places EIA surveys."
+   ],
+   "example": {
+    "prompt": "What are gas prices today?",
+    "tool": "get_gas_prices",
+    "args": {},
+    "result": "Regular gasoline in the U.S. averaged $4.153 a gallon in the week of 2026-11-02 (down $0.116 from the week before, down $0.201 from four weeks ago, $3.019 a year ago). Source: U.S. Energy Information Administration weekly retail price survey, released 2026-11-03; next release 2026-11-10.",
+    "note": "Run on 2026-11-07 with the EIA release of 2026-11-03. EIA publishes new averages on Mondays, and the server reads the newest week each time you ask.",
+    "is_error": false,
+    "run": "2026-11-07"
+   },
+   "example2": {
+    "prompt": "What will a 300 mile trip cost in Texas if my car does 30 miles per gallon?",
+    "tool": "estimate_fill_up_cost",
+    "args": {
+     "gallons": 15,
+     "area": "Texas",
+     "miles": 300,
+     "miles_per_gallon": 30
+    },
+    "result": "15 gallons of regular gasoline at $3.578 a gallon (EIA average for regular gasoline, Texas, week of 2026-11-02) costs $53.67. A 300-mile trip at 30 miles per gallon uses 10 gallons and costs about $35.78, or 11.93 cents a mile.",
+    "note": "",
+    "is_error": false,
+    "run": "2026-11-07"
+   },
+   "faq": [
+    {
+     "q": "Is this the price at my gas station?",
+     "a": "No. EIA reports an average from a retail survey. Station prices vary by brand and street, so use the average to see the level and the trend, not the number on the pump."
+    },
+    {
+     "q": "Why is my state not priced directly?",
+     "a": "EIA prices nine states and ten cities directly. For any other state the server returns the EIA region that contains it and says so, for example West Coast for Arizona."
+    }
+   ]
   }
  ]
 }

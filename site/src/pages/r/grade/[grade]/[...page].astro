@@ -1,0 +1,113 @@
+---
+// s1107: /r/grade/<a-f>/ and /r/grade/<a-f>/<n>/. One grade, R_PAGE_SIZE (250) rows a page, best score first.
+// Rows are in the HTML; a small script filters the rows of this page by text, sign-in and store.
+import Layout from '../../../../layouts/Layout.astro';
+import { STORES } from '../../../../data/readiness';
+import { getRData, rowsOfGrade, gradePath, gradePages, R_GRADES, R_PAGE_SIZE, AUTH_LABEL, type RServer } from '../../../../data/readinessServers';
+
+export function getStaticPaths() {
+  if (!getRData()) return [];
+  return R_GRADES.flatMap((g) => {
+    const rows = rowsOfGrade(g);
+    if (!rows.length) return [];
+    return Array.from({ length: gradePages(g) }, (_, i) => ({
+      params: { grade: g.toLowerCase(), page: i ? String(i + 1) : undefined },
+      props: { g, page: i + 1, pages: gradePages(g), total: rows.length, rows: rows.slice(i * R_PAGE_SIZE, (i + 1) * R_PAGE_SIZE) },
+    }));
+  });
+}
+
+const { g, page, pages, total, rows } = Astro.props as { g: string; page: number; pages: number; total: number; rows: RServer[] };
+const n = (v: number) => v.toLocaleString('en-US');
+const first = (page - 1) * R_PAGE_SIZE + 1;
+const last = first + rows.length - 1;
+const range = pages > 1 ? `, ${n(first)} to ${n(last)}` : '';
+const title = `Grade ${g} MCP servers${pages > 1 ? `, page ${page} of ${pages}` : ''}`;
+const description = `${n(total)} MCP servers from the official registry with McpStamp grade ${g} on 2 November 2026${range}. Score, sign-in, tools and readiness for Claude, ChatGPT, Gemini and the MCP Registry.`;
+const auths = [...new Set(rows.map((r) => r.auth))].sort();
+---
+<Layout title={title} description={description} crumbs={[{ name: 'Server reports', path: '/r/' }, { name: `Grade ${g}`, path: gradePath(g, page) }]}>
+  <section class="wrap pb-6 pt-10 sm:pt-14">
+    <span class="eyebrow">Server reports</span>
+    <h1 class="display mt-5 !text-[clamp(2rem,5vw,3.4rem)]">Grade {g} MCP servers</h1>
+    <p class="lead mt-4 max-w-3xl">{n(total)} servers scored grade {g} in the 2 November 2026 scan.{pages > 1 && <> This is page {page} of {pages} (servers {n(first)} to {n(last)}).</>} Open a server for its store calls and fixes.</p>
+    <nav class="rg-nav mt-5" aria-label="Grades">
+      {R_GRADES.filter((x) => rowsOfGrade(x).length).map((x) => x === g ? <span aria-current="page" class="rg-cur">{x}</span> : <a href={gradePath(x)} class="link">{x}</a>)}
+      <a href="/r/" class="link">All reports</a>
+    </nav>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="rg-h">
+    <h2 id="rg-h" class="sr-only">Servers</h2>
+    <form id="rg-filter" class="rg-filters" role="search" aria-label="Filter this page" onsubmit="return false">
+      <div class="rg-f rg-f-q"><label for="rg-q">Name</label><input id="rg-q" type="search" class="rg-in" placeholder="Filter this page" autocomplete="off" spellcheck="false" /></div>
+      <div class="rg-f"><label for="rg-auth">Sign-in</label><select id="rg-auth" class="rg-in"><option value="">All</option>{auths.map((a) => <option value={a}>{AUTH_LABEL[a] ?? a}</option>)}</select></div>
+      <div class="rg-f"><label for="rg-store">Ready for</label><select id="rg-store" class="rg-in"><option value="">Any or none</option>{STORES.map((s) => <option value={s.key}>{s.name}</option>)}</select></div>
+    </form>
+    <p id="rg-count" class="rg-count" role="status" aria-live="polite">{n(rows.length)} servers on this page</p>
+    <div class="rg-scroll">
+      <table class="table rg-table">
+        <thead><tr><th scope="col">Server</th><th scope="col" class="rg-num">Score</th><th scope="col">Sign-in</th><th scope="col" class="rg-num">Tools</th><th scope="col">Ready for</th></tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr data-q={`${r.title} ${r.name}`.toLowerCase()} data-auth={r.auth} data-stores={STORES.filter((s) => r.stores[s.key].status === 'ready').map((s) => s.key).join(' ')}>
+              <td><a class="rg-name" href={`/r/${r.slug}/`}>{r.title}</a><code class="rg-reg">{r.name}</code></td>
+              <td class="rg-num tnum">{r.score}</td>
+              <td>{AUTH_LABEL[r.auth] ?? r.auth}</td>
+              <td class="rg-num tnum">{r.tools || '–'}</td>
+              <td><ul class="rg-stores">{STORES.map((s) => { const st = r.stores[s.key].status; return <li class:list={['rg-store', `is-${st}`]} title={`${s.name}: ${st.replace('_', ' ')}`}><span aria-hidden="true">{s.short}{st === 'unverified' ? '?' : ''}</span><span class="sr-only">{s.name} {st.replace('_', ' ')}</span></li>; })}</ul></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="rg-key mt-3">Cl = Claude, GPT = ChatGPT, Gem = Gemini, Reg = MCP Registry. A filled mark means ready, ? means unverified.</p>
+    {pages > 1 && (
+      <nav class="rg-pager mt-6" aria-label="Pages">
+        {Array.from({ length: pages }, (_, i) => i + 1 === page ? <span aria-current="page" class="rg-cur">{i + 1}</span> : <a href={gradePath(g, i + 1)} class="link">{i + 1}</a>)}
+      </nav>
+    )}
+  </section>
+</Layout>
+
+<script>
+  const rows = Array.from(document.querySelectorAll<HTMLTableRowElement>('.rg-table tbody tr'));
+  const q = document.getElementById('rg-q') as HTMLInputElement | null;
+  const auth = document.getElementById('rg-auth') as HTMLSelectElement | null;
+  const store = document.getElementById('rg-store') as HTMLSelectElement | null;
+  const count = document.getElementById('rg-count');
+  const apply = () => {
+    const term = (q?.value ?? '').trim().toLowerCase();
+    let shown = 0;
+    for (const r of rows) {
+      const d = r.dataset;
+      const ok = (!term || d.q!.includes(term)) && (!auth?.value || d.auth === auth.value) && (!store?.value || (' ' + d.stores + ' ').includes(' ' + store.value + ' '));
+      r.hidden = !ok;
+      if (ok) shown++;
+    }
+    if (count) count.textContent = shown === rows.length ? `${rows.length} servers on this page` : `${shown} of ${rows.length} servers on this page`;
+  };
+  [q, auth, store].forEach((x) => x?.addEventListener('input', apply));
+</script>
+
+<style is:global>
+  .rg-nav, .rg-pager { display: flex; flex-wrap: wrap; gap: .4rem 1rem; font-family: var(--font-mono); }
+  .rg-cur { font-weight: 700; }
+  .rg-filters { display: grid; gap: .75rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 900px) { .rg-filters { grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)); } }
+  .rg-f-q { grid-column: 1 / -1; }
+  @media (min-width: 900px) { .rg-f-q { grid-column: auto; } }
+  .rg-f label { display: block; margin-bottom: .3rem; font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .rg-in { width: 100%; min-height: 2.75rem; padding: .5rem .7rem; border: 1px solid var(--border-strong); border-bottom-width: 2px; border-radius: 3px; background: var(--surface-solid); color: var(--text); }
+  .rg-count, .rg-key { margin-top: .8rem; font-family: var(--font-mono); font-size: .76rem; color: var(--faint); }
+  .rg-scroll { overflow-x: auto; margin-top: .5rem; }
+  .rg-table { min-width: 44rem; }
+  .rg-num, .rg-table th.rg-num { text-align: right; }
+  .rg-name { display: block; font-weight: 650; text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; overflow-wrap: anywhere; }
+  .rg-reg { display: block; font-family: var(--font-mono); font-size: .74rem; color: var(--faint); overflow-wrap: anywhere; }
+  .rg-stores { display: flex; gap: .25rem; list-style: none; margin: 0; padding: 0; }
+  .rg-store { font-family: var(--font-mono); font-size: .66rem; font-weight: 600; padding: .1rem .3rem; border: 1px solid var(--border-strong); border-radius: 2px; color: var(--faint); }
+  .rg-store.is-unverified { border-style: dashed; }
+  .rg-store.is-ready { border-color: var(--text); background: var(--text); color: var(--bg); }
+  .rg-table tr[hidden] { display: none; }
+</style>

@@ -7,6 +7,7 @@ import { COMPARISONS } from '../data/compare';
 import { CONTENT_REVIEWED } from '../data/schema';
 import { getFreeServers } from '../data/freeServers';
 import { getReadiness, readinessPublished } from '../data/readiness';
+import { getRData } from '../data/readinessServers';
 
 export const GET: APIRoute = ({ site }) => {
   const u = (p: string) => new URL(p, site).href;
@@ -43,6 +44,10 @@ export const GET: APIRoute = ({ site }) => {
     '## McpStamp Check',
     `- [McpStamp Check](${u('/check/')}): free check for any remote MCP server URL. Score 0-100, grade A-F, readiness for Claude, ChatGPT, Gemini and the MCP Registry, and the fix for each failed check. JSON API: ${u('/api/check')}?url=<https MCP URL>. README badge: ${u('/badge')}?url=<https MCP URL>.`,
     `- [Services](${u('/services/')}): paid help from the maintainer. Readiness Audit $490, Store Launch for Claude, ChatGPT, Gemini and the MCP Registry $4,900 (one store $1,900), custom MCP server from $4,500, Care plan $490 a month.`,
+    ...(getRData()?.rows.length ? [
+      `- [State of MCP readiness, November 2026](${u('/state-of-mcp-2026-11/')}): study of ${getRData()!.population.toLocaleString('en-US')} registry MCP servers that responded on 2 November 2026. 28.9% were ready for all four stores; the top blocker is missing ChatGPT tool hints (10,372 servers).`,
+      `- [MCP server readiness reports](${u('/r/')}): ${getRData()!.rows.length.toLocaleString('en-US')} public reports, one per server at ${u('/r/')}<slug>/ (registry name lowercased, non-alphanumerics as hyphens). Score, grade, store readiness and fixes.`,
+    ] : []),
     ...(readinessPublished() ? [`- [McpStamp Readiness Index](${u('/readiness/')}): ${getReadiness()!.totals.scanned} remote servers from the official MCP Registry, scored with the same check. Average score ${Math.round(getReadiness()!.totals.avg_score)}. Updated ${getReadiness()!.generated_at.slice(0, 10)}.`] : []),
     '',
     '## Pricing',
