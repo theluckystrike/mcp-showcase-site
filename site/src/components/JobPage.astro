@@ -93,7 +93,12 @@ for (const x of (job?.answer ?? '').split(/(?<=[.!?])\s+/)) {
   if (jobMeta && `${jobMeta} ${x}`.length > 160) break;
   jobMeta = jobMeta ? `${jobMeta} ${x}` : x;
 }
-const description = (kind === 'answer' && jobMeta) || (kind === 'answer' && main ? answer.replace(' Then ask in plain words.', '') : p.meta_description);
+// s1108: an authored sitemap description wins on answer pages. The CTR rewrites in pages.json
+// are written for the snippet in search results; the job-derived text describes the page, not the query.
+const authored = (p.meta_description ?? '').trim();
+const description = (kind === 'answer' && authored.length >= 70 && authored.length <= 165)
+  ? authored
+  : (kind === 'answer' && jobMeta) || (kind === 'answer' && main ? answer.replace(' Then ask in plain words.', '') : p.meta_description);
 const hub = kind === 'usecase' ? { name: 'Use cases', path: '/use-cases/' } : { name: 'Answers', path: '/use-cases/#answers' };
 const mainHasOutput = !!main && main.cases.length > 0;
 ---
