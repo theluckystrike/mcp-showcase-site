@@ -120,6 +120,9 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
         // Google Consent Mode v2 (a7-site, 2026-11-02): the consent defaults MUST be pushed before 'config'.
         // EEA + UK + CH: everything denied until the visitor clicks Accept. Elsewhere: analytics granted, ads denied
         // (the site has no ads). A stored choice from the banner (src/components/CookieConsent.astro) wins everywhere.
+        // cro-host-allowlist: GA runs only on the production host, never on *.pages.dev previews, *.workers.dev,
+        // localhost or 127.0.0.1. Elsewhere gtag is a no-op so the consent banner and click handlers still work.
+        if (location.hostname !== 'www.mcpstamp.com' && location.hostname !== 'mcpstamp.com') { window.gtag = function () {}; return; }
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         window.gtag = gtag; // define:vars wraps this script in a function; the consent banner needs the global.
@@ -148,7 +151,9 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
           var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
           var h = a.href;
           if (h.indexOf('mcp.zovo.one/buy/') > -1) {
-            var u = new URL(h); gtag('event', 'begin_checkout', { item_id: u.pathname.split('/').pop(), slot: u.searchParams.get('src') || '' });
+            // Single servers are $19 once, the bundle $39 once (pricing page, 2026-11-13).
+            var u = new URL(h), id = u.pathname.split('/').pop(), v = id === 'bundle' ? 39 : 19;
+            gtag('event', 'begin_checkout', { item_id: id, slot: u.searchParams.get('src') || '', currency: 'USD', value: v, items: [{ item_id: id, price: v, quantity: 1 }] });
           } else if (/buymeacoffee\.com|paypal\.me|t\.me\/|github\.com\/theluckystrike/.test(h)) {
             gtag('event', 'support_click', { link_url: h });
           }

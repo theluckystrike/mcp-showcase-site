@@ -114,7 +114,8 @@ const mainHasOutput = !!main && main.cases.length > 0;
             {job?.intro && <p class="lead mt-5 max-w-2xl">{job.intro}</p>}
             <p class:list={['lead max-w-2xl !text-fg', job?.intro ? 'mt-4' : 'mt-5']}>{answer}</p>
             <div class="mt-7 flex flex-wrap gap-3">
-              <a href="#connect" class="btn btn-primary">Connect free in 1 minute</a>
+              {single && <a href={buy('hero')} rel="nofollow" class="btn btn-primary" data-cro="mcpstamp-answer-buy-cta">Buy {main.name} Pro, ${main.priceUsd} once</a>}
+              <a href="#connect" class:list={['btn', !single && 'btn-primary']}>Connect free in 1 minute</a>
               {main && <a href={`/servers/${main.id}/`} class="btn">See all {main.name} tools</a>}
             </div>
           </div>
