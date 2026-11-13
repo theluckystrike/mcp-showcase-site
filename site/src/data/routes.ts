@@ -12,7 +12,7 @@ export const BUILT_PAGE_TYPES = ['use-case', 'answer', 'audience', 'client-guide
 
 export function allRoutes(): { path: string; priority: number; lastmod?: string }[] {
   const prio = (p: string, d: number) => pageMeta(p)?.priority ?? d;
-  const fixed = ['/', '/servers/', '/use-cases/', '/pricing/', '/connect/', '/developers/', '/developers/hosted-endpoints/', '/developers/tool-contracts/', '/developers/mcp-inspector/', '/compare/', '/services/', '/about/'];
+  const fixed = ['/', '/servers/', '/use-cases/', '/pricing/', '/connect/', '/developers/', '/developers/hosted-endpoints/', '/developers/tool-contracts/', '/developers/mcp-inspector/', '/compare/', '/services/', '/about/', '/run-your-own-mcp-stack/'];
   const out = [
     ...fixed.map((p) => ({ path: p, priority: prio(p, 0.5) })),
     ...['/terms/', '/privacy/'].map((p) => ({ path: p, priority: prio(p, 0.2) })),

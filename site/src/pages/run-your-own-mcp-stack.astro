@@ -1,0 +1,156 @@
+---
+// sprint-20261113 L5: "Run your own MCP stack" guide plus the $29 template-repo offer.
+// Pay mode is a waitlist: mcp-billing cannot ship a new item today (its gated deploy needs a valid Stripe CLI live key).
+// The form posts to the shared fleet-leads Worker with offer_id mcp-stack-guide. Nothing is sold on this page.
+import Layout from '../layouts/Layout.astro';
+import { brand } from '../config/brand';
+import { bundleUrl } from '../data/servers';
+
+const title = 'Run your own MCP stack: architecture, self-hosting, security and cost';
+const description = 'How to run your own MCP servers instead of a hosted MCP vendor: one stdio server per job, one Worker that serves them over streamable HTTP, per-user tokens, the security checks that matter and what it costs per month.';
+const bundleHref = `${bundleUrl()}?src=site.guide.mcp-stack`;
+---
+<Layout title={title} description={description} crumbs={[{ name: 'Run your own MCP stack', path: '/run-your-own-mcp-stack/' }]}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-10 sm:pt-14">
+      <span class="eyebrow">Guide</span>
+      <h1 class="display mt-5 max-w-4xl !text-[clamp(2rem,5vw,3.6rem)]">Run your own MCP stack</h1>
+      <p class="lead mt-5 max-w-3xl">
+        A hosted MCP vendor gives you one URL and a monthly bill. Running your own stack gives you the source, the logs and the keys. This guide shows the layout we use for the {brand.name} servers: what the parts are, how to host them, what to lock down and what it costs.
+      </p>
+      <p class="mt-6 flex flex-wrap gap-3">
+        <a href="#template" class="btn btn-primary" data-cro="sprint-20261113-mcp-stack-hero" data-mcpstack-cta="hero">Get the template repo, $29 at launch</a>
+        <a href="#architecture" class="btn">Read the guide</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap pb-10">
+    <div class="prose-site max-w-3xl">
+      <h2 class="h2" id="when">Vendor or your own stack?</h2>
+      <p>Use a hosted vendor when you need one or two integrations this week and nobody on the team wants to run a server. Run your own stack when one of these is true:</p>
+      <ul>
+        <li>The tools touch customer data, invoices or credentials, and you must know where that data goes.</li>
+        <li>You need a tool the vendor does not have, or you need to change how a tool behaves.</li>
+        <li>You pay per seat or per call, and the usage grows faster than the value.</li>
+        <li>You must pass a security review that asks for the source, the logs and the data location.</li>
+      </ul>
+      <p>The work is smaller than it sounds. An MCP server is a small program that lists tools and answers tool calls. The hard parts are the same as for any small API: auth, limits, logs and updates.</p>
+
+      <h2 class="h2 mt-12" id="architecture">Architecture</h2>
+      <p>The layout has four parts. Each part is replaceable.</p>
+      <ol>
+        <li><strong>One server per job.</strong> Each server is a small package with a short list of tools (for example, invoice: create, list, export PDF). It speaks MCP over stdio, so it runs on a laptop with no network. Keep a written contract for each tool: input schema, output, errors. Small servers are easy to review and easy to delete.</li>
+        <li><strong>One gateway Worker.</strong> A single HTTP service imports the tool sets of every server and serves each one at its own path, for example <code>/mcp/invoice</code>, over MCP streamable HTTP. The stdio package stays the source of truth. A build step copies (vendors) its source into the gateway, so the hosted tools never drift from the local ones.</li>
+        <li><strong>Auth in front of tools.</strong> The gateway can answer <code>initialize</code> and <code>tools/list</code> without a token, so a client can discover the server. Every <code>tools/call</code> needs a token: a per-user token in the URL for simple clients, or OAuth for clients that support it.</li>
+        <li><strong>Small state store.</strong> A key-value store keeps token records, usage counters and per-user settings. Tool data that a user owns (documents, logs) stays in the user's own storage or is returned as a file, not kept on the gateway.</li>
+      </ol>
+      <pre class="mcps-diagram" aria-label="Request path"><code>Claude / ChatGPT / Cursor
+        |  MCP streamable HTTP + token
+        v
+  gateway Worker  /mcp/&lt;server&gt;
+        |  checks token, limits, logs the call
+        +--&gt; tool set: invoice   (vendored from servers/invoice)
+        +--&gt; tool set: docx      (vendored from servers/docx)
+        +--&gt; tool set: currency  (vendored from servers/currency)
+        |
+        v
+  key-value store: tokens, counters (no tool payloads)</code></pre>
+      <p>This is how our hosted endpoints run: one Cloudflare Worker serves the tool sets of several servers at <code>mcp.zovo.one/mcp/&lt;name&gt;</code>, and every server also runs locally over stdio. The source is on <a class="link" href={brand.links.github} rel="noopener">GitHub</a>.</p>
+
+      <h2 class="h2 mt-12" id="steps">Self-hosting steps</h2>
+      <ol>
+        <li><strong>Start local.</strong> Run each server over stdio in Claude Desktop or Cursor first. Fix the tool names, descriptions and schemas there. A model chooses tools by their descriptions, so write them for the model: what the tool does, when not to use it, what each field means.</li>
+        <li><strong>Add the gateway.</strong> Create one Worker (or a small Node service) with a route per server. Use the official MCP TypeScript SDK transport for streamable HTTP. Keep one build script that vendors each server's source into the gateway, and run it in CI so a change to a server always reaches the hosted copy.</li>
+        <li><strong>Add tokens.</strong> Mint a random token per user (at least 128 bits), store only its hash with the user id and plan, and check it on every <code>tools/call</code>. Let users revoke and rotate tokens. Add OAuth later if your clients need it.</li>
+        <li><strong>Add limits.</strong> Count calls per token per day in the key-value store. Keep counters in memory per request batch and write them in batches, so a busy token does not cost one write per call. Return a clear MCP error when a limit is reached.</li>
+        <li><strong>Add a check to CI.</strong> After each deploy, call <code>initialize</code>, <code>tools/list</code> and one harmless <code>tools/call</code> per server, and fail the deploy if any of them breaks. You can run the same checks by hand with the free <a class="link" href="/check/">McpStamp check</a>.</li>
+        <li><strong>Connect clients.</strong> Give each user a connect page that shows the full URL with their token, plus the config snippet for each client. A bare URL without a token should list tools but refuse calls, with an error that says how to get a token.</li>
+      </ol>
+
+      <h2 class="h2 mt-12" id="security">Security checklist</h2>
+      <ul>
+        <li><strong>Least privilege per server.</strong> Each server gets only the secrets and scopes its tools need. Do not give the gateway one master API key for everything.</li>
+        <li><strong>Validate every input</strong> against the tool's schema before you act on it. Reject unknown fields. Cap sizes of strings, files and arrays.</li>
+        <li><strong>Treat tool output as untrusted text.</strong> Content that a tool fetches (a web page, an email, a document) can carry instructions aimed at the model. Return data, label it as data, and do not let one tool's output trigger a write in another tool without the user's confirmation.</li>
+        <li><strong>Confirm destructive actions.</strong> Tools that send, pay, delete or publish need an explicit confirm field or a two-step flow.</li>
+        <li><strong>Check the Origin header</strong> on the HTTP transport and allow only the clients you expect. Serve only over HTTPS.</li>
+        <li><strong>Log calls, not payloads.</strong> Log the token id, tool name, status and duration. Do not log documents, prompts or personal data.</li>
+        <li><strong>Pin versions.</strong> Pin the SDK and every dependency, review updates, and keep the tool list stable. A tool whose description changes silently is a supply-chain risk for every client that trusts it.</li>
+        <li><strong>Keep secrets out of the repo.</strong> Use the platform's secret store, and rotate a secret when someone leaves the team.</li>
+      </ul>
+
+      <h2 class="h2 mt-12" id="cost">What it costs</h2>
+      <p>MCP calls are small HTTP requests, so the hosting cost is low. On Cloudflare Workers (list prices, November 2026; check the current pricing page before you plan):</p>
+      <ul>
+        <li><strong>Free plan:</strong> 100,000 requests a day and 1,000 key-value writes a day. That is enough for a small team that makes a few thousand tool calls a day.</li>
+        <li><strong>Paid plan:</strong> about $5 a month, with 10 million requests a month included and a small fee for each extra million.</li>
+        <li><strong>The real cost is time.</strong> Plan about 1 to 2 days to set up the gateway, tokens and CI, then about 1 to 2 hours a month for dependency updates and checks.</li>
+      </ul>
+      <p>Compare that with a per-seat vendor price multiplied by your team size and the number of months, and with the cost of a security review for a third party that sees your data.</p>
+    </div>
+  </section>
+
+  <section class="wrap pb-12" id="template" aria-labelledby="mcps-offer-h">
+    <div class="rs-cta mcps-offer" data-cro="sprint-20261113-mcp-stack-offer">
+      <div>
+        <span class="eyebrow">Template repo</span>
+        <h2 id="mcps-offer-h" class="mt-3 text-2xl font-bold sm:text-3xl">MCP stack template, $29 at launch</h2>
+        <p class="muted mt-2 max-w-xl">The layout from this guide as a repo you can fork: a gateway Worker with a route per server, a vendoring build script, token mint and revoke, per-token daily limits, an example server with a written tool contract, and a CI workflow that checks every endpoint after deploy. The template is not on sale yet. Leave your email and we send you one email when it launches, with the $29 price.</p>
+        <form class="mcps-form mt-5" data-mcpstack-form>
+          <label class="upd-label" for="mcps-email">Email address</label>
+          <div class="mcps-row">
+            <input id="mcps-email" class="mcps-input" type="email" name="email" required maxlength="254" autocomplete="email" inputmode="email" placeholder="you@example.com" />
+            <button type="submit" class="btn btn-primary" data-mcpstack-cta="waitlist">Get it first, $29 at launch</button>
+          </div>
+          <div class="mcps-hp" aria-hidden="true"><label>Leave this empty <input type="text" name="hp" tabindex="-1" autocomplete="off" /></label></div>
+          <p class="mcps-msg mt-3" role="status" aria-live="polite"></p>
+        </form>
+        <p class="muted mt-3 text-[.9rem]">One launch email. We use the address for nothing else. See the <a class="link" href="/privacy/">privacy page</a>.</p>
+      </div>
+    </div>
+    <p class="mt-6 max-w-3xl">Do not want to run it yourself? Our {brand.name} servers run locally or at a hosted URL today. <a class="link" href={bundleHref} data-mcpstack-cta="bundle" data-cro="sprint-20261113-mcp-stack-bundle">All paid servers, $39 once</a> <span class="text-faint">·</span> <a class="link" href="/pricing/">Pricing</a></p>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var P = { site: 'mcpstamp.com', product: 'mcp-stack-template', price: 29, currency: 'USD' };
+      function ev(n, x) { try { if (window.gtag) window.gtag('event', n, Object.assign({}, P, x || {})); } catch (e) {} }
+      var seen = false;
+      function view() { if (seen) return; seen = true; ev('offer_view'); off(); }
+      function off() { removeEventListener('scroll', view); removeEventListener('pointerdown', view); clearTimeout(t); }
+      addEventListener('scroll', view, { passive: true }); addEventListener('pointerdown', view);
+      var t = setTimeout(view, 10000);
+      document.addEventListener('click', function (e) {
+        var c = e.target.closest && e.target.closest('[data-mcpstack-cta]');
+        if (c) ev('cta_click', { cta: c.getAttribute('data-mcpstack-cta') });
+      });
+      var f = document.querySelector('[data-mcpstack-form]'); if (!f) return;
+      var msg = f.querySelector('.mcps-msg');
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var b = f.querySelector('button'); b.disabled = true; msg.textContent = 'Sending...';
+        fetch('https://fleet-leads.lipmichal.workers.dev/lead', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: f.email.value, offer_id: 'mcp-stack-guide', page: location.pathname, price: 29, hp: f.hp.value })
+        }).then(function (r) { return r.json().catch(function () { return {}; }); }).then(function (j) {
+          if (j && j.ok) { msg.textContent = 'You are on the list. We send one email when the template launches.'; f.email.disabled = true; ev('generate_lead', { value: 29 }); }
+          else { msg.textContent = 'That did not work. Check the address and try again.'; b.disabled = false; }
+        }).catch(function () { msg.textContent = 'Network error. Please try again.'; b.disabled = false; });
+      });
+    })();
+  </script>
+</Layout>
+
+<style is:global>
+  .rs-cta { display: grid; gap: 1.25rem; padding: 1.5rem; border: 1px solid var(--manila-2); background: var(--manila); border-radius: 3px; }
+  @media (min-width: 900px) { .rs-cta { padding: 2rem; } }
+  .mcps-diagram { margin: 1.5rem 0; padding: 1rem; overflow-x: auto; font-family: var(--font-mono); font-size: .82rem; line-height: 1.5; border: 1px solid var(--border); border-radius: 3px; background: var(--surface-solid); }
+  .mcps-row { display: flex; flex-wrap: wrap; gap: .6rem; max-width: 36rem; }
+  .mcps-input { flex: 1 1 16rem; min-width: 0; min-height: 2.9rem; padding: .55rem .75rem; font: inherit; color: var(--text); background: var(--surface-solid); border: 1px solid var(--border-strong); border-radius: 2px; }
+  .mcps-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .mcps-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .upd-label { display: block; font-size: .9rem; font-weight: 600; margin-bottom: .4rem; }
+  .mcps-msg:empty { display: none; }
+</style>
