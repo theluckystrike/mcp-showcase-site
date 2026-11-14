@@ -1827,6 +1827,143 @@
      "description": "Cost of filling a tank (gallons times this week's EIA average for the area, or your price per gallon), and optionally the fuel cost of a trip from miles and miles per gallon, including cents per mile."
     }
    ]
+  },
+  {
+   "repo": "aurora-forecast-kp-index-mcp",
+   "topic": "Aurora forecast and Kp index",
+   "name": "Aurora Forecast",
+   "tagline": "Can you see the northern lights tonight from where you are? NOAA's Kp forecast, the live auroral oval and cloud cover, hour by hour.",
+   "knows": [
+    "Tonight's verdict for a place, hour by hour through the dark hours, from NOAA's predicted Kp index, how far the auroral oval reaches and the cloud cover.",
+    "NOAA's three-day Kp forecast in 3-hour blocks with the G-scale storm level, the OVATION nowcast for the next 30 to 90 minutes, and recent space weather alerts."
+   ],
+   "sources": "NOAA Space Weather Prediction Center (Kp forecast, OVATION aurora nowcast, alerts) and Open-Meteo for cloud cover and geocoding, read at call time.",
+   "hosted_url": "https://aurora-forecast-kp-index-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/aurora-forecast-kp-index-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-14",
+   "added": "2026-11-14",
+   "money_site": null,
+   "prompts": [
+    "Can I see the northern lights tonight in Reykjavik?",
+    "What is the Kp index forecast for the next three days?",
+    "Which is better for aurora tonight, Fairbanks or Tromso?"
+   ],
+   "tools": [
+    {
+     "name": "aurora_tonight",
+     "title": "Aurora tonight",
+     "description": "Can I see the northern lights (or southern lights) tonight from a place? Hour by hour through the dark hours: NOAA's predicted Kp index, whether the auroral oval reaches overhead or the horizon there, cloud cover, and a good/possible/unlikely verdict with the best window. Up to 3 nights."
+    },
+    {
+     "name": "aurora_now",
+     "title": "Aurora now",
+     "description": "Is the aurora visible right now from a place? NOAA's OVATION nowcast probability overhead and on the poleward horizon (next 30 to 90 minutes), the current Kp index, whether it is dark and the current cloud cover."
+    },
+    {
+     "name": "kp_forecast",
+     "title": "Kp forecast",
+     "description": "NOAA's planetary Kp index forecast for the next three days in 3-hour UTC blocks, with the NOAA G-scale storm level, plus the last 24 hours observed and the daily maximum. Kp 5 or more is a geomagnetic storm and pushes aurora toward mid latitudes."
+    },
+    {
+     "name": "space_weather_alerts",
+     "title": "Space weather alerts",
+     "description": "Recent NOAA SWPC space weather alerts, watches and warnings: geomagnetic storm watches (aurora outlook), Kp warnings, solar radiation and radio blackout alerts, newest first."
+    },
+    {
+     "name": "aurora_compare_locations",
+     "title": "Aurora compare locations",
+     "description": "Rank 2 to 10 places by tonight's aurora chances: good and possible dark hours, cloud, and the Kp needed, so you can choose where to drive."
+    }
+   ]
+  },
+  {
+   "repo": "tide-times-tide-tables-mcp",
+   "topic": "Tide times and tide tables",
+   "name": "Tide Times",
+   "tagline": "High and low tide times for US coastal stations from NOAA, today or for any date range up to a month.",
+   "knows": [
+    "High and low tide times and heights for a NOAA station or a place name, for today or any range up to 31 days, and whether the tide is rising or falling right now.",
+    "Low tides at or below a height you choose over the next 90 days, each marked daylight or dark, for tide pooling, clamming or launching a boat."
+   ],
+   "sources": "NOAA CO-OPS tide predictions and station metadata, with Open-Meteo geocoding for place names, read at call time.",
+   "hosted_url": "https://tide-times-tide-tables-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/tide-times-tide-tables-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-14",
+   "added": "2026-11-14",
+   "money_site": null,
+   "prompts": [
+    "What are the tide times in Santa Cruz today?",
+    "When is low tide this weekend in Monterey?",
+    "Find morning low tides under 0 ft in the next month near Seattle."
+   ],
+   "tools": [
+    {
+     "name": "tide_times",
+     "title": "Tide times",
+     "description": "High tide and low tide times and heights (a tide table) for a US coastal place or NOAA station, today or any date, from NOAA tide predictions. location takes a place (\"Santa Cruz, CA\"), a NOAA station id (9414290) or lat,lon. Up to 31 days per call."
+    },
+    {
+     "name": "tide_now",
+     "title": "Tide now",
+     "description": "Is the tide coming in or going out right now at a US coastal place? Returns rising or falling, the estimated current height, and the time and height of the next high and next low tide, from NOAA predictions."
+    },
+    {
+     "name": "low_tide_windows",
+     "title": "Low tide windows",
+     "description": "Find the low tides at or below a height over the coming days, marked daylight or dark, for tide pooling, clamming, beach access or launching a boat. Up to 90 days ahead."
+    },
+    {
+     "name": "tide_stations_search",
+     "title": "Tide stations search",
+     "description": "Find NOAA tide prediction stations by name (\"Monterey\", \"Bar Harbor, ME\") or nearest to lat,lon, with station id, state, type and distance. Use the id with the other tide tools when a place name is ambiguous."
+    }
+   ]
+  },
+  {
+   "repo": "treasury-yields-rates-today-mcp",
+   "topic": "Treasury yields today",
+   "name": "Treasury Yields",
+   "tagline": "Today's US Treasury yield curve, bill rates and real yields from the Treasury's daily feed, with history back to 1990.",
+   "knows": [
+    "Today's par yield curve from 1 month to 30 years, with the 10-year minus 2-year spread, and the daily bill rates and real (TIPS) yields.",
+    "Any maturity's history over a date range, up to 731 days per call and back to 1990."
+   ],
+   "sources": "U.S. Department of the Treasury daily interest rate XML feed (home.treasury.gov), read at call time.",
+   "hosted_url": "https://treasury-yields-rates-today-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/treasury-yields-rates-today-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-14",
+   "added": "2026-11-14",
+   "money_site": null,
+   "prompts": [
+    "What is the 10-year Treasury yield today?",
+    "Is the yield curve inverted right now?",
+    "How has the 2-year yield moved over the last six months?"
+   ],
+   "tools": [
+    {
+     "name": "treasury_yield_curve",
+     "title": "Treasury yield curve",
+     "description": "Today's (or any date's) US Treasury par yield curve: 1-month to 30-year yields including the 10-year and 2-year, the change from the previous business day and from a month earlier, and the 10y-2y and 10y-3m spreads with an inversion flag. Any date back to 1990."
+    },
+    {
+     "name": "treasury_yield_history",
+     "title": "Treasury yield history",
+     "description": "History of one Treasury yield (e.g. 10y, 2y, 3m, 30y) between two dates: start, end, change, high, low and average, with a daily or sampled table. Up to 731 days per call, back to 1990."
+    },
+    {
+     "name": "treasury_bill_rates",
+     "title": "Treasury bill rates",
+     "description": "Daily US Treasury bill rates for 4, 6, 8, 13, 17, 26 and 52 week bills: the bank discount rate and the coupon-equivalent yield (comparable to a savings or CD rate), with the change from the previous business day."
+    },
+    {
+     "name": "treasury_real_yields",
+     "title": "Treasury real yields",
+     "description": "US Treasury real yield curve (TIPS) for 5, 7, 10, 20 and 30 years, the nominal yield for the same maturity, and the breakeven inflation rate the market implies (nominal minus real)."
+    }
+   ]
   }
  ]
 }
