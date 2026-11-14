@@ -1,0 +1,12 @@
+---
+// s1114 badge watch notice page (functions/updates/*.js). noindex via UpdatesNotice.
+import UpdatesNotice from '../../components/UpdatesNotice.astro';
+---
+<UpdatesNotice title="Confirm your watch" heading="One more click">
+  <p>Press the button to get an email when this MCP server's readiness grade changes in a new McpStamp snapshot. We use your address for nothing else.</p>
+  <form method="post" action="/updates/confirm" class="mt-6">
+    <input type="hidden" name="t" value="" />
+    <button type="submit" class="btn btn-primary">Yes, watch this server</button>
+  </form>
+  <p class="text-[.95rem]">If you did not ask for this, close the page. Nothing happens unless you press the button.</p>
+</UpdatesNotice>

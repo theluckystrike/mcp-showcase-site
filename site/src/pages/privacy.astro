@@ -114,6 +114,7 @@ const retention: [string, string][] = [
     <li>To stop the emails, use the unsubscribe link in any of them. It removes your address from the list. You can also email {email}.</li>
     <li>To stop abuse, the form counts requests per IP address and per email address for up to one hour. Those counters are hashed and sit only in Cloudflare's short-term cache.</li>
   </ul>
+  <p>The "watch this server" form on the server reports and the badge page works the same way, with its own Resend contact list called <code>mcpstamp-badge-watch</code>. After you confirm, we keep your email address, the report addresses (slugs) of the servers you watch and the tag <code>badge-watch</code>. We use them only to email you when a new snapshot changes a watched server's grade. The stop link in each email removes your address from that list.</p>
 
   <h2 id="support">8. If you contact support</h2>
   <p>If you email {email}, we receive your email address and what you write, and use it to answer you. Include a Stripe session id for a purchase question. Do not post licence keys, tokens or payment details in a public GitHub issue.</p>

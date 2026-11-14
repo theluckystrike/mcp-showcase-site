@@ -10,6 +10,11 @@
 // Rate limits live in isolate memory and the Cache API (per colo). No KV or other store is written.
 
 export const AUDIENCE_ID = '0bddb949-303b-42d6-b9bd-51f949bdc03e';
+// s1114 badge watch: a separate Resend audience, so a watcher never gets the monthly update email and vice versa.
+// The contact carries two contact properties (created 2026-11-14): watch = comma list of /r/ slugs, source = "badge-watch".
+export const WATCH_AUDIENCE_ID = '309cd4d6-6c6d-4e40-8a71-57fcb98ff19b';
+export const WATCH_SOURCE = 'badge-watch';
+const WATCH_MAX = 20;
 export const FROM = 'McpStamp updates <hello@zovo.one>';
 export const REPLY_TO = 'support@zovo.one';
 export const SITE = 'https://www.mcpstamp.com';
@@ -64,6 +69,29 @@ export function cleanSource(v) {
   return /^\/(free-servers|can-claude)\/[a-z0-9/-]{0,120}$/.test(s) ? s : '/';
 }
 
+/** /r/ slug from a slug, a registry name or a report URL. Same rule as the /r/ search box. Empty when it cannot be one. */
+export function watchSlug(v) {
+  let s = String(v ?? '').trim().toLowerCase();
+  const m = /\/r\/([a-z0-9-]+)\/?/.exec(s);
+  if (m) s = m[1];
+  s = s.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return /^[a-z0-9][a-z0-9-]{0,160}$/.test(s) ? s : '';
+}
+
+/** True when /r/<slug>/ exists in this deployment (its static badge is built from the same rows). */
+export async function watchSlugExists(env, request, slug) {
+  try {
+    const res = await env.ASSETS.fetch(new Request(new URL(`/badge/${slug}.svg`, request.url), { method: 'GET' }));
+    return res.status === 200;
+  } catch { return false; }
+}
+
+/** Merge one slug into the comma list kept in the contact's "watch" property. */
+export function mergeWatch(prev, slug) {
+  const list = String(prev ?? '').split(',').map((x) => x.trim()).filter(Boolean).filter((x) => x !== slug);
+  return [...list, slug].slice(-WATCH_MAX).join(',');
+}
+
 export function originOk(request) {
   const o = request.headers.get('origin') || request.headers.get('referer');
   if (!o) return false;
@@ -113,8 +141,40 @@ export async function resend(env, method, path, body) {
   return { status: res.status, ok: res.ok, data };
 }
 
-export async function unsubscribeUrl(env, email) {
-  return `${SITE}/updates/unsubscribe?t=${await signToken(env.OPTIN_HMAC_SECRET, { a: 'u', e: email })}`;
+export async function unsubscribeUrl(env, email, list) {
+  const p = list === 'w' ? { a: 'u', e: email, l: 'w' } : { a: 'u', e: email };
+  return `${SITE}/updates/unsubscribe?t=${await signToken(env.OPTIN_HMAC_SECRET, p)}`;
+}
+
+export function watchConfirmEmail({ confirmUrl, unsubUrl, slug }) {
+  const report = `${SITE}/r/${slug}/`;
+  const text = [
+    'Hi,',
+    '',
+    'Someone, probably you, asked on www.mcpstamp.com for an email when the readiness grade of this MCP server changes.',
+    report,
+    '',
+    'When a new McpStamp snapshot gives the server a different grade, we send one short email saying so. We use your address for nothing else.',
+    '',
+    'To start the watch, open this link and press the button.',
+    confirmUrl,
+    '',
+    'The link works for 3 days. If you did not ask for this, ignore this email. You will not be added and we keep nothing.',
+    '',
+    'McpStamp, run by autom8 LLC. Questions: support@zovo.one',
+    `Privacy: ${SITE}/privacy/#updates`,
+    `Stop all watch emails: ${unsubUrl}`,
+  ].join('\n');
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const html = `<!doctype html><html><body style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5;color:#111;max-width:560px">
+<p>Hi,</p>
+<p>Someone, probably you, asked on www.mcpstamp.com for an email when the readiness grade of this MCP server changes: <a href="${esc(report)}">${esc(report)}</a></p>
+<p>When a new McpStamp snapshot gives the server a different grade, we send one short email saying so. We use your address for nothing else.</p>
+<p><a href="${esc(confirmUrl)}" style="display:inline-block;background:#111;color:#fff;padding:10px 16px;text-decoration:none;border-radius:2px">Confirm and start the watch</a></p>
+<p>The link works for 3 days. If you did not ask for this, ignore this email. You will not be added and we keep nothing.</p>
+<p style="font-size:13px;color:#555">McpStamp, run by autom8 LLC. Questions: support@zovo.one. <a href="${SITE}/privacy/#updates">Privacy</a>. <a href="${esc(unsubUrl)}">Stop all watch emails</a></p>
+</body></html>`;
+  return { subject: `Confirm your McpStamp watch for ${slug}`, text, html };
 }
 
 export function confirmEmail({ confirmUrl, unsubUrl, source }) {

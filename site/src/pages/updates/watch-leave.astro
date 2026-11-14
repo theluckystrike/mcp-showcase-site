@@ -1,0 +1,11 @@
+---
+// s1114 badge watch notice page (functions/updates/*.js). noindex via UpdatesNotice.
+import UpdatesNotice from '../../components/UpdatesNotice.astro';
+---
+<UpdatesNotice title="Stop watch emails" heading="Stop watch emails">
+  <p>Press the button to stop every grade-change email from McpStamp. We delete your address from the watch list right away.</p>
+  <form method="post" action="/updates/unsubscribe" class="mt-6">
+    <input type="hidden" name="t" value="" />
+    <button type="submit" class="btn btn-primary">Stop the emails</button>
+  </form>
+</UpdatesNotice>

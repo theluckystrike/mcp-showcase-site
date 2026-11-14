@@ -3,6 +3,7 @@
 // Every number on the page is that server's own measured result. Servers with 0 tools and no detected sign-in are noindex (thin).
 import Layout from '../../layouts/Layout.astro';
 import CopyCode from '../../components/CopyCode.astro';
+import WatchSignup from '../../components/WatchSignup.astro';
 import { STORES } from '../../data/readiness';
 import { getRData, rowsOfGrade, gradePath, R_PAGE_SIZE, AUTH_LABEL, STATUS_LABEL, type RServer } from '../../data/readinessServers';
 import { badgePath } from '../../data/badge';
@@ -176,6 +177,7 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
         )}
       </div>
     </div>
+    <div class="mt-8"><WatchSignup slug={r.slug} title={r.title} slot="r_report" /></div>
   </section>
 
   <section class="wrap pb-12" data-cro="sprint-20261113-r-mcp-stack-link">

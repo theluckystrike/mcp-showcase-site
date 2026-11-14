@@ -1,0 +1,39 @@
+---
+// s1114 badge watch: double opt-in "email me when this server's grade changes". Posts to functions/updates/subscribe.js
+// with a "watch" field (a /r/ slug, or on /badge/ whatever the visitor pastes). Source is tagged "badge-watch" server-side.
+// Nothing is stored until the person presses the button behind the link in the confirmation email.
+interface Props { slug?: string; title?: string; slot: string }
+const { slug, title, slot } = Astro.props;
+const id = 'watch-' + slot;
+---
+<div class="watch" data-cro="s1114-badge-watch">
+  <h3 id={id} class="watch-h">{slug ? 'Watch this server' : 'Watch your server'}</h3>
+  <p class="muted mt-2 max-w-2xl text-[.95rem]">Get one email when {slug ? `${title ?? 'this server'}'s` : "your server's"} readiness grade changes in a new McpStamp snapshot. We send a confirmation link first, and you're not on the list until you click it. We use the address for nothing else, and every email has a link to stop them. Details are on the <a class="link" href="/privacy/#updates">privacy page</a>.</p>
+  <form class="watch-form mt-4" method="post" action="/updates/subscribe" aria-labelledby={id}>
+    {slug ? <input type="hidden" name="watch" value={slug} /> : (
+      <>
+        <label class="watch-label" for={id + '-srv'}>Report address or registry name</label>
+        <input id={id + '-srv'} class="watch-input watch-srv" type="text" name="watch" required maxlength="300" autocomplete="off" spellcheck="false" placeholder="https://www.mcpstamp.com/r/your-server/" />
+      </>
+    )}
+    <label class="watch-label" for={id + '-email'}>Email address</label>
+    <div class="watch-row">
+      <input id={id + '-email'} class="watch-input" type="email" name="email" required maxlength="254" autocomplete="email" inputmode="email" placeholder="you@example.com" />
+      <button type="submit" class="btn" data-cta="badge_watch" data-cta-slot={slot}>Email me if the grade changes</button>
+    </div>
+    <div class="watch-hp" aria-hidden="true">
+      <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+  </form>
+</div>
+<style>
+  .watch { border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .watch-h { font-weight: 700; font-size: 1.15rem; }
+  .watch-label { display: block; font-size: .9rem; font-weight: 600; margin: .6rem 0 .4rem; }
+  .watch-row { display: flex; flex-wrap: wrap; gap: .6rem; max-width: 40rem; }
+  .watch-input { flex: 1 1 16rem; min-width: 0; min-height: 2.9rem; padding: .55rem .75rem; font: inherit; color: var(--text);
+    background: var(--surface-solid); border: 1px solid var(--border-strong); border-radius: 2px; }
+  .watch-srv { width: 100%; max-width: 40rem; display: block; }
+  .watch-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .watch-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+</style>

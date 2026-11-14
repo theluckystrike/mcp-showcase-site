@@ -4,6 +4,7 @@
 // functions/badge/[[path]].js serves this page for /badge/ without a query; /badge?url= stays the live badge proxy.
 import Layout from '../../layouts/Layout.astro';
 import CopyCode from '../../components/CopyCode.astro';
+import WatchSignup from '../../components/WatchSignup.astro';
 import { getRData, rowsOfGrade, R_GRADES } from '../../data/readinessServers';
 import { badgePath } from '../../data/badge';
 import { getServicesContent, orderMailto } from '../../data/services';
@@ -83,6 +84,13 @@ const description = `A README badge for MCP server publishers. It shows the grad
         <p>Ship the fix, then press the free re-check button on your report. The live check shows the new score straight away, and the report and its badge change when we publish the next snapshot.</p>
         {audit && <p>If you'd rather have someone go through the server with you, the Readiness Audit is {audit.price_label}. We run the check, read the server by hand and send a written fix list ranked by store blocker, with a code snippet for each fix. {audit.price_note} <a class="link" href="/services/#audit" data-cta="audit" data-cta-slot="badge_page">What the audit covers</a> or <a class="link" href={orderMailto(audit.order_subject ?? 'Readiness Audit')} data-cta="audit_email" data-cta-slot="badge_page">order it by email</a>.</p>}
       </div>
+    </div>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="bd-watch-h">
+    <div class="bd-grid">
+      <h2 id="bd-watch-h" class="h2">Hear when your grade changes</h2>
+      <div><WatchSignup slot="badge_page" /></div>
     </div>
   </section>
 </Layout>
