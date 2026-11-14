@@ -180,7 +180,7 @@
    "slug": "adjust-for-inflation",
    "repo": "cpi-inflation-calculator-mcp",
    "h1": "Can Claude adjust a price for inflation?",
-   "title": "Can Claude adjust for inflation? Official CPI data",
+   "title": "Claude and CPI: adjust for inflation with BLS data",
    "query": "can claude calculate inflation",
    "answer": "It can do the formula, but it does not know the latest CPI. The Bureau of Labor Statistics publishes a new index every month, and Claude only knows the months before its training cutoff, so an inflation-adjusted figure it gives from memory is stale or guessed. Connect the free CPI Inflation Calculator server and Claude uses official BLS CPI-U, CPI-W and core CPI values from 1913 to the latest month, then gives the exact adjusted amount and the yearly rate.",
    "native": [
@@ -214,7 +214,8 @@
      "q": "What if the newest month is missing?",
      "a": "The answer names the latest month it used. When the live BLS API is not reachable it falls back to bundled data and says so."
     }
-   ]
+   ],
+   "meta_description": "Claude knows the inflation formula, not the latest CPI. The free CPI Inflation Calculator server gives it official BLS CPI-U from 1913 to the latest month."
   },
   {
    "slug": "look-up-per-diem-rates",
@@ -526,7 +527,8 @@
      "q": "Is this live data?",
      "a": "It is static data from the College Board class of 2026 report. It will be rebuilt when the class of 2027 report comes out."
     }
-   ]
+   ],
+   "meta_description": "Only roughly from memory, and from an older year. The free SAT Score Percentiles server reads College Board's class of 2026 user and national percentiles."
   },
   {
    "slug": "convert-cups-to-grams",
@@ -1128,7 +1130,7 @@
    "repo": "currency",
    "server_id": "currency",
    "h1": "Can Claude convert currency at today's exchange rate?",
-   "title": "Can Claude convert currency at today's rate? ECB rates",
+   "title": "Claude currency: convert at today's rate, or change billing",
    "query": "can claude convert currency",
    "answer": "Not from memory. Exchange rates change every day and Claude only knows rates from before its training cutoff, so any conversion it does alone uses an old rate. With web search on, Claude.ai can find a quote on a web page, but it may not say which date or source the rate is from. Connect the Currency server (free token) and Claude converts with the European Central Bank reference rate, names the rate date and rounds to the currency's minor units.",
    "native": [
@@ -1161,8 +1163,13 @@
     {
      "q": "How far back does it go?",
      "a": "The free tier reads rates for the last 90 days. History back to January 1999 is in Pro."
+    },
+    {
+     "q": "How do I change the currency Claude bills me in?",
+     "a": "Not in the middle of a plan. Anthropic says that to change your subscription currency you first mark your plan to cancel at the end of the current term and wait for the term to end. When you buy a new Pro or Max plan, you get the same currency options new subscribers get in your region."
     }
-   ]
+   ],
+   "meta_description": "Claude alone uses an old exchange rate. The free Currency server converts at the ECB reference rate and names its date. Billing currency: see below."
   },
   {
    "slug": "convert-raw-to-cooked-weight",
@@ -1721,9 +1728,9 @@
    "repo": "zip",
    "server_id": "zip",
    "h1": "Can Claude zip files?",
-   "title": "Can Claude zip files? Pack an archive in chat",
+   "title": "Can Claude work with zip files? Read, unzip and zip",
    "query": "can claude zip files",
-   "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude can zip files you upload, and Claude Code can run the zip command on your disk. Connect the Zip server (free token) and Claude packs uploaded files into a new archive and adds files to an existing one, with entry names kept safe to unpack. A local install can also bundle a month of invoices.",
+   "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude can read and unzip a .zip you upload, and pack files into a new archive you download, and Claude Code can run zip and unzip on your disk. Connect the Zip server (free token) and Claude packs uploaded files into a new archive and adds files to an existing one, with entry names kept safe to unpack. A local install can also bundle a month of invoices.",
    "native": [
     "Tells you which files to include.",
     "Zips files you upload in its sandbox when code execution is on.",
@@ -1759,7 +1766,8 @@
      "q": "Is it free?",
      "a": "Creating archives is free for 20 a month, and listing is free. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
     }
-   ]
+   ],
+   "meta_description": "Yes, with code execution on (default on Free, Pro and Max). Claude reads and unzips a .zip you upload and packs files into a new archive to download."
   },
   {
    "slug": "make-a-resume",

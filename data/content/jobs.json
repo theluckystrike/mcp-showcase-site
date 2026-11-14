@@ -955,7 +955,7 @@
    "answer": "Yes. Claude makes a PDF with code execution, on by default on Free, Pro and Max. For numbered invoices, edits to existing PDFs or apps without it, the Invoice, Billing Docs and PDF servers write the files."
   },
   "/can-claude/read-zip-files/": {
-   "intro": "Yes. Claude.ai, Claude Desktop and the mobile apps unzip an upload with code execution, on by default on Free, Pro and Max. Here is how to list, read and safely unpack a zip from chat, and why you should check what is inside first.",
+   "intro": "Yes. Claude can open a zip file, unzip it and read the files inside. Upload the .zip in Claude.ai, Claude Desktop or the mobile app with code execution on (the default on Free, Pro and Max) and ask what is in it. Below is how to list, read and safely unpack one, and why you should check what is inside first.",
    "without_tool": "With code execution on (the default on Free, Pro and Max, on web, Desktop and mobile), Claude can unpack an uploaded zip in its sandbox and read the files. It won't check for traversal paths or a zip bomb unless you ask, and it can't open a zip on your disk. Cursor and VS Code need a script or a tool.",
    "with_tool": "The Zip server lists entries with sizes and ratios, reads one text file from an archive without unpacking, unpacks safely (traversal, absolute-path and symlink entries are refused), creates archives with glob patterns, and on a local install bundles a month of invoices for your accountant.",
    "example": {
@@ -978,7 +978,21 @@
     "Ignoring a huge compression ratio, a sign of a zip bomb.",
     "Emailing a zip of invoices that misses half the month."
    ],
-   "answer": "Yes. Claude unzips an upload when code execution is on, the default on Free, Pro and Max. The Zip server lists entries, reads one file without unpacking and unzips safely, refusing traversal and symlink entries."
+   "answer": "Yes. Claude unzips an uploaded .zip in its code sandbox when code execution is on, the default on Free, Pro and Max. The Zip server lists entries, reads one file without unpacking and unzips safely, refusing traversal and symlink entries.",
+   "sections": [
+    {
+     "h2": "Can Claude unzip files and read them?",
+     "body": "Yes, in one step. Upload the archive and ask Claude to unzip it and summarize, search or compare the files. It extracts them in its sandbox, not on your computer, and then reads the files it can parse, such as text, CSV and code. If code execution is off in Settings > Capabilities (Create and edit files in the newer layout), turn it on and upload the zip again."
+    },
+    {
+     "h2": "Can you upload a zip file to Claude?",
+     "body": "Yes, with code execution on. Anthropic's limit for files used with code execution is 30 MB per file, for uploads and downloads, so split a bigger archive before you upload it."
+    },
+    {
+     "h2": "Can Claude Code read zip files?",
+     "body": "Yes. Claude Code runs shell commands on your machine after you approve them, so it can run unzip or a short script on an archive in your project folder and then read the extracted files."
+    }
+   ]
   },
   "/can-chatgpt/create-an-invoice/": {
    "intro": "ChatGPT writes invoice text well and can make a file with its data analysis tool, but it keeps no numbering or client list. Below is what a connected MCP server adds. We haven't tested the ChatGPT setup, so that part stays unknown.",
@@ -1011,7 +1025,7 @@
    "answer": "ChatGPT can draft an invoice and make a file, but it keeps no numbering or client list. The Invoice server adds numbered A4 PDFs, stored clients and payment tracking. It works in Claude and Cursor. ChatGPT connector setup is plan-dependent and not tested by us."
   },
   "/can-chatgpt/open-zip-files/": {
-   "intro": "Usually. ChatGPT can unpack an uploaded zip with its code tool. A Zip server lets you look inside first and pull out one file at a time.",
+   "intro": "Yes, when Data Analysis is available in your chat. OpenAI says ChatGPT may use tools to open an uploaded ZIP archive and work with the files inside, and what it can read depends on those files. A Zip server lets you look inside first and pull out one file at a time.",
    "without_tool": "With its code tool, ChatGPT can usually unpack a zip you upload and read the files inside its sandbox. It won't check for traversal paths or a suspicious compression ratio unless you ask, and the files stay in that one chat.",
    "with_tool": "The Zip server lists every entry with sizes and ratios, reads one text file without unpacking the rest, and unpacks safely with traversal, absolute-path and symlink entries refused. The hosted server can't see files on your computer. It takes a file from a public link or a small upload (up to 1 MB), and new files come back as one-hour download links. To try it in ChatGPT on the web, where your plan or workspace allows custom MCP servers, get a free token at mcp.zovo.one/mcp/connect and add mcp.zovo.one/mcp/zip/t/<token> as a server with No authentication. We haven't tested this in ChatGPT yet.",
    "example": {
@@ -1034,7 +1048,7 @@
     "Ignoring a huge compression ratio, a sign of a zip bomb.",
     "Assuming every ChatGPT plan can add a custom MCP server. Check your plan first."
    ],
-   "answer": "Usually. ChatGPT can unpack an uploaded zip with its code tool. The Zip server lists entries, reads one file without unpacking and refuses unsafe paths. It runs hosted or locally in Claude and Cursor."
+   "answer": "Yes, when Data Analysis is available. ChatGPT opens an uploaded ZIP with its tools and reads the files it supports. The Zip server lists entries, reads one file without unpacking and refuses unsafe paths. It runs hosted or locally in Claude and Cursor."
   },
   "/can-chatgpt/zip-files/": {
    "intro": "Yes, for files it already has. ChatGPT's code tool can pack files you upload into a .zip. A Zip server does the same with patterns and keeps a history of what it made.",
@@ -1465,6 +1479,9 @@
     "Committing large PDFs to the repo to read them."
    ],
    "answer": "Yes. Attach a PDF in Cursor chat and it reads the text, and the agent can run a script for more. A PDF server adds page counts, page ranges and new files as named tools."
+  },
+  "/can-claude/merge-pdfs/": {
+   "answer": "Yes. Upload the PDFs and ask Claude to merge them. With code execution on, the default on Free, Pro and Max, it writes one combined PDF you can download. The PDF server merges, splits and pulls page ranges in one call, for files on your disk or in Cursor."
   }
  }
 }

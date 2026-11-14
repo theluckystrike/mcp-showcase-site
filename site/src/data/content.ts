@@ -134,6 +134,8 @@ export function quickstartsFor(slug: string): Quickstart[] {
 export interface JobStep { tool: string; does: string }
 export interface JobCopy {
   intro: string; without_tool: string; with_tool: string; answer: string; pitfalls: string[];
+  /** s1114: short query-shaped sections under the answer (h2 = the search question, body = the direct answer). */
+  sections: { h2: string; body: string }[];
   example: { persona: string; prompt: string; steps: JobStep[]; result: string } | null;
 }
 let jobsCache: Record<string, any> | null = null;
@@ -145,6 +147,7 @@ export function getJob(pagePath: string): JobCopy | null {
   return {
     intro: String(j.intro ?? ''), without_tool: String(j.without_tool ?? ''), with_tool: String(j.with_tool ?? ''),
     answer: String(j.answer ?? ''), pitfalls: arr<string>(j.pitfalls).map(String),
+    sections: arr<Record<string, any>>(j.sections).filter((x) => x?.h2 && x?.body).map((x) => ({ h2: String(x.h2), body: String(x.body) })),
     example: ex?.prompt ? {
       persona: String(ex.persona ?? ''), prompt: String(ex.prompt), result: String(ex.result ?? ''),
       steps: arr<Record<string, any>>(ex.steps).filter((s) => s?.tool).map((s) => ({ tool: String(s.tool), does: String(s.does ?? '') })),
