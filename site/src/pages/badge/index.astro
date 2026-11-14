@@ -1,0 +1,97 @@
+---
+// s1114: /badge/ explains the static README badge (/badge/<slug>.svg) to MCP server publishers.
+// Every number here comes from data/readiness-servers.json or data/content/services.json at build time.
+// functions/badge/[[path]].js serves this page for /badge/ without a query; /badge?url= stays the live badge proxy.
+import Layout from '../../layouts/Layout.astro';
+import CopyCode from '../../components/CopyCode.astro';
+import { getRData, rowsOfGrade, R_GRADES } from '../../data/readinessServers';
+import { badgePath } from '../../data/badge';
+import { getServicesContent, orderMailto } from '../../data/services';
+
+const D = getRData();
+const rows = D?.rows ?? [];
+const n = (v: number) => v.toLocaleString('en-US');
+const checks = D ? Object.keys(D.checkTitle).length : 0;
+const date = rows[0]?.date ?? '2026-11-02';
+const dateText = new Date(date + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const site = Astro.site!;
+const examples = R_GRADES.map((g) => rowsOfGrade(g).find((r) => !r.noindex)).filter(Boolean) as NonNullable<ReturnType<typeof rowsOfGrade>[number]>[];
+const ex = examples[0];
+const exMd = ex ? `[![MCP readiness grade ${ex.grade}](${new URL(badgePath(ex.slug), site).href})](${new URL(`/r/${ex.slug}/`, site).href})` : '';
+const byGrade = Object.fromEntries(R_GRADES.map((g) => [g, rows.filter((r) => r.grade === g).length]));
+// Most frequent failed checks across the published reports.
+const failCount = new Map<string, { title: string; k: number }>();
+for (const r of rows) for (const c of r.bad) if (c.status === 'fail') {
+  const e = failCount.get(c.id) ?? { title: c.title, k: 0 };
+  e.k += 1; failCount.set(c.id, e);
+}
+const topFails = [...failCount.entries()].sort((a, b) => b[1].k - a[1].k).slice(0, 4);
+const audit = getServicesContent().services.find((s) => s.id === 'audit');
+
+const title = 'MCP readiness badge for your README';
+const description = `A README badge for MCP server publishers. It shows the grade and score McpStamp measured for your server over ${checks} checks and links to the full report.`;
+---
+<Layout title={title} description={description} noindex={!rows.length} crumbs={[{ name: 'Server reports', path: '/r/' }, { name: 'README badge', path: '/badge/' }]}>
+  <section class="relative isolate">
+    <div class="grid-lines"></div>
+    <div class="wrap pb-8 pt-10 sm:pt-14">
+      <span class="eyebrow">For MCP server publishers</span>
+      <h1 class="display mt-5 max-w-4xl !text-[clamp(2.2rem,5.4vw,4rem)]">MCP readiness badge</h1>
+      <p class="lead mt-5 max-w-3xl">Each of the {n(rows.length)} <a class="link" href="/r/">server reports</a> has its own badge. It shows the grade and score your server got in the {dateText} check and links to the report, so anyone reading your README can see what passed and what didn't.</p>
+      {examples.length > 0 && (
+        <ul class="bd-ex mt-7" aria-label="Badges from real reports">
+          {examples.map((r) => (
+            <li><a href={`/r/${r.slug}/`}><img src={badgePath(r.slug)} alt={`MCP readiness grade ${r.grade}, score ${r.score} of 100`} height="20" decoding="async" /></a> <span class="bd-ex-n">{r.title}</span></li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="bd-what-h">
+    <div class="bd-grid">
+      <h2 id="bd-what-h" class="h2">What the badge measures</h2>
+      <div class="prose-site">
+        <p>McpStamp Check connects to the server's public URL without credentials and runs {checks} checks. They cover transport, server metadata, sign-in and tools. A pass counts in full, a warning counts half and a fail counts nothing. The score is the weighted share of the checks that apply to your server.</p>
+        <p>The grade follows from the score. A starts at 90, B at 80, C at 65 and D at 50. Anything lower is F. In the {n(rows.length)} reports, {n(byGrade.A)} servers have an A and {n(byGrade.F)} have an F.</p>
+        <p>The same checks decide whether a server is ready for the Claude Directory, the ChatGPT app directory, Gemini Connected Apps and the MCP Registry. The report lists each store. The badge carries only the grade and the score.</p>
+        <p>It doesn't rate what your tools do or how good their answers are. It tells you whether a store's client can connect, sign in and read your tools the way that store expects.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="bd-add-h">
+    <div class="bd-grid">
+      <h2 id="bd-add-h" class="h2">Add it to your README</h2>
+      <div class="prose-site">
+        <p>Find your server in the <a class="link" href="/r/">report list</a>, open its report and copy the Markdown under "Add this badge to your README". For {ex ? ex.title : 'a grade A server'} it looks like this.</p>
+        {exMd && <div class="not-prose my-4"><CopyCode code={exMd} label="Markdown" cta="badge_copy" slot="badge_page" /></div>}
+        <p>The image is served from <code>/badge/&lt;slug&gt;.svg</code> and the link goes to <code>/r/&lt;slug&gt;/</code>. Both addresses stay the same when the reports are refreshed, so you paste it once.</p>
+        <p>Not in the list? The reports cover a sample of the registry. Run the <a class="link" href="/check/" data-cta="check" data-cta-slot="badge_page">free check</a> on any remote MCP URL and copy the live badge from the result. That one follows the latest check of your URL instead of the {dateText} snapshot.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="bd-up-h">
+    <div class="bd-grid">
+      <h2 id="bd-up-h" class="h2">How to raise your grade</h2>
+      <div class="prose-site">
+        <p>Open your report. Every failed check shows what we measured and how to fix it. These were the most common failures across the {n(rows.length)} reports.</p>
+        <ul>
+          {topFails.map(([id, e]) => <li>{e.title}, failed by {n(e.k)} servers (<code>{id}</code>)</li>)}
+        </ul>
+        <p>Ship the fix, then press the free re-check button on your report. The live check shows the new score straight away, and the report and its badge change when we publish the next snapshot.</p>
+        {audit && <p>If you'd rather have someone go through the server with you, the Readiness Audit is {audit.price_label}. We run the check, read the server by hand and send a written fix list ranked by store blocker, with a code snippet for each fix. {audit.price_note} <a class="link" href="/services/#audit" data-cta="audit" data-cta-slot="badge_page">What the audit covers</a> or <a class="link" href={orderMailto(audit.order_subject ?? 'Readiness Audit')} data-cta="audit_email" data-cta-slot="badge_page">order it by email</a>.</p>}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .bd-grid { display: grid; gap: 1.25rem; border-top: 2px solid var(--text); padding-top: 2rem; }
+  @media (min-width: 1024px) { .bd-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 3rem; } }
+  .bd-ex { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
+  .bd-ex li { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+  .bd-ex img { display: block; }
+  .bd-ex-n { font-size: .9rem; color: var(--muted); overflow-wrap: anywhere; }
+</style>

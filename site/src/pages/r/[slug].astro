@@ -5,6 +5,8 @@ import Layout from '../../layouts/Layout.astro';
 import CopyCode from '../../components/CopyCode.astro';
 import { STORES } from '../../data/readiness';
 import { getRData, rowsOfGrade, gradePath, R_PAGE_SIZE, AUTH_LABEL, STATUS_LABEL, type RServer } from '../../data/readinessServers';
+import { badgePath } from '../../data/badge';
+import { getServicesContent, orderMailto } from '../../data/services';
 
 export function getStaticPaths() {
   const d = getRData();
@@ -29,9 +31,15 @@ const dateText = new Date(r.date + 'T00:00:00Z').toLocaleDateString('en-GB', { d
 const site = Astro.site!;
 const pageUrl = new URL(`/r/${r.slug}/`, site).href;
 const checkUrl = `/check/?url=${encodeURIComponent(r.url)}`;
-const badgeUrl = new URL(`/badge?url=${encodeURIComponent(r.url)}`, site).href;
-const md = `[![McpStamp score](${badgeUrl})](${pageUrl})`;
-const html = `<a href="${pageUrl}"><img src="${badgeUrl}" alt="McpStamp score" height="20"></a>`;
+// s1114: static badge of this report (src/pages/badge/[slug].svg.ts). It links to this report, so README clicks land here.
+const badgeUrl = new URL(badgePath(r.slug), site).href;
+const badgeAlt = `MCP readiness grade ${r.grade}`;
+const md = `[![${badgeAlt}](${badgeUrl})](${pageUrl})`;
+const html = `<a href="${pageUrl}"><img src="${badgeUrl}" alt="${badgeAlt}" height="20"></a>`;
+// Publisher CTA. The $490 audit price and turnaround come from data/content/services.json, never from this file.
+const auditSvc = getServicesContent().services.find((s) => s.id === 'audit');
+const auditPrice = auditSvc?.price_label ?? '';
+const auditMail = orderMailto(`${auditSvc?.order_subject ?? 'Readiness Audit'} for ${r.name}`);
 const ink = (g: string) => (g === 'A' || g === 'B' ? 'var(--ink-blue)' : g === 'C' ? 'var(--ink-violet)' : 'var(--ink-red)');
 const t = (id: string) => D.checkTitle[id] ?? id;
 const join = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
@@ -46,6 +54,9 @@ const storeSentence = [
 ].filter(Boolean).join(' ');
 const fails = r.bad.filter((c) => c.status === 'fail');
 const warns = r.bad.filter((c) => c.status === 'warn');
+const plural = (k: number, one: string, many: string) => `${k} ${k === 1 ? one : many}`;
+const foundText = !r.bad.length ? `Every check that ran on ${dateText} passed. If you change the server, re-check it for free.`
+  : `The ${dateText} check found ${[fails.length ? plural(fails.length, 'failed check', 'failed checks') : '', warns.length ? plural(warns.length, 'warning', 'warnings') : ''].filter(Boolean).join(' and ')}. ${r.bad.length === 1 ? 'The fix for it is' : 'The fix for each one is'} listed above. Ship the fixes, then re-check for free.`;
 const authSkipped = r.skipped.filter((id) => id.startsWith('auth_'));
 const otherSkipped = r.skipped.filter((id) => !id.startsWith('auth_'));
 const repoUrl = /^https?:\/\//.test(r.repo) ? r.repo : '';
@@ -136,29 +147,39 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
     </details>
   </section>
 
-  <section class="wrap pb-12" aria-labelledby="rs-re-h">
-    <div class="rs-cta">
-      <div>
-        <h2 id="rs-re-h" class="text-2xl font-bold sm:text-3xl">Run a fresh check</h2>
-        <p class="muted mt-2 max-w-xl">This page is the {dateText} snapshot. If you maintain this server and have shipped fixes since then, re-check it. The live check and the badge show the current result, and the next snapshot will pick up the change.</p>
+  <section class="wrap pb-12" aria-labelledby="rs-pub-h" data-cro="s1114-publisher-badge">
+    <span class="eyebrow">For the maintainer</span>
+    <h2 id="rs-pub-h" class="h2 mt-3">If you publish this server</h2>
+    <div class="rs-pub mt-6">
+      <div class="rs-pub-col" aria-labelledby="rs-badge-h">
+        <h3 id="rs-badge-h" class="rs-pub-h">Add this badge to your README</h3>
+        <p class="mt-3"><img src={badgePath(r.slug)} alt={`${badgeAlt}, score ${r.score} of 100`} height="20" loading="lazy" decoding="async" /></p>
+        <p class="muted mt-3 text-[.95rem]">It shows the grade and score from the {dateText} check and links back to this report. Paste the Markdown into your README.</p>
+        <div class="mt-4 grid gap-4">
+          <CopyCode code={md} label="Markdown" cta="badge_copy" slot="r_markdown" />
+          <CopyCode code={html} label="HTML" cta="badge_copy" slot="r_html" />
+        </div>
+        <p class="mt-3 text-[.92rem]"><a class="link" href="/badge/" data-cta="badge_page" data-cta-slot="r_badge">How the badge works</a></p>
       </div>
-      <p><a class="btn btn-primary" rel="nofollow" href={checkUrl} data-cta="r_recheck">Re-check now</a></p>
+      <div class="rs-pub-col rs-cta" aria-labelledby="rs-re-h">
+        <h3 id="rs-re-h" class="rs-pub-h">Improve this grade</h3>
+        <p class="mt-3">{foundText} The live check shows the new score at once, and this page picks it up at the next snapshot.</p>
+        <p class="mt-4 flex flex-wrap gap-3"><a class="btn btn-primary" rel="nofollow" href={checkUrl} data-cta="r_recheck" data-cta-slot="publisher">Re-check now, free</a></p>
+        {auditSvc && (
+          <>
+            <p class="mt-5 text-[.95rem]">Want someone to read the server for you? The Readiness Audit is {auditPrice}. You get a written fix list ranked by store blocker and a code snippet for each fix. {auditSvc.price_note}</p>
+            <p class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[.95rem]">
+              <a class="btn" href="/services/#audit" data-cta="audit" data-cta-slot="r_improve">See the {auditPrice} audit</a>
+              <a class="link" href={auditMail} data-cta="audit_email" data-cta-slot="r_improve">Order it by email</a>
+            </p>
+          </>
+        )}
+      </div>
     </div>
   </section>
 
   <section class="wrap pb-12" data-cro="sprint-20261113-r-mcp-stack-link">
     <p class="max-w-3xl"><strong>Comparing MCP vendors with running your own servers?</strong> Read <a class="link" href="/run-your-own-mcp-stack/?src=r" data-cta="r_mcp_stack_guide">Run your own MCP stack</a>: architecture, self-hosting steps, security checklist and monthly cost.</p>
-  </section>
-
-  <section class="wrap pb-12" aria-labelledby="rs-badge-h">
-    <span class="eyebrow">Badge</span>
-    <h2 id="rs-badge-h" class="h2 mt-3">README badge</h2>
-    <p class="muted mt-3 max-w-2xl">The badge shows the latest score for this URL and links to this report.</p>
-    <p class="mt-4"><img src={badgeUrl} alt={`McpStamp score for ${r.title}`} height="20" loading="lazy" decoding="async" /></p>
-    <div class="mt-4 grid gap-4 lg:grid-cols-2">
-      <CopyCode code={md} label="Markdown" />
-      <CopyCode code={html} label="HTML" />
-    </div>
   </section>
 
   <section class="wrap pb-12" aria-labelledby="rs-about-h">
@@ -215,8 +236,11 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
   .rs-detail code { font-family: var(--font-mono); font-size: .82rem; }
   .rs-fixtext { margin-top: .45rem; max-width: 48rem; }
   .rs-more summary { cursor: pointer; font-family: var(--font-mono); font-size: .8rem; color: var(--accent); }
-  .rs-cta { display: grid; gap: 1.25rem; padding: 1.5rem; border: 1px solid var(--manila-2); background: var(--manila); border-radius: 3px; }
-  @media (min-width: 900px) { .rs-cta { grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: 2rem; } }
+  .rs-cta { padding: 1.5rem; border: 1px solid var(--manila-2); background: var(--manila); border-radius: 3px; }
+  .rs-pub { display: grid; gap: 1.5rem; }
+  @media (min-width: 900px) { .rs-pub { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; } }
+  .rs-pub-col { min-width: 0; }
+  .rs-pub-h { font-weight: 700; font-size: 1.25rem; }
   .rs-quote { border-left: 3px solid var(--border-strong); padding-left: 1rem; color: var(--muted); max-width: 48rem; overflow-wrap: anywhere; }
   .rs-meta > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: .75rem; padding: .5rem 0; border-bottom: 1px solid var(--rule); }
   .rs-meta dt { font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); padding-top: .2rem; }
