@@ -18,8 +18,8 @@ export async function onRequestPost({ request, env }) {
   const t = String(form.t || new URL(request.url).searchParams.get('t') || '');
   const p = env.OPTIN_HMAC_SECRET ? await verifyToken(env.OPTIN_HMAC_SECRET, t, 'u') : null;
   if (!p) return asJson ? json(400, { ok: false, error: 'bad_token' }) : page(env, request, '/updates/problem/', { status: 400, msg: BAD });
-  // Resend keeps contact properties on the account-wide contact after a list removal, so a watch stop clears them first.
-  if (p.l === 'w') await resend(env, 'PATCH', `/audiences/${WATCH_AUDIENCE_ID}/contacts/${encodeURIComponent(p.e)}`, { properties: { watch: '', source: '' } });
+  // Resend keeps contact properties on the account-wide contact after a list removal, so a watch stop clears them first (null clears, an empty string does not).
+  if (p.l === 'w') await resend(env, 'PATCH', `/audiences/${WATCH_AUDIENCE_ID}/contacts/${encodeURIComponent(p.e)}`, { properties: { watch: null, source: null } });
   const r = await resend(env, 'DELETE', `/audiences/${p.l === 'w' ? WATCH_AUDIENCE_ID : AUDIENCE_ID}/contacts/${encodeURIComponent(p.e)}`);
   // 404 = not on the list (never confirmed, or already removed): the person is unsubscribed either way.
   if (!r.ok && r.status !== 404) {
