@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { stats, CONTENT_DIR } from '../data/servers';
 import { STORES } from '../data/readiness';
+import ZovoXpromo from '../components/ZovoXpromo.astro';
 
 const st = stats();
 const title = 'McpStamp Check: is your MCP server store-ready?';
@@ -217,6 +218,7 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
       <p class="muted mt-6 max-w-3xl text-[.95rem]">The check connects the way an MCP client does and reads what the server publishes. See how public servers score in the <a href="/readiness/" class="link">McpStamp Readiness Index</a>.</p>
     </div>
   </section>
+  <ZovoXpromo placement="tool" content="check" />
 </Layout>
 
 <script>

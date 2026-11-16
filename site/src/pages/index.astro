@@ -16,6 +16,7 @@ import { stats, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
 import { seo } from '../data/pages';
 import { CLIENTS } from '../data/content';
 import { getServicesContent } from '../data/services';
+import ZovoXpromo from '../components/ZovoXpromo.astro';
 
 const st = stats();
 const meta = seo('/', { title: `${brand.name}: ${brand.tagline}`, description: brand.description });
@@ -175,6 +176,8 @@ npx -y @theluckystrike/mcp-invoice`}</pre>
       </div>
     </div>
   </section>
+
+  <ZovoXpromo placement="home" />
 
   <StickyCta label={`All ${st.paid} paid, $${bundlePrice()} once`} sub="Lifetime licence. The free tier stays free." href={buyUrl(bundleUrl(), 'home', 'sticky')} cta="Get the bundle" secondary={{ label: 'Pricing', href: '/pricing/' }} />
 </Layout>

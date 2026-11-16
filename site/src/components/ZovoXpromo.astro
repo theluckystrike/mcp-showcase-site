@@ -1,0 +1,18 @@
+---
+// Zovo cross-promo module (sprint-20261116-zovo-xpromo). Audience: developers. One block, one CTA, after the page's own offer.
+interface Props { placement: 'home' | 'tool'; content?: string }
+const { placement, content } = Astro.props;
+const site = 'mcpstamp.com';
+const href = `https://zovo.one/pricing?utm_source=${site}&utm_medium=xpromo&utm_campaign=s3${content ? `&utm_content=${content}` : ''}`;
+const onclick = `typeof gtag==='function'&&gtag('event','zovo_xpromo_click',{site:'${site}',placement:'${placement}',link_url:this.href})`;
+---
+<div class="wrap">
+  <aside data-cro="sprint-20261116-zovo-xpromo" class="zovo-xpromo" style="margin:2rem auto;max-width:720px;padding:1rem 1.25rem;border:1px solid var(--border-strong,#e5e7eb);border-radius:10px;font-size:15px;line-height:1.5">
+    <p style="margin:0 0 .4rem;font-weight:600">From the makers of McpStamp: Zovo Chrome extensions for developers</p>
+    <ul style="margin:.25rem 0 .6rem 1.1rem;padding:0;list-style:disc">
+      <li><b>JSON Formatter Pro</b> - format and validate JSON locally</li><li><b>API Testing PRO</b> - send and inspect API requests</li><li><b>Regex Tester Pro</b> - test and debug regex</li>
+    </ul>
+    <p style="margin:0 0 .6rem">One Zovo Pro plan unlocks Pro in all 15 extensions: <b>$4.99 a month</b> or <b>Lifetime $99</b> once.</p>
+    <a href={href} onclick={onclick} target="_blank" rel="noopener" class="link" style="font-weight:600">See Zovo Pro and Lifetime &rarr;</a>
+  </aside>
+</div>
