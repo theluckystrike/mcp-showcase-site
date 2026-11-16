@@ -16,8 +16,9 @@
    "description": "What Elaichi AI's MCP server is, from its registry entry and our 2 Nov 2026 check (OAuth sign-in, grade B), and what running your own MCP servers takes instead.",
    "lead": "Elaichi AI (elaichi.ai) describes itself in the MCP Registry as governed AI agents for the software your company already runs, with 400+ connectors behind one endpoint. You connect one hosted URL, https://api.elaichi.ai/mcp, and sign in with OAuth; its tools sit behind that sign-in, so our check without credentials could not list them. Running your own MCP servers instead means you host, secure and update each server yourself. [Run your own MCP stack](/run-your-own-mcp-stack/?src=r-elaichi) covers the architecture, a security checklist and the monthly cost.",
    "related": [
-    "com-apideck-mcp",
-    "com-crm-connector-crm-connector"
+    "com-crm-connector-crm-connector",
+    "ai-chipp-chipp-integrations",
+    "ai-lenshub-lenshub"
    ]
   },
   "ai-smithery-docfork-mcp": {
@@ -26,7 +27,6 @@
    "lead": "Docfork serves the latest documentation and code examples for 9,000+ libraries to LLMs and AI code editors, according to its registry entry. This report covers the Smithery-hosted endpoint, https://server.smithery.ai/@docfork/mcp/mcp, which asks for an OAuth sign-in; the source is at github.com/docfork/docfork-mcp. On 2 November 2026 it scored 85 of 100 (grade B), and the Gemini sign-in discovery check failed (details below).",
    "related": [
     "io-qt-qt-docs-mcp-qt-documentation",
-    "com-googleapis-developerknowledge-mcp",
     "io-developerhub-docs"
    ]
   },
