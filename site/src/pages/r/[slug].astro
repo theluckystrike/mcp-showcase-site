@@ -8,6 +8,9 @@ import { STORES } from '../../data/readiness';
 import { getRData, rowsOfGrade, gradePath, R_PAGE_SIZE, AUTH_LABEL, STATUS_LABEL, type RServer } from '../../data/readinessServers';
 import { badgePath } from '../../data/badge';
 import { getServicesContent, orderMailto } from '../../data/services';
+import S3PayBox from '../../components/S3PayBox.astro';
+import { S3_PAYLINKS } from '../../data/s3PayLinks';
+import { stats, bundlePrice } from '../../data/servers';
 
 export function getStaticPaths() {
   const d = getRData();
@@ -64,6 +67,10 @@ const repoUrl = /^https?:\/\//.test(r.repo) ? r.repo : '';
 const webUrl = /^https?:\/\//.test(r.web) ? r.web : '';
 const higher = pct(r.below, D.population);
 
+// sprint-20261116 D1B: McpStamp's own paid offer (bundle) as a one-click Stripe Payment Link.
+const s3b = S3_PAYLINKS.bundle;
+const s3paid = stats().paid;
+if (bundlePrice() !== s3b.price) throw new Error(`bundle price ${bundlePrice()} != Payment Link price ${s3b.price}`);
 const title = `${r.title} MCP server readiness for Claude, ChatGPT and Gemini`;
 const description = `${r.title} MCP server (${r.name}) scored ${r.score} of 100, grade ${r.grade}, on ${dateText}. ${storeSentence} ${r.tools ? `${r.tools} tools listed.` : ''}`;
 const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other' ? 'Behind sign-in' : '0';
@@ -178,6 +185,14 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
       </div>
     </div>
     <div class="mt-8"><WatchSignup slug={r.slug} title={r.title} slot="r_report" /></div>
+  </section>
+
+  <section class="wrap pb-12" aria-labelledby="rs-s3-h" data-cro="sprint-20261116-offer">
+    <span class="eyebrow">McpStamp servers</span>
+    <h2 id="rs-s3-h" class="h2 mt-3">All {s3paid} paid McpStamp servers, one key</h2>
+    <p class="mt-3 max-w-3xl">Our own MCP servers for invoices, documents, zip files, tracking and more answer at a hosted URL with a free tier. One payment turns on Pro on all of them, for life.</p>
+    <p class="mt-4" data-cro="sprint-20261116-direct"><a class="btn btn-primary" href={s3b.url} rel="nofollow" data-checkout="mcp:bundle" data-item-id={s3b.itemId} data-product={s3b.name} data-price={String(s3b.price)} data-slot="r.offer">Get all {s3paid} paid servers, ${s3b.price} once</a> <a class="link ml-3" href="/pricing/">See what Pro removes</a></p>
+    <S3PayBox price={s3b.price} gets={`all ${s3paid} paid servers: ${s3b.gets}`} />
   </section>
 
   <section class="wrap pb-12" data-cro="sprint-20261113-r-mcp-stack-link">

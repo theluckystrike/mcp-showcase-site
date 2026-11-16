@@ -150,10 +150,15 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
           if (c) gtag('event', 'mcpstamp_cta_click', { cta: c.getAttribute('data-cta'), slot: c.getAttribute('data-cta-slot') || '', page_path: location.pathname });
           var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
           var h = a.href;
-          if (h.indexOf('mcp.zovo.one/buy/') > -1) {
+          var ck = a.getAttribute('data-checkout');
+          if (ck) {
+            // sprint-20261116 (D1B): one-click Stripe Payment Link. Product, price and value come from the button itself.
+            var pr = Number(a.getAttribute('data-price')) || 0, iid = a.getAttribute('data-item-id') || ck, pn = a.getAttribute('data-product') || iid;
+            gtag('event', 'begin_checkout', { site: 'mcpstamp.com', product: pn, product_id: iid, price: pr, checkout: ck, slot: a.getAttribute('data-slot') || '', currency: 'USD', value: pr, items: [{ item_id: iid, item_name: pn, price: pr, quantity: 1 }], transport_type: 'beacon' });
+          } else if (h.indexOf('mcp.zovo.one/buy/') > -1) {
             // Single servers are $19 once, the bundle $39 once (pricing page, 2026-11-13).
             var u = new URL(h), id = u.pathname.split('/').pop(), v = id === 'bundle' ? 39 : 19;
-            gtag('event', 'begin_checkout', { item_id: id, slot: u.searchParams.get('src') || '', currency: 'USD', value: v, items: [{ item_id: id, price: v, quantity: 1 }] });
+            gtag('event', 'begin_checkout', { site: 'mcpstamp.com', product: id, item_id: id, price: v, slot: u.searchParams.get('src') || '', currency: 'USD', value: v, items: [{ item_id: id, price: v, quantity: 1 }], transport_type: 'beacon' });
           } else if (/buymeacoffee\.com|paypal\.me|t\.me\/|github\.com\/theluckystrike/.test(h)) {
             gtag('event', 'support_click', { link_url: h });
           }
@@ -177,7 +182,24 @@ const graphJson = JSON.stringify(graph).replace(/</g, '\\u003c');
         var t = b.getAttribute('data-copy');
         if (t == null) { var el = document.querySelector(b.getAttribute('data-copy-target')); t = el ? el.textContent : ''; }
         var done = function () { var o = b.textContent; b.textContent = 'Copied'; setTimeout(function () { b.textContent = o; }, 1400); };
-        if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, function () {}); 
+        if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, function () {});
+      });
+      // sprint-20261116 notready: "Email me this link" (components/S3PayBox.astro) -> fleet-leads, double opt-in there.
+      document.addEventListener('submit', function (e) {
+        var f = e.target; if (!f || !f.classList || !f.classList.contains('s3-notready')) return;
+        e.preventDefault();
+        if (f.hp && f.hp.value) return;
+        var em = (f.email && f.email.value || '').trim(), msg = f.querySelector('.s3-nr-msg');
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { if (msg) msg.textContent = 'Please enter a valid email.'; return; }
+        var off = f.getAttribute('data-offer') || 'mcpstamp-notready', pr = f.getAttribute('data-price') || '';
+        var b = f.querySelector('button'); if (b) b.disabled = true;
+        fetch('https://fleet-leads.lipmichal.workers.dev/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: em, offer_id: off, offer_name: document.title, page: location.href, price: '$' + pr, hp: '' }) })
+          .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return r.ok && j.ok !== false; }); })
+          .then(function (ok) {
+            if (msg) msg.textContent = ok ? 'Check your inbox to confirm.' : 'Sorry, that did not work. Email support@zovo.one.';
+            if (ok && window.gtag) window.gtag('event', 'generate_lead', { site: 'mcpstamp.com', offer_id: off, price: Number(pr) || 0, value: Number(pr) || 0, currency: 'USD' });
+            if (!ok && b) b.disabled = false;
+          }, function () { if (msg) msg.textContent = 'Sorry, that did not work. Email support@zovo.one.'; if (b) b.disabled = false; });
       });
     </script>
   </body>

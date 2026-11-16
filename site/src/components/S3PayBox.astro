@@ -1,0 +1,28 @@
+---
+// Sprint 3 (PAY4 + PAY7): pre-pay box and "Email me this link" form. Placed directly AFTER a buy button.
+// Refund text = terms section 8 (Pro Licences: full refund within 14 days). The notready form posts to
+// fleet-leads (script in layouts/Layout.astro, one copy per page).
+interface Props { price: number; gets: string; offer?: string }
+const { price, gets, offer = 'mcpstamp-notready' } = Astro.props;
+---
+<div class="s3-paybox" data-cro="sprint-20261116-paybox">
+  <p><strong>${price}</strong> once - {gets}.</p>
+  <p>Instant delivery: your licence key shows on the page right after payment · Full refund within 14 days, email support@zovo.one (<a href="/terms/#refunds">terms</a>)</p>
+  <p>Secure checkout by Stripe - the page shows BeLikeNative, our company account</p>
+</div>
+<form class="s3-notready" data-cro="sprint-20261116-notready" data-offer={offer} data-price={String(price)} novalidate>
+  <label>Not ready? Email me this link <input type="email" name="email" required placeholder="you@email.com" autocomplete="email"></label>
+  <input type="text" name="hp" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+  <button type="submit">Email me</button>
+  <small>We email you this link once and one reminder. Unsubscribe any time.</small>
+  <span class="s3-nr-msg" role="status"></span>
+</form>
+<style is:global>
+  .s3-paybox{margin:.5rem 0;padding:.5rem .75rem;border:1px solid currentColor;border-color:color-mix(in srgb,currentColor 20%,transparent);border-radius:8px;font-size:13px;line-height:1.4;max-width:40rem}
+  .s3-paybox p{margin:.15rem 0}
+  .s3-paybox a{text-decoration:underline}
+  .s3-notready{font-size:13px;margin:.25rem 0 .75rem;position:relative;max-width:40rem}
+  .s3-notready input[type=email]{max-width:200px;padding:4px 6px;font-size:14px;border:1px solid var(--border-strong,#999);background:transparent;color:inherit;border-radius:3px}
+  .s3-notready button{padding:4px 10px;font-size:13px;border:1px solid var(--border-strong,#999);border-radius:3px;background:transparent;color:inherit;cursor:pointer}
+  .s3-notready small{display:block;opacity:.75}
+</style>

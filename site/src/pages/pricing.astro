@@ -11,6 +11,8 @@ import { getPricing } from '../data/content';
 import { CATEGORIES } from '../data/categories';
 import { stats, getServers, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
 import { seo } from '../data/pages';
+import S3PayBox from '../components/S3PayBox.astro';
+import { S3_PAYLINKS } from '../data/s3PayLinks';
 import { getServicesContent, priceText, usd } from '../data/services';
 const meta = seo('/pricing/', { title: 'Pricing', description: '' });
 // Internal links never carry src tags (seo.json canonical rule). src tags go only on mcp.zovo.one buy links.
@@ -27,6 +29,9 @@ const free = plan('free', 0);
 const one = plan('pro-single', 1);
 const all = plan('bundle', 2);
 const bundleHref = buyUrl(bundleUrl(), 'pricing', 'plan_bundle');
+// sprint-20261116 D1B: the bundle button opens Stripe in one click (new Payment Link, same Price as the billing Worker).
+const s3b = S3_PAYLINKS.bundle;
+if (bundlePrice() !== s3b.price) throw new Error(`bundle price ${bundlePrice()} != Payment Link price ${s3b.price}`);
 
 // Picker: grouped by category, invoice selected first. Each option carries its buy URL and one Pro line.
 const DEFAULT_ID = 'invoice';
@@ -76,7 +81,8 @@ const faq = p.faq.length ? p.faq : [
             <details class="pl-more mt-3"><summary>What's included</summary><ul>{all.features.map((f) => <li>{f}</li>)}</ul></details>
           </div>
           <p class="pl-price tnum">${bundle}</p>
-          <div class="pl-act"><a href={bundleHref} rel="nofollow" class="btn btn-primary w-full">Buy the bundle, ${bundle}</a></div>
+          <div class="pl-act"><span class="block" data-cro="sprint-20261116-direct"><a href={s3b.url} rel="nofollow" class="btn btn-primary w-full" data-checkout="mcp:bundle" data-item-id={s3b.itemId} data-product={s3b.name} data-price={String(s3b.price)} data-slot="pricing.plan_bundle">Buy the bundle, ${bundle}</a></span>
+            <S3PayBox price={s3b.price} gets={`all ${st.paid} paid servers: ${s3b.gets}`} /></div>
         </li>
 
         <li class="pl-line" id="single">

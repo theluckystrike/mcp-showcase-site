@@ -8,6 +8,9 @@ import UpdatesSignup from './UpdatesSignup.astro';
 import { installLines, moneyHref } from '../data/freeServers';
 import { getLiveAnswers, type LiveAnswer, type LiveExample } from '../data/canClaudeLive';
 import { brand } from '../config/brand';
+import S3PayBox from './S3PayBox.astro';
+import { S3_PAYLINKS } from '../data/s3PayLinks';
+import { stats, bundlePrice } from '../data/servers';
 
 interface Props { page: LiveAnswer }
 const { page: p } = Astro.props;
@@ -47,6 +50,10 @@ const jsonLd = [
     ],
   },
 ];
+// sprint-20261116 D1B: the site's paid offer (bundle) as a one-click Stripe Payment Link after the connect steps.
+const s3b = S3_PAYLINKS.bundle;
+const s3paid = stats().paid;
+if (bundlePrice() !== s3b.price) throw new Error(`bundle price ${bundlePrice()} != Payment Link price ${s3b.price}`);
 const crumbs = [{ name: 'Can Claude', path: '/can-claude/' }, { name: p.h1, path: p.path }];
 ---
 <Layout title={p.title} description={description} jsonLd={jsonLd} ogType="article" crumbs={crumbs}>
@@ -116,6 +123,11 @@ const crumbs = [{ name: 'Can Claude', path: '/can-claude/' }, { name: p.h1, path
       <CopyCode code={lines.vscode} label="VS Code (.vscode/mcp.json)" />
     </div>
     <p class="mt-6">All {s.tools.length} tools{tok ? ', free and Pro limits' : ', sources'} and more prompts are on the <a class="link" href={s.path}>{s.h1}</a> page.{money && <> <span class="text-faint">·</span> <a class="link" href={money} rel="noopener">{s.moneySite!.name}</a></>}</p>
+    <div class="la-s3 mt-8 max-w-3xl" data-cro="sprint-20261116-offer">
+      <p class="text-[1.02rem]"><strong>Need more than the free tiers?</strong> One key turns on Pro on all {s3paid} paid McpStamp servers (invoices, documents, zip, tracking and more), for life.</p>
+      <p class="mt-3" data-cro="sprint-20261116-direct"><a class="btn btn-primary" href={s3b.url} rel="nofollow" data-checkout="mcp:bundle" data-item-id={s3b.itemId} data-product={s3b.name} data-price={String(s3b.price)} data-slot={`can-claude-${p.slug}.offer`}>Get all {s3paid} paid servers, ${s3b.price} once</a></p>
+      <S3PayBox price={s3b.price} gets={`all ${s3paid} paid servers: ${s3b.gets}`} />
+    </div>
   </section>
 
   <section class="wrap py-12">

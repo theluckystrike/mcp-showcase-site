@@ -9,6 +9,8 @@ import CopyCode from './CopyCode.astro';
 import Faq from './Faq.astro';
 import JobCard from './JobCard.astro';
 import StickyCta from './StickyCta.astro';
+import S3PayBox from './S3PayBox.astro';
+import { s3Link } from '../data/s3PayLinks';
 import UpsellBand from './UpsellBand.astro';
 import UpdatesSignup from './UpdatesSignup.astro';
 import { brand } from '../config/brand';
@@ -25,6 +27,9 @@ const cat = getCategory(main?.category ?? 'invoicing');
 const slug = slugOf(p.path);
 const st = stats();
 const single = Boolean(main?.paid && !main?.bundleOnly);
+// sprint-20261116 D1B: one-click Stripe Payment Link where one exists for this server; pay box text from the server's own Pro line.
+const s3 = main ? s3Link(main.id) : undefined;
+const s3pro = ((main?.freeVsPro?.pro ?? []).find((x) => x && !/^unknown/i.test(x)) ?? '').replace(/\.$/, '');
 const buy = (slot: string) => (main ? buyUrl(main.buyBase, kind, `${slug}.${slot}`) : buyUrl(bundleUrl(), kind, `${slug}.${slot}`));
 const bundle = (slot: string) => buyUrl(bundleUrl(), kind, `${slug}.${slot}`);
 const after = upsell('use-cases', 'after_case', { copy: `Every example here works on the free tier. One $${bundlePrice()} key removes the limits.`, cta_url: bundle('after_case') });
@@ -119,10 +124,13 @@ const mainHasOutput = !!main && main.cases.length > 0;
             {job?.intro && <p class="lead mt-5 max-w-2xl">{job.intro}</p>}
             <p class:list={['lead max-w-2xl !text-fg', job?.intro ? 'mt-4' : 'mt-5']}>{answer}</p>
             <div class="mt-7 flex flex-wrap gap-3">
-              {single && <a href={buy('hero')} rel="nofollow" class="btn btn-primary" data-cro="mcpstamp-answer-buy-cta">Buy {main.name} Pro, ${main.priceUsd} once</a>}
+              {single && (s3 && s3.price === main.priceUsd
+                ? <span data-cro="sprint-20261116-direct" class="contents"><a href={s3.url} rel="nofollow" class="btn btn-primary" data-cro="mcpstamp-answer-buy-cta" data-checkout={`mcp:${main.id}`} data-item-id={s3.itemId} data-product={s3.name} data-price={String(s3.price)} data-slot={`${slug}.hero`}>Buy {main.name} Pro, ${main.priceUsd} once</a></span>
+                : <a href={buy('hero')} rel="nofollow" class="btn btn-primary" data-cro="mcpstamp-answer-buy-cta">Buy {main.name} Pro, ${main.priceUsd} once</a>)}
               <a href="#connect" class:list={['btn', !single && 'btn-primary']}>Connect free in 1 minute</a>
               {main && <a href={`/servers/${main.id}/`} class="btn">See all {main.name} tools</a>}
             </div>
+            {single && <div class="mt-4"><S3PayBox price={main.priceUsd} gets={s3 && s3.price === main.priceUsd ? s3.gets : `${main.name} Pro, lifetime key${s3pro ? `: ${s3pro}` : ''}`} /></div>}
           </div>
           {main && mainHasOutput ? (
             <div class="lg:pt-4">
