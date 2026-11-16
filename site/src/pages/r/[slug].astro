@@ -11,6 +11,7 @@ import { getServicesContent, orderMailto } from '../../data/services';
 import S3PayBox from '../../components/S3PayBox.astro';
 import { S3_PAYLINKS } from '../../data/s3PayLinks';
 import { stats, bundlePrice } from '../../data/servers';
+import { getROverride, leadParts } from '../../data/rOverrides';
 
 export function getStaticPaths() {
   const d = getRData();
@@ -71,8 +72,13 @@ const higher = pct(r.below, D.population);
 const s3b = S3_PAYLINKS.bundle;
 const s3paid = stats().paid;
 if (bundlePrice() !== s3b.price) throw new Error(`bundle price ${bundlePrice()} != Payment Link price ${s3b.price}`);
-const title = `${r.title} MCP server readiness for Claude, ChatGPT and Gemini`;
-const description = `${r.title} MCP server (${r.name}) scored ${r.score} of 100, grade ${r.grade}, on ${dateText}. ${storeSentence} ${r.tools ? `${r.tools} tools listed.` : ''}`;
+// s1116: reports Google shows for a named query get their own title, meta and lead answer (data/content/r-overrides.json).
+const ov = getROverride(r.slug);
+const title = ov?.title || `${r.title} MCP server readiness for Claude, ChatGPT and Gemini`;
+const description = ov?.description || `${r.title} MCP server (${r.name}) scored ${r.score} of 100, grade ${r.grade}, on ${dateText}. ${storeSentence} ${r.tools ? `${r.tools} tools listed.` : ''}`;
+const bySlug = new Map(D.rows.map((x) => [x.slug, x]));
+const related = (ov?.related ?? []).map((s) => bySlug.get(s)).filter((x): x is RServer => Boolean(x) && !x!.noindex && x!.slug !== r.slug);
+if (ov && related.length !== ov.related.length) throw new Error(`r-overrides ${r.slug}: related slug missing or noindex`);
 const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other' ? 'Behind sign-in' : '0';
 ---
 <Layout title={title} description={description} noindex={r.noindex}
@@ -83,7 +89,12 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
       <span class="eyebrow">MCP server report</span>
       <h1 class="display mt-5 max-w-4xl !text-[clamp(2rem,5vw,3.6rem)] [overflow-wrap:anywhere]">{r.title} MCP server</h1>
       <p class="mt-3"><code class="rs-name">{r.name}</code></p>
-      <p class="lead mt-5 max-w-3xl">
+      {ov?.lead && (
+        <p class="lead mt-5 max-w-3xl" data-cro="s1116-r-lead">
+          {leadParts(ov.lead).map((x) => (x.href ? <a class="link" href={x.href}>{x.text}</a> : x.text))}
+        </p>
+      )}
+      <p class:list={['max-w-3xl', ov?.lead ? 'mt-4' : 'lead mt-5']}>
         We checked this server on {dateText} with McpStamp Check engine {D.engine}. It scored {r.score} of 100 (grade {r.grade}), higher than {higher}% of the {n(D.population)} registry servers that responded over HTTPS that day. {storeSentence}
       </p>
     </div>
@@ -213,6 +224,18 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
     </dl>
     <p class="muted mt-5 max-w-2xl text-[.92rem]">The description above is the server's own text from the official MCP Registry. If a result looks wrong, run a fresh check and email support@zovo.one with the report link.</p>
   </section>
+
+  {ov && (
+    <section class="wrap pb-12" aria-labelledby="rs-rel-h" data-cro="s1116-r-related">
+      <h2 id="rs-rel-h" class="h2">Related server reports</h2>
+      {related.length > 0 && (
+        <ul class="rs-near mt-5">
+          {related.map((x) => <li><a href={`/r/${x.slug}/`}>{x.title} MCP server</a> <span class="tnum text-faint">{x.score} {x.grade}</span></li>)}
+        </ul>
+      )}
+      <p class="mt-5 max-w-3xl">Want a server you can use right now without an account? The <a class="link" href="/free-servers/" data-cta="r_free_servers">free live-data MCP servers</a> answer at one URL each, with no token.</p>
+    </section>
+  )}
 
   <section class="wrap pb-16" aria-labelledby="rs-near-h">
     <h2 id="rs-near-h" class="h2">More grade {r.grade} servers</h2>

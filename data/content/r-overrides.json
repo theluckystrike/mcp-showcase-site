@@ -1,0 +1,156 @@
+{
+ "_readme": "s1116: per-report title, meta and lead for /r/<slug>/ pages Google shows for a named query. Read by site/src/data/rOverrides.ts. Facts come from the slug's row in data/readiness-servers.json (check of 2 Nov 2026); product claims are attributed to the registry entry. related = other /r/ slugs.",
+ "pages": {
+  "io-stackcut-stackcut": {
+   "title": "Stackcut (stackcut.io) MCP server: 24 tools, no sign-in",
+   "description": "Stackcut's remote MCP server at stackcut.io/mcp helps cancel or cut subscriptions. On 2 Nov 2026 it needed no sign-in, listed 24 tools and scored 98 (A).",
+   "lead": "Stackcut (stackcut.io) runs a remote MCP server at https://stackcut.io/mcp. Its registry entry says it helps you cancel or cut any subscription, with exit steps, cheaper plans, alternatives and the cheapest stack. When we checked it on 2 November 2026 it asked for no sign-in, listed 24 tools and scored 98 of 100 (grade A).",
+   "related": [
+    "io-usefulapi-cratejoy",
+    "io-usefulapi-awtomic",
+    "io-usefulapi-invoiced"
+   ]
+  },
+  "ai-elaichi-mcp": {
+   "title": "Elaichi AI vs running your own MCP servers",
+   "description": "What Elaichi AI's MCP server is, from its registry entry and our 2 Nov 2026 check (OAuth sign-in, grade B), and what running your own MCP servers takes instead.",
+   "lead": "Elaichi AI (elaichi.ai) describes itself in the MCP Registry as governed AI agents for the software your company already runs, with 400+ connectors behind one endpoint. You connect one hosted URL, https://api.elaichi.ai/mcp, and sign in with OAuth; its tools sit behind that sign-in, so our check without credentials could not list them. Running your own MCP servers instead means you host, secure and update each server yourself. [Run your own MCP stack](/run-your-own-mcp-stack/?src=r-elaichi) covers the architecture, a security checklist and the monthly cost.",
+   "related": [
+    "com-apideck-mcp",
+    "com-crm-connector-crm-connector"
+   ]
+  },
+  "ai-smithery-docfork-mcp": {
+   "title": "Docfork MCP server: library docs for AI code editors",
+   "description": "Docfork's MCP server on Smithery gives LLMs and AI code editors the latest docs and code examples for libraries. OAuth sign-in; grade B (85) on 2 Nov 2026.",
+   "lead": "Docfork serves the latest documentation and code examples for 9,000+ libraries to LLMs and AI code editors, according to its registry entry. This report covers the Smithery-hosted endpoint, https://server.smithery.ai/@docfork/mcp/mcp, which asks for an OAuth sign-in; the source is at github.com/docfork/docfork-mcp. On 2 November 2026 it scored 85 of 100 (grade B), and the Gemini sign-in discovery check failed (details below).",
+   "related": [
+    "io-qt-qt-docs-mcp-qt-documentation",
+    "com-googleapis-developerknowledge-mcp",
+    "io-developerhub-docs"
+   ]
+  },
+  "ai-sellerforge-sellerforge": {
+   "title": "SellerForge MCP server: Amazon Seller Central data in AI",
+   "description": "SellerForge's MCP server brings Amazon Seller Central and Ads data (account health, FBA inventory, reimbursements) to AI. OAuth; grade B on 2 Nov 2026.",
+   "lead": "SellerForge (sellerforge.ai) connects Amazon Seller Central and Amazon Ads data to AI clients: account health, FBA inventory, reimbursements and keywords, per its registry entry. The server answers at https://www.sellerforge.ai/api/mcp and asks for an OAuth sign-in, so its tools were not visible to our check without credentials. It scored 85 of 100 (grade B) on 2 November 2026.",
+   "related": [
+    "com-sellertoolbelt-mcp",
+    "com-webotee-amazon-product-research-mcp",
+    "com-sellerprofitdoctor-free-tools"
+   ]
+  },
+  "io-scanbimlabs-twinmotion": {
+   "title": "Twinmotion MCP server and Claude: what our check found",
+   "description": "ScanBIM Labs' Twinmotion MCP server (rendering and video export via Datasmith) answered HTTP 401 with no OAuth discovery on 2 Nov 2026. Grade F, 39 of 100.",
+   "lead": "ScanBIM Labs publishes a Twinmotion MCP server at https://mcp.scanbimlabs.io/twinmotion for rendering and video export through the Datasmith pipeline, per its registry entry. On 2 November 2026 it answered HTTP 401 without a WWW-Authenticate header or OAuth discovery documents, so our check could not start a sign-in or list its tools. Before you add it to Claude or another client, read the setup notes in its repo, github.com/ScanBIM-Labs/twinmotion-mcp.",
+   "related": [
+    "io-scanbimlabs-revit-mcp",
+    "io-scanbimlabs-acc-mcp",
+    "io-scanbimlabs-scanbim-mcp"
+   ]
+  },
+  "com-sednasystem-genesis": {
+   "title": "Sedna Genesis MCP server: yacht charter search, 8 tools",
+   "description": "Sedna System's Genesis MCP server searches yachts and sends charter requests. No sign-in, 8 tools, 84 of 100 (grade B) on 2 Nov 2026.",
+   "lead": "Genesis is Sedna System's customer-facing MCP server for yacht search and charter requests, per its registry entry. It answers at https://mcp.sednasystem.com/mcp with no sign-in, and on 2 November 2026 it listed 8 tools, among them search_boats and boat_details. It scored 84 of 100 (grade B); tools without titles are what hold it back for the Claude and ChatGPT directories.",
+   "related": [
+    "com-rycrentals-deals",
+    "com-chartercaptain-charter-captain"
+   ]
+  },
+  "io-usefulapi-adminpulse": {
+   "title": "AdminPulse MCP server by usefulapi: 15 tools, grade B",
+   "description": "usefulapi's AdminPulse MCP server reads relations, invoices, tasks and documents and creates tasks in AdminPulse. OAuth, 15 tools, 88 of 100 on 2 Nov 2026.",
+   "lead": "usefulapi's AdminPulse MCP server lets an AI client read AdminPulse relations, invoices, tasks and documents, create tasks and log interactions, per its registry entry. It answers at https://adminpulse.usefulapi.io/mcp with an OAuth sign-in. On 2 November 2026 it listed 15 tools and scored 88 of 100 (grade B); missing tool hints are what hold it back for the Claude and ChatGPT directories.",
+   "related": [
+    "io-usefulapi-copper",
+    "io-usefulapi-shiftbase",
+    "io-usefulapi-invoiced"
+   ]
+  },
+  "com-yehangshe-nightwatch": {
+   "title": "Yehangshe Nightwatch MCP: dealer gamma exposure (GEX)",
+   "description": "Nightwatch from yehangshe.com serves dealer gamma exposure (GEX) levels and positioning heatmaps for US equity options over MCP. Grade F on 2 Nov 2026.",
+   "lead": "Nightwatch is yehangshe.com's MCP server for dealer gamma exposure (GEX) levels and dealer positioning heatmaps on US equity options, per its registry entry. It answers at https://mcp.yehangshe.com/mcp, and its docs are at docs.yehangshe.com. On 2 November 2026 it answered HTTP 401 without OAuth discovery documents, so our check could not list its tools; it scored 40 of 100 (grade F).",
+   "related": [
+    "com-firmtape-spx-options-gamma",
+    "io-optionwhales-options-flow"
+   ]
+  },
+  "ai-usegigi-gigi": {
+   "title": "Gigi AI MCP server: LinkedIn outreach from Claude",
+   "description": "Gigi AI's MCP server runs LinkedIn outreach from Claude with a human veto: review, approve and send drafts. OAuth sign-in; 85 of 100 (grade B) on 2 Nov 2026.",
+   "lead": "Gigi AI (usegigi.ai) runs LinkedIn outreach from Claude with a human veto, per its registry entry: you review, approve and send drafts and triage replies. The MCP server answers at https://usegigi.ai/api/mcp and asks for an OAuth sign-in, so its tools were not visible to our check without credentials. It scored 85 of 100 (grade B) on 2 November 2026. Gigi's own setup page is usegigi.ai/connect-claude.",
+   "related": [
+    "com-gtmotto-linkedin",
+    "com-outreach2day-mcp"
+   ]
+  },
+  "com-openbait-lookalike-domains": {
+   "title": "OpenBait MCP server: lookalike domain check, 1 tool",
+   "description": "OpenBait's MCP server finds lookalike domains of a brand's site and shows which resolve and what they show. No sign-in, 1 tool, 85 of 100 on 2 Nov 2026.",
+   "lead": "OpenBait (openbait.com) finds lookalike domains of a brand's website and shows which ones resolve and what they show, per its registry entry. Its MCP server answers at https://openbait.com/api/mcp with no sign-in and, on 2 November 2026, listed one tool, check_lookalike_domains. It scored 85 of 100 (grade B). OpenBait also has a typosquat check page at openbait.com/tools/typosquat-check.",
+   "related": [
+    "ai-gomain-domains",
+    "io-inboxguard-email-deliverability"
+   ]
+  },
+  "ai-b77-nightscout": {
+   "title": "Nightscout MCP server: your glucose data in AI chat",
+   "description": "b77.ai's Nightscout MCP server makes your Nightscout glucose data conversational after an OAuth sign-in. 85 of 100 (grade B) on 2 Nov 2026.",
+   "lead": "b77.ai's Nightscout MCP server makes your Nightscout glucose data conversational, per its registry entry. It answers at https://nightscout.b77.ai/mcp and asks for an OAuth sign-in, so its tools were not visible to our check without credentials. It scored 85 of 100 (grade B) on 2 November 2026. Setup is described at b77.ai/apps/nightscout.",
+   "related": [
+    "io-usefulapi-vital",
+    "io-usefulapi-oura"
+   ]
+  },
+  "com-mcptoplist-mcptoplist": {
+   "title": "MCP Toplist MCP server: search MCP servers by adoption",
+   "description": "MCP Toplist (mcptoplist.com) lets an AI client search MCP servers ranked by adoption data. No sign-in, 2 tools, 86 of 100 (grade B) on 2 Nov 2026.",
+   "lead": "MCP Toplist (mcptoplist.com) lets an AI client search 100,000+ MCP servers ranked by adoption data, per its registry entry. Its MCP server answers at https://mcptoplist.com/mcp with no sign-in and, on 2 November 2026, listed two tools, search_servers and get_server_details. It scored 86 of 100 (grade B); missing tool hints hold it back for the Claude and ChatGPT directories. For readiness grades across the registry, see [all server reports](/r/).",
+   "related": [
+    "io-verifymcp-mcp",
+    "com-a2awire-data-model-context-protocol-mcp-server-discovery"
+   ]
+  },
+  "ai-supercut-mcp": {
+   "title": "Supercut MCP server: recordings and transcripts in AI",
+   "description": "Supercut's MCP server reads your recordings, transcripts, frames and comments with your permissions. OAuth sign-in; 85 of 100 (grade B) on 2 Nov 2026.",
+   "lead": "Supercut's MCP server reads your recordings, transcripts, frames and comments with your permissions, per its registry entry. It answers at https://mcp.supercut.ai/mcp and asks for an OAuth sign-in, so its tools were not visible to our check without credentials. It scored 85 of 100 (grade B) on 2 November 2026, and every check that ran passed. Supercut's setup guides are at supercut.ai/agents/mcp-setup-guides.",
+   "related": [
+    "com-tryslicemedia-slice",
+    "com-getyoutubetranscript-youtube-transcript-and-youtube-search"
+   ]
+  },
+  "io-usefulapi-vital": {
+   "title": "Vital MCP server: wearables and lab data, 21 tools",
+   "description": "usefulapi's Vital MCP server reads wearables and lab health data: sleep, activity, workouts, lab tests and orders. OAuth, 21 tools, 96 of 100 on 2 Nov 2026.",
+   "lead": "usefulapi's Vital MCP server reads wearables and lab health data, per its registry entry: sleep, activity, workouts, timeseries, lab tests and orders. It answers at https://vital.usefulapi.io/mcp with an OAuth sign-in. On 2 November 2026 it listed 21 tools and scored 96 of 100 (grade A); missing open-world hints are what hold it back for the ChatGPT directory.",
+   "related": [
+    "io-usefulapi-oura",
+    "io-usefulapi-fitbit",
+    "ai-b77-nightscout"
+   ]
+  },
+  "io-usefulapi-idosell": {
+   "title": "IdoSell MCP server: orders, products and stock, 13 tools",
+   "description": "usefulapi's IdoSell MCP server searches orders, products, stock, customers and returns and sets order status. OAuth, 13 tools, 96 of 100 on 2 Nov 2026.",
+   "lead": "usefulapi's IdoSell MCP server searches IdoSell orders, products, stock, customers and returns and sets order status, per its registry entry. It answers at https://idosell.usefulapi.io/mcp with an OAuth sign-in. On 2 November 2026 it listed 13 tools and scored 96 of 100 (grade A); missing open-world hints are what hold it back for the ChatGPT directory.",
+   "related": [
+    "io-usefulapi-brightpearl",
+    "io-usefulapi-veeqo",
+    "io-usefulapi-channable"
+   ]
+  },
+  "io-usefulapi-vtiger": {
+   "title": "Vtiger MCP server: CRM leads, deals and cases, 13 tools",
+   "description": "usefulapi's Vtiger MCP server searches, reads, creates and updates Vtiger CRM leads, contacts, deals and cases. OAuth, 13 tools, 94 of 100 on 2 Nov 2026.",
+   "lead": "usefulapi's Vtiger MCP server searches, reads, creates and updates Vtiger CRM leads, contacts, deals, cases and more, and tags records, per its registry entry. It answers at https://vtiger.usefulapi.io/mcp with an OAuth sign-in. On 2 November 2026 it listed 13 tools and scored 94 of 100 (grade A); missing open-world hints are what hold it back for the ChatGPT directory.",
+   "related": [
+    "io-usefulapi-copper",
+    "io-usefulapi-adminpulse"
+   ]
+  }
+ }
+}

@@ -9,8 +9,12 @@ import { getFreeServers } from '../../data/freeServers';
 
 const list = getFreeServers();
 const tools = list.reduce((n, s) => n + s.tools.length, 0);
+// s1116: newest servers first in their own row, by the "added" date in free-servers.json (stable for equal dates).
+const newest = list.map((s, i) => ({ s, i })).filter((x) => x.s.added)
+  .sort((a, b) => (b.s.added === a.s.added ? b.i - a.i : b.s.added.localeCompare(a.s.added))).slice(0, 6).map((x) => x.s);
+const fmtDate = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 const title = `Free live-data MCP servers, no token`;
-const description = `${list.length} free MCP servers with live data and new rules. Lake levels, gold prices, wages, 2026 tax limits, 401(k) limits, student loans, ACA credits, estate tax, UK sick pay, Section 179, nutrition, AP scores, A/B tests and subdomains. Paste one URL.`;
+const description = `${list.length} free MCP servers with live data and no token. Newest: ${newest.slice(0, 3).map((s) => s.topic).join('; ')}. Paste one URL.`;
 const example = list[0];
 const jsonLd = [
   { '@type': 'CollectionPage', name: 'Free live-data MCP servers' },
@@ -28,6 +32,15 @@ const jsonLd = [
       <p class="lead mt-5 max-w-2xl">{list.length} servers, {tools} tools. Each one reads data a model can't know from training: today's prices, this week's levels, rules passed after the cutoff, exact calendar math. No token, no account.</p>
     </div>
   </section>
+
+  {newest.length > 0 && (
+    <section class="wrap pb-10" aria-labelledby="fs-new-h" data-cro="s1116-free-newest">
+      <h2 id="fs-new-h" class="text-[.78rem] font-semibold uppercase tracking-[.08em] text-faint">Newest servers</h2>
+      <ul class="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+        {newest.map((s) => <li><a class="underline underline-offset-2" href={s.path}>{s.h1}</a> <span class="text-faint text-[.85rem]">added {fmtDate(s.added)}</span></li>)}
+      </ul>
+    </section>
+  )}
 
   <section class="wrap pb-10">
     <FreeServerList headingLevel="h2" />
