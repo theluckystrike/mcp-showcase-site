@@ -1964,6 +1964,181 @@
      "description": "US Treasury real yield curve (TIPS) for 5, 7, 10, 20 and 30 years, the nominal yield for the same maturity, and the breakeven inflation rate the market implies (nominal minus real)."
     }
    ]
+  },
+  {
+   "repo": "powerball-mega-millions-winning-numbers-mcp",
+   "topic": "Powerball and Mega Millions winning numbers",
+   "name": "Powerball and Mega Millions",
+   "tagline": "Last night's Powerball and Mega Millions numbers, any past draw, and a ticket checker that says what you won.",
+   "knows": [
+    "Last night's numbers. Powerball draws Monday, Wednesday and Saturday at 10:59 pm ET; Mega Millions draws Tuesday and Friday at 11:00 pm ET.",
+    "The current prize tables: Powerball with Power Play (Match 5 with Power Play is $2,000,000) and the $5 Mega Millions game with its built-in 2x to 10x multiplier since 2025-04-08.",
+    "Frequency counts restricted to the current number matrix, so old 75-ball or 59-ball draws do not skew them."
+   ],
+   "sources": "New York State Gaming Commission winning numbers on data.ny.gov (open data, Socrata), read at call time. No key.",
+   "hosted_url": "https://powerball-mega-millions-winning-numbers-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/powerball-mega-millions-winning-numbers-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What were last night's Powerball numbers?",
+    "Did my Powerball ticket 7 19 33 41 62 Powerball 11 with Power Play win on Saturday?",
+    "What were the Mega Millions numbers on November 13, 2026?"
+   ],
+   "tools": [
+    {
+     "name": "lottery_latest_numbers",
+     "title": "Latest Powerball and Mega Millions numbers",
+     "description": "The latest Powerball and Mega Millions winning numbers: five white balls, the Powerball or Mega Ball, the Power Play multiplier and Double Play numbers, plus the next draw date. Optionally the last 2 to 10 draws. Results usually reach the feed the morning after the draw."
+    },
+    {
+     "name": "lottery_numbers_by_date",
+     "title": "Lottery numbers by date",
+     "description": "Powerball or Mega Millions winning numbers for a draw date, or every draw between two dates (up to 400 days). When no draw was held on the date, returns the draws just before and after. Powerball back to 2010, Mega Millions back to 2002."
+    },
+    {
+     "name": "lottery_check_ticket",
+     "title": "Check a lottery ticket",
+     "description": "Check a Powerball or Mega Millions ticket against the latest draw or a given draw date: which numbers matched, the prize tier, the prize amount (with Power Play, or with the multiplier printed on a Mega Millions ticket) and the odds of that tier. Optional Powerball Double Play matches."
+    },
+    {
+     "name": "lottery_number_frequency",
+     "title": "Hot and cold lottery numbers",
+     "description": "Most and least drawn Powerball or Mega Millions numbers over the last N draws (default 100, up to all draws of the current game: Powerball since 2015-10-07, Mega Millions since 2025-04-08), with how many draws ago each number last appeared. Past frequency does not change the odds."
+    }
+   ]
+  },
+  {
+   "repo": "prime-rate-sofr-fed-funds-rate-today-mcp",
+   "topic": "Prime rate, SOFR and fed funds rate today",
+   "name": "Prime Rate, SOFR and Fed Funds",
+   "tagline": "The prime rate, SOFR and the fed funds rate today from the New York Fed, with every Fed rate change and a loan rate calculator.",
+   "knows": [
+    "Today's numbers. The New York Fed publishes SOFR and EFFR at about 8 am ET for the previous business day.",
+    "The latest FOMC decision, read from the target range carried on every EFFR row, so a cut or hike shows up the day it takes effect.",
+    "The prime rate by the rule banks follow: the top of the fed funds target range plus 3 percentage points."
+   ],
+   "sources": "Federal Reserve Bank of New York reference rates (Markets Data API, markets.newyorkfed.org), read at call time. No key.",
+   "hosted_url": "https://prime-rate-sofr-fed-funds-rate-today-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/prime-rate-sofr-fed-funds-rate-today-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What is the prime rate today?",
+    "What is SOFR today, and what is the 30-day average SOFR?",
+    "When did the Fed last cut interest rates, and by how much?"
+   ],
+   "tools": [
+    {
+     "name": "fed_funds_rate_today",
+     "title": "Fed funds rate and prime rate today",
+     "description": "The current federal funds target range set by the FOMC, the effective federal funds rate (EFFR) for the latest business day with its change and volume, the prime rate (top of the range plus 3 points), and the last Fed rate change with every change in the last 3 years."
+    },
+    {
+     "name": "sofr_rate_today",
+     "title": "SOFR rate today",
+     "description": "The latest Secured Overnight Financing Rate (SOFR) with the change from the previous business day, percentiles and volume, the 30, 90 and 180 day SOFR averages and SOFR Index (used to price SOFR loans), and the other New York Fed reference rates: TGCR, BGCR, OBFR and EFFR."
+    },
+    {
+     "name": "interest_rate_history",
+     "title": "Interest rate history",
+     "description": "History of one reference rate between two dates (up to 5 years per call): start, end, change in basis points, high, low and average, with a daily or sampled table. Rates: sofr, effr, obfr, tgcr, bgcr, sofr_30day_average, sofr_90day_average, sofr_180day_average, sofr_index, fed_funds_upper, prime. EFFR and prime back to 2000, SOFR back to 2018-04-02."
+    },
+    {
+     "name": "fed_rate_changes",
+     "title": "Fed rate cuts and hikes",
+     "description": "Every change to the federal funds target since a date (default the last 5 years, back to 2000): the date it took effect, cut or hike, basis points, the new target range and the prime rate after it. Answers \"when did the Fed last cut rates\"."
+    },
+    {
+     "name": "loan_rate_calculator",
+     "title": "Prime or SOFR plus margin loan rate",
+     "description": "The all-in variable rate today for a loan priced at an index plus a margin, such as an SBA 7(a) loan at prime + 2.75, a business line of credit at prime + 1 or a commercial loan at 30-day average SOFR + 2.5, with an optional floor or cap and the monthly payment for an amount and term."
+    }
+   ]
+  },
+  {
+   "repo": "border-wait-times-canada-mexico-mcp",
+   "topic": "Border wait times",
+   "name": "Border Wait Times",
+   "tagline": "Live US-Mexico and US-Canada border crossing waits from CBP for cars, SENTRI, NEXUS, Ready Lane, pedestrians and trucks.",
+   "knows": [
+    "The line right now. CBP officers post the wait at each port about once an hour.",
+    "Which lanes are open: SENTRI and NEXUS, Ready Lane, pedestrian and FAST truck lanes, and the number of booths staffed.",
+    "Which crossing serves a Mexican or Canadian city (Tijuana: San Ysidro and Otay Mesa; Juarez: the El Paso bridges; Windsor: the Detroit crossings)."
+   ],
+   "sources": "U.S. Customs and Border Protection Border Wait Times feed (bwt.cbp.gov), read at call time. No key.",
+   "hosted_url": "https://border-wait-times-canada-mexico-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/border-wait-times-canada-mexico-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What is the wait at San Ysidro right now?",
+    "Is SENTRI faster at Otay Mesa or San Ysidro?",
+    "Which crossing from Tijuana has the shortest car line?"
+   ],
+   "tools": [
+    {
+     "name": "border_wait_times",
+     "title": "Border wait times at a crossing",
+     "description": "Current wait to enter the US at a land border crossing: passenger car general lanes, SENTRI or NEXUS, Ready Lane, pedestrian and commercial truck (FAST) lanes, lanes open, port hours, CBP notices and when CBP last reported. Accepts a port or bridge name (San Ysidro, Otay Mesa, Peace Arch, Ambassador Bridge, Rainbow Bridge), the city across the border (Tijuana, Juarez, Nuevo Laredo, Windsor, Vancouver), a state, or a CBP port number."
+    },
+    {
+     "name": "border_wait_times_list",
+     "title": "All border crossing wait times",
+     "description": "Wait times for one lane type at every CBP land port on the Mexican border, the Canadian border, or in one state (CA, AZ, NM, TX, WA, MT, ND, MN, MI, NY, VT, ME), sorted by the shortest wait or by name. Closed and pending lanes are listed after posted waits."
+    },
+    {
+     "name": "border_fastest_crossing",
+     "title": "Fastest border crossing",
+     "description": "Rank border crossings by the current wait for a lane type and name the fastest. Pass crossings (e.g. [\"San Ysidro\", \"Otay Mesa\", \"Tecate\"]) or near (an area or state, e.g. \"San Diego\", \"Juarez\", \"Niagara\", \"TX\"). Drive time to each port is not included."
+    }
+   ]
+  },
+  {
+   "repo": "airport-delays-faa-status-mcp",
+   "topic": "Airport delays today",
+   "name": "Airport Delays",
+   "tagline": "FAA ground stops, ground delay programs, closures and deicing at US airports right now, for one airport or a whole trip.",
+   "knows": [
+    "Whether a ground stop or ground delay program is running right now, why (weather, low ceilings, volume, equipment) and until when.",
+    "Average and maximum delay of a ground delay program, and the minimum to maximum range and trend of general arrival and departure delays.",
+    "Which closures matter: night curfews and full closures are reported, while NOTAMs that only close an airport to private transient aircraft are kept as notices."
+   ],
+   "sources": "FAA National Airspace System status (nasstatus.faa.gov), read at call time. No key.",
+   "hosted_url": "https://airport-delays-faa-status-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/airport-delays-faa-status-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "Are there any airport delays right now?",
+    "Is there a ground stop at Newark?",
+    "Why is San Francisco delayed, and how long is the delay?"
+   ],
+   "tools": [
+    {
+     "name": "airport_delays_now",
+     "title": "Airport delays now (FAA)",
+     "description": "All US airports with an active FAA event right now: ground stops, ground delay programs (average and maximum delay, reason such as weather or volume, end time), general arrival and departure delays with trend, airport closures and deicing, sorted worst first, plus airspace flow programs."
+    },
+    {
+     "name": "airport_status",
+     "title": "Airport status and delays",
+     "description": "FAA delay status of one US airport, by IATA code (JFK), ICAO code (KJFK), airport name or city (Newark, O'Hare, Denver): any ground stop, ground delay program, arrival or departure delay, closure or deicing with reason, minutes and end time, or a clear statement that the FAA reports no delay there; plus the runway configuration and arrival rate when posted."
+    },
+    {
+     "name": "airport_delays_check_trip",
+     "title": "Check a trip for airport delays",
+     "description": "Check every airport on an itinerary (origin, connections, destination; 1 to 8 airports) for FAA ground stops, ground delay programs, delays and closures in one call."
+    }
+   ]
   }
  ]
 }
