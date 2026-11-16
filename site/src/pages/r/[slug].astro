@@ -230,7 +230,7 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
       <h2 id="rs-rel-h" class="h2">Related server reports</h2>
       {related.length > 0 && (
         <ul class="rs-near mt-5">
-          {related.map((x) => <li><a href={`/r/${x.slug}/`}>{x.title} MCP server</a> <span class="tnum text-faint">{x.score} {x.grade}</span></li>)}
+          {related.map((x) => <li><a href={`/r/${x.slug}/`}>{/\bMCP\b/i.test(x.title) ? x.title : `${x.title} MCP server`}</a> <span class="tnum text-faint">{x.score} {x.grade}</span></li>)}
         </ul>
       )}
       <p class="mt-5 max-w-3xl">Want a server you can use right now without an account? The <a class="link" href="/free-servers/" data-cta="r_free_servers">free live-data MCP servers</a> answer at one URL each, with no token.</p>
