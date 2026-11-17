@@ -7,7 +7,7 @@ import WatchSignup from '../../components/WatchSignup.astro';
 import { STORES } from '../../data/readiness';
 import { getRData, rowsOfGrade, gradePath, R_PAGE_SIZE, AUTH_LABEL, STATUS_LABEL, type RServer } from '../../data/readinessServers';
 import { badgePath } from '../../data/badge';
-import { getServicesContent, orderMailto } from '../../data/services';
+import { getServicesContent, orderMailto, ctaHref } from '../../data/services';
 import S3PayBox from '../../components/S3PayBox.astro';
 import { S3_PAYLINKS } from '../../data/s3PayLinks';
 import { stats, bundlePrice } from '../../data/servers';
@@ -44,6 +44,8 @@ const html = `<a href="${pageUrl}"><img src="${badgeUrl}" alt="${badgeAlt}" heig
 // Publisher CTA. The $490 audit price and turnaround come from data/content/services.json, never from this file.
 const auditSvc = getServicesContent().services.find((s) => s.id === 'audit');
 const auditPrice = auditSvc?.price_label ?? '';
+const auditLive = getServicesContent().checkout_live === true;
+const auditPay = auditSvc && auditLive ? ctaHref(auditSvc, 'r', 'r_improve') : '';
 const auditMail = orderMailto(`${auditSvc?.order_subject ?? 'Readiness Audit'} for ${r.name}`);
 const ink = (g: string) => (g === 'A' || g === 'B' ? 'var(--ink-blue)' : g === 'C' ? 'var(--ink-violet)' : 'var(--ink-red)');
 const t = (id: string) => D.checkTitle[id] ?? id;
@@ -188,6 +190,7 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
           <>
             <p class="mt-5 text-[.95rem]">Want someone to read the server for you? The Readiness Audit is {auditPrice}. You get a written fix list ranked by store blocker and a code snippet for each fix. {auditSvc.price_note}</p>
             <p class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[.95rem]">
+              {auditPay && <a class="btn btn-primary" rel="nofollow" href={auditPay} data-cta="audit_buy" data-cta-slot="r_improve">Buy the audit, {auditPrice}</a>}
               <a class="btn" href="/services/#audit" data-cta="audit" data-cta-slot="r_improve">See the {auditPrice} audit</a>
               <a class="link" href={auditMail} data-cta="audit_email" data-cta-slot="r_improve">Order it by email</a>
             </p>
