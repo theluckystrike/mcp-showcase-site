@@ -77,8 +77,31 @@ const s3paid = stats().paid;
 if (bundlePrice() !== s3b.price) throw new Error(`bundle price ${bundlePrice()} != Payment Link price ${s3b.price}`);
 // s1116: reports Google shows for a named query get their own title, meta and lead answer (data/content/r-overrides.json).
 const ov = getROverride(r.slug);
-const title = ov?.title || `${r.title} MCP server readiness for Claude, ChatGPT and Gemini`;
-const description = ov?.description || `${r.title} MCP server (${r.name}) scored ${r.score} of 100, grade ${r.grade}, on ${dateText}. ${storeSentence} ${r.tools ? `${r.tools} tools listed.` : ''}`;
+// s1118b L1: default title and meta lead with what searchers type ("<name> mcp server", "<name> mcp", the host name)
+// and the measured grade. The first title variant that fits 60 chars wins, so the name is never cut off.
+const mcpName = /\bmcp\b/i.test(r.title) ? r.title : `${r.title} MCP server`;
+const host = (() => { try { return new URL(r.url).hostname.replace(/^www\./, ''); } catch { return ''; } })();
+const dateShort = new Date(r.date + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+const defaultTitle = [
+  `${mcpName} review, grade ${r.grade} (${r.score}/100)`,
+  `${mcpName} review, grade ${r.grade}`,
+  `${mcpName}, grade ${r.grade}`,
+].find((x) => x.length <= 60) ?? mcpName;
+const AUTH_TEXT: Record<string, string> = { none: 'No sign-in', oauth: 'OAuth sign-in', other: 'API key or other sign-in', unknown: 'Sign-in not detected' };
+const pubDesc = r.desc.replace(/\s+/g, ' ').trim();
+const metaParts = [
+  `${mcpName}${host ? ` (${host})` : ''} review. Grade ${r.grade}, ${r.score} of 100, in our ${dateShort} check.`,
+  pubDesc && /[.!?]$/.test(pubDesc) ? pubDesc : '',
+  `${AUTH_TEXT[r.auth] ?? 'Sign-in not detected'}${r.tools ? `, ${n(r.tools)} tools` : ''}.`,
+  storeSentence,
+  `Higher than ${higher}% of ${n(D.population)} servers checked.`,
+  `Measured by McpStamp Check engine ${D.engine}.`,
+  'Re-check it for free.',
+].filter(Boolean);
+let defaultDescription = metaParts[0];
+for (const s of metaParts.slice(1)) if ((defaultDescription + ' ' + s).length <= 160) defaultDescription += ' ' + s;
+const title = ov?.title || defaultTitle;
+const description = ov?.description || defaultDescription;
 const bySlug = new Map(D.rows.map((x) => [x.slug, x]));
 const related = (ov?.related ?? []).map((s) => bySlug.get(s)).filter((x): x is RServer => Boolean(x) && !x!.noindex && x!.slug !== r.slug);
 if (ov && related.length !== ov.related.length) throw new Error(`r-overrides ${r.slug}: related slug missing or noindex`);
