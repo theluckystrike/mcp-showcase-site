@@ -2,13 +2,17 @@
 // s1107: "State of MCP readiness, November 2026" study page. Every number is copied from
 // ~/mcpstamp-work/s1102m/scan/INSIGHTS.md (readiness.json generated 2026-11-02T11:25:22Z, engine 1.2.0 rows only).
 // Do not recompute them here. Links into /r/ come from data/readiness-servers.json.
+// s1118c S6: share card public/og/state-of-mcp-2026-11.png is made by scripts/og-state-of-mcp.py from the same numbers.
+// The meta description says Claude, ChatGPT and Gemini because readiness.json totals.ready_all3_ai is also 9,541.
 import Layout from '../../layouts/Layout.astro';
 import CopyCode from '../../components/CopyCode.astro';
 import AuditBuyBox from '../../components/AuditBuyBox.astro';
 import { getRData, rowsOfGrade, gradePath, R_GRADES } from '../../data/readinessServers';
+import { getServicesContent } from '../../data/services';
 
 const D = getRData();
 const n = (v: number) => v.toLocaleString('en-US');
+const auditPrice = getServicesContent().services.find((s) => s.id === 'audit')?.price_label ?? '';
 const examples = D ? rowsOfGrade('A').slice().sort((a, b) => b.tools - a.tools).slice(0, 6) : [];
 const notReadyChatgpt = D ? D.rows.filter((r) => r.stores.chatgpt.blockers.includes('tool_open_world')).sort((a, b) => b.tools - a.tools).slice(0, 4) : [];
 
@@ -54,17 +58,20 @@ const toolExample = `{
   }
 }`;
 const cite = 'McpStamp. State of MCP readiness, November 2026. Scan of the official MCP Registry on 2 November 2026, McpStamp Check engine 1.2.0. https://www.mcpstamp.com/state-of-mcp-2026-11/';
-const title = 'State of MCP readiness, November 2026';
-const description = 'We checked 34,728 remote MCP servers from the official registry on 2 November 2026. 28.9% of the 33,003 that responded were ready for Claude, ChatGPT, Gemini and the MCP Registry.';
+const title = 'State of MCP server readiness, November 2026';
+const description = 'We checked 34,728 remote MCP servers in the official registry on 2 Nov 2026. Only 28.9% of the 33,003 that answered were ready for Claude, ChatGPT and Gemini.';
+const ogImage = '/og/state-of-mcp-2026-11.png';
+const ogImageAlt = 'State of MCP readiness. 28.9% of 33,003 responding remote MCP servers pass every blocking check. Ready by store, Claude 37.2%, ChatGPT 29.7%, Gemini 60.8%, Registry 92.0%.';
+const tags = ['Model Context Protocol', 'MCP servers', 'Claude connectors', 'ChatGPT apps', 'Gemini'];
 const jsonLd = [{
-  '@context': 'https://schema.org', '@type': 'Article', headline: title, description, datePublished: '2026-11-07', dateModified: '2026-11-07',
+  '@context': 'https://schema.org', '@type': 'Article', headline: title, description, datePublished: '2026-11-07', dateModified: '2026-11-18', image: new URL(ogImage, Astro.site).href,
   author: { '@type': 'Organization', name: 'McpStamp', url: new URL('/', Astro.site).href },
   publisher: { '@type': 'Organization', name: 'McpStamp', url: new URL('/', Astro.site).href },
-  about: ['Model Context Protocol', 'MCP servers', 'Claude connectors', 'ChatGPT apps', 'Gemini'],
+  about: tags,
   mainEntityOfPage: new URL('/state-of-mcp-2026-11/', Astro.site).href,
 }];
 ---
-<Layout title={title} description={description} jsonLd={jsonLd} ogType="article" crumbs={[{ name: 'State of MCP readiness, November 2026', path: '/state-of-mcp-2026-11/' }]}>
+<Layout title={title} description={description} jsonLd={jsonLd} ogType="article" ogImage={ogImage} ogImageAlt={ogImageAlt} article={{ published: '2026-11-07', modified: '2026-11-18', section: 'Research', tags }} crumbs={[{ name: 'State of MCP readiness, November 2026', path: '/state-of-mcp-2026-11/' }]}>
   <section class="relative isolate">
     <div class="grid-lines"></div>
     <div class="wrap pb-8 pt-10 sm:pt-14">
@@ -72,6 +79,11 @@ const jsonLd = [{
       <h1 class="display mt-5 max-w-4xl !text-[clamp(2.2rem,5.4vw,4rem)]">State of MCP readiness, November 2026</h1>
       <p class="lead mt-5 max-w-3xl">Fewer than three in ten remote MCP servers are ready for every store. We checked 34,728 of the 35,158 unique remote URLs in the official MCP Registry on 2 November 2026. Of the 33,003 that responded over HTTPS, 9,541 (28.9%) passed every blocking check for Claude, ChatGPT, Gemini and the MCP Registry.</p>
       <p class="mt-4 max-w-3xl muted">The biggest gap isn't auth or transport. It's tool metadata. The three most common blockers are all missing tool hints or titles, and each takes a few lines of JSON to fix.</p>
+      <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+        <a href="/check/" class="btn btn-primary" data-cta="check" data-cta-slot="study_hero">Check your server free</a>
+        <a href="/services/#audit" class="link" data-cta="audit" data-cta-slot="study_hero">Readiness Audit{auditPrice && `, ${auditPrice}`}</a>
+        <a href="/services/sample-audit/" class="link" data-cta="audit_sample" data-cta-slot="study_hero">See a sample audit</a>
+      </div>
     </div>
   </section>
 
@@ -154,7 +166,7 @@ const jsonLd = [{
         <p>Set <code>readOnlyHint: true</code> on tools that only read. Set <code>destructiveHint: true</code> on tools that change or delete data, and false on the rest. Claude needs one of the two on every tool (<code>tool_annotations</code>). ChatGPT needs all three hints written out, including <code>openWorldHint</code>, which says whether the tool reaches outside your own system (<code>tool_open_world</code>).</p>
         <p>The title (<code>tool_titles</code>) is the short human name a store shows next to the tool. Keep it in plain words, not the snake_case name.</p>
         <p>Then run <a href="/check/" class="link">McpStamp Check</a> on your URL. It lists any tool that still misses a hint.</p>
-        <AuditBuyBox src="site.study" slot="study" line="Want us to find and rank every fix on your own server?" />
+        <AuditBuyBox src="site.study" slot="study" line="Want us to find and rank every fix on your own server?" sample />
       </div>
       <div>
         <CopyCode code={toolExample} label="One tool in tools/list" />
@@ -185,11 +197,11 @@ const jsonLd = [{
       <div class="mt-6 grid gap-8 lg:grid-cols-2">
         <div>
           <h3 class="sm-h3">Grade A servers with the most tools</h3>
-          <ul class="sm-links">{examples.map((r) => <li><a href={`/r/${r.slug}/`}>{r.title}</a> <span class="text-faint tnum">{r.tools} tools</span></li>)}</ul>
+          <ul class="sm-links">{examples.map((r) => <li><a href={`/r/${r.slug}/`}>{r.title}</a> <span class="text-faint tnum">{n(r.tools)} tools</span></li>)}</ul>
         </div>
         <div>
           <h3 class="sm-h3">Missing the ChatGPT tool hints</h3>
-          <ul class="sm-links">{notReadyChatgpt.map((r) => <li><a href={`/r/${r.slug}/`}>{r.title}</a> <span class="text-faint tnum">{r.tools} tools, grade {r.grade}</span></li>)}</ul>
+          <ul class="sm-links">{notReadyChatgpt.map((r) => <li><a href={`/r/${r.slug}/`}>{r.title}</a> <span class="text-faint tnum">{n(r.tools)} tools, grade {r.grade}</span></li>)}</ul>
         </div>
       </div>
       <p class="mt-6 flex flex-wrap gap-x-4 gap-y-1">{R_GRADES.filter((g) => rowsOfGrade(g).length).map((g) => <a class="link" href={gradePath(g)}>Grade {g}</a>)}</p>
@@ -207,7 +219,8 @@ const jsonLd = [{
     <div class="sm-cta">
       <div>
         <h2 id="sm-cta-h" class="text-2xl font-bold sm:text-3xl">Check your own server</h2>
-        <p class="muted mt-2 max-w-xl">Paste a remote MCP URL. You get the score, the store blockers and the fix for each one in under a minute.</p>
+        <p class="muted mt-2 max-w-xl">Paste a remote MCP URL. You get the score, the store blockers and the fix for each one in under a minute. It's free and needs no sign-up.</p>
+        <p class="mt-2 text-[.95rem]"><span class="muted">Want the fixes written up for you? </span><a href="/services/#audit" class="link" data-cta="audit" data-cta-slot="study_cta">See the Readiness Audit</a><span class="muted"> or </span><a href="/services/sample-audit/" class="link" data-cta="audit_sample" data-cta-slot="study_cta">a sample report</a>.</p>
       </div>
       <form action="/check/" method="get" class="sm-cta-form">
         <label for="sm-cta-url" class="sr-only">Remote MCP server URL</label>
