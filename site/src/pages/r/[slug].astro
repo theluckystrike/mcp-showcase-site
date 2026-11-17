@@ -9,6 +9,7 @@ import { getRData, rowsOfGrade, gradePath, R_PAGE_SIZE, AUTH_LABEL, STATUS_LABEL
 import { badgePath } from '../../data/badge';
 import { getServicesContent, orderMailto, ctaHref } from '../../data/services';
 import S3PayBox from '../../components/S3PayBox.astro';
+import AuditBuyBox from '../../components/AuditBuyBox.astro';
 import { S3_PAYLINKS } from '../../data/s3PayLinks';
 import { stats, bundlePrice } from '../../data/servers';
 import { getROverride, leadParts } from '../../data/rOverrides';
@@ -81,6 +82,11 @@ const description = ov?.description || `${r.title} MCP server (${r.name}) scored
 const bySlug = new Map(D.rows.map((x) => [x.slug, x]));
 const related = (ov?.related ?? []).map((s) => bySlug.get(s)).filter((x): x is RServer => Boolean(x) && !x!.noindex && x!.slug !== r.slug);
 if (ov && related.length !== ov.related.length) throw new Error(`r-overrides ${r.slug}: related slug missing or noindex`);
+// s1118 L1: F and D reports show the audit offer right under the grade. Count of failed checks, else checks to fix.
+const lowGrade = r.grade === 'F' || r.grade === 'D';
+const topLine = fails.length
+  ? `This server fails ${plural(fails.length, 'check', 'checks')}${warns.length ? ` and has ${plural(warns.length, 'warning', 'warnings')}` : ''}. We can find every fix for you.`
+  : `This server has ${plural(r.bad.length, 'check', 'checks')} to fix. We can find every fix for you.`;
 const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other' ? 'Behind sign-in' : '0';
 ---
 <Layout title={title} description={description} noindex={r.noindex}
@@ -110,6 +116,7 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
       <div><dt>Tools listed</dt><dd class="rs-small tnum">{toolText}</dd></div>
       <div><dt>Protocol version</dt><dd class="rs-small">{r.proto || 'None returned'}</dd></div>
     </dl>
+    {lowGrade && r.bad.length > 0 && <AuditBuyBox src="site.r.top" slot="r_top" line={topLine} />}
   </section>
 
   <section class="wrap pb-12" aria-labelledby="rs-stores-h">

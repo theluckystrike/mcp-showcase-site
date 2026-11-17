@@ -1728,7 +1728,7 @@
    "repo": "zip",
    "server_id": "zip",
    "h1": "Can Claude zip files?",
-   "title": "Can Claude work with zip files? Read, unzip and zip",
+   "title": "Can Claude open zip files? Yes, and it can make them too",
    "query": "can claude zip files",
    "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude can read and unzip a .zip you upload, and pack files into a new archive you download, and Claude Code can run zip and unzip on your disk. Connect the Zip server (free token) and Claude packs uploaded files into a new archive and adds files to an existing one, with entry names kept safe to unpack. A local install can also bundle a month of invoices.",
    "native": [
@@ -1767,7 +1767,7 @@
      "a": "Creating archives is free for 20 a month, and listing is free. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
     }
    ],
-   "meta_description": "Yes, with code execution on (default on Free, Pro and Max). Claude reads and unzips a .zip you upload and packs files into a new archive to download."
+   "meta_description": "Yes. Claude opens and unzips a .zip you upload, and packs files into a new .zip to download. It uses code execution, on by default for Free, Pro and Max."
   },
   {
    "slug": "make-a-resume",

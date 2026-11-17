@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import CopyCode from '../../components/CopyCode.astro';
 import Faq from '../../components/Faq.astro';
+import FreePaidBlock from '../../components/FreePaidBlock.astro';
 import { brand } from '../../config/brand';
 import { liveAnswersFor } from '../../data/canClaudeLive';
 import { getFreeServers, shortDescription, moneyHref, installLines, type FreeServer } from '../../data/freeServers';
@@ -147,6 +148,8 @@ const answers = liveAnswersFor(s.repo);
       {s.npm && <a href={`https://www.npmjs.com/package/${s.npm}`} rel="noopener"><span class="fs-label">npm</span>{s.npm}</a>}
     </div>
   </section>
+
+  <FreePaidBlock slug={s.repo} />
 
   <section class="wrap py-14">
     <h2 class="h2">Questions</h2>

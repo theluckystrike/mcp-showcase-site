@@ -3,6 +3,7 @@
 // Rows are in the HTML; a small script filters the rows of this page by text, sign-in and store.
 import Layout from '../../../../layouts/Layout.astro';
 import { STORES } from '../../../../data/readiness';
+import AuditBuyBox from '../../../../components/AuditBuyBox.astro';
 import { getRData, rowsOfGrade, gradePath, gradePages, R_GRADES, R_PAGE_SIZE, AUTH_LABEL, type RServer } from '../../../../data/readinessServers';
 
 export function getStaticPaths() {
@@ -35,6 +36,10 @@ const auths = [...new Set(rows.map((r) => r.auth))].sort();
       {R_GRADES.filter((x) => rowsOfGrade(x).length).map((x) => x === g ? <span aria-current="page" class="rg-cur">{x}</span> : <a href={gradePath(x)} class="link">{x}</a>)}
       <a href="/r/" class="link">All reports</a>
     </nav>
+    {(g === 'F' || g === 'D') && (
+      <AuditBuyBox src={`site.grade.${g.toLowerCase()}`} slot={`grade_${g.toLowerCase()}`}
+        line={`Is your server on this list? Every grade ${g} server here fails at least one check.`} />
+    )}
   </section>
 
   <section class="wrap pb-12" aria-labelledby="rg-h">

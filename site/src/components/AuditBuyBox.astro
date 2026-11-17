@@ -1,0 +1,33 @@
+---
+// s1118 L1: compact "Buy the audit" box for F and D reports, the F and D grade lists and the study page.
+// Price, product URL and turnaround come from data/content/services.json (audit service). Nothing renders
+// unless checkout_live is true and the audit has a pay URL. src is the full tag, for example site.r.top.
+import { getServicesContent } from '../data/services';
+
+interface Props { src: string; line: string; slot: string; compact?: boolean }
+const { src, line, slot, compact = false } = Astro.props as Props;
+if (!/^[a-z0-9][a-z0-9._-]{0,90}$/.test(src)) throw new Error(`AuditBuyBox: bad src tag ${src}`);
+const content = getServicesContent();
+const audit = content.services.find((s) => s.id === 'audit');
+const base = audit?.cta?.pay && audit.cta.url?.startsWith('http') ? audit.cta.url : '';
+const href = content.checkout_live === true && base ? `${base}${base.includes('?') ? '&' : '?'}src=${src}` : '';
+const price = audit?.price_label ?? '';
+---
+{href && price && (
+  <div class:list={['abb', compact && 'abb-compact']} data-cro="s1118-audit-top">
+    <p class="abb-line">{line}</p>
+    <p class="abb-sub">The Readiness Audit is {price}. You get a written fix list ranked by store blocker and a code snippet for each fix. {audit!.price_note}</p>
+    <p class="abb-act">
+      <a class="btn btn-primary" rel="nofollow" href={href} data-cta="audit_buy" data-cta-slot={slot}>Buy the audit, {price}</a>
+      <a class="link" href="/services/#audit" data-cta="audit" data-cta-slot={slot}>What the audit covers</a>
+    </p>
+  </div>
+)}
+
+<style is:global>
+  .abb { margin-top: 1.25rem; padding: 1rem 1.25rem; max-width: 48rem; border: 1px solid var(--manila-2); border-left: 4px solid var(--ink-red); background: var(--manila); border-radius: 3px; }
+  .abb-line { font-weight: 700; font-size: 1.05rem; }
+  .abb-sub { margin-top: .3rem; font-size: .93rem; color: var(--muted); }
+  .abb-act { margin-top: .75rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+  .abb-compact .abb-sub { display: none; }
+</style>

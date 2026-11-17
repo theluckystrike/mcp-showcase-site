@@ -1,0 +1,32 @@
+---
+// s1118 L3: one paid block on the free-server pages. The free servers stay free; this offers the paid
+// back-office bundle and the free readiness check. Price and count come from the catalog (bundlePrice, stats).
+import { stats, bundleUrl, bundlePrice, buyUrl } from '../data/servers';
+
+interface Props { slug: string }
+const { slug } = Astro.props as Props;
+const href = buyUrl(bundleUrl(), 'free', slug);
+if (!/[?&]src=[a-z0-9][a-z0-9._-]{0,90}$/.test(href)) throw new Error(`FreePaidBlock: bad src in ${href}`);
+const paid = stats().paid;
+const price = bundlePrice();
+---
+<section class="wrap py-10" aria-labelledby="fpb-h" data-cro="s1118-free-paid">
+  <div class="fpb">
+    <div>
+      <span class="eyebrow">Paid servers</span>
+      <h2 id="fpb-h" class="mt-3 text-2xl font-bold sm:text-3xl">All {paid} paid servers, ${price} once</h2>
+      <p class="muted mt-2 max-w-xl">Invoices, quotes, PDFs, Word files, zip files and more, hosted or local. Each one has a free tier. One payment turns on Pro on all {paid}, for life, with no subscription.</p>
+    </div>
+    <div class="fpb-act">
+      <a class="btn btn-primary" rel="nofollow" href={href} data-cta="bundle_buy" data-cta-slot={`free_${slug}`}>Get all {paid} for ${price}</a>
+      <a class="link" href="/pricing/">See what Pro removes</a>
+    </div>
+  </div>
+  <p class="mt-4 text-[.95rem]">Is your own MCP server ready? <a class="link" href="/check/" data-cta="check" data-cta-slot={`free_${slug}`}>Run the free check</a></p>
+</section>
+
+<style is:global>
+  .fpb { display: grid; gap: 1.25rem; padding: 1.5rem; border: 1px solid var(--manila-2); background: var(--manila); border-radius: 3px; }
+  @media (min-width: 900px) { .fpb { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: center; padding: 2rem; } }
+  .fpb-act { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; }
+</style>

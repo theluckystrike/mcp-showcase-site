@@ -4,6 +4,7 @@
 // Do not recompute them here. Links into /r/ come from data/readiness-servers.json.
 import Layout from '../../layouts/Layout.astro';
 import CopyCode from '../../components/CopyCode.astro';
+import AuditBuyBox from '../../components/AuditBuyBox.astro';
 import { getRData, rowsOfGrade, gradePath, R_GRADES } from '../../data/readinessServers';
 
 const D = getRData();
@@ -153,6 +154,7 @@ const jsonLd = [{
         <p>Set <code>readOnlyHint: true</code> on tools that only read. Set <code>destructiveHint: true</code> on tools that change or delete data, and false on the rest. Claude needs one of the two on every tool (<code>tool_annotations</code>). ChatGPT needs all three hints written out, including <code>openWorldHint</code>, which says whether the tool reaches outside your own system (<code>tool_open_world</code>).</p>
         <p>The title (<code>tool_titles</code>) is the short human name a store shows next to the tool. Keep it in plain words, not the snake_case name.</p>
         <p>Then run <a href="/check/" class="link">McpStamp Check</a> on your URL. It lists any tool that still misses a hint.</p>
+        <AuditBuyBox src="site.study" slot="study" line="Want us to find and rank every fix on your own server?" />
       </div>
       <div>
         <CopyCode code={toolExample} label="One tool in tools/list" />

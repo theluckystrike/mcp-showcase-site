@@ -10,3 +10,7 @@
 /guides/windsurf/        /connect/windsurf/        301
 /guides/paste-a-url/     /connect/paste-a-url/     301
 /sitemap-index.xml       /sitemap.xml              301
+# s1118: /r/ paths that returned 404 in Cloudflare 10-17 Nov and have no report in this build. Every other 404 slug in that
+# window (2,934) has a live report; those 404s came from 13 Nov 10:00 to 14:59 UTC only. List in mcp-servers/data/s1118/site/.
+/r/your-server/          /r/                       301
+/r/github/               /r/                       301

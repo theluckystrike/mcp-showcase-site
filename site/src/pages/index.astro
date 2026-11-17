@@ -17,6 +17,7 @@ import { seo } from '../data/pages';
 import { CLIENTS } from '../data/content';
 import { getServicesContent } from '../data/services';
 import ZovoXpromo from '../components/ZovoXpromo.astro';
+import { rowsOfGrade, gradePath } from '../data/readinessServers';
 
 const st = stats();
 const meta = seo('/', { title: `${brand.name}: ${brand.tagline}`, description: brand.description });
@@ -39,6 +40,8 @@ const TEAM_BAND = [
   { name: 'Readiness Audit', price: svcPrice('audit'), list: svcList('audit'), text: 'A fix list ranked by store blocker, in 3 business days. Founding price for the first 10.', href: '/services/#audit' },
   { name: 'Store Launch', price: svcPrice('launch'), list: undefined, text: 'We fix it, then submit it to Claude, ChatGPT, Gemini and the MCP Registry.', href: '/services/#launch' },
 ];
+// s1118 L5: grade lists linked from the teams band. Counts are the rows of each grade in data/readiness-servers.json.
+const GRADE_LINKS = ['F', 'D', 'C'].map((g) => ({ g, n: rowsOfGrade(g).length, href: gradePath(g) })).filter((x) => x.n > 0);
 const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
 ---
 <Layout
@@ -136,6 +139,15 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
           </li>
         ))}
       </ol>
+      {GRADE_LINKS.length > 0 && (
+        <p class="mt-5 text-[.95rem]" data-cro="s1118-home-grades">
+          Public server reports that need fixes.{' '}
+          {GRADE_LINKS.map((x, i) => (
+            <>{i > 0 && <span class="text-faint"> · </span>}<a class="link" href={x.href} data-cta="grade_list" data-cta-slot={`home_${x.g.toLowerCase()}`}>Grade {x.g}, {x.n.toLocaleString('en-US')} servers</a></>
+          ))}
+          <span class="text-faint"> · </span><a class="link" href="/r/">All server reports</a>
+        </p>
+      )}
     </div>
   </section>
 
