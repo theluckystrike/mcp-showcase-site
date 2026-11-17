@@ -37,7 +37,23 @@
    },
    "slot": "audit",
    "credit": "100% of the audit fee is credited if you buy Store Launch or a custom server within 30 days.",
-   "order_subject": "Readiness Audit ($490)"
+   "order_subject": "Readiness Audit ($490)",
+   "page": {
+    "short": "Find out what stops your server from being listed, in the order it blocks you. See a sample audit first.",
+    "scope": [
+     "We run McpStamp Check on your endpoint, then sign in with the test key or test account you give us and read the server by hand.",
+     "OAuth discovery and sign-in, tool annotations, tool titles and descriptions, error handling and handshake speed.",
+     "Checked against the review rules of the Claude Directory, ChatGPT apps, Gemini Connected Apps and the MCP Registry.",
+     "One server, one remote URL, all of its tools. We read your code if you give us access, but we do not change it."
+    ],
+    "you_get": [
+     "A written report like the sample, with every finding, its severity, the store it blocks and what we measured",
+     "A fix for each finding, with a code snippet for your language and a command to check it yourself",
+     "A re-grade plan with the order to ship the fixes and what the free check will show after each step",
+     "Written answers to your follow-up questions by email for 14 days, and one re-check of your fixes"
+    ],
+    "price_note": "Fixed price. Report 3 business days after you send the server URL and a test key."
+   }
   },
   {
    "id": "launch",
@@ -251,6 +267,34 @@
  },
  "faq": [
   {
+   "q": "What do you need from me?",
+   "a": "Your server URL and a test key or test account. Repo access is optional. With it, the code snippets match your codebase. The 3 business days start when we have the URL and the key."
+  },
+  {
+   "q": "My server uses an API key. Is the audit still useful?",
+   "a": "Yes, and it is the most common case. 437 of the 439 grade F servers in our 2 November scan ask for an API key, which ChatGPT and Gemini cannot send. The audit shows the shortest path to OAuth for your server, or a no-sign-in option, and we use your test key to check the tools the free check cannot reach."
+  },
+  {
+   "q": "What does the report look like?",
+   "a": "Like the sample audit. One table of findings with severity, the store each one blocks and what we measured. Then a fix for each finding with a code snippet and a check command, and a re-grade plan.",
+   "link": {
+    "href": "/services/sample-audit/",
+    "label": "See the sample audit"
+   }
+  },
+  {
+   "q": "Do you change my code?",
+   "a": "No. The audit is a written report. If you want us to make the fixes, Store Launch does that, and the audit fee counts toward it within 30 days."
+  },
+  {
+   "q": "Can I see the free check first?",
+   "a": "Yes. Run McpStamp Check on your URL. The audit starts from the same check and adds the parts it cannot do without a key.",
+   "link": {
+    "href": "/check/",
+    "label": "Run the free check"
+   }
+  },
+  {
    "q": "How do I pay?",
    "a": "By card, through Stripe. We never see your card number. The seller is autom8 LLC, as set out in our Terms."
   },
@@ -272,7 +316,7 @@
   },
   {
    "q": "What happens after I order?",
-   "a": "We email you to ask for your server URL and repo access. The audit's 3 business days start when we have access."
+   "a": "We email you to ask for your server URL and the access the job needs. For the audit that is a test key or test account, and repo access is optional. For Store Launch we also ask for repo access. The audit's 3 business days start when we have the URL and the key."
   },
   {
    "q": "Does the deposit count toward the price?",

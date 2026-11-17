@@ -13,11 +13,13 @@ export interface Service {
   id: string; name: string; short: string; price_usd?: number; list_usd?: number; price_label?: string; price_unit?: string;
   price_tag?: string; price_note?: string; price_from?: boolean; deposit_usd?: number; credit?: string; guarantee?: string;
   order_subject?: string; options?: Option[]; scope: string[]; you_get: string[]; note?: string; cta?: Cta; cta2?: Cta; slot: string;
+  /** /services/ only. Overrides for the services page card; the Terms, /r/ box and sample page keep the base fields. */
+  page?: { short?: string; scope?: string[]; you_get?: string[]; price_note?: string };
 }
 
 const fallback = {
   show_prices: false, checkout_live: false, checkout_off_note: '', eyebrow: 'Custom work', h1: 'Get an MCP server built around your own data', lead: '',
-  services: [] as Service[], steps: [] as any[], proof: null as any, github: null as any, faq: [] as { q: string; a: string }[],
+  services: [] as Service[], steps: [] as any[], proof: null as any, github: null as any, faq: [] as { q: string; a: string; link?: { href: string; label: string } }[],
 };
 
 let cache: typeof fallback | null = null;

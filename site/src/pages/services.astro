@@ -15,10 +15,12 @@ const email = SUPPORT_EMAIL;
 const tg = brand.links.telegram;
 const proof = c.proof;
 const gh = c.github;
-const audit = c.services.find((s) => s.id === 'audit');
+// Card text on this page may come from services[].page (s1118c S7), so the Terms section 9 text stays as it is.
+const services = c.services.map((s) => ({ ...s, ...(s.page ?? {}) }));
+const audit = services.find((s) => s.id === 'audit');
 const title = 'MCP store launch, audits and custom servers';
 const description = 'Get your MCP server listed in the Claude Directory, the ChatGPT app directory, Gemini Connected Apps and the MCP Registry. Readiness Audit $490, Store Launch $4,900, custom servers from $4,500.';
-type Svc = (typeof c.services)[number];
+type Svc = (typeof services)[number];
 const offerList = (s: Svc) => {
   if (!c.show_prices || !s.price_usd) return [];
   // The pay link is the offer URL only when checkout is live and it charges the full price (not a deposit).
@@ -32,7 +34,7 @@ const offerList = (s: Svc) => {
 };
 const jsonLd = [
   { '@context': 'https://schema.org', '@type': 'ItemList', name: 'MCP store launch and custom MCP work',
-    itemListElement: c.services.map((s, i) => {
+    itemListElement: services.map((s, i) => {
       const offers = offerList(s);
       return { '@type': 'ListItem', position: i + 1,
         item: { '@type': 'Service', name: s.name, description: s.short, serviceType: 'Software development',
@@ -77,7 +79,7 @@ const jsonLd = [
   <section class="wrap py-8" aria-labelledby="svc-h">
     <h2 id="svc-h" class="h2 font-display">Four ways to get it done</h2>
     <ol class="mt-6 border-t-2 border-fg">
-      {c.services.map((s, i) => (
+      {services.map((s, i) => (
         <li id={s.id} class="svc-row grid gap-5 border-b border-line-strong py-7 md:grid-cols-[3.5rem_1fr_14.5rem]">
           <p class="font-mono text-[.9rem] text-faint">{String(i + 1).padStart(2, '0')}</p>
           <div>
