@@ -1,0 +1,228 @@
+---
+// s1118b L11: an anonymized example of the $490 Readiness Audit report, so buyers can see what they get.
+// Built from a real grade F row in data/readiness-servers.json (check of 2 Nov 2026, engine 1.2.0). The server name,
+// company, domain, URLs and scope names are replaced with "Example Server" and example.com. Findings, severity,
+// fix steps and the re-grade plan are kept. Price and credit text come from data/content/services.json.
+import Layout from '../../layouts/Layout.astro';
+import { getServicesContent, ctaHref } from '../../data/services';
+
+const c = getServicesContent();
+const audit = c.services.find((s) => s.id === 'audit');
+const price = audit?.price_label ?? '';
+const payHref = audit && c.checkout_live && c.show_prices ? ctaHref(audit, 'services', 'sample') : '';
+const title = 'Sample MCP readiness audit report';
+const description = 'An example of the McpStamp Readiness Audit for a grade F MCP server. Six findings with severity, fix steps with check commands, and a re-grade plan.';
+
+const server: [string, string][] = [
+  ['Registry name', 'com.example/example-server'],
+  ['Remote URL', 'https://mcp.example.com/mcp'],
+  ['What it does', 'Company data lookup by domain'],
+  ['Sign-in found', 'API key or other static credential'],
+  ['Score', '22 of 100, grade F'],
+  ['Checks failed', '6'],
+  ['Checks passed', '1 (served over HTTPS)'],
+  ['Checks that could not run', '20 (they sit behind sign-in)'],
+];
+const stores: [string, string, string][] = [
+  ['ChatGPT app directory', 'Not ready', 'Blocked by sign-in method, protected resource metadata and authorization server metadata'],
+  ['Gemini Connected Apps', 'Not ready', 'Blocked by sign-in method and authorization server metadata'],
+  ['Claude Connectors Directory', 'Unverified', 'Nothing failed, but initialize, tools/list, input schemas, tool annotations and tool titles could not run without a credential'],
+  ['Official MCP Registry', 'Unverified', 'initialize could not run without a credential'],
+];
+const severity: [string, string][] = [
+  ['Blocker', 'A store will not accept the server until this is fixed'],
+  ['High', 'Not a listed store rule, but clients cannot finish sign-in or connect without it'],
+  ['Medium', 'Works, but users or reviewers see it fail or time out'],
+  ['Low', 'Spec hygiene that some clients trip over'],
+];
+const findings: [string, string, string, string, string][] = [
+  ['1', 'Sign-in method the store supports (auth_method)', 'Blocker', 'ChatGPT, Gemini', 'initialize returned HTTP 401 and no working OAuth discovery. The server expects a credential such as an API key or static token'],
+  ['2', 'Protected resource metadata, RFC 9728 (auth_prm)', 'Blocker', 'ChatGPT', 'https://mcp.example.com/.well-known/oauth-protected-resource/mcp returned 404, and https://mcp.example.com/.well-known/oauth-protected-resource returned 404'],
+  ['3', 'Authorization server metadata, RFC 8414 or OIDC (auth_as_metadata)', 'Blocker', 'ChatGPT, Gemini', 'https://mcp.example.com/.well-known/oauth-authorization-server returned 404, and https://mcp.example.com/.well-known/openid-configuration returned 404'],
+  ['4', '401 carries WWW-Authenticate resource_metadata (auth_challenge)', 'High', 'None directly', 'initialize returned HTTP 401 without a WWW-Authenticate header'],
+  ['5', 'initialize latency (latency)', 'Medium', 'None directly', 'About 4,700 ms. The target is under 1,500 ms'],
+  ['6', 'GET answers SSE or 405 (get_stream)', 'Low', 'None directly', 'GET on the endpoint returned HTTP 200 text/html'],
+];
+const prm = `{
+  "resource": "https://mcp.example.com/mcp",
+  "authorization_servers": ["https://mcp.example.com"],
+  "bearer_methods_supported": ["header"],
+  "scopes_supported": ["data.read"]
+}`;
+const asm = `{
+  "issuer": "https://mcp.example.com",
+  "authorization_endpoint": "https://mcp.example.com/oauth/authorize",
+  "token_endpoint": "https://mcp.example.com/oauth/token",
+  "registration_endpoint": "https://mcp.example.com/oauth/register",
+  "response_types_supported": ["code"],
+  "grant_types_supported": ["authorization_code", "refresh_token"],
+  "code_challenge_methods_supported": ["S256"],
+  "token_endpoint_auth_methods_supported": ["none", "client_secret_post"],
+  "scopes_supported": ["data.read"]
+}`;
+const check123 = `curl -s https://mcp.example.com/.well-known/oauth-protected-resource/mcp | jq .resource
+curl -s https://mcp.example.com/.well-known/oauth-authorization-server | jq '.issuer, .code_challenge_methods_supported'`;
+const http401 = `HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer resource_metadata="https://mcp.example.com/.well-known/oauth-protected-resource/mcp"
+Content-Type: application/json`;
+const node401 = `if (!validBearer(req)) {
+  res.setHeader(
+    "WWW-Authenticate",
+    'Bearer resource_metadata="https://mcp.example.com/.well-known/oauth-protected-resource/mcp"'
+  );
+  return res.status(401).json({ error: "unauthorized" });
+}`;
+const check4 = `curl -si -X POST https://mcp.example.com/mcp | grep -i www-authenticate`;
+const check5 = `curl -s -o /dev/null -w "%{time_total}\\n" -X POST https://mcp.example.com/mcp \\
+  -H "Content-Type: application/json" -H "Accept: application/json, text/event-stream" \\
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"check","version":"1"}}}'`;
+const http405 = `HTTP/1.1 405 Method Not Allowed
+Allow: POST`;
+const check6 = `curl -si https://mcp.example.com/mcp | head -1`;
+const regrade: [string, string, string][] = [
+  ['1', 'Ship fixes 4 and 6 (one header, one status code)', 'auth_challenge and get_stream pass. The ChatGPT and Gemini status does not change yet'],
+  ['2', 'Ship fix 5 (latency)', 'latency passes when initialize answers under 1.5 s'],
+  ['3', 'Ship fixes 1 to 3 (OAuth)', 'auth_method, auth_prm and auth_as_metadata are tested again, and the 7 OAuth checks that did not run now run'],
+  ['4', 'Run the free McpStamp Check again on your URL', 'The live score shows at once. The public report page picks it up at the next snapshot'],
+  ['5', 'Send us the new check link', 'We confirm each finding is closed in writing, and list anything new the check found'],
+];
+---
+<Layout title={title} description={description}
+  crumbs={[{ name: 'Services', path: '/services/' }, { name: 'Sample audit', path: '/services/sample-audit/' }]}>
+  <section class="wrap pb-6 pt-10 sm:pt-14">
+    <span class="eyebrow">Example report</span>
+    <h1 class="display mt-5 max-w-3xl font-display !text-[clamp(2rem,4.4vw,3.4rem)]">Sample Readiness Audit for Example Server</h1>
+    <p class="sa-note mt-6 max-w-3xl"><span class="sa-tab font-mono">Example</span>We built this example report from a real grade F server in our 2 November 2026 scan (McpStamp Check engine 1.2.0, no credentials). We replaced the server name, company, domain and URLs with "Example Server" and example.com. The findings, severity, fix steps and re-grade plan are as we wrote them.</p>
+    <p class="lead mt-5">A paid audit also signs in with a test account you give us and reads the tool list by hand. Those parts are listed under "What the paid audit adds".</p>
+    <div class="mt-7 flex flex-wrap items-center gap-3">
+      {payHref && <a href={payHref} rel="nofollow" class="btn btn-primary" data-cta="audit" data-cta-slot="sample">Buy the audit, {price}</a>}
+      <a href="/services/#audit" class="btn" data-cta="audit" data-cta-slot="sample">What the audit covers</a>
+    </div>
+  </section>
+
+  <section class="wrap py-8" aria-labelledby="sa-server-h">
+    <h2 id="sa-server-h" class="h2 font-display">The server</h2>
+    <div class="sa-scroll mt-5">
+      <table class="table sa-table"><tbody>
+        {server.map(([k, v]) => <tr><th scope="row">{k}</th><td>{v}</td></tr>)}
+      </tbody></table>
+    </div>
+  </section>
+
+  <section class="wrap py-8" aria-labelledby="sa-stores-h">
+    <h2 id="sa-stores-h" class="h2 font-display">Where it stands in each store</h2>
+    <div class="sa-scroll mt-5">
+      <table class="table">
+        <thead><tr><th scope="col">Store</th><th scope="col">Status on 2 Nov 2026</th><th scope="col">Why</th></tr></thead>
+        <tbody>{stores.map(([s, st, why]) => <tr><th scope="row">{s}</th><td>{st}</td><td>{why}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <p class="mt-5 max-w-3xl">In one sentence, the server asks for an API key, and ChatGPT and Gemini cannot send one. Everything else follows from that.</p>
+  </section>
+
+  <section class="wrap py-8" aria-labelledby="sa-cmp-h">
+    <h2 id="sa-cmp-h" class="h2 font-display">How this server compares</h2>
+    <p class="mt-4 max-w-3xl">In the same 2 November snapshot of 5,000 published reports, servers that sign in with OAuth had a median score of 85, and 2,131 of 2,206 (97%) were grade A or B. Servers that ask for an API key or other static credential had a median score of 39, and 437 of 519 (84%) were grade F. The sign-in method is the single largest reason for a grade F.</p>
+  </section>
+
+  <section class="wrap py-8" aria-labelledby="sa-find-h">
+    <h2 id="sa-find-h" class="h2 font-display">Findings, in the order to fix them</h2>
+    <p class="muted mt-4 max-w-3xl">Severity scale used in every audit.</p>
+    <div class="sa-scroll mt-3">
+      <table class="table">
+        <thead><tr><th scope="col">Severity</th><th scope="col">Meaning</th></tr></thead>
+        <tbody>{severity.map(([s, m]) => <tr><th scope="row">{s}</th><td>{m}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <div class="sa-scroll mt-8">
+      <table class="table">
+        <thead><tr><th scope="col">#</th><th scope="col">Check</th><th scope="col">Severity</th><th scope="col">Blocks</th><th scope="col">What we measured</th></tr></thead>
+        <tbody>{findings.map(([i, chk, sev, blocks, m]) => <tr><td class="font-mono">{i}</td><td>{chk}</td><td>{sev}</td><td>{blocks}</td><td class="sa-wrap">{m}</td></tr>)}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="wrap py-8" aria-labelledby="sa-fix-h">
+    <h2 id="sa-fix-h" class="h2 font-display">Fix steps</h2>
+    <div class="sa-body mt-6 max-w-3xl">
+      <h3 class="sa-h3">Fix 1, 2 and 3 together. Add MCP OAuth in front of the API key</h3>
+      <p>ChatGPT and Gemini only connect to servers that use OAuth or need no sign-in. You have two ways out.</p>
+      <p>Option A, recommended. Keep the API key as the account, and add OAuth on top. The user signs in once in the store's consent window, and your token endpoint maps that user to their existing API key. Paying customers keep their plan and usage limits.</p>
+      <p>Option B. Serve a free, rate-limited subset of tools with no sign-in, and keep the full tool set behind the API key for Claude Code and other clients that can send a header. It is faster, but the stores only see the free tools.</p>
+      <p>For option A, the server needs three things.</p>
+      <p>Protected resource metadata, at both https://mcp.example.com/.well-known/oauth-protected-resource/mcp and https://mcp.example.com/.well-known/oauth-protected-resource. The "resource" value must equal the server URL exactly, path included, because Claude checks for an exact match.</p>
+      <pre class="code">{prm}</pre>
+      <p>Authorization server metadata, at https://mcp.example.com/.well-known/oauth-authorization-server. The issuer must equal the entry in authorization_servers, or ChatGPT rejects it. PKCE S256, a registration endpoint and the refresh_token grant are checked next, so add them now.</p>
+      <pre class="code">{asm}</pre>
+      <p>The hostnames and paths above are placeholders. A separate auth host (for example your existing login domain) works too, as long as issuer and authorization_servers match.</p>
+      <p>The three endpoints. /oauth/register accepts dynamic client registration (RFC 7591) so each store gets a client id without a manual step. /oauth/authorize shows your sign-in and consent page. /oauth/token issues an access token and a refresh token, and on refresh keeps the user signed in past the first hour.</p>
+      <p>How to check it yourself.</p>
+      <pre class="code">{check123}</pre>
+      <p>The first command must print "https://mcp.example.com/mcp". The second must print the issuer and ["S256"].</p>
+
+      <h3 class="sa-h3">Fix 4. Point the 401 at the metadata</h3>
+      <p>Today the 401 has no WWW-Authenticate header, so a client that gets the 401 has no link to the sign-in. Send this on every 401 from /mcp.</p>
+      <pre class="code">{http401}</pre>
+      <p>Example for a Node handler.</p>
+      <pre class="code">{node401}</pre>
+      <p>Check it with this command.</p>
+      <pre class="code">{check4}</pre>
+
+      <h3 class="sa-h3">Fix 5. Bring initialize under 1.5 seconds</h3>
+      <p>initialize took about 4,700 ms, about three times the 1,500 ms target. Store reviewers and clients time out on slow handshakes, and the first call is the one users notice. The usual causes are a cold start on a serverless host and an upstream call (key lookup, database, data API) inside the handshake. Answer initialize from static data, move the key lookup to the first tools/call, and keep one instance warm.</p>
+      <p>Check it with this command. Run it three times. The first number shows the cold start.</p>
+      <pre class="code">{check5}</pre>
+
+      <h3 class="sa-h3">Fix 6. Answer GET with 405</h3>
+      <p>GET on /mcp returns an HTML page with status 200. A client that opens the optional server-to-client stream gets HTML and fails. If you do not offer that stream, return 405.</p>
+      <pre class="code">{http405}</pre>
+      <p>Check it with this command. It must print 405, or 200 with Content-Type text/event-stream.</p>
+      <pre class="code">{check6}</pre>
+    </div>
+  </section>
+
+  <section class="wrap py-8" aria-labelledby="sa-adds-h">
+    <h2 id="sa-adds-h" class="h2 font-display">What the paid audit adds</h2>
+    <p class="mt-4 max-w-3xl">The public check stopped at the 401, so 20 checks did not run. In a paid audit we sign in with a test key you give us and check them by hand. For this server that means the following.</p>
+    <ol class="sa-ol mt-4 grid max-w-3xl gap-2.5">
+      <li>The 7 OAuth checks that need a working sign-in. Resource equals server URL, the first metadata URL Gemini tries, issuer match for ChatGPT, PKCE S256, client registration and refresh tokens.</li>
+      <li>The 13 checks behind sign-in. initialize, protocol version, content type, JSON-RPC errors, serverInfo, server instructions, the tools capability, tools/list, input schemas, tool names, readOnlyHint and destructiveHint, openWorldHint for ChatGPT, tool titles and tool descriptions.</li>
+      <li>A read of each tool against the Claude, ChatGPT and Gemini review lists. For a data lookup server we would expect every tool to be read-only, so each one should carry readOnlyHint true, destructiveHint false and openWorldHint true (it calls the open web). We expect it, we did not measure it.</li>
+      <li>A code snippet for each finding, written for the language and framework in your repository.</li>
+      <li>Written answers to your follow-up questions by email for 14 days.</li>
+    </ol>
+  </section>
+
+  <section class="wrap py-8" aria-labelledby="sa-regrade-h">
+    <h2 id="sa-regrade-h" class="h2 font-display">Re-grade plan</h2>
+    <div class="sa-scroll mt-5">
+      <table class="table">
+        <thead><tr><th scope="col">Step</th><th scope="col">What you do</th><th scope="col">What to expect on McpStamp Check</th></tr></thead>
+        <tbody>{regrade.map(([i, a, b]) => <tr><td class="font-mono">{i}</td><td>{a}</td><td>{b}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <p class="mt-5 max-w-3xl">We do not promise a score. For scale, OAuth servers in the same snapshot had a median of 85. The tool checks that sit behind sign-in will still show as not run in the public check, because it uses no credentials. The paid audit covers them.</p>
+  </section>
+
+  <section class="wrap pb-14 pt-8" aria-labelledby="sa-next-h">
+    <h2 id="sa-next-h" class="h2 font-display">Get this report for your server</h2>
+    <p class="mt-4 max-w-3xl">The Readiness Audit is {price}. {audit?.price_note} {audit?.credit}</p>
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      {payHref && <a href={payHref} rel="nofollow" class="btn btn-primary" data-cta="audit" data-cta-slot="sample_end">Buy the audit, {price}</a>}
+      <a href="/check/" class="btn" data-cta="check" data-cta-slot="sample_end">Check your server free</a>
+      <a href="/services/#audit" class="link" data-cta="audit" data-cta-slot="sample_end">Back to services</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .sa-note { background: var(--manila); color: var(--manila-ink); padding: .7rem .9rem; border-radius: 2px; font-size: .97rem; }
+  .sa-tab { display: inline-block; font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; padding: .05rem .4rem; margin-right: .6rem; border: 1px solid currentColor; border-radius: 2px; vertical-align: .1em; }
+  .sa-scroll { overflow-x: auto; max-width: 100%; }
+  .sa-table th { text-transform: none; letter-spacing: 0; font-size: .85rem; border-bottom: 1px solid var(--border); width: 14rem; }
+  .sa-wrap { overflow-wrap: anywhere; min-width: 14rem; }
+  .sa-body > * + * { margin-top: 1rem; }
+  .sa-h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; line-height: 1.25; margin-top: 2.25rem !important; }
+  .sa-h3:first-child { margin-top: 0 !important; }
+  .sa-ol { list-style: decimal; padding-left: 1.4rem; }
+</style>

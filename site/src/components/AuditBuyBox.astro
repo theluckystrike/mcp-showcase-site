@@ -4,8 +4,9 @@
 // unless checkout_live is true and the audit has a pay URL. src is the full tag, for example site.r.top.
 import { getServicesContent } from '../data/services';
 
-interface Props { src: string; line: string; slot: string; compact?: boolean }
-const { src, line, slot, compact = false } = Astro.props as Props;
+// sample: show a text link to the example report under the buy button (s1118b L11).
+interface Props { src: string; line: string; slot: string; compact?: boolean; sample?: boolean }
+const { src, line, slot, compact = false, sample = false } = Astro.props as Props;
 if (!/^[a-z0-9][a-z0-9._-]{0,90}$/.test(src)) throw new Error(`AuditBuyBox: bad src tag ${src}`);
 const content = getServicesContent();
 const audit = content.services.find((s) => s.id === 'audit');
@@ -21,6 +22,7 @@ const price = audit?.price_label ?? '';
       <a class="btn btn-primary" rel="nofollow" href={href} data-cta="audit_buy" data-cta-slot={slot}>Buy the audit, {price}</a>
       <a class="link" href="/services/#audit" data-cta="audit" data-cta-slot={slot}>What the audit covers</a>
     </p>
+    {sample && <p class="abb-sample"><a class="link" href="/services/sample-audit/" data-cta="audit_sample" data-cta-slot={slot}>See a sample audit</a></p>}
   </div>
 )}
 
@@ -29,5 +31,6 @@ const price = audit?.price_label ?? '';
   .abb-line { font-weight: 700; font-size: 1.05rem; }
   .abb-sub { margin-top: .3rem; font-size: .93rem; color: var(--muted); }
   .abb-act { margin-top: .75rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+  .abb-sample { margin-top: .5rem; font-size: .9rem; }
   .abb-compact .abb-sub { display: none; }
 </style>

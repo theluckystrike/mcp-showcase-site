@@ -23,6 +23,15 @@ export interface RData {
 const LETTER: Record<string, StoreStatus> = { r: 'ready', n: 'not_ready', u: 'unverified' };
 let cache: RData | null | undefined;
 
+// s1118b L11: the scan stored fix text cut at 240 characters, so some fixes stop mid-sentence.
+// Show only the whole sentences. Text with no sentence end before the cut is kept as it is.
+function wholeSentences(t: string): string {
+  const s = (t ?? '').trim();
+  if (/[.!?)"\]]$/.test(s)) return s;
+  const cut = s.lastIndexOf('. ');
+  return cut > 0 ? s.slice(0, cut + 1) : s;
+}
+
 export function getRData(): RData | null {
   if (cache !== undefined) return cache;
   cache = null;
@@ -37,7 +46,7 @@ export function getRData(): RData | null {
       status: LETTER[r.st[i]] ?? 'not_ready', blockers: r.sb?.[s.key] ?? [], unverified: r.su?.[s.key] ?? [],
     }])) as RServer['stores'];
     const bad: RCheck[] = r.bad.map(([id, st, detail, fx]: [string, string, string, number]) => ({
-      id, title: title[id] ?? id, status: st === 'f' ? 'fail' : 'warn', detail, fix: fx >= 0 ? j.fixes[fx] : '',
+      id, title: title[id] ?? id, status: st === 'f' ? 'fail' : 'warn', detail, fix: fx >= 0 ? wholeSentences(j.fixes[fx]) : '',
       blocks: STORES.filter((s) => stores[s.key].blockers.includes(id)).map((s) => s.key),
     }));
     return {

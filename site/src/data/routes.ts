@@ -13,7 +13,7 @@ export const BUILT_PAGE_TYPES = ['use-case', 'answer', 'audience', 'client-guide
 
 export function allRoutes(): { path: string; priority: number; lastmod?: string }[] {
   const prio = (p: string, d: number) => pageMeta(p)?.priority ?? d;
-  const fixed = ['/', '/servers/', '/use-cases/', '/pricing/', '/connect/', '/developers/', '/developers/hosted-endpoints/', '/developers/tool-contracts/', '/developers/mcp-inspector/', '/compare/', '/services/', '/about/', '/run-your-own-mcp-stack/'];
+  const fixed = ['/', '/servers/', '/use-cases/', '/pricing/', '/connect/', '/developers/', '/developers/hosted-endpoints/', '/developers/tool-contracts/', '/developers/mcp-inspector/', '/compare/', '/services/', '/services/sample-audit/', '/about/', '/run-your-own-mcp-stack/'];
   // s1114: /badge/ (publisher badge page) only when the /r/ reports exist.
   if (getRData()?.rows.length) fixed.push('/badge/');
   const out = [

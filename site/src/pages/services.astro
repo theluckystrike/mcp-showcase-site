@@ -124,6 +124,9 @@ const jsonLd = [
                 rel={s.cta.pay ? 'nofollow' : undefined} data-cta={s.id} data-cta-slot={s.slot}
                 class:list={['btn mt-2 w-full md:w-auto', (s.cta.pay || s.cta.mailto) && 'btn-primary']}>{c.show_prices || !s.cta.pay ? ctaLabel(s) : 'Ask about this'}</a>
             )}
+            {s.id === 'audit' && (
+              <p class="text-[.9rem]"><a href="/services/sample-audit/" class="link" data-cta="audit_sample" data-cta-slot={s.slot}>See a sample audit</a></p>
+            )}
             {s.cta2 && (
               <p class="text-[.9rem]"><a href={mailto(s.cta2.subject || s.cta2.label)} class="link" data-cta={`${s.id}-describe`} data-cta-slot={s.slot}>{s.cta2.label}</a><span class="muted"> by email or on </span><a href={tg} rel="noopener" target="_blank" class="link">Telegram</a></p>
             )}

@@ -70,6 +70,8 @@ const otherSkipped = r.skipped.filter((id) => !id.startsWith('auth_'));
 const repoUrl = /^https?:\/\//.test(r.repo) ? r.repo : '';
 const webUrl = /^https?:\/\//.test(r.web) ? r.web : '';
 const higher = pct(r.below, D.population);
+// s1118b L11: "higher than 0.0%" reads as broken. Show the percentile only when it is above 0.
+const showHigher = higher !== '0.0';
 
 // sprint-20261116 D1B: McpStamp's own paid offer (bundle) as a one-click Stripe Payment Link.
 const s3b = S3_PAYLINKS.bundle;
@@ -94,7 +96,7 @@ const metaParts = [
   pubDesc && /[.!?]$/.test(pubDesc) ? pubDesc : '',
   `${AUTH_TEXT[r.auth] ?? 'Sign-in not detected'}${r.tools ? `, ${n(r.tools)} tools` : ''}.`,
   storeSentence,
-  `Higher than ${higher}% of ${n(D.population)} servers checked.`,
+  showHigher ? `Higher than ${higher}% of ${n(D.population)} servers checked.` : '',
   `Measured by McpStamp Check engine ${D.engine}.`,
   'Re-check it for free.',
 ].filter(Boolean);
@@ -126,7 +128,7 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
         </p>
       )}
       <p class:list={['max-w-3xl', ov?.lead ? 'mt-4' : 'lead mt-5']}>
-        We checked this server on {dateText} with McpStamp Check engine {D.engine}. It scored {r.score} of 100 (grade {r.grade}), higher than {higher}% of the {n(D.population)} registry servers that responded over HTTPS that day. {storeSentence}
+        We checked this server on {dateText} with McpStamp Check engine {D.engine}. It scored {r.score} of 100 (grade {r.grade}){showHigher ? `, higher than ${higher}% of the ${n(D.population)} registry servers that responded over HTTPS that day` : ''}. {storeSentence}
       </p>
     </div>
   </section>
@@ -139,7 +141,7 @@ const toolText = r.tools ? n(r.tools) : r.auth === 'oauth' || r.auth === 'other'
       <div><dt>Tools listed</dt><dd class="rs-small tnum">{toolText}</dd></div>
       <div><dt>Protocol version</dt><dd class="rs-small">{r.proto || 'None returned'}</dd></div>
     </dl>
-    {lowGrade && r.bad.length > 0 && <AuditBuyBox src="site.r.top" slot="r_top" line={topLine} />}
+    {lowGrade && r.bad.length > 0 && <AuditBuyBox src="site.r.top" slot="r_top" line={topLine} sample />}
   </section>
 
   <section class="wrap pb-12" aria-labelledby="rs-stores-h">
