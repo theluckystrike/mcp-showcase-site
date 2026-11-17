@@ -2139,6 +2139,181 @@
      "description": "Check every airport on an itinerary (origin, connections, destination; 1 to 8 airports) for FAA ground stops, ground delay programs, delays and closures in one call."
     }
    ]
+  },
+  {
+   "repo": "last-frost-date-hardiness-zone-mcp",
+   "topic": "Last frost date and hardiness zone",
+   "name": "Last Frost Date and Hardiness Zone",
+   "tagline": "Your USDA hardiness zone by ZIP, average last spring and first fall frost dates, the next frost in the forecast and when to plant each vegetable.",
+   "knows": [
+    "The 2023 USDA hardiness zone for any US ZIP code, which moved about half of the country half a zone warmer than the 2012 map.",
+    "Local last spring and first fall frost dates with 1-in-10 year odds, computed from 30 seasons of daily minimum temperatures for any place on Earth, Southern Hemisphere included.",
+    "Whether a frost or freeze is forecast in the next 16 days, and the frost of the current season so far."
+   ],
+   "sources": "USDA 2023 Plant Hardiness Zone Map by ZIP (phzmapi.org) and Open-Meteo historical weather, forecast and geocoding, read at call time. No key.",
+   "hosted_url": "https://last-frost-date-hardiness-zone-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/last-frost-date-hardiness-zone-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What is the last frost date for ZIP 80202?",
+    "What USDA hardiness zone is Burlington, Vermont 05401 in?",
+    "Will it freeze in Denver in the next week?"
+   ],
+   "tools": [
+    {
+     "name": "hardiness_zone",
+     "title": "USDA plant hardiness zone by ZIP code",
+     "description": "The USDA plant hardiness zone for a US ZIP code from the 2023 USDA Plant Hardiness Zone Map (for example 6a), the average annual coldest winter temperature range it stands for in F and C, and the ZIP's coordinates. Answers \"what growing zone am I in\"."
+    },
+    {
+     "name": "frost_dates",
+     "title": "Last frost and first frost dates",
+     "description": "Average (median) last spring frost date and first fall frost date for a US ZIP code, a place name or coordinates, the dates beaten in only 1 year in 10, the earliest and latest on record, the median frost-free growing season, and the last spring and first fall frost of the latest seasons. Computed from 30 complete seasons of daily minimum temperatures. threshold_f 32 (frost, default), 36 (light frost on tender plants) or 28 (hard freeze)."
+    },
+    {
+     "name": "frost_forecast",
+     "title": "Frost forecast",
+     "description": "Forecast frost and freeze nights for the next 1 to 16 days (default 16) at a ZIP code, place or coordinates: each night at or below 36 F with its category (frost possible, frost or light freeze, freeze, hard freeze), the first night at or below 32 F and the coldest night. Answers \"will it frost tonight\"."
+    },
+    {
+     "name": "planting_calendar",
+     "title": "Vegetable planting calendar",
+     "description": "When to plant vegetables at a ZIP code, place or coordinates: dates to start seeds indoors, transplant outdoors, direct sow and sow a fall crop, counted from the local median last spring and first fall frost, and whether a warm-season crop fits the frost-free season. Crops: tomato, pepper, eggplant, cucumber, zucchini, pumpkin, watermelon, corn, beans, basil, lettuce, spinach, peas, radish, carrot, beet, broccoli, cabbage, kale, onion, potato, cilantro, garlic. Default all."
+    }
+   ]
+  },
+  {
+   "repo": "covid-flu-rsv-wastewater-levels-mcp",
+   "topic": "COVID, flu and RSV levels",
+   "name": "COVID, Flu and RSV Levels",
+   "tagline": "COVID, flu and RSV levels in your state and county from CDC wastewater data, with emergency department activity and national test positivity.",
+   "knows": [
+    "This week's levels. CDC publishes new wastewater, emergency department and test positivity data every week, usually on Fridays, for the week that ended the Saturday before.",
+    "The level of each of about 900 sewershed sites, by county, for SARS-CoV-2, influenza A and RSV, with the population each site serves.",
+    "Which states have not reported the newest week yet, so an older reading is never passed off as this week's."
+   ],
+   "sources": "CDC National Wastewater Surveillance System viral activity levels, ARI emergency department activity and test positivity on data.cdc.gov (open data), read at call time. No key.",
+   "hosted_url": "https://covid-flu-rsv-wastewater-levels-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/covid-flu-rsv-wastewater-levels-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "Is COVID going around in Ohio right now?",
+    "What are the flu and RSV wastewater levels in Cook County, Illinois?",
+    "Compare COVID levels in California, Texas, New York and Florida this week."
+   ],
+   "tools": [
+    {
+     "name": "covid_flu_rsv_levels_state",
+     "title": "COVID, flu and RSV levels in a state",
+     "description": "CDC wastewater viral activity levels for COVID-19, flu (influenza A) and RSV in one US state, DC or territory for the latest week: how many sewershed sites are Very Low, Low, Moderate, High or Very High, the share of people served by High or Very High sites, the median site level and the change from the week before, a 6-week trend, and the state's emergency department acute respiratory illness level."
+    },
+    {
+     "name": "covid_flu_rsv_levels_county",
+     "title": "COVID, flu and RSV wastewater levels in a county",
+     "description": "Wastewater levels for COVID-19, flu and RSV at every CDC sewershed site that serves a county: each site's level and category for the latest week, the readings for the last weeks (default 6, up to 12) and the population served. If no site serves the county, lists the counties in the state that have one."
+    },
+    {
+     "name": "covid_flu_rsv_levels_national",
+     "title": "COVID, flu and RSV levels in the US",
+     "description": "The United States picture this week: the percent of laboratory tests positive for COVID-19, influenza and RSV with the weekly trend (default 8 weeks, up to 52), the share of people in sewersheds rated High or Very High for each virus, and emergency department acute respiratory illness activity with the highest states."
+    },
+    {
+     "name": "covid_flu_rsv_compare_states",
+     "title": "Compare COVID, flu and RSV levels between states",
+     "description": "Compare COVID-19, flu and RSV wastewater levels across 2 to 10 states for the latest week each state has reported, ranked by the share of people served by sites rated High or Very High, with each state's median site level and emergency department respiratory illness level."
+    }
+   ]
+  },
+  {
+   "repo": "fuel-economy-gas-mileage-mpg-mcp",
+   "topic": "Fuel economy and gas mileage (MPG)",
+   "name": "Fuel Economy and MPG",
+   "tagline": "EPA city, highway and combined MPG, EV range and annual fuel cost for any car by year, make and model, plus side-by-side comparisons.",
+   "knows": [
+    "The EPA label numbers for each version, not a rounded model average: a 2026 RAV4 runs from 38 to 43 combined MPG depending on the version.",
+    "Current national average fuel and electricity prices from fueleconomy.gov, so fuel cost answers use today's prices rather than a training-time guess.",
+    "Model years up to next year as soon as the EPA lists them, plus the average MPG that real drivers report on fueleconomy.gov when there are reports."
+   ],
+   "sources": "U.S. DOE and EPA fueleconomy.gov web services (vehicle records, My MPG and national fuel prices), read at call time. No key.",
+   "hosted_url": "https://fuel-economy-gas-mileage-mpg-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/fuel-economy-gas-mileage-mpg-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What gas mileage does a 2026 Toyota RAV4 get?",
+    "Is a 2025 Tesla Model Y cheaper to run than a 2026 Ford F-150 hybrid if I drive 12,000 miles a year?",
+    "How much will I spend on gas a month with a 28 MPG car and 1,000 miles a month?"
+   ],
+   "tools": [
+    {
+     "name": "fuel_economy_lookup",
+     "title": "Fuel economy and MPG lookup",
+     "description": "EPA fuel economy for every version of a vehicle by year, make and model: city, highway and combined MPG (MPGe, kWh per 100 miles and range for an EV; gas MPG, electric MPGe and electric range for a plug-in hybrid), EPA annual fuel cost, 5-year savings against the average new car, tailpipe CO2, EPA fuel economy and greenhouse gas scores, and the average MPG real drivers report on fueleconomy.gov when there is one."
+    },
+    {
+     "name": "fuel_economy_compare",
+     "title": "Compare fuel economy",
+     "description": "Compare 2 to 4 vehicles side by side: MPG or MPGe, range, and the yearly fuel cost at current national average prices for your miles, with how much more each costs per year and over 5 years than the cheapest. Each vehicle is a year, make and model (best match) or a fueleconomy.gov id."
+    },
+    {
+     "name": "fuel_cost_calculator",
+     "title": "Fuel cost calculator",
+     "description": "Yearly and monthly fuel cost and cost per mile for your driving, from an MPG figure, a kWh per 100 miles figure (EV) or a vehicle (year, make, model or id), at the national average gas, diesel and electricity prices fueleconomy.gov uses, or at your own price. Plug-in hybrids get gas-only, electric-only and an EPA utility-factor blend."
+    },
+    {
+     "name": "fuel_economy_models",
+     "title": "Makes, models and versions",
+     "description": "What fueleconomy.gov lists for a model year: with no make, every make with EPA ratings; with a make, every model; with a make and model, every version (transmission, cylinders, engine size) with its fueleconomy.gov id for exact lookups and comparisons. Years 1984 to next year."
+    }
+   ]
+  },
+  {
+   "repo": "flood-zone-lookup-fema-flood-map-mcp",
+   "topic": "Flood zone lookup",
+   "name": "Flood Zone Lookup",
+   "tagline": "The FEMA flood zone for any US address, with base flood elevation, FIRM panel and date, nearby high-risk zones and what it means for flood insurance.",
+   "knows": [
+    "The flood zone of a specific lot, which changes from one side of a street to the other and which no model has memorized: FEMA's current effective map, including Letters of Map Revision issued this year.",
+    "The base flood elevation and its datum (NAVD88 or NGVD29), or the flood depth in AO zones, and the FIRM panel that applies. Where panels of neighbouring counties overlap, it picks the panel of the flood study that covers the point.",
+    "How close the floodplain is: the straight-line distance to the nearest high-risk, floodway and 0.2% annual chance zones."
+   ],
+   "sources": "FEMA National Flood Hazard Layer (hazards.fema.gov) and the U.S. Census Bureau geocoder, read at call time. No key.",
+   "hosted_url": "https://flood-zone-lookup-fema-flood-map-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/flood-zone-lookup-fema-flood-map-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What flood zone is 1000 Ocean Dr, Miami Beach, FL 33139 in, and do I need flood insurance?",
+    "Is 1701 Wynkoop St, Denver in a flood zone? How far is the nearest floodplain?",
+    "What does flood zone AE mean compared with shaded X?"
+   ],
+   "tools": [
+    {
+     "name": "flood_zone_lookup",
+     "title": "Flood zone lookup by address",
+     "description": "The FEMA flood zone at a US street address or latitude/longitude, from the National Flood Hazard Layer: zone code (A, AE, AH, AO, V, VE, shaded or unshaded X, D), whether it is in the Special Flood Hazard Area (high risk, 1% annual chance), the base flood elevation or flood depth, the FIRM panel number and effective date, Letters of Map Revision, the NFIP community, whether flood insurance is federally required, and a link to the official FEMA map."
+    },
+    {
+     "name": "flood_zone_nearby",
+     "title": "Flood zones near an address",
+     "description": "High-risk (A and V zones, including floodways), moderate-risk (shaded X, 0.2% annual chance) and undetermined (D) FEMA flood zones within a radius of a US address or point (default 500 m, up to 2000 m), with the straight-line distance to the nearest of each and their base flood elevations. Answers \"how far is this house from the floodplain\"."
+    },
+    {
+     "name": "flood_zone_explain",
+     "title": "What a flood zone means",
+     "description": "What a FEMA flood zone code means and its flood insurance rules: A, AE, AH, AO, AR, A99, V, VE, shaded X (old B, 0.2% annual chance), unshaded X (old C), D. Omit the zone for the full list. No address needed."
+    }
+   ]
   }
  ]
 }
