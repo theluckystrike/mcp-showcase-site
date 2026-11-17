@@ -2314,6 +2314,171 @@
      "description": "What a FEMA flood zone code means and its flood insurance rules: A, AE, AH, AO, AR, A99, V, VE, shaded X (old B, 0.2% annual chance), unshaded X (old C), D. Omit the zone for the full list. No address needed."
     }
    ]
+  },
+  {
+   "repo": "nursing-home-ratings-medicare-care-compare-mcp",
+   "topic": "Nursing home ratings",
+   "name": "Nursing Home Ratings",
+   "tagline": "Medicare Care Compare star ratings for any US nursing home, with nurse staffing hours, staff turnover, inspection deficiencies, fines and abuse flags, searchable by ZIP and comparable side by side.",
+   "knows": [
+    "The current CMS star ratings of all 14,686 certified nursing homes, refreshed monthly by CMS, not a training-time snapshot.",
+    "Each facility's inspection record: cited deficiencies with scope and severity (actual harm, immediate jeopardy), fines and payment denials of the last 3 years, the abuse icon and Special Focus Facility status.",
+    "Reported nurse and RN staffing hours per resident per day, weekend staffing and staff turnover, next to the state and national averages."
+   ],
+   "sources": "CMS Provider Data Catalog on data.cms.gov (nursing home Provider Information, Penalties, Health Deficiencies, State and US Averages), the data behind Medicare.gov Care Compare, read at call time. No key.",
+   "hosted_url": "https://nursing-home-ratings-medicare-care-compare-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/nursing-home-ratings-medicare-care-compare-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What are the best rated nursing homes within 10 miles of ZIP 05401?",
+    "Show me the Care Compare ratings, fines and recent inspection problems for Premier Rehab and Healthcare at Burlington in Vermont.",
+    "Compare these three nursing homes we are touring: Birchwood Terrace, Elderwood at Burlington and Wake Robin in Vermont."
+   ],
+   "tools": [
+    {
+     "name": "nursing_home_search",
+     "title": "Find and rank nursing homes",
+     "description": "Find Medicare and Medicaid certified nursing homes near a ZIP code (default 10 miles) or latitude and longitude, or in a city, county or state, or by name, ranked by CMS overall star rating (or inspection, staffing, quality, nurse hours, distance or name). Each result has the four star ratings, beds, ownership, nurse hours per resident per day, staff turnover, fines, the abuse icon, Special Focus Facility status and the ccn for nursing_home_ratings."
+    },
+    {
+     "name": "nursing_home_ratings",
+     "title": "Nursing home ratings and inspection record",
+     "description": "Full CMS Care Compare profile of one nursing home by ccn (or name and state): overall, health inspection, staffing and quality measure star ratings (long-stay and short-stay) with the CMS footnote that explains a blank or 1-star rating, nurse and RN staffing hours per resident per day and weekend staffing against state and US averages, nursing staff and RN turnover, the last inspections, recent cited deficiencies with scope and severity (actual harm, immediate jeopardy), fines and payment denials of the last 3 years, abuse icon, Special Focus status, ownership, chain and the Medicare.gov link."
+    },
+    {
+     "name": "nursing_home_compare",
+     "title": "Compare nursing homes",
+     "description": "Compare 2 to 5 nursing homes side by side from CMS Care Compare: the four star ratings, nurse and RN hours per resident per day, staff turnover, health deficiencies in the latest inspection cycle, fines, abuse icon and Special Focus status, with the leader on each measure and the state averages."
+    }
+   ]
+  },
+  {
+   "repo": "measles-cases-by-state-outbreak-mcp",
+   "topic": "Measles cases by state",
+   "name": "Measles Cases and Outbreaks",
+   "tagline": "How many measles cases the US and each state have this year, the outbreak count, hospitalizations and deaths, the weekly trend and kindergarten MMR vaccination rates by state.",
+   "knows": [
+    "This week's CDC count: 5,412 confirmed US measles cases in 2026 as of November 12, 2026, 43 outbreaks and 8 deaths, numbers that change every week.",
+    "Cases for each state for this year and the two before, with New York City and the rest of New York State kept apart the way CDC reports them.",
+    "The latest kindergarten MMR coverage by state (2025-26), which is published after any model's training data was collected."
+   ],
+   "sources": "CDC Measles Cases and Outbreaks page and its chart data files, including SchoolVaxView kindergarten MMR coverage, read at call time. No key.",
+   "hosted_url": "https://measles-cases-by-state-outbreak-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/measles-cases-by-state-outbreak-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "How many measles cases are there in the US this year?",
+    "How many measles cases does Texas have, and how does that compare with last year?",
+    "Which states have the most measles cases right now?"
+   ],
+   "tools": [
+    {
+     "name": "measles_cases_us",
+     "title": "US measles cases this year",
+     "description": "Confirmed US measles cases for this year (or 2025) from CDC: the total, the number of outbreaks and the share of cases that are outbreak-associated, jurisdictions with cases, cases by age, vaccination status, percent hospitalized, deaths, the previous year for comparison and the trend over the last complete weeks."
+    },
+    {
+     "name": "measles_cases_by_state",
+     "title": "Measles cases by state",
+     "description": "Confirmed measles cases by state from CDC. With a state: its cases this year, last year and the year before, its rank, and its kindergarten MMR coverage. Without a state: every state ranked by cases this year and the states with none. New York City is reported separately from the rest of New York State; \"NY\" adds both."
+    },
+    {
+     "name": "measles_cases_history",
+     "title": "Measles cases history",
+     "description": "US measles case history from CDC. view yearly (default): confirmed cases per year from 1985 to this year, with the highest and lowest year in the range. view weekly: cases per week by rash onset for one year (2022 on), monthly totals, the peak week and the recent trend."
+    },
+    {
+     "name": "mmr_vaccination_rates",
+     "title": "Kindergarten MMR vaccination rates",
+     "description": "Kindergarten MMR vaccination coverage (2 doses) from CDC. With a state: its rate for the latest or a given school year, its rank, the change since 2019-20 and the trend. Without a state: every state ranked from lowest, how many are below the 95% herd immunity target, and the state median. School years 2009-10 to the latest."
+    }
+   ]
+  },
+  {
+   "repo": "hospital-ratings-cms-star-ratings-mcp",
+   "topic": "Hospital ratings",
+   "name": "Hospital Ratings and CMS Star Ratings",
+   "tagline": "The CMS overall star rating, patient survey stars, ER wait times and quality measures for any US hospital, with best-rated search by city, state or ZIP and side-by-side comparison.",
+   "knows": [
+    "The current CMS overall hospital star rating for each of the 5,435 hospitals in the October 2026 Care Compare data and the reason when a hospital is not rated, from the latest Care Compare refresh rather than a training-time snapshot.",
+    "Patient survey (HCAHPS) star ratings by topic and the share of patients who rated the hospital 9 or 10, compared with the national average.",
+    "Each hospital's ER median time from arrival to leaving and its rate of patients who left before being seen, against the state and national averages."
+   ],
+   "sources": "CMS Care Compare hospital datasets in the Provider Data Catalog on data.cms.gov (Hospital General Information, Patient survey (HCAHPS), Timely and Effective Care), read at call time. No key.",
+   "hosted_url": "https://hospital-ratings-cms-star-ratings-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/hospital-ratings-cms-star-ratings-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What are the best rated hospitals in Boston?",
+    "How good is Mass General? What is its CMS star rating and ER wait time?",
+    "Compare Brigham and Women's and Massachusetts General Hospital for patient satisfaction."
+   ],
+   "tools": [
+    {
+     "name": "hospital_search",
+     "title": "Find and rank hospitals",
+     "description": "Find US hospitals by state, city, county, ZIP code (5 digits, or a 3-digit prefix for the area) or name, with each hospital's CMS overall star rating (1 to 5), HCAHPS patient survey summary stars, type, ownership and ER availability. Best rated first, with the count at each star level. Filter by type, minimum stars or emergency services."
+    },
+    {
+     "name": "hospital_ratings",
+     "title": "Hospital star rating and quality detail",
+     "description": "Full CMS Care Compare ratings for one hospital (by facility id, or name with state or city): overall star rating with the reason when unrated; how many mortality, safety and readmission measures are better, no different or worse than the national rate; HCAHPS patient survey stars overall and by topic (nurses, doctors, cleanliness, quiet, discharge), share rating it 9 or 10 and who would recommend it against national; ER median time from arrival to leaving, left without being seen, sepsis care and staff flu vaccination, each against the state and national average."
+    },
+    {
+     "name": "hospital_compare",
+     "title": "Compare hospitals",
+     "description": "Compare 2 to 5 hospitals side by side on CMS overall stars, patient survey stars, the share of patients rating it 9 or 10 and who would recommend it, ER median time, left before being seen, sepsis care and mortality, safety and readmission measures better or worse than national. Names which hospital leads each."
+    }
+   ]
+  },
+  {
+   "repo": "avalanche-forecast-danger-rating-mcp",
+   "topic": "Avalanche forecast",
+   "name": "Avalanche Forecast and Danger Rating",
+   "tagline": "Today's avalanche danger rating for any US backcountry zone or mountain place, with danger by elevation, avalanche problems, the bottom line and the full forecast link.",
+   "knows": [
+    "Today's danger rating for each of the roughly 90 US avalanche forecast zones, which changes every morning and which no model can know.",
+    "Which zone a ski town, pass or peak falls in (Alta is in the Utah Avalanche Center's Salt Lake zone), worked out from the zone boundaries.",
+    "Whether a center is issuing ratings yet: early and late in the season most zones publish only a summary, and the server says so instead of inventing a number."
+   ],
+   "sources": "avalanche.org public API (National Avalanche Center map layer and the US avalanche centers' zone forecasts) and the Open-Meteo geocoder, read at call time. No key.",
+   "hosted_url": "https://avalanche-forecast-danger-rating-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/avalanche-forecast-danger-rating-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-17",
+   "added": "2026-11-17",
+   "money_site": null,
+   "prompts": [
+    "What is the avalanche danger near Alta, Utah today?",
+    "Is there an avalanche forecast for Snoqualmie Pass yet this season?",
+    "Where in the US is the avalanche danger highest right now?"
+   ],
+   "tools": [
+    {
+     "name": "avalanche_forecast",
+     "title": "Avalanche forecast",
+     "description": "The current avalanche forecast for a mountain place (\"Alta, UT\", \"Snoqualmie Pass\", \"Mount Hood\"), a forecast zone name (\"Tetons\", \"Salt Lake\") or latitude and longitude: the danger rating (1 Low to 5 Extreme) and travel advice, danger above, near and below treeline for today and tomorrow when the center issues them, avalanche problems (type, likelihood, size, aspects and elevations), the bottom line or early-season summary, issue and expiry times, and the full forecast link. Covers every zone on avalanche.org (AK, AZ, CA, CO, ID, MT, NH, NM, NY, OR, UT, WA, WY)."
+    },
+    {
+     "name": "avalanche_danger_map",
+     "title": "Avalanche danger map",
+     "description": "Current avalanche danger for every US avalanche forecast zone (about 90 zones from about 30 centers), or one state or center, sorted highest first, with counts by danger level, off-season zones, the validity window of each rating and avalanche warnings."
+    },
+    {
+     "name": "avalanche_centers",
+     "title": "Avalanche centers",
+     "description": "US avalanche centers (all, or in one state) with their forecast zones, website, time zone and season status: issuing danger ratings, in season without a rating today, or off season, plus the highest current danger."
+    }
+   ]
   }
  ]
 }
