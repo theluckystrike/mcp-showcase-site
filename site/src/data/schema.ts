@@ -6,6 +6,7 @@ import { brand } from '../config/brand';
 import { getServer, type Server } from './servers';
 import { pageMeta } from './pages';
 import { getJob } from './content';
+import { rReportLastmodForPath } from './readinessServers';
 
 /** Date of the last real content review. Used for sitemap lastmod and WebPage dateModified.
  *  Change it only when the content changes (goal5 5.5: no fake freshness). Not the build date. */
@@ -20,7 +21,7 @@ export const PAGE_MODIFIED: Record<string, string> = {
   '/pricing/': '2026-11-02',
   '/': '2026-11-02',
 };
-export const modifiedFor = (path: string): string => PAGE_MODIFIED[path] ?? CONTENT_REVIEWED;
+export const modifiedFor = (path: string): string => PAGE_MODIFIED[path] ?? rReportLastmodForPath(path) ?? CONTENT_REVIEWED;
 
 type Node = Record<string, unknown>;
 const FORBIDDEN = new Set(['AggregateRating', 'Review']);
