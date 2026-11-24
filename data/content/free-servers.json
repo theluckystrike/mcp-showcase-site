@@ -2479,6 +2479,321 @@
      "description": "US avalanche centers (all, or in one state) with their forecast zones, website, time zone and season status: issuing danger ratings, in season without a rating today, or off season, plus the highest current danger."
     }
    ]
+  },
+  {
+   "repo": "egg-prices-grocery-prices-mcp",
+   "topic": "Egg and grocery prices",
+   "name": "Egg Prices and Grocery Prices",
+   "tagline": "US monthly average retail prices for eggs, ground beef, coffee, milk, bread, chicken, butter, gasoline and electricity from the Bureau of Labor Statistics, with yearly changes, record highs and history back to 1980.",
+   "knows": [
+    "Last month's US average price of a dozen grade A large eggs (October 2026: $2.32, down 33.5% from September 2025 and far below the $6.23 record of March 2025), a figure that changes every month.",
+    "The same monthly BLS averages for 30 more items: ground beef, steak, chicken, bacon, pork chops, milk, butter, cheese, bread, flour, rice, coffee, orange juice, sugar, fruit and vegetables, gasoline, diesel, electricity and natural gas.",
+    "Which months are missing and why (BLS published no October 2025 prices during the federal government shutdown), and which regional averages BLS still publishes for each item."
+   ],
+   "sources": "U.S. Bureau of Labor Statistics CPI Average Price Data (APU series), read from the St. Louis Fed FRED CSV endpoints at call time. No key.",
+   "hosted_url": "https://egg-prices-grocery-prices-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/egg-prices-grocery-prices-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-24",
+   "added": "2026-11-24",
+   "money_site": null,
+   "prompts": [
+    "How much is a dozen eggs right now, and how does that compare with last year?",
+    "Are beef prices at a record high?",
+    "What were egg prices in March 2025?"
+   ],
+   "tools": [
+    {
+     "name": "grocery_price",
+     "title": "Average price of one grocery item",
+     "description": "The latest BLS average retail price of one item in the US (or a census region): eggs per dozen, ground beef, steak, chicken, bacon per lb, milk per gallon, coffee, bread, butter, gasoline per gallon, electricity per kWh and more. Returns the month, the price, the change from the month before, a year before and five years before, the record high and when, and the last 13 months. region \"all\" lists the U.S. average next to the Northeast, Midwest, South and West where BLS publishes them. month gives the price as of a past month."
+    },
+    {
+     "name": "grocery_price_history",
+     "title": "Grocery price history",
+     "description": "Monthly BLS average prices of one item between two months (most items go back to 1980): every month, the first and last price and the change, the high and low with their months, and yearly averages. Default the last 24 published months."
+    },
+    {
+     "name": "grocery_prices_compare",
+     "title": "Compare grocery prices",
+     "description": "Several items side by side from BLS average price data: the latest monthly price and unit, the change from last month and from a year ago, the biggest 12-month increases and decreases, and any item at a record high. Without items it uses an everyday basket (eggs, milk, bread, ground beef, chicken breast, bacon, coffee, butter, cheddar, bananas, sugar, rice)."
+    },
+    {
+     "name": "grocery_price_items",
+     "title": "Grocery price items",
+     "description": "The 31 items this server tracks (foods, drinks, gasoline, diesel, electricity, natural gas) with their BLS names, units, plain-word aliases, categories and FRED series ids, and the four census regions."
+    }
+   ]
+  },
+  {
+   "repo": "restaurant-health-inspection-scores-mcp",
+   "topic": "Restaurant health inspections",
+   "name": "Restaurant Health Inspection Scores",
+   "tagline": "The latest health inspection grade, score, result and violations for any restaurant in New York City, Chicago, Austin or Boston, with its inspection history and the places that recently failed or were closed nearby.",
+   "knows": [
+    "Each covered restaurant's latest health inspection as published by the city this week: New York City letter grades and scores, Chicago pass/fail results, Austin scores and Boston results, not a training-time snapshot.",
+    "The violations cited at an inspection: NYC critical violations, Chicago inspector comments, Boston violations by level (1 to 3 stars) and whether they were corrected on re-inspection.",
+    "Which restaurants in a city, NYC borough or ZIP code failed an inspection or were closed by the Health Department in the last days or weeks."
+   ],
+   "sources": "City open data read at call time with no key: NYC DOHMH Restaurant Inspection Results, Chicago CDPH Food Inspections, Austin Public Health Food Establishment Inspection Scores and Boston Inspectional Services Food Establishment Inspections.",
+   "hosted_url": "https://restaurant-health-inspection-scores-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/restaurant-health-inspection-scores-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-24",
+   "added": "2026-11-24",
+   "money_site": null,
+   "prompts": [
+    "What health inspection grade does Katz's Delicatessen in New York have, and what violations did the inspector find last time?",
+    "Which restaurants in ZIP 10002 failed a health inspection or were closed in the last 30 days?",
+    "Did Au Cheval in Chicago pass its last health inspection?"
+   ],
+   "tools": [
+    {
+     "name": "restaurant_inspection_search",
+     "title": "Restaurant health inspection lookup",
+     "description": "Find restaurants and other food establishments by name and return each one's latest health inspection: in New York City the posted letter grade (A, B, C or pending) and the score in points, in Chicago Pass, Pass w/ Conditions or Fail, in Austin the score out of 100, in Boston the pass/fail result and open violations. Without a city or ZIP it searches all four cities. Returns the id for restaurant_inspection_history."
+    },
+    {
+     "name": "restaurant_inspection_history",
+     "title": "Restaurant inspection history and violations",
+     "description": "Inspection record of one establishment by city and id (from restaurant_inspection_search), or by city and name: the latest inspection with every violation cited (NYC critical flags, Chicago inspector comments, Boston violation level (1 to 3 stars) and whether it was corrected), the current NYC letter grade, past inspections with scores or results, and how many inspections in the last 3 years failed or ended in a closure. Austin publishes scores only."
+    },
+    {
+     "name": "restaurant_inspection_failures",
+     "title": "Recent failed restaurant inspections and closures",
+     "description": "Recent failed health inspections in a city, NYC borough or ZIP code over the last N days up to the newest published inspection: New York City Health Department closures and scores of 28 points or more (C range), Chicago inspections with the result Fail, Austin scores under 70, Boston failed inspections and closures. Newest first, with each establishment's id."
+    },
+    {
+     "name": "restaurant_inspection_cities",
+     "title": "Covered cities and grading scales",
+     "description": "The cities this server covers (New York City, Chicago, Austin, Boston), how each health department scores or grades an inspection, what detail its open data has, and the newest published inspection date in each dataset (read live)."
+    }
+   ]
+  },
+  {
+   "repo": "snow-depth-snowpack-snotel-mcp",
+   "topic": "Snow depth and snowpack",
+   "name": "Snow Depth and Snowpack (SNOTEL)",
+   "tagline": "Today's snow depth, snow water equivalent and percent of the 30-year median at the SNOTEL mountain stations nearest any western US place, plus statewide snowpack and how this season compares with last season.",
+   "knows": [
+    "Today's snow depth and snow water equivalent at about 920 SNOTEL mountain stations, updated daily, which no model can know.",
+    "How this snowpack compares with normal: snow water equivalent as a percent of the NRCS 30-year median for the same date, per station and summed for a whole state.",
+    "Each station's season so far against last season and against the median dates when snow usually starts, peaks and melts out."
+   ],
+   "sources": "USDA NRCS SNOTEL network via the AWDB REST API (wcc.sc.egov.usda.gov), read at call time, with Open-Meteo geocoding for place names and phzmapi.org for ZIP codes. No key.",
+   "hosted_url": "https://snow-depth-snowpack-snotel-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/snow-depth-snowpack-snotel-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-24",
+   "added": "2026-11-24",
+   "money_site": null,
+   "prompts": [
+    "How much snow is on the ground near Breckenridge, Colorado right now?",
+    "How is the Colorado snowpack compared with normal this week?",
+    "How does this season at Berthoud Summit compare with last season?"
+   ],
+   "tools": [
+    {
+     "name": "snow_depth",
+     "title": "Snow depth near a place",
+     "description": "Current snow depth (inches and cm), snow water equivalent, SWE as a percent of the 30-year median for the date, and the 24-hour and 7-day change in depth at the SNOTEL stations nearest a place, ZIP code or coordinates, or at a named station. Each station has its elevation and distance. SNOTEL covers the mountains of AK, AZ, CA, CO, ID, MT, NV, NM, OR, SD, UT, WA and WY."
+    },
+    {
+     "name": "snowpack_by_state",
+     "title": "Snowpack by state",
+     "description": "Statewide snowpack from every active SNOTEL station in one state: snow water equivalent as a percent of the 30-year median (summed over stations), the median station percent, how many stations report and have snow, the deepest site, and every station with its snow depth, SWE and percent of median, sorted by depth, SWE, percent of median, elevation or name."
+    },
+    {
+     "name": "snow_depth_history",
+     "title": "Snow depth season history",
+     "description": "One SNOTEL station's snow season (Oct 1 to Sep 30): daily snow depth, snow water equivalent and the 30-year median SWE, weekly samples, the deepest day and peak SWE so far, first snow, melt-out, the same day last year, last season's peak, and the median onset, peak and melt-out dates. Give a station, or a place to use its nearest station."
+    },
+    {
+     "name": "snotel_stations",
+     "title": "Find SNOTEL stations",
+     "description": "Search the active USDA NRCS SNOTEL stations by state, name, county, minimum elevation or distance from a place (nearest first). Returns name, triplet (for the other tools), state, county, elevation, coordinates and the NRCS station page."
+    }
+   ]
+  },
+  {
+   "repo": "home-health-hospice-ratings-care-compare-mcp",
+   "topic": "Home health and hospice ratings",
+   "name": "Home Health and Hospice Ratings",
+   "tagline": "Medicare Care Compare star ratings, patient and family caregiver survey results and quality measures for every Medicare-certified home health agency and hospice, found by the ZIP code they serve.",
+   "knows": [
+    "The current Medicare Care Compare star ratings of every certified home health agency and hospice (home health quality and patient survey stars refreshed September 2026, hospice family caregiver stars August 2026), with the CMS footnote that explains a missing rating.",
+    "Which agencies actually serve a given ZIP code, from the ZIP code lists that agencies report to Medicare, not just the agencies with an office nearby.",
+    "Each agency's quality measures, hospital use, Medicare spending and (for hospices) the Hospice Care Index and visits in the last days of life, next to the state and national averages."
+   ],
+   "sources": "CMS Provider Data Catalog on data.cms.gov (Home Health Care Agencies, HHCAHPS, Hospice General Information, Provider Data, CAHPS Hospice Survey, ZIP codes served, state and national data), the data behind Medicare.gov Care Compare, read at call time. No key.",
+   "hosted_url": "https://home-health-hospice-ratings-care-compare-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/home-health-hospice-ratings-care-compare-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-24",
+   "added": "2026-11-24",
+   "money_site": null,
+   "prompts": [
+    "Which home health agencies serve ZIP 05401, and which have the best ratings?",
+    "We need hospice care for my father in Burlington, Vermont (ZIP 05401). Which hospices serve that area and what do families say about them?",
+    "How does UVMHN Home Health and Hospice compare with the Vermont average on starting care on time and patient outcomes?"
+   ],
+   "tools": [
+    {
+     "name": "home_health_search",
+     "title": "Find and rank home health agencies",
+     "description": "Find Medicare-certified home health agencies that serve a ZIP code (as reported to Medicare), or that have an office in a state or city, or by name, ranked by the CMS quality of patient care star rating (1 to 5 in half stars), patient survey (HHCAHPS) stars or name. Each result has both star ratings, the share of patients rating it 9 or 10 and who would recommend it, services offered (nursing, physical, occupational and speech therapy, medical social services, home health aide), ownership, phone and the ccn for home_health_ratings."
+    },
+    {
+     "name": "home_health_ratings",
+     "title": "Home health agency ratings and quality measures",
+     "description": "Full Medicare Care Compare profile of one home health agency by ccn (or name and state): quality of patient care star rating with the state and national median, patient survey stars and the four survey topics with state and national percentages, would definitely recommend, 13 quality measures (timely start of care, improvement in walking, bathing, breathing and taking medicines, falls with major injury, pressure ulcers, discharge function, flu shot check) against state and national averages, discharge to community and preventable hospital readmissions and hospitalizations against the national rate, Medicare spending per episode, number of ZIP codes served, services and the Medicare.gov link. A missing value carries the CMS footnote that explains it."
+    },
+    {
+     "name": "hospice_search",
+     "title": "Find and rank hospices",
+     "description": "Find Medicare-certified hospices that serve a ZIP code (as reported to Medicare), or that have an office in a state, city or county, or by name, ranked by the family caregiver survey (CAHPS Hospice) star rating, the Hospice Care Index or name. Each result has the family survey stars (or the reason there are none), the share of caregivers rating it 9 or 10 and who would definitely recommend it, the Hospice Care Index (0 to 10), ownership, phone and the ccn for hospice_ratings."
+    },
+    {
+     "name": "hospice_ratings",
+     "title": "Hospice ratings and quality measures",
+     "description": "Full Medicare Care Compare profile of one hospice by ccn (or name and state): family caregiver survey star rating and the seven survey results (communication, timely help, respect, emotional support, help with pain and symptoms, rating 9 or 10, would recommend) against state and national averages, full assessment at admission, nurse or social worker visits in the last days of life, the Hospice Care Index score and its 10 indicators with national percentiles (live discharges, nursing visit gaps, nurse minutes, spending per beneficiary), average daily census, diagnosis mix, where care is given (home, assisted living, nursing facility) and ZIP codes served. A missing value carries the CMS footnote that explains it."
+    }
+   ]
+  },
+  {
+   "repo": "nhtsa-vehicle-recalls-vin-mcp",
+   "topic": "NHTSA vehicle recalls and VIN decoder",
+   "name": "NHTSA Vehicle Recalls and VIN Decoder",
+   "tagline": "Live 17-character VIN decoding via NHTSA vPIC, open vehicle safety recalls (with Park-It and Park-Outside flags), aggregated consumer safety complaints, and 5-Star NCAP crash-test ratings.",
+   "knows": [
+    "Full NHTSA vPIC VIN decoding for any 17-character US VIN, including make, model, year, trim, engine, manufacturing plant, and standard safety equipment.",
+    "Current NHTSA safety recall campaigns by VIN or make/model/year, including urgent Do-Not-Drive (Park-It), Park-Outside, and Over-The-Air update flags.",
+    "Live consumer ODI safety complaint counts (crashes, fires, injuries, deaths, top defect components) and official NHTSA 5-Star NCAP crash-test ratings and rollover risk percentages."
+   ],
+   "sources": "US DOT NHTSA vPIC API (vpic.nhtsa.dot.gov/api/vehicles) and NHTSA Safety APIs (api.nhtsa.gov/recalls, /complaints, /SafetyRatings), read at call time. No key.",
+   "hosted_url": "https://nhtsa-vehicle-recalls-vin-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/nhtsa-vehicle-recalls-vin-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-24",
+   "added": "2026-11-24",
+   "money_site": null,
+   "prompts": [
+    "Decode VIN 1HGCM82633A004352 and check if it has any NHTSA safety recalls.",
+    "Check all NHTSA recalls for a 2020 Honda Accord, including any Park-It or Park-Outside warnings.",
+    "What are the most common NHTSA consumer safety complaints and 5-Star crash ratings for a 2020 Honda Accord?"
+   ],
+   "tools": [
+    {
+     "name": "nhtsa_decode_vin",
+     "title": "Decode a 17-character VIN",
+     "description": "Decode a 17-character Vehicle Identification Number (VIN) using NHTSA vPIC: make, model, model year, trim, body class, engine, fuel type, drive type, manufacturing plant, standard safety equipment, and an overview of matching NHTSA recalls."
+    },
+    {
+     "name": "nhtsa_vehicle_recalls",
+     "title": "Check NHTSA vehicle recalls",
+     "description": "Fetch official NHTSA safety recalls for a vehicle by 17-character VIN or make, model, and model_year. Returns recall count, urgent Park-It (Do Not Drive), Park-Outside, and Over-The-Air update flags, campaign numbers, components, summaries, consequences, and remedies."
+    },
+    {
+     "name": "nhtsa_safety_complaints",
+     "title": "NHTSA consumer safety complaints",
+     "description": "Fetch and aggregate official NHTSA consumer safety complaints for a vehicle by VIN or make, model, and model_year. Returns total complaints, crash/fire/injury/death counts, top complained-about components, and recent complaint summaries (optionally filtered by component keyword)."
+    },
+    {
+     "name": "nhtsa_safety_ratings",
+     "title": "NHTSA 5-Star crash safety ratings",
+     "description": "Fetch official NHTSA 5-Star NCAP crash-test safety ratings by VIN or make, model, and model_year: overall stars, front crash, side crash, side pole, rollover stars and rollover risk %, standard crash-avoidance tech (ESC, FCW, LDW), and recall/complaint/investigation counts per trim variant."
+    }
+   ]
+  },
+  {
+   "repo": "fdic-bank-health-financials-mcp",
+   "topic": "FDIC bank health and financials",
+   "name": "FDIC Bank Health & Financials",
+   "tagline": "Verify FDIC deposit insurance for any US bank, inspect quarterly Call Report financials (assets, insured vs uninsured deposits, CET1 and Tier 1 capital ratios, ROA/ROE, noncurrent loans), search the Failed Bank List, and find branch locations.",
+   "knows": [
+    "Live FDIC insurance status and CERT numbers for every active and historical FDIC-insured US bank, updated daily from the FDIC BankFind Suite API.",
+    "Quarterly FFIEC Call Report balance sheets and capital ratios through Q3 2026, including exact insured vs uninsured deposit shares, CET1, Tier 1 risk-based capital, efficiency ratio, and noncurrent loans percentage.",
+    "Every US bank failure on the official FDIC Failed Bank List from 1934 through 2026, with assets, deposits, and estimated Deposit Insurance Fund (DIF) cost."
+   ],
+   "sources": "FDIC BankFind Suite public API on api.fdic.gov/banks (institutions, financials/Call Reports, failures, and branch locations), read live at call time. No key.",
+   "hosted_url": "https://fdic-bank-health-financials-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/fdic-bank-health-financials-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-24",
+   "added": "2026-11-24",
+   "money_site": null,
+   "prompts": [
+    "Is JPMorgan Chase Bank actively FDIC-insured, and what are its latest CET1 ratio and uninsured deposit percentage?",
+    "Which US banks failed in 2026, and how much did each cost the FDIC Deposit Insurance Fund?",
+    "Find FDIC-insured Chase branches in ZIP code 10017."
+   ],
+   "tools": [
+    {
+     "name": "fdic_bank_search",
+     "title": "Search FDIC-insured US banks",
+     "description": "Search FDIC-insured US banks by name, state, city, ZIP code, or FDIC CERT number. Returns active insurance status, CERT number, headquarters, charter class, total assets, total deposits, equity capital, net income, ROA, ROE, office count, and website."
+    },
+    {
+     "name": "fdic_bank_financials",
+     "title": "FDIC bank quarterly Call Report financials",
+     "description": "Retrieve quarterly FDIC Call Report financial health metrics for a bank by CERT number (or bank name + optional state): total assets, total and domestic deposits, insured vs uninsured deposits and uninsured share %, equity capital, Tier 1 capital, CET1 ratio, Tier 1 risk-based capital ratio, YTD net income, ROA, ROE, net interest margin, efficiency ratio, and noncurrent loans %."
+    },
+    {
+     "name": "fdic_failed_banks",
+     "title": "Search FDIC Failed Bank List",
+     "description": "Search the official FDIC Failed Bank List from 1934 to the present by bank name, state, or year range, or omit filters to list the most recent US bank failures. Returns failure date, location, assets and deposits at failure, estimated Deposit Insurance Fund (DIF) cost, resolution type, and CERT number."
+    },
+    {
+     "name": "fdic_bank_branches",
+     "title": "Find FDIC-insured bank branches",
+     "description": "Find physical branch locations of FDIC-insured banks by CERT number, bank name, ZIP code, city, or state. Returns branch name, street address, county, main-office indicator, service type code, and latitude/longitude."
+    }
+   ]
+  },
+  {
+   "repo": "fema-disaster-declarations-aid-mcp",
+   "topic": "FEMA disaster declarations and aid",
+   "name": "FEMA Disaster Declarations & Aid",
+   "tagline": "Look up US federal disaster declarations, verify county-level FEMA disaster eligibility (insurance, mortgage underwriting, IRS disaster relief), and inspect official Individual Assistance, Public Assistance, and Hazard Mitigation grant totals.",
+   "knows": [
+    "The newest US federal disaster declarations (Major Disasters, Emergencies, and Fire Management Assistance) as published by OpenFEMA, including 2026 declarations.",
+    "County, parish, and borough-level designated disaster areas by county name or 5-digit FIPS code, with declared aid programs and Individual Assistance filing deadlines.",
+    "Official FEMA federal aid obligation totals for any disaster number: Individual Assistance approvals, IHP/Housing/Other Needs dollars, Public Assistance emergency vs permanent work, and Hazard Mitigation grants."
+   ],
+   "sources": "OpenFEMA public API on fema.gov/api/open (FemaWebDisasterDeclarations v1, DisasterDeclarationsSummaries v2, and FemaWebDisasterSummaries v1), read live at call time. No key.",
+   "hosted_url": "https://fema-disaster-declarations-aid-mcp.lipmichal.workers.dev/mcp",
+   "repo_url": "https://github.com/theluckystrike/fema-disaster-declarations-aid-mcp",
+   "npm": null,
+   "tools_checked": "2026-11-24",
+   "added": "2026-11-24",
+   "money_site": null,
+   "prompts": [
+    "What are the most recent US federal disaster declarations?",
+    "Has Bay County, Florida had any FEMA federal disaster declarations since 2024?",
+    "How much Individual Assistance and Public Assistance has FEMA approved for Disaster 4834?"
+   ],
+   "tools": [
+    {
+     "name": "fema_disaster_search",
+     "title": "Search FEMA federal disaster declarations",
+     "description": "Search US federally declared disasters by state, incident type (Hurricane, Flood, Severe Storm, Fire, Tornado, Earthquake, etc.), declaration type (DR = Major Disaster, EM = Emergency, FM = Fire Management), keyword in title, or year range. Returns disaster numbers, dates, declared assistance programs, and FEMA.gov links."
+    },
+    {
+     "name": "fema_county_disaster_check",
+     "title": "Check FEMA disaster declarations for a US county",
+     "description": "Check federal disaster declarations designating a specific US county, parish, or borough (by state + county name, or 5-digit county FIPS code). Returns declaration IDs (e.g. DR-4955-FL), incident types, dates, declared assistance programs (IHP, IA, PA, HMGP), and Individual Assistance filing deadlines."
+    },
+    {
+     "name": "fema_disaster_aid_summary",
+     "title": "FEMA disaster federal aid and grant totals",
+     "description": "Retrieve official FEMA federal aid totals and designated counties for a specific disaster number (e.g. 4834): Individual Assistance approvals, Individuals & Households Program (IHP) approved dollars, Housing Assistance, Other Needs Assistance, Public Assistance obligated dollars (emergency work vs permanent work), Hazard Mitigation Grant Program funding, and designated areas."
+    },
+    {
+     "name": "fema_recent_disasters",
+     "title": "Most recent US federal disaster declarations",
+     "description": "List the newest US federal disaster declarations nationwide or for a specific state, sorted newest first, with incident types, declaration dates, declared aid programs, and FEMA.gov links."
+    }
+   ]
   }
  ]
 }

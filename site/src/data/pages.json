@@ -826,9 +826,9 @@
   },
   {
     "path": "/can-claude/read-zip-files/",
-    "title": "Can Claude open zip files? Yes, upload a .zip and ask",
-    "h1": "Can Claude open zip files?",
-    "meta_description": "Yes. Claude opens a .zip you upload, unzips it and reads the files inside. It uses code execution, on by default for Free, Pro and Max. Limit 30 MB a file.",
+    "title": "Can Claude read zip files? Upload a .zip up to 30 MB",
+    "h1": "Can Claude read zip files?",
+    "meta_description": "Yes, Claude reads uploaded .zip files up to 30 MB on Free, Pro and Max with code execution on, plus how to inspect local archives safely.",
     "primary_keyword": "can claude read zip files",
     "intent": "informational",
     "priority": 0.75,
