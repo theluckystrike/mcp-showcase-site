@@ -1130,7 +1130,7 @@
       "repo": "currency",
       "server_id": "currency",
       "h1": "Can Claude convert currency at today's exchange rate?",
-      "title": "Claude currency: convert at today's rate, or change billing",
+      "title": "Can Claude Convert Currency at Today's Rate? Live ECB MCP",
       "query": "can claude convert currency",
       "answer": "Not from memory. Exchange rates change every day and Claude only knows rates from before its training cutoff, so any conversion it does alone uses an old rate. With web search on, Claude.ai can find a quote on a web page, but it may not say which date or source the rate is from. Connect the Currency server (free token) and Claude converts with the European Central Bank reference rate, names the rate date and rounds to the currency's minor units.",
       "native": [
@@ -1169,7 +1169,7 @@
           "a": "Not in the middle of a plan. Anthropic says that to change your subscription currency you first mark your plan to cancel at the end of the current term and wait for the term to end. When you buy a new Pro or Max plan, you get the same currency options new subscribers get in your region."
         }
       ],
-      "meta_description": "Claude alone uses an old exchange rate. The free Currency server converts at the ECB reference rate and names its date. Billing currency: see below."
+      "meta_description": "Claude alone lacks live exchange rates. Connect the free Currency MCP server to convert at today's official ECB reference rate with the exact rate date."
     },
     {
       "slug": "convert-raw-to-cooked-weight",
@@ -1398,7 +1398,7 @@
       "repo": "spreadsheet",
       "server_id": "spreadsheet",
       "h1": "Can Claude read Excel files?",
-      "title": "Can Claude read Excel files? Yes, and query them",
+      "title": "Can Claude Read Excel (.xlsx) Files? Yes, Query & Sum",
       "query": "can claude read excel files",
       "answer": "Yes in the Claude apps with code execution on (the default on Free, Pro and Max). Claude.ai reads an uploaded .xlsx or CSV and can analyze it in its sandbox, and Claude Code can read a file on your disk with a script. Apps without code execution only see what you paste. Connect the Spreadsheet server (free token) and any MCP app can list the sheets and columns of a workbook, filter and sort rows with a query, search every cell and get per-column stats.",
       "native": [
@@ -1446,7 +1446,8 @@
           "q": "What is free?",
           "a": "Reading, querying and stats. The hosted server holds up to 2 MB of loaded sheets per token. On the hosted server your files and records are kept for your token for 30 days, refreshed on every write. Install the server locally if you want nothing to leave your machine."
         }
-      ]
+      ],
+      "meta_description": "Yes. Upload an .xlsx file to Claude to inspect sheets and formulas. For local workbooks or repeated queries, add the Spreadsheet MCP server in 1 minute."
     },
     {
       "slug": "generate-qr-codes",
@@ -2070,7 +2071,7 @@
       "repo": "bank-statement",
       "server_id": "bank-statement",
       "h1": "Can Claude find my subscriptions?",
-      "title": "Can Claude find my subscriptions? From a bank CSV",
+      "title": "Can Claude Find Recurring Subscriptions? Scan a Bank CSV",
       "query": "can claude find my subscriptions",
       "answer": "Partly. Claude can spot repeat charges in a statement you upload, but it keeps no ledger to check again next month. Connect the Bank Statement server (free token) and Claude groups debits by who was paid, checks for a steady amount and cadence, and gives the next expected date and a yearly figure for each recurring charge.",
       "native": [
@@ -2103,7 +2104,8 @@
           "q": "What is free?",
           "a": "The last 3 months and up to 5 recurring charges. The full history is Pro."
         }
-      ]
+      ],
+      "meta_description": "Yes. Upload a bank CSV or connect the Bank Statement MCP server to flag recurring charges, monthly totals, and forgotten subscriptions in one prompt."
     },
     {
       "slug": "calculate-loan-payments",
@@ -3170,9 +3172,9 @@
       "repo": "checklist",
       "server_id": "checklist",
       "h1": "Can Claude make an inspection checklist?",
-      "title": "Can Claude make an inspection checklist? Runs with sign-off",
+      "title": "Can Claude Make an Inspection Checklist? Runs & Sign-Off",
       "query": "can claude make an inspection checklist",
-      "meta_description": "Yes, as a document. The Checklist server also keeps each dated run, who checked each step, the failures and the sign-off.",
+      "meta_description": "Yes, as text. Connect the Checklist MCP server in Claude to save dated inspection runs, record who passed or failed each step, and keep sign-off logs.",
       "answer": "Yes, as a document. Claude can write a checklist for a van, a site or a machine, and with code execution on (the default on Free, Pro and Max) it can save it as a file to print. What it does not keep is a record of each time the checklist was run, who ticked what, and who signed. Connect the Checklist server (free token) and Claude stores the checklist, starts a dated run, records pass, fail or not applicable for each step with a name, and blocks sign-off while a required step is failed or unanswered unless you force it, with the exception kept on the record.",
       "native": [
         "Writes the steps of a checklist for a job.",
@@ -3431,9 +3433,9 @@
       "repo": "invoice",
       "server_id": "invoice",
       "h1": "Can Claude find overdue invoices?",
-      "title": "Can Claude find overdue invoices? Days late and totals",
+      "title": "Can Claude Find Overdue Invoices? Yes, Days Late & Totals",
       "query": "claude overdue invoice",
-      "meta_description": "Partly. Claude can sort an invoice list you upload. The Invoice server keeps every invoice and lists the unpaid ones past due, worst first.",
+      "meta_description": "Partly on its own if you upload a CSV. Connect the Invoice MCP server to track every invoice across chats and list unpaid past-due accounts worst first.",
       "answer": "Partly. With code execution on (the default on Free, Pro and Max) Claude can read an invoice export you upload and sort out what is past due. A chat does not hold your invoices and payments, so its list is only as current as the file you gave it. Connect the Invoice server (free token) and Claude lists every invoice not paid in full whose due date has passed, worst first, with days overdue, the amount still open and a total per currency. Part payments you recorded are taken off.",
       "native": [
         "Sorts an invoice export you upload by due date.",

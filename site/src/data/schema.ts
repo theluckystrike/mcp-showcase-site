@@ -33,6 +33,22 @@ export const PAGE_MODIFIED: Record<string, string> = {
   '/servers/stripe-billing/': '2026-11-27',
   '/use-cases/per-diem-travel-allowance/': '2026-11-27',
   '/servers/supplier-statement-check/': '2026-11-27',
+  '/servers/': '2026-11-27',
+  '/use-cases/track-billable-time-in-claude/': '2026-11-27',
+  '/can-cursor/read-excel-files/': '2026-11-27',
+  '/can-claude/create-word-documents/': '2026-11-27',
+  '/servers/expense-tracker/': '2026-11-27',
+  '/use-cases/convert-currency-ecb-rates/': '2026-11-27',
+  '/can-claude/currency-converter/': '2026-11-27',
+  '/use-cases/merge-pdf-in-claude/': '2026-11-27',
+  '/can-claude/create-invoice/': '2026-11-27',
+  '/can-claude/time-tracking/': '2026-11-27',
+  '/servers/supplier-list/': '2026-11-27',
+  '/can-claude/find-overdue-invoices/': '2026-11-27',
+  '/can-claude/make-an-inspection-checklist/': '2026-11-27',
+  '/can-claude/read-excel-files/': '2026-11-27',
+  '/can-claude/convert-currency-at-todays-rate/': '2026-11-27',
+  '/can-claude/find-recurring-subscriptions/': '2026-11-27',
 };
 export const modifiedFor = (path: string): string => PAGE_MODIFIED[path] ?? rReportLastmodForPath(path) ?? CONTENT_REVIEWED;
 
