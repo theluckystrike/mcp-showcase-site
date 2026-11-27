@@ -17,11 +17,29 @@ const fmtDate = (d: string) => new Date(d + 'T00:00:00Z').toLocaleDateString('en
 const title = `Free live-data MCP servers, no token`;
 const description = `${list.length} free MCP servers with live data and no token. Newest: ${newest.slice(0, 3).map((s) => s.topic).join('; ')}. Paste one URL.`;
 const example = list[0];
+const freeFaq = [
+  {
+    q: 'Do these MCP servers require an API key or account?',
+    a: 'No. Every server listed here runs over public HTTP with no token, no sign-in, and no credit card. Paste the endpoint URL into Claude, Cursor, or VS Code.',
+  },
+  {
+    q: 'Where does the live data come from?',
+    a: 'Each server fetches current figures directly from public primary sources such as BLS, FDIC, FEMA, NHTSA, USBR, USDA SNOTEL, and state agencies instead of relying on model training data.',
+  },
+  {
+    q: 'Are these servers open source and in the Official MCP Registry?',
+    a: 'Yes. Every server has a public GitHub repository and an active entry in the Official MCP Registry, and passes McpStamp readiness checks.',
+  },
+];
 const jsonLd = [
   { '@type': 'CollectionPage', name: 'Free live-data MCP servers' },
   {
     '@context': 'https://schema.org', '@type': 'ItemList', name: 'Free live-data MCP servers', numberOfItems: list.length,
     itemListElement: list.map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: new URL(s.path, Astro.site).href, name: s.h1 })),
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: freeFaq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   },
 ];
 ---
@@ -59,7 +77,18 @@ const jsonLd = [
   </section>
 
   <section class="wrap pb-6">
-    <p class="muted max-w-3xl">All servers are open source on GitHub and listed in the official MCP Registry. For invoices, quotes, PDFs and other back-office files, see the <a href="/servers/" class="link">{brand.name} servers</a>.</p>
+    <p class="muted max-w-3xl">All servers are open source on GitHub and listed in the official MCP Registry. For invoices, quotes, PDFs and other back-office files, see the <a href="/servers/" class="link">{brand.name} servers</a>. Shipping your own MCP server to Claude, ChatGPT, or Gemini? See our <a href="/services/" class="link">Readiness Audit and Store Launch services</a>.</p>
+  </section>
+  <section class="wrap pb-10" aria-labelledby="fs-faq-h">
+    <h2 id="fs-faq-h" class="text-xl font-bold">Frequently asked questions</h2>
+    <dl class="mt-4 grid gap-4 max-w-3xl">
+      {freeFaq.map((f) => (
+        <div class="border-b border-line pb-4">
+          <dt class="font-semibold">{f.q}</dt>
+          <dd class="muted mt-1 text-[.95rem]">{f.a}</dd>
+        </div>
+      ))}
+    </dl>
   </section>
   <FreePaidBlock slug="index" />
   <UpdatesSignup source="/free-servers/" />

@@ -3377,9 +3377,9 @@
   },
   {
     "path": "/can-claude/purchase-requisition-checklist/",
-    "title": "Purchase requisition checklist, with approval sign-off",
+    "title": "Can Claude run a purchase requisition checklist? Yes, with approval sign-off",
     "h1": "Purchase Requisition Checklist",
-    "meta_description": "A purchase requisition checklist: budget code, three quotes, approved supplier, spend limit and approver sign-off. Run it in Claude with a dated record.",
+    "meta_description": "Yes. Run a purchase requisition checklist in Claude covering budget code, three quotes, approved supplier, spend limits, and dated approver sign-off.",
     "primary_keyword": "purchase requisition checklist",
     "intent": "informational",
     "priority": 0.72,

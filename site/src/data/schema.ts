@@ -14,12 +14,14 @@ export const CONTENT_REVIEWED = '2026-10-30';
 
 /** Pages reviewed after CONTENT_REVIEWED: path -> date of their last real content change (WebPage dateModified + sitemap lastmod). */
 export const PAGE_MODIFIED: Record<string, string> = {
-  '/services/': '2026-11-02',
+  '/services/': '2026-11-27',
+  '/services/sample-audit/': '2026-11-27',
+  '/free-servers/': '2026-11-27',
   '/terms/': '2026-11-02',
   '/check/': '2026-11-02',
   '/readiness/': '2026-11-02',
   '/pricing/': '2026-11-02',
-  '/': '2026-11-02',
+  '/': '2026-11-27',
 };
 export const modifiedFor = (path: string): string => PAGE_MODIFIED[path] ?? rReportLastmodForPath(path) ?? CONTENT_REVIEWED;
 
