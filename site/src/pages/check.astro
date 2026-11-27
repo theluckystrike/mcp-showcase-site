@@ -101,6 +101,17 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
         <p id="ck-limited" class="ck-limited" hidden>Tools could not be verified without sign-in, so the score is capped at 85. <span data-f="coverage"></span></p>
         <p id="ck-unreach" class="ck-limited" hidden></p>
 
+        <div id="ck-fail-cta" class="ck-fail-cta" role="note" aria-labelledby="ck-fail-cta-h" data-cro="s1127-check-top-audit" hidden>
+          <div>
+            <p id="ck-fail-cta-h" class="ck-fail-cta-h"></p>
+            <p class="ck-fail-cta-sub">Readiness Audit ($490 fixed): we run the full check by hand and send a ranked fix list with code snippets in 3 business days.</p>
+          </div>
+          <div class="ck-fail-cta-act">
+            <a id="ck-top-audit" class="btn btn-primary" href={AUDIT_URL} rel="nofollow" data-live={checkoutLive ? '1' : '0'} data-cta="audit_buy" data-cta-slot="top_result">{checkoutLive ? 'Buy Readiness Audit, $490' : 'Order Readiness Audit by email, $490'}</a>
+            <a class="link text-[.9rem]" href="/services/sample-audit/" data-cta="audit_sample" data-cta-slot="top_result">See a sample audit</a>
+          </div>
+        </div>
+
         <hr class="perf-rule" />
 
         <section aria-labelledby="ck-stores-h">
@@ -165,6 +176,7 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
             <div class="ck-offer-buy">
               <p class="ck-price"><span class="tnum">$490</span> <span class="ck-per">{checkoutLive ? 'fixed, pay now' : 'fixed, invoiced'}</span></p>
               <a id="ck-audit" class="btn btn-primary" href={AUDIT_URL} rel="nofollow" data-live={checkoutLive ? '1' : '0'} data-cta="audit" data-cta-slot="offer">{checkoutLive ? 'Buy the audit' : 'Order the audit by email'}</a>
+              <a class="link text-[.88rem]" href="/services/sample-audit/" data-cta="audit_sample" data-cta-slot="offer">See a sample audit</a>
             </div>
           </li>
           <li data-offer="launch">
@@ -452,12 +464,23 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
     $<HTMLInputElement>('#ck-link').value = report;
     $('#ck-link-text').textContent = report;
 
+    // Above-the-fold failing-check / Grade C, D, F Readiness Audit CTA right under the score stamp.
+    const failCta = $('#ck-fail-cta');
+    const showFailCta = tally.fail > 0 || grade === 'C' || grade === 'D' || grade === 'F' || score < 80;
+    failCta.hidden = !showFailCta;
+    if (showFailCta) {
+      $('#ck-fail-cta-h').textContent = tally.fail > 0
+        ? `Grade ${grade} (${score}/100) with ${tally.fail} failing ${tally.fail === 1 ? 'check' : 'checks'}. Want the exact fixes written down?`
+        : `Grade ${grade} (${score}/100). Want every store blocker and fix written down?`;
+    }
+
     // Audit CTA: mailto with the checked URL and score while Stripe checkout is not live.
     const audit = $<HTMLAnchorElement>('#ck-audit');
     if (audit.dataset.live !== '1') {
       const body = `Hello,\n\nI would like a Readiness Audit ($490) for this MCP server:\n\nURL: ${String(r.url || '')}\nMcpStamp score: ${score} (${grade})\nReport: ${report}\n\nName:\nCompany:\n`;
       audit.href = 'mailto:support@zovo.one?subject=' + encodeURIComponent('Readiness Audit ($490)') + '&body=' + encodeURIComponent(body);
       $<HTMLAnchorElement>('#ck-unv-audit').href = audit.href;
+      $<HTMLAnchorElement>('#ck-top-audit').href = audit.href;
     }
 
     // Offers, ordered by score
@@ -599,6 +622,12 @@ const AUDIT_UNV_URL = checkoutLive ? 'https://mcp.zovo.one/buy/svc-audit?src=sit
   @media (min-width: 768px) { .ck-unv { grid-template-columns: minmax(0, 1fr) auto; align-items: center; } }
   .ck-limited { margin-top: 1rem; padding: .6rem .8rem; border: 1px dashed var(--warn); border-radius: 3px; font-size: .93rem; color: var(--text); }
   .ck-limited[hidden] { display: none; }
+  .ck-fail-cta { margin-top: 1.15rem; padding: 1rem 1.2rem; border: 1px solid var(--manila-2); border-left: 4px solid var(--ink-red); border-radius: 3px; background: var(--manila); color: var(--text); display: grid; gap: .85rem; }
+  .ck-fail-cta[hidden] { display: none; }
+  .ck-fail-cta-h { font-weight: 700; font-size: 1.02rem; line-height: 1.4; }
+  .ck-fail-cta-sub { margin-top: .25rem; font-size: .9rem; color: var(--muted); line-height: 1.45; }
+  .ck-fail-cta-act { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem 1rem; }
+  @media (min-width: 768px) { .ck-fail-cta { grid-template-columns: minmax(0, 1fr) auto; align-items: center; } .ck-fail-cta-act { flex-direction: column; align-items: flex-end; gap: .45rem; } }
   .ck-meta > div[hidden] { display: none; }
 
   .ck-tally { font-family: var(--font-mono); font-size: .78rem; color: var(--faint); }

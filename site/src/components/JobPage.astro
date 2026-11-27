@@ -245,7 +245,12 @@ const mainHasOutput = !!main && main.cases.length > 0;
       <section class="wrap py-12">
         <h2 class="text-2xl font-semibold sm:text-3xl">Related jobs</h2>
         <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{related.map((r) => <JobCard page={r} />)}</div>
-        {aud && <p class="mt-6"><a class="link" href={aud.path}>All jobs on the {aud.h1} page</a></p>}
+        <p class="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-[.95rem]">
+          {aud && <><a class="link" href={aud.path}>All jobs on the {aud.h1} page</a><span class="text-faint">·</span></>}
+          <a class="link" href="/free-servers/">Free MCP servers</a>
+          <span class="text-faint">·</span>
+          <a class="link" href="/services/">Build or audit an MCP server</a>
+        </p>
       </section>
     )}
 
