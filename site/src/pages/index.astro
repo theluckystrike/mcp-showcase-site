@@ -62,9 +62,9 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
           <a href="/connect/" class="btn btn-primary">Connect free in 1 minute</a>
           <a href={buyUrl(bundleUrl(), 'home', 'hero2')} rel="nofollow" class="btn hidden sm:inline-flex">All {st.paid} paid servers, ${bundlePrice()} once</a>
         </div>
-        <p class="hero-check mt-4 text-[.95rem]"><span class="muted">Building your own MCP server? </span><a href="/check/" class="link font-semibold">Check your MCP server free</a></p>
+        <p class="hero-check mt-4 text-[.95rem]"><span class="muted">Building your own MCP server? </span><a href="/check/" class="link font-semibold">Check your MCP server free</a> <span class="text-faint">·</span> <a href="/services/#audit" class="link">Readiness Audit ($490)</a></p>
         <!-- Live proof (s1102m SITE2): our own invoice server scored 100/100, ready in all 4 stores (engine 1.2.0, 2 Nov 2026). nofollow: the link runs a live check. -->
-        <p class="hero-proof mt-1.5 font-mono text-[.78rem] text-faint"><a href="/check/?url=https%3A%2F%2Fmcp.zovo.one%2Fmcp%2Finvoice%2Fv1" rel="nofollow" class="underline decoration-1 underline-offset-2 hover:no-underline">Our own servers: 100/100, ready for all four stores</a></p>
+        <p class="hero-proof mt-1.5 font-mono text-[.78rem] text-faint"><a href="/check/?url=https%3A%2F%2Fmcp.zovo.one%2Fmcp%2Finvoice%2Fv1" rel="nofollow" class="underline decoration-1 underline-offset-2 hover:no-underline">Our own servers: 100/100, ready for all four stores</a> <span aria-hidden="true">·</span> <a href="/services/sample-audit/" class="underline decoration-1 underline-offset-2 hover:no-underline">See a sample audit</a></p>
       </div>
       <HeroDemo />
       <!-- Form foot: one ruled docket line under both columns (counts left, clients right) -->
@@ -123,7 +123,11 @@ const clients = CLIENTS.filter((c) => c.slug !== 'chatgpt').slice(0, 4);
           <span class="eyebrow">For teams</span>
           <h2 id="teams-h" class="mt-3 text-2xl font-bold sm:text-3xl">For teams shipping MCP servers</h2>
         </div>
-        <a href="/services/" class="link text-[.95rem]">All services and prices</a>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[.95rem]">
+          <a href="/services/sample-audit/" class="link" data-cta="audit_sample" data-cta-slot="home_teams">See a sample audit</a>
+          <span class="text-faint">·</span>
+          <a href="/services/" class="link">All services and prices</a>
+        </div>
       </div>
       <ol class="team-band mt-6 grid border-l-2 border-t-2 border-fg md:grid-cols-3">
         {TEAM_BAND.map((b, i) => (

@@ -18,10 +18,21 @@ export const PAGE_MODIFIED: Record<string, string> = {
   '/services/sample-audit/': '2026-11-27',
   '/free-servers/': '2026-11-27',
   '/terms/': '2026-11-02',
-  '/check/': '2026-11-02',
-  '/readiness/': '2026-11-02',
+  '/check/': '2026-11-27',
+  '/readiness/': '2026-11-27',
   '/pricing/': '2026-11-02',
   '/': '2026-11-27',
+  '/use-cases/': '2026-11-27',
+  '/developers/': '2026-11-27',
+  '/for/ops-hr/': '2026-11-27',
+  '/use-cases/chase-overdue-invoices/': '2026-11-27',
+  '/can-chatgpt/help-with-finances/': '2026-11-27',
+  '/can-claude/read-a-scanned-receipt/': '2026-11-27',
+  '/can-claude/expense-tracker-freelancers/': '2026-11-27',
+  '/can-claude/track-receipts-for-expenses/': '2026-11-27',
+  '/servers/stripe-billing/': '2026-11-27',
+  '/use-cases/per-diem-travel-allowance/': '2026-11-27',
+  '/servers/supplier-statement-check/': '2026-11-27',
 };
 export const modifiedFor = (path: string): string => PAGE_MODIFIED[path] ?? rReportLastmodForPath(path) ?? CONTENT_REVIEWED;
 
